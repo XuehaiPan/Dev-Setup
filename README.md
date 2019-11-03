@@ -9,9 +9,9 @@ Bash scripts for setting up a freshly new installed OS automatically.
 
 ## Usage
 
-Open Terminal and run
+Open Terminal and run:
 
-```bash
+```shell
 bash setup_${OS_name}.sh
 ```
 
@@ -20,6 +20,12 @@ change the user profiles in `$HOME/.gitconfig` after the script is done.
 If using Linux, modify the default user name and host name in function `send_to_mac` and `receive_from_mac` in `$HOME/.dotfiles/utilities.sh`.
 
 After running the script, the default shell for the current user will be set to `zsh`, and all the old configuration files involved will be backed up to the folder `$HOME/.dotfiles/backups`.
+
+Also, the script will create a shell script `upgrade_packages.sh` at your home directory. You can upgrade your packages just run:
+
+```shell
+zsh ~/upgrade_packages.sh
+```
 
 ## Customization
 
@@ -32,7 +38,7 @@ Add new config file to the script:
 5. replace all `$` in `temp.txt` to `\$`;
 6. add the following to the script:
 
-```bash
+```shell
 cd $HOME   # this line has already been added at the top of the script
 
 # change ${cfg_file_name} to the config file's name

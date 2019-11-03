@@ -404,7 +404,7 @@ function echo_and_eval() {
 function upgrade_ubuntu() {
 	# Upgrade Packages
 	echo_and_eval 'sudo apt update'
-	echo_and_eval 'sudo sudo apt dist-upgrade --yes'
+	echo_and_eval 'sudo apt dist-upgrade --yes'
 	echo_and_eval 'sudo apt full-upgrade --yes'
 	echo_and_eval 'sudo apt upgrade --yes'
 
@@ -1345,7 +1345,7 @@ function echo_and_eval() {
 function upgrade_ubuntu() {
 	# Upgrade Packages
 	echo_and_eval 'sudo apt update'
-	echo_and_eval 'sudo sudo apt dist-upgrade --yes'
+	echo_and_eval 'sudo apt dist-upgrade --yes'
 	echo_and_eval 'sudo apt full-upgrade --yes'
 	echo_and_eval 'sudo apt upgrade --yes'
 

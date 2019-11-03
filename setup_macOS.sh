@@ -1426,6 +1426,7 @@ echo_and_eval 'brew cask install neteasemusic iina'
 echo_and_eval 'brew install gcc gdb llvm make cmake'
 echo_and_eval 'brew cask install oracle-jdk'
 echo_and_eval '/usr/libexec/java_home --request'
+echo_and_eval 'brew cleanup'
 
 echo_and_eval 'defaults write com.apple.screencapture disable-shadow -boolean true'
 echo_and_eval 'killall SystemUIServer'

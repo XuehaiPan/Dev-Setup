@@ -15,11 +15,11 @@ Open Terminal and run
 bash setup_${OS_name}.sh
 ```
 
-change the user profiles in `.gitconfig` after the script is done.
+change the user profiles in `$HOME/.gitconfig` after the script is done.
 
-If using Linux, modify the default user name and host name in function `send_to_mac` and `recieve_from_mac` in file `$HOME/.dotfiles/utilities.sh`.
+If using Linux, modify the default user name and host name in function `send_to_mac` and `receive_from_mac` in `$HOME/.dotfiles/utilities.sh`.
 
-After running the script, all the old configuration files involved will be backed up to the folder `$HOME/.dotfiles/backups`.
+After running the script, the default shell for the current user will be set to `zsh`, and all the old configuration files involved will be backed up to the folder `$HOME/.dotfiles/backups`.
 
 ## Customization
 
@@ -45,60 +45,59 @@ ln -sf .dotfiles/${cfg_file_name} .
 
 ## Packages
 
-The source of package managers (HomeBrew (macOS), APT (Ubuntu) and Pacman (Manjaro) ) will be set to the open source mirrors at [TUNA](https://mirrors.tuna.tsinghua.edu.cn).
+The source of package managers (HomeBrew (macOS), APT (Ubuntu) and Pacman (Manjaro)) will be set to the open source mirrors at [TUNA](https://mirrors.tuna.tsinghua.edu.cn).
 
 The following packages will be setup:
 
-| Package                            | macOS | Ubuntu | Manjaro |
-| :--------------------------------- | :---: | :----: | :-----: |
-| Mirrors at TUNA                    |   ✔   |   ✔    |    ✔    |
-| HomeBrew                           |   ✔   |   ✘    |    ✘    |
-|                                    |       |        |         |
-| zsh                                |   ✔   |   ✔    |    ✔    |
-| bash                               |   ✔   |   ✔    |    ✔    |
-| oh-my-zsh                          |   ✔   |   ✔    |    ✔    |
-| powerlevel10k                      |   ✔   |   ✔    |    ✔    |
-| zsh-syntax-highlighting            |   ✔   |   ✔    |    ✔    |
-| zsh-autosuggestions                |   ✔   |   ✔    |    ✔    |
-| zsh-completions                    |   ✔   |   ✔    |    ✔    |
-| colorls                            |   ✔   |   ✔    |    ✔    |
-|                                    |       |        |         |
-| git & git-lfs                      |   ✔   |   ✔    |    ✔    |
-| vim & vim-plug                     |   ✔   |   ✔    |    ✔    |
-| tmux & oh-my-tmux                  |   ✔   |   ✔    |    ✔    |
-| reattach-to-user-namespace / xclip |   ✔   |   ✔    |    ✔    |
-|                                    |       |        |         |
-| wget & curl                        |   ✔   |   ✔    |    ✔    |
-| ssh / openssh                      |   ✔   |   ✔    |    ✔    |
-| ruby & gem                         |   ✔   |   ✔    |    ✔    |
-| perl & cpan                        |   ✔   |   ✔    |    ✔    |
-| htop                               |   ✔   |   ✔    |    ✔    |
-| net-tools                          |   ✔   |   ✔    |    ✔    |
-| exfat-utils                        |   ✔   |   ✔    |    ✔    |
-|                                    |       |        |         |
-| Miniconda3                         |   ✔   |   ✔    |    ✔    |
-| gcc                                |   ✔   |   ✔    |    ✔    |
-| gdb                                |   ✔   |   ✔    |    ✔    |
-| clang & llvm                       |   ✔   |   ✔    |    ✔    |
-| gdb & lldb                         |   ✔   |   ✔    |    ✔    |
-| make & cmake                       |   ✔   |   ✔    |    ✔    |
-|                                    |       |        |         |
-| DejaVu Sans Mono Nerd Font         |   ✔   |   ✔    |    ✔    |
-| Cascadia Font                      |   ✔   |   ✔    |    ✔    |
-| Menlo Font                         |   ✔   |   ✔    |    ✔    |
+| Package                            | macOS | Ubuntu Linux | Manjaro Linux |
+| :--------------------------------- | :---: | :----------: | :-----------: |
+| Mirrors at TUNA                    |   ✔   |      ✔       |       ✔       |
+| HomeBrew                           |   ✔   |      ✘       |       ✘       |
+|                                    |       |              |               |
+| bash                               |   ✔   |      ✔       |       ✔       |
+| zsh & oh-my-zsh                    |   ✔   |      ✔       |       ✔       |
+| powerlevel10k                      |   ✔   |      ✔       |       ✔       |
+| zsh-syntax-highlighting            |   ✔   |      ✔       |       ✔       |
+| zsh-autosuggestions                |   ✔   |      ✔       |       ✔       |
+| zsh-completions                    |   ✔   |      ✔       |       ✔       |
+| colorls                            |   ✔   |      ✔       |       ✔       |
+|                                    |       |              |               |
+| git & git-lfs                      |   ✔   |      ✔       |       ✔       |
+| vim & vim-plug                     |   ✔   |      ✔       |       ✔       |
+| tmux & oh-my-tmux                  |   ✔   |      ✔       |       ✔       |
+| reattach-to-user-namespace / xclip |   ✔   |      ✔       |       ✔       |
+|                                    |       |              |               |
+| wget & curl                        |   ✔   |      ✔       |       ✔       |
+| ssh / openssh                      |   ✔   |      ✔       |       ✔       |
+| ruby & gem                         |   ✔   |      ✔       |       ✔       |
+| perl & cpan                        |   ✔   |      ✔       |       ✔       |
+| htop                               |   ✔   |      ✔       |       ✔       |
+| net-tools                          |   ✔   |      ✔       |       ✔       |
+| exfat-utils                        |   ✔   |      ✔       |       ✔       |
+|                                    |       |              |               |
+| Miniconda3                         |   ✔   |      ✔       |       ✔       |
+| gcc                                |   ✔   |      ✔       |       ✔       |
+| gdb                                |   ✔   |      ✔       |       ✔       |
+| clang & llvm                       |   ✔   |      ✔       |       ✔       |
+| gdb & lldb                         |   ✔   |      ✔       |       ✔       |
+| make & cmake                       |   ✔   |      ✔       |       ✔       |
+|                                    |       |              |               |
+| DejaVu Sans Mono Nerd Font         |   ✔   |      ✔       |       ✔       |
+| Cascadia Font                      |   ✔   |      ✔       |       ✔       |
+| Menlo Font                         |   ✔   |      ✔       |       ✔       |
 
 Currently macOS only casks:
 
-| Package            | macOS | Ubuntu | Manjaro |
-| :----------------- | :---: | :----: | :-----: |
-| HomeBrew           |   ✔   |   ✘    |    ✘    |
-| iTerm2             |   ✔   |   ✘    |    ✘    |
-| Google Chrome      |   ✔   |   ✘    |    ✘    |
-| Keka               |   ✔   |   ✘    |    ✘    |
-| Sogouinput         |   ✔   |   ✘    |    ✘    |
-| Typora             |   ✔   |   ✘    |    ✘    |
-| Transmission       |   ✔   |   ✘    |    ✘    |
-| Teamviewer         |   ✔   |   ✘    |    ✘    |
-| Visual Studio Code |   ✔   |   ✘    |    ✘    |
-| Xquartz            |   ✔   |   ✘    |    ✘    |
-| Oracle-JDK         |   ✔   |   ✘    |    ✘    |
+| Package            | macOS | Ubuntu Linux | Manjaro Linux |
+| :----------------- | :---: | :----------: | :-----------: |
+| HomeBrew           |   ✔   |      ✘       |       ✘       |
+| iTerm2             |   ✔   |      ✘       |       ✘       |
+| Google Chrome      |   ✔   |      ✘       |       ✘       |
+| Keka               |   ✔   |      ✘       |       ✘       |
+| Sogouinput         |   ✔   |      ✘       |       ✘       |
+| Typora             |   ✔   |      ✘       |       ✘       |
+| Transmission       |   ✔   |      ✘       |       ✘       |
+| Teamviewer         |   ✔   |      ✘       |       ✘       |
+| Visual Studio Code |   ✔   |      ✘       |       ✘       |
+| Xquartz            |   ✔   |      ✘       |       ✘       |
+| Oracle-JDK         |   ✔   |      ✘       |       ✘       |

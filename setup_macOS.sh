@@ -56,12 +56,12 @@ echo_and_eval '/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/
 echo_and_eval 'brew tap homebrew/cask'
 echo_and_eval 'brew tap homebrew/cask-fonts'
 
-echo_and_eval 'git -C "$(brew --repo)" remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git'
-echo_and_eval 'git -C "$(brew --repo homebrew/core)" remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git'
-echo_and_eval 'git -C "$(brew --repo homebrew/cask)" remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-cask.git'
-echo_and_eval 'git -C "$(brew --repo)" fetch --unshallow'
-echo_and_eval 'git -C "$(brew --repo homebrew/core)" fetch --unshallow'
-echo_and_eval 'git -C "$(brew --repo homebrew/cask)" fetch --unshallow'
+echo_and_eval 'git -C "$( brew --repo )" remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git'
+echo_and_eval 'git -C "$( brew --repo homebrew/core )" remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git'
+echo_and_eval 'git -C "$( brew --repo homebrew/cask )" remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-cask.git'
+echo_and_eval 'git -C "$( brew --repo )" fetch'
+echo_and_eval 'git -C "$( brew --repo homebrew/core )" fetch --unshallow'
+echo_and_eval 'git -C "$( brew --repo homebrew/cask )" fetch --unshallow'
 export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles"
 echo_and_eval 'brew update'
 

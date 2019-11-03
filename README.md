@@ -30,7 +30,7 @@ zsh ~/upgrade_packages.sh
 The default shell for the current user will be set to `zsh`. In order to get a wonderful and enjoyable terminal experience, please change your terminal font to nerd font. You can download them from [nerdfonts.com](https://www.nerdfonts.com). Or use the powerlevel10k lean theme:
 
 ```shell
-chsh -s $HOME/.local/bin/zsh_purepower
+chsh -s /usr/local/bin/zsh_purepower
 ```
 
 ## Customization

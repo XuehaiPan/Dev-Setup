@@ -368,8 +368,10 @@ exit
 EOF
 
 chmod +x .dotfiles/zsh_purepower/zsh
-mkdir -p $HOME/.local/bin
-sudo ln -sf $HOME/.dotfiles/zsh_purepower/zsh $HOME/.local/bin/zsh_purepower
+echo_and_eval 'sudo ln -sf $HOME/.dotfiles/zsh_purepower/zsh /usr/local/bin/zsh_purepower'
+if ! grep -qF "/usr/local/bin/zsh_purepower" /etc/shells; then
+	echo_and_eval 'sudo echo "/usr/local/bin/zsh_purepower" >>/etc/shells'
+fi
 
 backup_dotfiles .dotfiles/utilities.sh
 

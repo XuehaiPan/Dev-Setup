@@ -2,6 +2,10 @@
 
 Bash scripts for setting up a freshly new installed OS automatically.
 
+- [OS-Setup](#os-setup)
+    - [Usage](#usage)
+    - [Customization](#customization)
+
 ## Usage
 
 Open Terminal and run
@@ -28,7 +32,7 @@ Add new config file to the script:
 ```bash
 cd $HOME   # this line has already been added at the top of the script
 
-# change ${cfg_file_name} to config file's name
+# change ${cfg_file_name} to the config file's name
 backup_dotfiles ${cfg_file_name} ./dotfiles/${cfg_file_name}
 
 cat >.dotfiles/${cfg_file_name} <<EOF

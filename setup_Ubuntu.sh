@@ -828,9 +828,11 @@ EOF
 
 echo_and_eval 'vim -c "PlugUpgrade | PlugInstall | PlugUpdate | qa"'
 
-backup_dotfiles .tmux.conf .dotfiles/.tmux.conf
+backup_dotfiles .tmux.conf .dotfiles/.tmux.conf \
+	.tmux.conf.local .dotfiles/.tmux.conf.local \
+	.tmux.conf.user .dotfiles/.tmux.conf.user
 
-cat >.dotfiles/.tmux.conf <<EOF
+cat >.dotfiles/.tmux.conf.user <<EOF
 # Set default terminal
 set-option -gs default-terminal "tmux-256color"
 set-option -gsa terminal-overrides ",xterm-termite:Tc"
@@ -934,10 +936,12 @@ bind-key r source-file ~/.tmux.conf \\; display-message "tmux.conf reloaded"
 # set-option -gs status-right ' #[fg=colour120][#{?#{==:#{=-60:pane_title},#{pane_title}},#{pane_title},…#{=-59:pane_title}}]#[default] #[none]%a %b-%d %H:%M:%S#[default] '
 EOF
 
-git clone https://github.com/gpakosz/.tmux.git
+backup_dotfiles .dotfiles/.tmux
+rm -rf .dotfiles/.tmux
+git clone https://github.com/gpakosz/.tmux.git .dotfiles/.tmux
 
-cp -f .tmux/.tmux.conf.local .dotfiles/
-ln -sf .tmux/.tmux.conf .
+cp -f .dotfiles/.tmux/.tmux.conf.local .dotfiles/
+ln -sf .dotfiles/.tmux/.tmux.conf .
 ln -sf .dotfiles/.tmux.conf.local .
 
 sed -i -e 's/tmux_conf_copy_to_os_clipboard=false/tmux_conf_copy_to_os_clipboard=true/g' .dotfiles/.tmux.conf.local
@@ -945,8 +949,8 @@ sed -i -e 's/#set -g history-limit 10000/set -g history-limit 10000/g' .dotfiles
 sed -i -e 's/#set -g mouse on/set -g mouse on/g' .dotfiles/.tmux.conf.local
 cat >>.dotfiles/.tmux.conf.local <<EOF
 
-%if '[ -f ~/.dotfiles/.tmux.conf ]'
-    source-file ~/.dotfiles/.tmux.conf
+%if '[ -f ~/.dotfiles/.tmux.conf.user ]'
+    source-file ~/.dotfiles/.tmux.conf.user
 %endif
 EOF
 

@@ -32,10 +32,10 @@ zsh ~/upgrade_packages.sh
 Add new config file to the script:
 
 1. copy the contents of the config file to a temp file `temp.txt`;
-2. change the identifier of your home directory to `$HOME`;
-3. change the identifier of your user name to `$USER`;
-4. replace all `\` in `temp.txt` to `\\`;
-5. replace all `$` in `temp.txt` to `\$`;
+2. replace all the identifiers of your home directory to `$HOME` in `temp.txt`;
+3. replace all the identifiers of your user name to `$USER` in `temp.txt`;
+4. replace all `\` to `\\` in `temp.txt`;
+5. replace all `$` to `\$` in `temp.txt`;
 6. add the following to the script:
 
 ```shell
@@ -45,7 +45,7 @@ cd $HOME   # this line has already been added at the top of the script
 backup_dotfiles ${cfg_file_name} ./dotfiles/${cfg_file_name}
 
 cat >.dotfiles/${cfg_file_name} <<EOF
-# Paste the contents in the file `temp.txt` here.
+# paste the contents in the temp file `temp.txt` here
 EOF
 
 ln -sf .dotfiles/${cfg_file_name} .

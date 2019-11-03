@@ -5,6 +5,7 @@ Bash scripts for setting up a freshly new installed OS automatically.
 - [OS-Setup](#os-setup)
     - [Usage](#usage)
     - [Customization](#customization)
+    - [Packages](#packages)
 
 ## Usage
 
@@ -41,3 +42,63 @@ EOF
 
 ln -sf .dotfiles/${cfg_file_name} .
 ```
+
+## Packages
+
+The source of package managers (HomeBrew (macOS), APT (Ubuntu) and Pacman (Manjaro) ) will be set to the open source mirrors at [TUNA](https://mirrors.tuna.tsinghua.edu.cn).
+
+The following packages will be setup:
+
+| Package                            | macOS | Ubuntu | Manjaro |
+| :--------------------------------- | :---: | :----: | :-----: |
+| Mirrors at TUNA                    |   ✔   |   ✔    |    ✔    |
+| HomeBrew                           |   ✔   |   ✘    |    ✘    |
+|                                    |       |        |         |
+| zsh                                |   ✔   |   ✔    |    ✔    |
+| bash                               |   ✔   |   ✔    |    ✔    |
+| oh-my-zsh                          |   ✔   |   ✔    |    ✔    |
+| powerlevel10k                      |   ✔   |   ✔    |    ✔    |
+| zsh-syntax-highlighting            |   ✔   |   ✔    |    ✔    |
+| zsh-autosuggestions                |   ✔   |   ✔    |    ✔    |
+| zsh-completions                    |   ✔   |   ✔    |    ✔    |
+| colorls                            |   ✔   |   ✔    |    ✔    |
+|                                    |       |        |         |
+| git & git-lfs                      |   ✔   |   ✔    |    ✔    |
+| vim & vim-plug                     |   ✔   |   ✔    |    ✔    |
+| tmux & oh-my-tmux                  |   ✔   |   ✔    |    ✔    |
+| reattach-to-user-namespace / xclip |   ✔   |   ✔    |    ✔    |
+|                                    |       |        |         |
+| wget & curl                        |   ✔   |   ✔    |    ✔    |
+| ssh / openssh                      |   ✔   |   ✔    |    ✔    |
+| ruby & gem                         |   ✔   |   ✔    |    ✔    |
+| perl & cpan                        |   ✔   |   ✔    |    ✔    |
+| htop                               |   ✔   |   ✔    |    ✔    |
+| net-tools                          |   ✔   |   ✔    |    ✔    |
+| exfat-utils                        |   ✔   |   ✔    |    ✔    |
+|                                    |       |        |         |
+| Miniconda3                         |   ✔   |   ✔    |    ✔    |
+| gcc                                |   ✔   |   ✔    |    ✔    |
+| gdb                                |   ✔   |   ✔    |    ✔    |
+| clang & llvm                       |   ✔   |   ✔    |    ✔    |
+| gdb & lldb                         |   ✔   |   ✔    |    ✔    |
+| make & cmake                       |   ✔   |   ✔    |    ✔    |
+|                                    |       |        |         |
+| DejaVu Sans Mono Nerd Font         |   ✔   |   ✔    |    ✔    |
+| Cascadia Font                      |   ✔   |   ✔    |    ✔    |
+| Menlo Font                         |   ✔   |   ✔    |    ✔    |
+
+Currently macOS only casks:
+
+| Package            | macOS | Ubuntu | Manjaro |
+| :----------------- | :---: | :----: | :-----: |
+| HomeBrew           |   ✔   |   ✘    |    ✘    |
+| iTerm2             |   ✔   |   ✘    |    ✘    |
+| Google Chrome      |   ✔   |   ✘    |    ✘    |
+| Keka               |   ✔   |   ✘    |    ✘    |
+| Sogouinput         |   ✔   |   ✘    |    ✘    |
+| Typora             |   ✔   |   ✘    |    ✘    |
+| Transmission       |   ✔   |   ✘    |    ✘    |
+| Teamviewer         |   ✔   |   ✘    |    ✘    |
+| Visual Studio Code |   ✔   |   ✘    |    ✘    |
+| Xquartz            |   ✔   |   ✘    |    ✘    |
+| Oracle-JDK         |   ✔   |   ✘    |    ✘    |

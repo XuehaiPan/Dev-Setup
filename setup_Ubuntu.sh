@@ -12,11 +12,13 @@ function echo_and_eval() {
 		}
 		{
 			for (i = 1; i <= NF; ++i) {
-				if (i == 1 || (i == 2 && $1 == "sudo")) {
-					printf(" %s%s%s", BoldGreen, $i, Reset);
-				} else {
-					printf(" %s%s%s", (($i ~ /^-/) ? BoldYellow : BoldWhite), $i, Reset);
+				Style = BoldWhite;
+				if ($i ~ /^-/) {
+					Style = BoldYellow;
+				} else if (i == 1 || $i == "sudo" || $(i - 1) == "sudo") {
+					Style = BoldGreen;
 				}
+				printf(" %s%s%s", Style, $i, Reset);
 			}
 		}
 		END {
@@ -390,11 +392,13 @@ function echo_and_eval() {
 		}
 		{
 			for (i = 1; i <= NF; ++i) {
-				if (i == 1 || (i == 2 && \$1 == "sudo")) {
-					printf(" %s%s%s", BoldGreen, \$i, Reset);
-				} else {
-					printf(" %s%s%s", ((\$i ~ /^-/) ? BoldYellow : BoldWhite), \$i, Reset);
+				Style = BoldWhite;
+				if (\$i ~ /^-/) {
+					Style = BoldYellow;
+				} else if (i == 1 || \$i == "sudo" || \$(i - 1) == "sudo") {
+					Style = BoldGreen;
 				}
+				printf(" %s%s%s", Style, \$i, Reset);
 			}
 		}
 		END {
@@ -1331,11 +1335,13 @@ function echo_and_eval() {
 		}
 		{
 			for (i = 1; i <= NF; ++i) {
-				if (i == 1 || (i == 2 && \$1 == "sudo")) {
-					printf(" %s%s%s", BoldGreen, \$i, Reset);
-				} else {
-					printf(" %s%s%s", ((\$i ~ /^-/) ? BoldYellow : BoldWhite), \$i, Reset);
+				Style = BoldWhite;
+				if (\$i ~ /^-/) {
+					Style = BoldYellow;
+				} else if (i == 1 || \$i == "sudo" || \$(i - 1) == "sudo") {
+					Style = BoldGreen;
 				}
+				printf(" %s%s%s", Style, \$i, Reset);
 			}
 		}
 		END {

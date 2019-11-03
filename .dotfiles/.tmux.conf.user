@@ -1,0 +1,101 @@
+# Set default terminal
+set-option -gs default-terminal "tmux-256color"
+set-option -gsa terminal-overrides ",xterm-termite:Tc"
+set-option -gs default-shell /usr/local/bin/zsh
+set-option -gs default-command "reattach-to-user-namespace -l zsh"
+
+# Automatically set window title
+set-option -gs automatic-rename on
+set-option -gs set-titles on
+set-option -gs base-index 1
+set-option -gs pane-base-index 1
+
+# Miscellaneous
+set-option -gs -q utf8 on
+set-option -gs status-keys vi
+set-option -gs mode-keys vi
+set-option -gs history-limit 10000
+
+set-option -gs mouse on
+set-option -gs monitor-activity on
+set-option -gs visual-activity on
+set-option -gs visual-bell off
+set-option -gs repeat-time 1000
+
+# Add second prefix key
+set-option -gs prefix2 C-a
+bind-key C-a send-prefix -2
+
+# Split window
+bind-key | split-window -h
+bind-key - split-window -v
+bind-key H split-window -h
+bind-key V split-window -v
+
+# Vim style pane selection
+bind-key h select-pane -L
+bind-key j select-pane -D
+bind-key k select-pane -U
+bind-key l select-pane -R
+
+# Use Alt-vim keys without prefix key to switch panes
+bind-key -n M-h select-pane -L
+bind-key -n M-j select-pane -D
+bind-key -n M-k select-pane -U
+bind-key -n M-l select-pane -R
+
+# Use Alt-vim keys to resize panes
+bind-key -r M-j resize-pane -D 5
+bind-key -r M-k resize-pane -U 5
+bind-key -r M-h resize-pane -L 5
+bind-key -r M-l resize-pane -R 5
+
+# Use Ctrl-vim keys to resize panes
+bind-key -r C-j resize-pane -D
+bind-key -r C-k resize-pane -U
+bind-key -r C-h resize-pane -L
+bind-key -r C-l resize-pane -R
+
+# Use Alt-arrow keys without prefix key to switch panes
+bind-key -n M-Left select-pane -L
+bind-key -n M-Right select-pane -R
+bind-key -n M-Up select-pane -U
+bind-key -n M-Down select-pane -D
+
+# Use Alt-arrow keys to resize panes
+bind-key -r M-Left resize-pane -L 5
+bind-key -r M-Right resize-pane -R 5
+bind-key -r M-Up resize-pane -U 5
+bind-key -r M-Down resize-pane -D 5
+
+# Use Ctrl-arrow keys to resize panes
+bind-key -r C-Left resize-pane -L
+bind-key -r C-Right resize-pane -R
+bind-key -r C-Up resize-pane -U
+bind-key -r C-Down resize-pane -D
+
+# Use Shift-arrow keys without prefix key to switch windows
+bind-key -n S-Left previous-window
+bind-key -n S-Right next-window
+
+# Reload tmux config
+bind-key r source-file ~/.tmux.conf \; display-message "tmux.conf reloaded"
+
+# Theme
+# set-option -gs window-style fg=white
+# set-option -gs window-active-style fg=brightwhite
+# set-option -gs pane-border-status top
+# set-option -gs pane-border-style fg=white,default
+# set-option -gs pane-active-border-style fg=brightgreen,bold
+# set-option -gs -q status-utf8 on
+# set-option -gs status-position bottom
+# set-option -gs status-interval 1
+# set-option -gs status-bg blue
+# set-option -gs status-fg black
+# set-option -gs status-attr bold
+# set-option -gs window-status-fg colour208
+# set-option -gs window-status-current-fg colour129
+# set-option -gs status-left-length 30
+# set-option -gs status-right-length 90
+# set-option -gs status-left '#[none][#{session_name}]#[default] '
+# set-option -gs status-right ' #[fg=colour120][#{?#{==:#{=-60:pane_title},#{pane_title}},#{pane_title},…#{=-59:pane_title}}]#[default] #[none]%a %b-%d %H:%M:%S#[default] '

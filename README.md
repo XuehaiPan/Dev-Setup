@@ -12,7 +12,7 @@ bash setup_${OS_name}.sh
 
 change the user profiles in `.gitconfig` after the script is done.
 
-If using Linux, modify the default host name in function `send_to_mac` and `recieve_from_mac` in file `$HOME/.dotfiles/utilities.sh`.
+If using Linux, modify the default user name and host name in function `send_to_mac` and `recieve_from_mac` in file `$HOME/.dotfiles/utilities.sh`.
 
 After running the script, all the old configuration files involved will be backed up to the folder `$HOME/.dotfiles/backups`.
 

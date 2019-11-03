@@ -17,14 +17,20 @@ bash setup_${OS_name}.sh
 
 change the user profiles in `$HOME/.gitconfig` after the script is done.
 
-If using Linux, modify the default user name and host name in function `send_to_mac` and `receive_from_mac` in `$HOME/.dotfiles/utilities.sh`.
+If you are using Linux, modify the default user name and host name in function `send_to_mac` and `receive_from_mac` in `$HOME/.dotfiles/utilities.sh`.
 
-After running the script, the default shell for the current user will be set to `zsh`, and all the old configuration files involved will be backed up to the folder `$HOME/.dotfiles/backups`.
+After running the script, all the old configuration files involved will be backed up to the folder `$HOME/.dotfiles/backups`.
 
 Also, the script will create a shell script `upgrade_packages.sh` at your home directory. You can upgrade your packages just by running:
 
 ```shell
 zsh ~/upgrade_packages.sh
+```
+
+The default shell for the current user will be set to `zsh`. In order to get a wonderful and enjoyable terminal experience, please change your terminal font to nerd font. You can download them from [nerdfonts.com](https://www.nerdfonts.com). Or use the powerlevel10k lean theme:
+
+```shell
+chsh -s $HOME/.local/bin/zsh_purepower
 ```
 
 ## Customization

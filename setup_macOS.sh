@@ -1425,3 +1425,5 @@ echo_and_eval 'defaults write com.apple.screencapture disable-shadow -boolean tr
 echo_and_eval 'killall SystemUIServer'
 echo_and_eval 'rm -rf $HOME/.bash_sessions/'
 echo_and_eval 'sudo scutil --set HostName MacBook-Pro'
+
+open "$(brew --prefix)/Caskroom/sogouinput"

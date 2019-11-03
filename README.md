@@ -103,6 +103,8 @@ Currently macOS only casks:
 | Google Chrome      |   ✔   |      ✘       |       ✘       |
 | Keka               |   ✔   |      ✘       |       ✘       |
 | Sogouinput         |   ✔   |      ✘       |       ✘       |
+| Netease Music      |   ✔   |      ✘       |       ✘       |
+| IINA               |   ✔   |      ✘       |       ✘       |
 | Typora             |   ✔   |      ✘       |       ✘       |
 | Transmission       |   ✔   |      ✘       |       ✘       |
 | Teamviewer         |   ✔   |      ✘       |       ✘       |

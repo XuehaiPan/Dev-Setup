@@ -1,28 +1,13 @@
 # OS-Setup
-Bash scripts for setting up freshly new installed OS
+
+Bash scripts for setting up freshly new installed OS automatically.
 
 ## Usage
 
-### macOS
-
 Open Terminal and run
 
 ```bash
-bash setup_macOS.sh
+bash setup_{OS_name}.sh
 ```
 
-### Ubuntu Linux
-
-Open Terminal and run
-
-```bash
-bash setup_Ubuntu.sh
-```
-
-### Manjaro Linux
-
-Open Terminal and run
-
-```bash
-bash setup_Manjaro.sh
-```
+change the user profiles in `.gitconfig` after the script is done.

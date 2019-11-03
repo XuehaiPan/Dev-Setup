@@ -21,7 +21,7 @@ If using Linux, modify the default user name and host name in function `send_to_
 
 After running the script, the default shell for the current user will be set to `zsh`, and all the old configuration files involved will be backed up to the folder `$HOME/.dotfiles/backups`.
 
-Also, the script will create a shell script `upgrade_packages.sh` at your home directory. You can upgrade your packages just run:
+Also, the script will create a shell script `upgrade_packages.sh` at your home directory. You can upgrade your packages just by running:
 
 ```shell
 zsh ~/upgrade_packages.sh
@@ -29,7 +29,7 @@ zsh ~/upgrade_packages.sh
 
 ## Customization
 
-Add new config file to the script:
+Add a new config file to the script:
 
 1. copy the contents of the config file to a temp file `temp.txt`;
 2. replace all the identifiers of your home directory to `$HOME` in `temp.txt`;

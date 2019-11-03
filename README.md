@@ -12,4 +12,4 @@ bash setup_${OS_name}.sh
 
 change the user profiles in `.gitconfig` after the script is done.
 
-If using Linux, modify the function `send_to_mac` and `recieve_from_mac` in `.dotfiles/utilities.sh`.
+If using Linux, modify the default host name in function `send_to_mac` and `recieve_from_mac` in file `.dotfiles/utilities.sh`.

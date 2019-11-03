@@ -26,9 +26,11 @@ After running the script, the default shell for the current user will be set to 
 Add new config file to the script:
 
 1. copy the contents of the config file to a temp file `temp.txt`;
-2. replace all `\` in `temp.txt` to `\\`;
-3. replace all `$` in `temp.txt` to `\$`;
-4. add the following to the script:
+2. change the identifier of your home directory to `$HOME`;
+3. change the identifier of your user name to `$USER`;
+4. replace all `\` in `temp.txt` to `\\`;
+5. replace all `$` in `temp.txt` to `\$`;
+6. add the following to the script:
 
 ```bash
 cd $HOME   # this line has already been added at the top of the script

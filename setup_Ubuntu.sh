@@ -28,7 +28,6 @@ function echo_and_eval() {
 function backup_dotfiles() {
 	cd $HOME
 
-	mkdir -p .dotfiles
 	mkdir -p .dotfiles/backups/.dotfiles
 
 	for file in $@; do
@@ -83,7 +82,9 @@ for plugin in zsh-syntax-highlighting zsh-autosuggestions zsh-completions; do
 	echo_and_eval "git clone https://github.com/zsh-users/$plugin \$ZSH_CUSTOM/plugins/$plugin"
 done
 
-cd $HOME
+echo_and_eval 'cd $HOME'
+
+mkdir -p .dotfiles
 
 backup_dotfiles .gemrc .dotfiles/.gemrc
 

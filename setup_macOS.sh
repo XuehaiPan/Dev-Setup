@@ -68,11 +68,11 @@ echo_and_eval 'brew update'
 echo_and_eval 'brew install zsh bash'
 
 if ! grep -qF "/usr/local/bin/bash" /etc/shells; then
-	echo_and_eval 'sudo echo "/usr/local/bin/bash" >>/etc/shells'
+	echo_and_eval 'echo "/usr/local/bin/bash" | sudo tee -a /etc/shells'
 fi
 
 if ! grep -qF "/usr/local/bin/zsh" /etc/shells; then
-	echo_and_eval 'sudo echo "/usr/local/bin/zsh" >>/etc/shells'
+	echo_and_eval 'echo "/usr/local/bin/zsh" | sudo tee -a /etc/shells'
 fi
 
 if [ "$SHELL" != "/usr/local/bin/zsh" ]; then
@@ -440,7 +440,7 @@ EOF
 chmod +x .dotfiles/zsh_purepower/zsh
 echo_and_eval 'sudo ln -sf $HOME/.dotfiles/zsh_purepower/zsh /usr/local/bin/zsh_purepower'
 if ! grep -qF "/usr/local/bin/zsh_purepower" /etc/shells; then
-	echo_and_eval 'sudo echo "/usr/local/bin/zsh_purepower" >>/etc/shells'
+	echo_and_eval 'echo "/usr/local/bin/zsh_purepower" | sudo tee -a /etc/shells'
 fi
 
 backup_dotfiles .bashrc .dotfiles/.bashrc

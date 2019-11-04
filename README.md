@@ -75,7 +75,7 @@ The following packages will be setup:
 | Package                                                                                                                          | macOS | Ubuntu Linux | Manjaro Linux |
 | :------------------------------------------------------------------------------------------------------------------------------- | :---: | :----------: | :-----------: |
 | [Mirrors at TUNA](https://mirrors.tuna.tsinghua.edu.cn)                                                                          |   ✔   |      ✔       |       ✔       |
-| [HomeBrew](https://brew.sh)                                                                                                      |   ✔   |      ✘       |       ✘       |
+| [HomeBrew (macOS)](https://brew.sh)                                                                                              |   ✔   |      ✘       |       ✘       |
 |                                                                                                                                  |       |              |               |
 | [bash](https://www.gnu.org/software/bash/)                                                                                       |   ✔   |      ✔       |       ✔       |
 | [zsh](http://zsh.sourceforge.net) & [oh-my-zsh](https://ohmyz.sh)                                                                |   ✔   |      ✔       |       ✔       |
@@ -109,20 +109,19 @@ The following packages will be setup:
 | [Cascadia Code Font](https://github.com/microsoft/cascadia-code)                                                                 |   ✔   |      ✔       |       ✔       |
 | Menlo Font                                                                                                                       |   ✔   |      ✔       |       ✔       |
 
-Currently macOS only casks:
+Currently macOS only casks installed by HomeBrew:
 
-| Package                     | macOS | Ubuntu Linux | Manjaro Linux |
-| :-------------------------- | :---: | :----------: | :-----------: |
-| [HomeBrew](https://brew.sh) |   ✔   |      ✘       |       ✘       |
-| iTerm2                      |   ✔   |      ✘       |       ✘       |
-| Google Chrome               |   ✔   |      ✘       |       ✘       |
-| Keka                        |   ✔   |      ✘       |       ✘       |
-| Sogouinput                  |   ✔   |      ✘       |       ✘       |
-| Netease Music               |   ✔   |      ✘       |       ✘       |
-| IINA                        |   ✔   |      ✘       |       ✘       |
-| Typora                      |   ✔   |      ✘       |       ✘       |
-| Transmission                |   ✔   |      ✘       |       ✘       |
-| Teamviewer                  |   ✔   |      ✘       |       ✘       |
-| Visual Studio Code          |   ✔   |      ✘       |       ✘       |
-| Xquartz                     |   ✔   |      ✘       |       ✘       |
-| Oracle-JDK                  |   ✔   |      ✘       |       ✘       |
+| Package                                                                           | macOS | Ubuntu Linux | Manjaro Linux |
+| :-------------------------------------------------------------------------------- | :---: | :----------: | :-----------: |
+| [iTerm2](https://iterm2.com)                                                      |   ✔   |      ✘       |       ✘       |
+| [Google Chrome](https://www.google.com/chrome/index.html)                         |   ✔   |      ✘       |       ✘       |
+| [Keka](https://www.keka.io)                                                       |   ✔   |      ✘       |       ✘       |
+| [Sogou Pinyin](https://pinyin.sogou.com/mac/)                                     |   ✔   |      ✘       |       ✘       |
+| [Netease Music](https://music.163.com)                                            |   ✔   |      ✘       |       ✘       |
+| [IINA](https://iina.io)                                                           |   ✔   |      ✘       |       ✘       |
+| [Typora](https://typora.io)                                                       |   ✔   |      ✘       |       ✘       |
+| [Transmission](https://transmissionbt.com)                                        |   ✔   |      ✘       |       ✘       |
+| [TeamViewer](https://www.teamviewer.com/en/)                                      |   ✔   |      ✘       |       ✘       |
+| [Visual Studio Code](https://code.visualstudio.com)                               |   ✔   |      ✘       |       ✘       |
+| [XQuartz](https://www.xquartz.org)                                                |   ✔   |      ✘       |       ✘       |
+| [Oracle JDK](https://www.oracle.com/technetwork/java/javase/downloads/index.html) |   ✔   |      ✘       |       ✘       |

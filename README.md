@@ -36,11 +36,13 @@ zsh ~/upgrade_packages.sh
 
 ### Font Settings
 
-The default shell for the current user will be set to `zsh`. In order to get a wonderful and enjoyable terminal experience, please change your terminal font to a nerd font. The script will download [`DejaVu Sans Mono Nerd Font`](https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/DejaVuSansMono) for macOS and Linux. If you are using WSL on Windows, you can download them from [nerdfonts.com](https://www.nerdfonts.com) manually. Or use the powerlevel10k lean theme:
+The default shell for the current user will be set to `zsh`. In order to get a wonderful and enjoyable terminal experience, please change your terminal font to a [Nerd Font](https://github.com/ryanoasis/nerd-fonts). The script will download [`DejaVu Sans Mono Nerd Font`](https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/DejaVuSansMono) for macOS and Linux. If you are using WSL on Windows, you can download them from [nerdfonts.com](https://www.nerdfonts.com) manually. Or use the Powerlevel10k lean theme:
 
 ```shell
 chsh -s /usr/local/bin/zsh_purepower
 ```
+
+See [Font configuration for Powerlevel10k](https://github.com/romkatv/powerlevel10k#fonts) for more details.
 
 ## Customization
 

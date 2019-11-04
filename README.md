@@ -72,42 +72,42 @@ The source of package managers (HomeBrew (macOS), APT (Ubuntu), Pacman (Manjaro)
 
 The following packages will be setup:
 
-| Package                                                                                                        | macOS | Ubuntu Linux | Manjaro Linux |
-| :------------------------------------------------------------------------------------------------------------- | :---: | :----------: | :-----------: |
-| [Mirrors at TUNA](https://mirrors.tuna.tsinghua.edu.cn)                                                        |   ✔   |      ✔       |       ✔       |
-| [HomeBrew](https://brew.sh)                                                                                    |   ✔   |      ✘       |       ✘       |
-|                                                                                                                |       |              |               |
-| [bash](https://www.gnu.org/software/bash/)                                                                     |   ✔   |      ✔       |       ✔       |
-| [zsh](http://zsh.sourceforge.net) & [oh-my-zsh](https://ohmyz.sh)                                              |   ✔   |      ✔       |       ✔       |
-| [powerlevel10k](https://github.com/romkatv/powerlevel10k)                                                      |   ✔   |      ✔       |       ✔       |
-| [zsh-syntax-highlighting](https://github.com/zsh-users/zsh-syntax-highlighting)                                |   ✔   |      ✔       |       ✔       |
-| [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions)                                        |   ✔   |      ✔       |       ✔       |
-| [zsh-completions](https://github.com/zsh-users/zsh-completions)                                                |   ✔   |      ✔       |       ✔       |
-| [colorls](https://github.com/athityakumar/colorls)                                                             |   ✔   |      ✔       |       ✔       |
-|                                                                                                                |       |              |               |
-| [git](https://git-scm.com) & [git-lfs](https://git-lfs.github.com)                                             |   ✔   |      ✔       |       ✔       |
-| [vim](https://www.vim.org) & [vim-plug](https://github.com/junegunn/vim-plug)                                  |   ✔   |      ✔       |       ✔       |
-| [tmux](https://github.com/tmux/tmux/wiki) & [oh-my-tmux](https://github.com/gpakosz/.tmux)                     |   ✔   |      ✔       |       ✔       |
-| reattach-to-user-namespace / xclip                                                                             |   ✔   |      ✔       |       ✔       |
-|                                                                                                                |       |              |               |
-| wget & curl                                                                                                    |   ✔   |      ✔       |       ✔       |
-| ssh / openssh                                                                                                  |   ✔   |      ✔       |       ✔       |
-| ruby & gem                                                                                                     |   ✔   |      ✔       |       ✔       |
-| perl & cpan                                                                                                    |   ✔   |      ✔       |       ✔       |
-| htop                                                                                                           |   ✔   |      ✔       |       ✔       |
-| net-tools                                                                                                      |   ✔   |      ✔       |       ✔       |
-| exfat-utils                                                                                                    |   ✔   |      ✔       |       ✔       |
-|                                                                                                                |       |              |               |
-| [Miniconda3](https://docs.conda.io/en/latest/miniconda.html)                                                   |   ✔   |      ✔       |       ✔       |
-| gcc                                                                                                            |   ✔   |      ✔       |       ✔       |
-| gdb                                                                                                            |   ✔   |      ✔       |       ✔       |
-| clang & llvm                                                                                                   |   ✔   |      ✔       |       ✔       |
-| gdb & lldb                                                                                                     |   ✔   |      ✔       |       ✔       |
-| make & cmake                                                                                                   |   ✔   |      ✔       |       ✔       |
-|                                                                                                                |       |              |               |
-| [DejaVu Sans Mono Nerd Font](https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/DejaVuSansMono) |   ✔   |      ✔       |       ✔       |
-| [Cascadia Code Font](https://github.com/microsoft/cascadia-code)                                               |   ✔   |      ✔       |       ✔       |
-| Menlo Font                                                                                                     |   ✔   |      ✔       |       ✔       |
+| Package                                                                                                                          | macOS | Ubuntu Linux | Manjaro Linux |
+| :------------------------------------------------------------------------------------------------------------------------------- | :---: | :----------: | :-----------: |
+| [Mirrors at TUNA](https://mirrors.tuna.tsinghua.edu.cn)                                                                          |   ✔   |      ✔       |       ✔       |
+| [HomeBrew](https://brew.sh)                                                                                                      |   ✔   |      ✘       |       ✘       |
+|                                                                                                                                  |       |              |               |
+| [bash](https://www.gnu.org/software/bash/)                                                                                       |   ✔   |      ✔       |       ✔       |
+| [zsh](http://zsh.sourceforge.net) & [oh-my-zsh](https://ohmyz.sh)                                                                |   ✔   |      ✔       |       ✔       |
+| [powerlevel10k](https://github.com/romkatv/powerlevel10k)                                                                        |   ✔   |      ✔       |       ✔       |
+| [zsh-syntax-highlighting](https://github.com/zsh-users/zsh-syntax-highlighting)                                                  |   ✔   |      ✔       |       ✔       |
+| [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions)                                                          |   ✔   |      ✔       |       ✔       |
+| [zsh-completions](https://github.com/zsh-users/zsh-completions)                                                                  |   ✔   |      ✔       |       ✔       |
+| [colorls](https://github.com/athityakumar/colorls)                                                                               |   ✔   |      ✔       |       ✔       |
+|                                                                                                                                  |       |              |               |
+| [git](https://git-scm.com) & [git-lfs](https://git-lfs.github.com)                                                               |   ✔   |      ✔       |       ✔       |
+| [vim](https://www.vim.org) & [vim-plug](https://github.com/junegunn/vim-plug)                                                    |   ✔   |      ✔       |       ✔       |
+| [tmux](https://github.com/tmux/tmux/wiki) & [oh-my-tmux](https://github.com/gpakosz/.tmux)                                       |   ✔   |      ✔       |       ✔       |
+| [reattach-to-user-namespace](https://github.com/ChrisJohnsen/tmux-MacOSX-pasteboard) / [xclip](https://github.com/astrand/xclip) |   ✔   |      ✔       |       ✔       |
+|                                                                                                                                  |       |              |               |
+| [wget](https://www.gnu.org/software/wget/) & [curl](https://curl.haxx.se)                                                        |   ✔   |      ✔       |       ✔       |
+| [ssh / openssh](https://www.ssh.com/ssh/)                                                                                        |   ✔   |      ✔       |       ✔       |
+| [ruby](https://www.ruby-lang.org/en/) & [rubygems](https://rubygems.org)                                                         |   ✔   |      ✔       |       ✔       |
+| [perl](https://www.perl.org) & [cpan](https://www.cpan.org)                                                                      |   ✔   |      ✔       |       ✔       |
+| [htop](https://hisham.hm/htop/)                                                                                                  |   ✔   |      ✔       |       ✔       |
+| [net-tools](https://sourceforge.net/projects/net-tools/)                                                                         |   ✔   |      ✔       |       ✔       |
+| [exfat-utils](https://pkgs.org/download/exfat-utils)                                                                             |   ✔   |      ✔       |       ✔       |
+|                                                                                                                                  |       |              |               |
+| [Miniconda3](https://docs.conda.io/en/latest/miniconda.html)                                                                     |   ✔   |      ✔       |       ✔       |
+| [gcc](https://gcc.gnu.org)                                                                                                       |   ✔   |      ✔       |       ✔       |
+| [gdb](https://www.gnu.org/software/gdb/)                                                                                         |   ✔   |      ✔       |       ✔       |
+| [clang](https://clang.llvm.org) & [llvm](https://llvm.org)                                                                       |   ✔   |      ✔       |       ✔       |
+| [lldb](http://lldb.llvm.org)                                                                                                     |   ✔   |      ✔       |       ✔       |
+| [make](https://www.gnu.org/software/make/) & [cmake](https://cmake.org)                                                          |   ✔   |      ✔       |       ✔       |
+|                                                                                                                                  |       |              |               |
+| [DejaVu Sans Mono Nerd Font](https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/DejaVuSansMono)                   |   ✔   |      ✔       |       ✔       |
+| [Cascadia Code Font](https://github.com/microsoft/cascadia-code)                                                                 |   ✔   |      ✔       |       ✔       |
+| Menlo Font                                                                                                                       |   ✔   |      ✔       |       ✔       |
 
 Currently macOS only casks:
 

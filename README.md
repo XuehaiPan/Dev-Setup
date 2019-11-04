@@ -24,7 +24,7 @@ change the user profiles in `$HOME/.gitconfig` after the script is done.
 
 If you are using Linux, modify the default user name and host name in function `send_to_mac` and `receive_from_mac` in `$HOME/.dotfiles/utilities.sh`.
 
-After running the script, all the old configuration files involved will be backed up to the folder `$HOME/.dotfiles/backups`.
+After running the script, all the old configuration files involved will be backed up to the folder `$HOME/.dotfiles/backups/$DATETIME`.
 
 ### Upgrade Packages
 

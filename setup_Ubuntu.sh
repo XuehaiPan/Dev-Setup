@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+DATETIME=$(date +"%Y-%m-%d-%T")
+BACKUP_DIR=.dotfiles/$DATETIME
+
 function echo_and_eval() {
 	local CMD="$*"
 	printf "%s" "$CMD" | awk \
@@ -30,7 +33,7 @@ function echo_and_eval() {
 function backup_dotfiles() {
 	cd $HOME
 
-	mkdir -p .dotfiles/backups/.dotfiles
+	mkdir -p $BACKUP_DIR/.dotfiles
 
 	for file in $@; do
 		if [ -f $file ] || [ -d $file ]; then
@@ -39,7 +42,7 @@ function backup_dotfiles() {
 				rm -f $file
 				cp -rf $original_file $file
 			fi
-			cp -rf $file .dotfiles/backups/$file
+			cp -rf $file $BACKUP_DIR/$file
 		fi
 	done
 }

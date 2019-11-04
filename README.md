@@ -90,7 +90,8 @@ The following packages will be setup:
 | [tmux](https://github.com/tmux/tmux/wiki) & [oh-my-tmux](https://github.com/gpakosz/.tmux)                                       |   ✔   |      ✔       |       ✔       |
 | [reattach-to-user-namespace](https://github.com/ChrisJohnsen/tmux-MacOSX-pasteboard) / [xclip](https://github.com/astrand/xclip) |   ✔   |      ✔       |       ✔       |
 |                                                                                                                                  |       |              |               |
-| [wget](https://www.gnu.org/software/wget/) & [curl](https://curl.haxx.se)                                                        |   ✔   |      ✔       |       ✔       |
+| [wget](https://www.gnu.org/software/wget/)                                                                                       |   ✔   |      ✔       |       ✔       |
+| [curl](https://curl.haxx.se)                                                                                                     |   ✔   |      ✔       |       ✔       |
 | [openssh](https://www.ssh.com/ssh/openssh/)                                                                                      |   ✔   |      ✔       |       ✔       |
 | [ruby](https://www.ruby-lang.org/en/) & [rubygems](https://rubygems.org)                                                         |   ✔   |      ✔       |       ✔       |
 | [perl](https://www.perl.org) & [cpan](https://www.cpan.org)                                                                      |   ✔   |      ✔       |       ✔       |
@@ -103,7 +104,8 @@ The following packages will be setup:
 | [gdb](https://www.gnu.org/software/gdb/)                                                                                         |   ✔   |      ✔       |       ✔       |
 | [clang](https://clang.llvm.org) & [llvm](https://llvm.org)                                                                       |   ✔   |      ✔       |       ✔       |
 | [lldb](http://lldb.llvm.org)                                                                                                     |   ✔   |      ✔       |       ✔       |
-| [make](https://www.gnu.org/software/make/) & [cmake](https://cmake.org)                                                          |   ✔   |      ✔       |       ✔       |
+| [make](https://www.gnu.org/software/make/)                                                                                       |   ✔   |      ✔       |       ✔       |
+| [cmake](https://cmake.org)                                                                                                       |   ✔   |      ✔       |       ✔       |
 |                                                                                                                                  |       |              |               |
 | [DejaVu Sans Mono Nerd Font](https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/DejaVuSansMono)                   |   ✔   |      ✔       |       ✔       |
 | [Cascadia Code Font](https://github.com/microsoft/cascadia-code)                                                                 |   ✔   |      ✔       |       ✔       |
@@ -111,17 +113,17 @@ The following packages will be setup:
 
 Currently macOS only casks installed by HomeBrew:
 
-| Package                                                                           | macOS | Ubuntu Linux | Manjaro Linux |
-| :-------------------------------------------------------------------------------- | :---: | :----------: | :-----------: |
-| [iTerm2](https://iterm2.com)                                                      |   ✔   |      ✘       |       ✘       |
-| [Google Chrome](https://www.google.com/chrome/index.html)                         |   ✔   |      ✘       |       ✘       |
-| [Keka](https://www.keka.io)                                                       |   ✔   |      ✘       |       ✘       |
-| [Sogou Pinyin](https://pinyin.sogou.com/mac/)                                     |   ✔   |      ✘       |       ✘       |
-| [Netease Music](https://music.163.com)                                            |   ✔   |      ✘       |       ✘       |
-| [IINA](https://iina.io)                                                           |   ✔   |      ✘       |       ✘       |
-| [Typora](https://typora.io)                                                       |   ✔   |      ✘       |       ✘       |
-| [Transmission](https://transmissionbt.com)                                        |   ✔   |      ✘       |       ✘       |
-| [TeamViewer](https://www.teamviewer.com/en/)                                      |   ✔   |      ✘       |       ✘       |
-| [Visual Studio Code](https://code.visualstudio.com)                               |   ✔   |      ✘       |       ✘       |
-| [XQuartz](https://www.xquartz.org)                                                |   ✔   |      ✘       |       ✘       |
-| [Oracle JDK](https://www.oracle.com/technetwork/java/javase/downloads/index.html) |   ✔   |      ✘       |       ✘       |
+| Package                                                                           | Description                                                                                | macOS | Ubuntu Linux | Manjaro Linux |
+| :-------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | :---: | :----------: | :-----------: |
+| [iTerm2](https://iterm2.com)                                                      | A terminal emulator for macOS that does amazing things                                     |   ✔   |      ✘       |       ✘       |
+| [Google Chrome](https://www.google.com/chrome/index.html)                         | A fast, secure, and free web browser built for the modern web                              |   ✔   |      ✘       |       ✘       |
+| [Keka](https://www.keka.io)                                                       | The macOS file archive                                                                     |   ✔   |      ✘       |       ✘       |
+| [Sogou Pinyin](https://pinyin.sogou.com/mac/)                                     | A popular Chinese Pinyin input method editor                                               |   ✔   |      ✘       |       ✘       |
+| [NetEase Music](https://music.163.com)                                            | A freemium music streaming service                                                         |   ✔   |      ✘       |       ✘       |
+| [IINA](https://iina.io)                                                           | The modern media player for macOS                                                          |   ✔   |      ✘       |       ✘       |
+| [Typora](https://typora.io)                                                       | A truly minimal markdown editor                                                            |   ✔   |      ✘       |       ✘       |
+| [Transmission](https://transmissionbt.com)                                        | A fast, easy, and free BitTorrent client                                                   |   ✔   |      ✘       |       ✘       |
+| [TeamViewer](https://www.teamviewer.com/)                                         | The world’s most-loved remote desktop tool                                                 |   ✔   |      ✘       |       ✘       |
+| [Visual Studio Code](https://code.visualstudio.com)                               | A lightweight but powerful source code editor                                              |   ✔   |      ✘       |       ✘       |
+| [XQuartz](https://www.xquartz.org)                                                | An open-source effort to develop a version of the X.Org X Window System that runs on macOS |   ✔   |      ✘       |       ✘       |
+| [Oracle JDK](https://www.oracle.com/technetwork/java/javase/downloads/index.html) | Java™ Platform Standard Edition Development Kit                                            |   ✔   |      ✘       |       ✘       |

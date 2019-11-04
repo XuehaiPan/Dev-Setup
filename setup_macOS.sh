@@ -35,9 +35,9 @@ function backup_dotfiles() {
 	for file in $@; do
 		if [ -f $file ] || [ -d $file ]; then
 			if [ -L $file ]; then
-				local origin_file=$(readlink $file)
+				local original_file=$(readlink $file)
 				rm -f $file
-				cp -rf $origin_file $file
+				cp -rf $original_file $file
 			fi
 			cp -rf $file .dotfiles/backups/$file
 		fi

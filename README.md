@@ -34,6 +34,14 @@ The script will create a shell script `upgrade_packages.sh` at your home directo
 zsh ~/upgrade_packages.sh
 ```
 
+By default, `upgrade_packages.sh` will not upgrade your conda environments. If you want to always keep your conda up-to-date, you can uncomment the last line in the script. Or run the script as:
+
+```shell
+source ~/upgrade_packages.sh; upgrade_conda
+```
+
+If you are using Linux, each function in `upgrade_packages.sh` has a copy in `$HOME/.dotfiles/utilities.sh` which will be sourced automatically when the shell starts up.
+
 ### Font Settings
 
 The default shell for the current user will be set to `zsh`. In order to get a wonderful and enjoyable terminal experience, please change your terminal font to a [Nerd Font](https://github.com/ryanoasis/nerd-fonts). The script will download [`DejaVu Sans Mono Nerd Font`](https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/DejaVuSansMono) for macOS and Linux. If you are using WSL on Windows, you can download them from [nerdfonts.com](https://www.nerdfonts.com) manually, and change the font setting in [Windows Terminal](https://github.com/Microsoft/Terminal) profile to Nerd Font Complete Windows Compatible (e.g. `DejaVuSansMono NF`). Or use the Powerlevel10k lean theme:

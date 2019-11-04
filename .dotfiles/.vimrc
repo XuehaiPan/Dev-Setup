@@ -53,16 +53,18 @@ let g:NERDTreeShowHidden=1
 let g:NERDTreeShowLineNumbers=0
 let g:NERDTreeWinPos='left'
 let g:NERDTreeWinSize=31
-autocmd VimEnter * let width = winwidth('%') |
-                 \ let numberwidth = ((&number || &relativenumber)? max([&numberwidth, strlen(line('$')) + 1]) : 0) |
-                 \ let signwidth = ((&signcolumn == 'yes' || &signcolumn == 'auto')? 2 : 0) |
-                 \ let foldwidth = &foldcolumn |
-                 \ let bufwidth = width - numberwidth - foldwidth - signwidth |
-                 \ if bufwidth > 80 + NERDTreeWinSize |
-                 \     NERDTree |
-                 \     wincmd p |
-                 \ endif |
-                 \ unlet width numberwidth signwidth foldwidth bufwidth
+autocmd VimEnter * if str2nr(system("ls -l $PWD | wc -l")) <= 1000 |
+                 \     let width = winwidth('%') |
+                 \     let numberwidth = ((&number || &relativenumber)? max([&numberwidth, strlen(line('$')) + 1]) : 0) |
+                 \     let signwidth = ((&signcolumn == 'yes' || &signcolumn == 'auto')? 2 : 0) |
+                 \     let foldwidth = &foldcolumn |
+                 \     let bufwidth = width - numberwidth - foldwidth - signwidth |
+                 \     if bufwidth > 80 + NERDTreeWinSize |
+                 \         NERDTree |
+                 \         wincmd p |
+                 \     endif |
+                 \     unlet width numberwidth signwidth foldwidth bufwidth |
+                 \ endif
 autocmd BufEnter * if (winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree()) |
                  \ q |
                  \ endif

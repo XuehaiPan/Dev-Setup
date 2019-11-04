@@ -1314,7 +1314,7 @@ rm -r .cph_tmp* 2>/dev/null
 rm -r Miniconda3/.cph_tmp* 2>/dev/null
 
 cat >upgrade_packages.sh <<EOF
-#!/usr/bin/env /usr/bin/zsh
+#!/usr/bin/env bash
 
 function echo_and_eval() {
 	local CMD="\$*"

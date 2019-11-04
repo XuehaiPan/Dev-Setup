@@ -52,7 +52,7 @@ Add a new config file to the script:
 2. replace all the identifiers of your home directory to `$HOME` in `temp.txt`;
 3. replace all the identifiers of your user name to `$USER` in `temp.txt`;
 4. replace all `\` to `\\` in `temp.txt`;
-5. replace all `$` to `\$` in `temp.txt`;
+5. replace all `$` to `\$` in `temp.txt` (including `$` in `$HOME` and `$USER` added above);
 6. add the following to the script:
 
 ```shell

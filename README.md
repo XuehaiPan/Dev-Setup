@@ -28,7 +28,7 @@ After running the script, all the old configuration files involved will be backe
 
 ### Upgrade Packages
 
-The script will create a shell script `upgrade_packages.sh` at your home directory. You can upgrade your packages just by running:
+The script will create a shell script named `upgrade_packages.sh` at your home directory. You can upgrade your packages just by running:
 
 ```shell
 zsh ~/upgrade_packages.sh
@@ -61,7 +61,7 @@ Add a new config file to the script:
 3. replace all the identifiers of your user name to `$USER` in `temp.txt`;
 4. replace all `\` to `\\` in `temp.txt`;
 5. replace all `$` to `\$` in `temp.txt` (including `$` in `$HOME` and `$USER` added above);
-6. add the following to the script:
+6. add the following lines to the script:
 
 ```shell
 cd $HOME   # this line has already been added at the top of the script

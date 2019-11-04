@@ -91,7 +91,7 @@ The following packages will be setup:
 | [reattach-to-user-namespace](https://github.com/ChrisJohnsen/tmux-MacOSX-pasteboard) / [xclip](https://github.com/astrand/xclip) |   ✔   |      ✔       |       ✔       |
 |                                                                                                                                  |       |              |               |
 | [wget](https://www.gnu.org/software/wget/) & [curl](https://curl.haxx.se)                                                        |   ✔   |      ✔       |       ✔       |
-| [ssh / openssh](https://www.ssh.com/ssh/)                                                                                        |   ✔   |      ✔       |       ✔       |
+| [openssh](https://www.ssh.com/ssh/openssh/)                                                                                      |   ✔   |      ✔       |       ✔       |
 | [ruby](https://www.ruby-lang.org/en/) & [rubygems](https://rubygems.org)                                                         |   ✔   |      ✔       |       ✔       |
 | [perl](https://www.perl.org) & [cpan](https://www.cpan.org)                                                                      |   ✔   |      ✔       |       ✔       |
 | [htop](https://hisham.hm/htop/)                                                                                                  |   ✔   |      ✔       |       ✔       |

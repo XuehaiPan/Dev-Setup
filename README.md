@@ -42,7 +42,7 @@ The default shell for the current user will be set to `zsh`. In order to get a w
 chsh -s /usr/local/bin/zsh_purepower
 ```
 
-See [Font configuration for Powerlevel10k](https://github.com/romkatv/powerlevel10k#fonts) for more details.
+See [Font configurations for Powerlevel10k](https://github.com/romkatv/powerlevel10k#fonts) for more details.
 
 ## Customization
 

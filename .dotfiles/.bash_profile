@@ -55,15 +55,15 @@ export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bot
 # Anaconda
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('$HOME/Anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+__conda_setup="$('$HOME/Anaconda3/bin/conda' 'shell.bash' 'hook' 2>/dev/null)"
 if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
+	eval "$__conda_setup"
 else
-    if [ -f "$HOME/Anaconda3/etc/profile.d/conda.sh" ]; then
-        . "$HOME/Anaconda3/etc/profile.d/conda.sh"
-    else
-        export PATH="$HOME/Anaconda3/bin:$PATH"
-    fi
+	if [ -f "$HOME/Anaconda3/etc/profile.d/conda.sh" ]; then
+		. "$HOME/Anaconda3/etc/profile.d/conda.sh"
+	else
+		export PATH="$HOME/Anaconda3/bin:$PATH"
+	fi
 fi
 unset __conda_setup
 # <<< conda initialize <<<
@@ -138,7 +138,7 @@ export DYLD_FALLBACK_LIBRARY_PATH="$DYLD_FALLBACK_LIBRARY_PATH:/usr/local/opt/nc
 # Remove duplicate entries
 function remove_duplicate() {
 	for item in "$@"; do
-		echo $(printf "%s" "$item" | awk -v RS=':' 'BEGIN { idx = 0; delete flag; } { if (!(flag[$0]++)) { printf("%s%s", (!idx++ ? "" : ":"), $0) } }')
+		echo $(printf "%s" "$item" | awk -v RS=':' 'BEGIN { idx = 0; delete flag; } { if (!(flag[$0]++)) { printf("%s%s", (!idx++ ? "" : ":"), $0); } }')
 	done
 }
 export PATH=$(remove_duplicate $PATH)

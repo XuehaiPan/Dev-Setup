@@ -209,7 +209,7 @@ export PATH="\$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:\$PATH"
 # Remove duplicate entries
 function remove_duplicate() {
 	for item in "\$@"; do
-		echo \$(printf "%s" "\$item" | awk -v RS=':' 'BEGIN { idx = 0; delete flag; } { if (!(flag[\$0]++)) { printf("%s%s", (!idx++ ? "" : ":"), \$0) } }')
+		echo \$(printf "%s" "\$item" | awk -v RS=':' 'BEGIN { idx = 0; delete flag; } { if (!(flag[\$0]++)) { printf("%s%s", (!idx++ ? "" : ":"), \$0); } }')
 	done
 }
 export PATH=\$(remove_duplicate \$PATH)
@@ -632,7 +632,7 @@ export PATH="\$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:\$PATH"
 # Remove duplicate entries
 function remove_duplicate() {
 	for item in "\$@"; do
-		echo \$(printf "%s" "\$item" | awk -v RS=':' 'BEGIN { idx = 0; delete flag; } { if (!(flag[\$0]++)) { printf("%s%s", (!idx++ ? "" : ":"), \$0) } }')
+		echo \$(printf "%s" "\$item" | awk -v RS=':' 'BEGIN { idx = 0; delete flag; } { if (!(flag[\$0]++)) { printf("%s%s", (!idx++ ? "" : ":"), \$0); } }')
 	done
 }
 export PATH=\$(remove_duplicate \$PATH)

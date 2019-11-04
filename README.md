@@ -4,10 +4,15 @@ Bash scripts for setting up a freshly new installed OS automatically.
 
 - [OS-Setup](#os-setup)
     - [Usage](#usage)
+        - [Installation](#installation)
+        - [Upgrade Packages](#upgrade-packages)
+        - [Font Settings](#font-settings)
     - [Customization](#customization)
     - [Packages](#packages)
 
 ## Usage
+
+### Installation
 
 Open Terminal and run:
 
@@ -21,13 +26,17 @@ If you are using Linux, modify the default user name and host name in function `
 
 After running the script, all the old configuration files involved will be backed up to the folder `$HOME/.dotfiles/backups`.
 
-Also, the script will create a shell script `upgrade_packages.sh` at your home directory. You can upgrade your packages just by running:
+### Upgrade Packages
+
+The script will create a shell script `upgrade_packages.sh` at your home directory. You can upgrade your packages just by running:
 
 ```shell
 zsh ~/upgrade_packages.sh
 ```
 
-The default shell for the current user will be set to `zsh`. In order to get a wonderful and enjoyable terminal experience, please change your terminal font to nerd font. You can download them from [nerdfonts.com](https://www.nerdfonts.com). Or use the powerlevel10k lean theme:
+### Font Settings
+
+The default shell for the current user will be set to `zsh`. In order to get a wonderful and enjoyable terminal experience, please change your terminal font to a nerd font. The script will download `DejaVu Sans Mono Nerd Font` for macOS and Linux. If you are using WSL on Windows, you can download them from [nerdfonts.com](https://www.nerdfonts.com) manually. Or use the powerlevel10k lean theme:
 
 ```shell
 chsh -s /usr/local/bin/zsh_purepower

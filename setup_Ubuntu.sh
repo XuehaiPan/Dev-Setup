@@ -224,7 +224,7 @@ POWERLEVEL9K_MODE='nerdfont-complete'
 POWERLEVEL9K_PROMPT_ON_NEWLINE=true
 POWERLEVEL9K_RPROMPT_ON_NEWLINE=false
 POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX=""
-POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="%K{white}%F{black} \ue795 \uf155 %f%k%F{white}\ue0b0%f "
+POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="%K{white}%F{black} \\ue795 \\uf155 %f%k%F{white}\\ue0b0%f "
 POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(anaconda context root_indicator dir dir_writable vcs)
 POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(command_execution_time status time ssh)
 POWERLEVEL9K_SHORTEN_DIR_LENGTH=3
@@ -534,7 +534,7 @@ if ! grep -qF "export PS1=" .bashrc; then
 
 # User specific environment and startup programs
 export TERM="xterm-256color"
-export PS1='[\\[\\e[1;33m\\]\\u\[\\e[0m\\]@\\[\\e[1;32m\\]\\h\\[\\e[0m\\]:\\[\\e[1;35m\\]\\W\[\\e[0m\\]]\\\$ '
+export PS1='[\\[\\e[1;33m\\]\\u\\[\\e[0m\\]@\\[\\e[1;32m\\]\\h\\[\\e[0m\\]:\\[\\e[1;35m\\]\\W\\[\\e[0m\\]]\\\$ '
 
 # locale
 export LANG="en_US.UTF-8"

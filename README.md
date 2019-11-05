@@ -57,10 +57,10 @@ See [Font configurations for Powerlevel10k](https://github.com/romkatv/powerleve
 Add a new config file to the script:
 
 1. copy the contents of the config file to a temp file `temp.txt`;
-2. replace all the identifiers of your home directory to `$HOME` in `temp.txt`;
-3. replace all the identifiers of your user name to `$USER` in `temp.txt`;
-4. replace all `\` to `\\` in `temp.txt`;
-5. replace all `$` to `\$` in `temp.txt`;
+2. replace all the identifiers of your home directory with `$HOME` in `temp.txt`;
+3. replace all the identifiers of your user name with `$USER` in `temp.txt`;
+4. replace all `\` with `\\` in `temp.txt`;
+5. replace all `$` with `\$` in `temp.txt`;
 6. add the following lines to the script:
 
 ```shell

@@ -1454,6 +1454,8 @@ echo_and_eval "wget -O $FONT_DIR/Cascadia.ttf -c https://github.com/microsoft/ca
 echo_and_eval "unzip -o DejaVuSansMono.zip -d $FONT_DIR/"
 echo_and_eval "unzip -o Menlo.zip -d $FONT_DIR/"
 echo_and_eval 'rm -f DejaVuSansMono.zip Menlo.zip'
-echo_and_eval 'sudo fc-cache --force'
+if [ "$FONT_DIR" == ".local/share/fonts" ]; then
+	echo_and_eval 'sudo fc-cache --force'
+fi
 
 echo_and_eval 'sudo select-editor'

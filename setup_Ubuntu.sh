@@ -1442,12 +1442,17 @@ chmod +x upgrade_packages.sh
 rm -f .zcompdump* 2>/dev/null
 rm -f .shell.pre-oh-my-zsh 2>/dev/null
 
-mkdir -p .local/share/fonts
+FONT_DIR=".local/share/fonts"
+if [ -d /mnt/c/Windows/Fonts ]; then
+	FONT_DIR="/mnt/c/Windows/Fonts"
+else
+	mkdir -p $FONT_DIR
+fi
 echo_and_eval 'wget -O DejaVuSansMono.zip -c https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/DejaVuSansMono.zip'
 echo_and_eval 'wget -O Menlo.zip -c https://raw.githubusercontent.com/XuehaiPan/OS-Setup/master/Menlo.zip'
-echo_and_eval 'wget -O .local/share/fonts/Cascadia.ttf -c https://github.com/microsoft/cascadia-code/releases/download/v1910.04/Cascadia.ttf'
-echo_and_eval 'unzip DejaVuSansMono.zip -d .local/share/fonts/'
-echo_and_eval 'unzip Menlo.zip -d .local/share/fonts/'
+echo_and_eval "wget -O $FONT_DIR/Cascadia.ttf -c https://github.com/microsoft/cascadia-code/releases/download/v1910.04/Cascadia.ttf"
+echo_and_eval "unzip -o DejaVuSansMono.zip -d $FONT_DIR/"
+echo_and_eval "unzip -o Menlo.zip -d $FONT_DIR/"
 echo_and_eval 'rm -f DejaVuSansMono.zip Menlo.zip'
 echo_and_eval 'sudo fc-cache --force'
 

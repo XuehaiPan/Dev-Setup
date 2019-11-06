@@ -20,7 +20,9 @@ Open Terminal and run:
 bash setup_${OS_name}.sh
 ```
 
-change the user profiles in `$HOME/.gitconfig` after the script is done.
+* **Note**: If you are using **WSL on Windows**, you need to run [Windows Terminal](https://github.com/Microsoft/Terminal) as **administrator** to get the permissions to unpack fonts to `C:\Windows\Fonts`. Otherwise, the fonts will not install successfully on Windows. You can download them from [nerdfonts.com](https://www.nerdfonts.com) and install them manually.
+
+Change the user profiles in `$HOME/.gitconfig` after the script is done.
 
 If you are using Linux, modify the default user name and host name in function `send_to_mac` and `receive_from_mac` in `$HOME/.dotfiles/utilities.sh`.
 
@@ -44,13 +46,22 @@ If you are using Linux, each function in `upgrade_packages.sh` has a copy in `$H
 
 ### Font Settings
 
-The default shell for the current user will be set to `zsh`. In order to get a wonderful and enjoyable terminal experience, please change your terminal font to a [Nerd Font](https://github.com/ryanoasis/nerd-fonts). The script will download [`DejaVu Sans Mono Nerd Font`](https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/DejaVuSansMono) for macOS and Linux. If you are using WSL on Windows, you can download them from [nerdfonts.com](https://www.nerdfonts.com) manually, and change the font setting in [Windows Terminal](https://github.com/Microsoft/Terminal) profile to Nerd Font Complete Windows Compatible (e.g. `DejaVuSansMono NF`). Or use the Powerlevel10k lean theme:
+The default shell for the current user will be set to **`zsh`**. In order to get a wonderful and enjoyable terminal experience, please change your terminal font to a [**Nerd Font**](https://github.com/ryanoasis/nerd-fonts). You can download any nerd font you like from [nerdfonts.com](https://www.nerdfonts.com) manually. The script will download and install [**`DejaVu Sans Mono Nerd Font`**](https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/DejaVuSansMono) for **macOS**, **Linux** and **Windows**. (Administrator permissions are required to install fonts on Windows)
+
+Configure your terminal to use nerd fonts:
+
+* For macOS and Linux users, change the terminal font setting to "Nerd Font" (e.g. `'DejaVuSansMono Nerd Font Book'`).
+* For WSL on Windows users, change the terminal font setting to "Nerd Font Complete Windows Compatible" (e.g. `'DejaVuSansMono NF'`).
+
+See [Font configurations for Powerlevel10k](https://github.com/romkatv/powerlevel10k#fonts) for more details.
+
+Or use the Powerlevel10k lean theme:
 
 ```shell
 chsh -s /usr/local/bin/zsh_purepower
 ```
 
-See [Font configurations for Powerlevel10k](https://github.com/romkatv/powerlevel10k#fonts) for more details.
+which do not need additional font settings.
 
 ## Customization
 

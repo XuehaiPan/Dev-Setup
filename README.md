@@ -20,7 +20,7 @@ Open Terminal and run:
 bash setup_${OS_name}.sh
 ```
 
-* **Note**: If you are using **WSL on Windows**, you need to run [Windows Terminal](https://github.com/Microsoft/Terminal) as **administrator** to get the permissions to unpack fonts to `C:\Windows\Fonts`. Otherwise, the fonts will not install successfully on Windows. You can download them from [nerdfonts.com](https://www.nerdfonts.com) and install them manually.
+- **Note**: If you are using **WSL on Windows**, you need to run [Windows Terminal](https://github.com/Microsoft/Terminal) as **administrator** to get the permissions to unpack fonts to `C:\Windows\Fonts`. Otherwise, the fonts will not install successfully on Windows. You can download them from [nerdfonts.com](https://www.nerdfonts.com) and install them manually.
 
 Change the user profiles in `$HOME/.gitconfig` after the script is done.
 
@@ -50,8 +50,8 @@ The default shell for the current user will be set to **`zsh`**. In order to get
 
 Configure your terminal to use nerd fonts:
 
-* For macOS and Linux users, change the terminal font setting to "Nerd Font Complete" (e.g. `'DejaVuSansMono Nerd Font Book'`).
-* For WSL on Windows users, change the terminal font setting to "Nerd Font Complete Windows Compatible" (e.g. `'DejaVuSansMono NF'`).
+- For macOS and Linux users, change the terminal font setting to "Nerd Font Complete" (e.g. `'DejaVuSansMono Nerd Font Book'`).
+- For WSL on Windows users, change the terminal font setting to "Nerd Font Complete Windows Compatible" (e.g. `'DejaVuSansMono NF'`).
 
 See [Font configurations for Powerlevel10k](https://github.com/romkatv/powerlevel10k#fonts) for more details.
 

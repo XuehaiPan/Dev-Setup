@@ -114,6 +114,9 @@ for plugin in zsh-syntax-highlighting zsh-autosuggestions zsh-completions; do
 	echo_and_eval "git clone https://github.com/zsh-users/$plugin \$ZSH_CUSTOM/plugins/$plugin"
 done
 
+rm -f $HOME/.zcompdump* 2>/dev/null
+rm -f $HOME/.shell.pre-oh-my-zsh 2>/dev/null
+
 echo_and_eval 'cd $HOME'
 
 mkdir -p .dotfiles
@@ -1424,9 +1427,6 @@ upgrade_gems
 EOF
 
 chmod +x upgrade_packages.sh
-
-rm -f .zcompdump* 2>/dev/null
-rm -f .shell.pre-oh-my-zsh 2>/dev/null
 
 echo_and_eval 'brew cask install visual-studio-code xquartz'
 echo_and_eval 'brew cask install typora transmission teamviewer google-chrome'

@@ -106,6 +106,8 @@ EOF
 
 ln -sf .dotfiles/.gemrc .
 
+export PATH="$(ruby -r rubygems -e 'puts Gem.dir')/bin:$PATH"
+export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
 echo_and_eval 'sudo gem update --system'
 echo_and_eval 'sudo gem update'
 echo_and_eval 'sudo gem install colorls'

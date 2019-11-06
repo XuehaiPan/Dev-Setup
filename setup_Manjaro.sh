@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 DATETIME=$(date +"%Y-%m-%d-%T")
-BACKUP_DIR=.dotfiles/$DATETIME
+BACKUP_DIR=.dotfiles/backups/$DATETIME
 
 function echo_and_eval() {
 	local CMD="$*"

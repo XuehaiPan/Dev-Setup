@@ -47,15 +47,13 @@ function backup_dotfiles() {
 	done
 }
 
-if ! grep -qF "mirrors.tuna.tsinghua.edu.cn" /etc/pacman.d/mirrorlist; then
-	sudo cat >>/etc/pacman.conf <<EOF
-
-[arch4edu]
-Server = https://mirrors.tuna.tsinghua.edu.cn/arch4edu/\$arch
-
-[archlinuxcn]
-Server = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/\$arch
-EOF
+if ! grep -qF "mirrors.tuna.tsinghua.edu.cn" /etc/pacman.conf; then
+	echo_and_eval 'printf "\n%s\n%s\n\n%s\n%s\n" \
+		"[arch4edu]" \
+		"Server = https://mirrors.tuna.tsinghua.edu.cn/arch4edu/\$arch" \
+		"[archlinuxcn]" \
+		"Server = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/\$arch" \
+		| sudo tee -a /etc/pacman.conf'
 fi
 
 echo_and_eval 'sudo pacman -Syy'
@@ -65,11 +63,10 @@ echo_and_eval 'sudo pacman-key --lsign-key 7931B6D628C8D3BA'
 echo_and_eval 'sudo pacman -S archlinuxcn-keyring --noconfirm'
 
 if ! grep -qF "mirrors.tuna.tsinghua.edu.cn" /etc/pacman.d/mirrorlist; then
-	sudo cat >>/etc/pacman.d/mirrorlist <<EOF
-
-## TUNA
-Server = https://mirrors.tuna.tsinghua.edu.cn/archlinux/\$repo/os/\$arch
-EOF
+	echo_and_eval 'printf "\n%s\n%s\n" \
+		"## TUNA" \
+		"Server = https://mirrors.tuna.tsinghua.edu.cn/archlinux/\$repo/os/\$arch" \
+		| sudo tee -a /etc/pacman.d/mirrorlist'
 fi
 
 echo_and_eval 'sudo pacman -Syy'

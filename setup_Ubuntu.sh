@@ -1444,7 +1444,7 @@ rm -f .shell.pre-oh-my-zsh 2>/dev/null
 
 mkdir -p .local/share/fonts
 echo_and_eval 'wget -O DejaVuSansMono.zip -c https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/DejaVuSansMono.zip'
-echo_and_eval 'wget -O Menlo.zip -c https://www.cufonfonts.com/download/font/menlo'
+echo_and_eval 'wget -O Menlo.zip -c https://raw.githubusercontent.com/XuehaiPan/OS-Setup/master/Menlo.zip'
 echo_and_eval 'wget -O .local/share/fonts/Cascadia.ttf -c https://github.com/microsoft/cascadia-code/releases/download/v1910.04/Cascadia.ttf'
 echo_and_eval 'unzip DejaVuSansMono.zip -d .local/share/fonts/'
 echo_and_eval 'unzip Menlo.zip -d .local/share/fonts/'

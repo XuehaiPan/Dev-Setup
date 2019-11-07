@@ -62,12 +62,7 @@ echo_and_eval 'sudo pacman-key --finger 7931B6D628C8D3BA'
 echo_and_eval 'sudo pacman-key --lsign-key 7931B6D628C8D3BA'
 echo_and_eval 'sudo pacman -S archlinuxcn-keyring --noconfirm'
 
-if ! grep -qF "mirrors.tuna.tsinghua.edu.cn" /etc/pacman.d/mirrorlist; then
-	echo_and_eval 'printf "\n%s\n%s\n" \
-		"## TUNA" \
-		"Server = https://mirrors.tuna.tsinghua.edu.cn/archlinux/\$repo/os/\$arch" \
-		| sudo tee -a /etc/pacman.d/mirrorlist'
-fi
+echo_and_eval 'sudo pacman-mirrors --country China --method rank'
 
 echo_and_eval 'sudo pacman -Syy'
 

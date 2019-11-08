@@ -1000,17 +1000,42 @@ backup_dotfiles .gitconfig .dotfiles/.gitconfig
 
 cat >.dotfiles/.gitconfig <<EOF
 [user]
-name = XuehaiPan
-email = XuehaiPan@pku.edu.cn
+	name = XuehaiPan
+	email = XuehaiPan@pku.edu.cn
 
 [core]
-excludesfile = $HOME/.gitignore_global
+	excludesfile = ~/.gitignore_global
+	editor = vim
+
+[diff]
+	tool = vimdiff
+	algorithm = minimal
+
+[difftool]
+	prompt = false
+
+[merge]
+	tool = vimdiff
+
+[mergetool]
+	prompt = false
+
+[fetch]
+	prune = true
+	parallel = 0
+
+[submodule]
+	recurse = true
+	fetchJobs = 0
 
 [filter "lfs"]
-clean = git-lfs clean -- %f
-smudge = git-lfs smudge -- %f
-process = git-lfs filter-process
-required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+
+[color]
+	ui = true
 EOF
 
 ln -sf .dotfiles/.gitconfig .

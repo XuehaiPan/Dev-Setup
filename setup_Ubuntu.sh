@@ -523,7 +523,7 @@ function auto_reannounce_trackers() {
 
 	echo -ne "\\033[?25l"
 
-	for ((t = 0; i <= \$TIMES; ++i)); do
+	for ((t = 0; i <= TIMES; ++i)); do
 		if [ \$((t % 5)) -ne 0 ]; then
 			TORRENT="active"
 		else
@@ -531,7 +531,7 @@ function auto_reannounce_trackers() {
 		fi
 		CMD="transmission-remote --torrent \$TORRENT --reannounce"
 		eval \$CMD 1>/dev/null
-		for ((r = \$((INTERVAL - 1)); r >= 0; --r)); do
+		for ((r = INTERVAL - 1; r >= 0; --r)); do
 			echo -ne "\$CMD (\$t/\$TIMES, next reannounce in \${r}s)\\033[K\\r"
 			sleep 1
 		done

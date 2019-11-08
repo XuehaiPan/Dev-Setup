@@ -3,6 +3,11 @@
 DATETIME=$(date +"%Y-%m-%d-%T")
 BACKUP_DIR=.dotfiles/backups/$DATETIME
 
+IS_WSL=false
+if $(uname -r | grep -qF 'Microsoft'); then
+	IS_WSL=true
+fi
+
 function echo_and_eval() {
 	local CMD="$*"
 	printf "%s" "$CMD" | awk \
@@ -1457,7 +1462,7 @@ EOF
 chmod +x upgrade_packages.sh
 
 FONT_DIR=".local/share/fonts"
-if [ -d /mnt/c/Windows/Fonts ]; then
+if $IS_WSL; then
 	FONT_DIR="/mnt/c/Windows/Fonts"
 else
 	mkdir -p $FONT_DIR
@@ -1468,7 +1473,7 @@ echo_and_eval "wget -O $FONT_DIR/Cascadia.ttf -c https://github.com/microsoft/ca
 echo_and_eval "unzip -o DejaVuSansMono.zip -d $FONT_DIR/"
 echo_and_eval "unzip -o Menlo.zip -d $FONT_DIR/"
 echo_and_eval 'rm -f DejaVuSansMono.zip Menlo.zip'
-if [ "$FONT_DIR" == ".local/share/fonts" ]; then
+if $IS_WSL; then
 	echo_and_eval 'sudo fc-cache --force'
 fi
 

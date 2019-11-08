@@ -544,7 +544,7 @@ function auto_reannounce_trackers() {
 		done
 	done
 
-	echo -ne "\\033[?25h"
+	echo -ne "\\033[K\\033[?25h"
 }
 EOF
 

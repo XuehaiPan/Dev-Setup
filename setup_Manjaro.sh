@@ -1501,5 +1501,3 @@ echo_and_eval 'rm -f DejaVuSansMono.zip Menlo.zip'
 if ! $IS_WSL; then
 	echo_and_eval 'sudo fc-cache --force'
 fi
-
-echo_and_eval 'sudo select-editor'

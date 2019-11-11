@@ -34,6 +34,7 @@ set wildmenu
 set wildmode=longest:list,full
 set background=dark
 set t_Co=256
+set guifont=DejaVuSansMono\ Nerd\ Font\ Mono\ 10
 colorscheme monokai
 
 

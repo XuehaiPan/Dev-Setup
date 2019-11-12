@@ -1450,6 +1450,16 @@ upgrade_ohmyzsh
 upgrade_vim
 upgrade_gems
 # upgrade_conda
+
+if [ -n "\$ZSH_VERSION" ]; then
+	if [ -f \$HOME/.zshrc ]; then
+		source \$HOME/.zshrc
+	fi
+elif [ -n "\$BASH_VERSION" ]; then
+	if [ -f \$HOME/.bash_profile ]; then
+		source \$HOME/.bash_profile
+	fi
+fi
 EOF
 
 chmod +x upgrade_packages.sh

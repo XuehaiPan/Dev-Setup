@@ -1364,8 +1364,8 @@ echo_and_eval 'rm -f Miniconda3-latest-Linux-x86_64.sh'
 source .zshrc 2>/dev/null
 echo_and_eval 'conda update conda --yes'
 echo_and_eval 'conda install pip jupyter ipython notebook jupyterlab ipdb \
-		cython numpy numba matplotlib pandas seaborn pygraphviz \
-		yapf autopep8 pycodestyle pylint --yes'
+							 cython numpy numba matplotlib pandas seaborn pygraphviz \
+							 yapf autopep8 pycodestyle pylint --yes'
 echo_and_eval 'conda update --all --yes'
 echo_and_eval 'conda clean --all --yes'
 rm -r .cph_tmp* 2>/dev/null

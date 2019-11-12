@@ -504,25 +504,27 @@ function upgrade_conda() {
 function send_to_mac() {
 	local SOURCE="\$1"
 	local TARGET=\${2:-'~/Downloads/'}
+	local USER_NAME="PanXuehai"
 	local TARGET_HOST="PanXuehai-MacBook-Pro.local"
 	local PORT="22"
 	if [ -n "\$SSH_CLIENT" ] && [ -n "\$SSH_CONNECTION" ]; then
 		TARGET_HOST=\$(echo \$SSH_CLIENT | awk '{ print \$1 }')
 		PORT=\$(echo \$SSH_CLIENT | awk '{ print \$3 }')
 	fi
-	echo_and_eval "scp -P \$PORT -r \\"\$SOURCE\\" PanXuehai@\$TARGET_HOST:\\"\$TARGET\\""
+	echo_and_eval "scp -P \$PORT -r \\"\$SOURCE\\" \$USER_NAME@\$TARGET_HOST:\\"\$TARGET\\""
 }
 
 function recieve_from_mac() {
 	local SOURCE="\$1"
+	local TARGET=\${2:-'~/Downloads/'}
+	local USER_NAME="PanXuehai"
 	local SOURCE_HOST="PanXuehai-MacBook-Pro.local"
-	local TARGET=\${2:-"\$HOME/Downloads/"}
 	local PORT="22"
 	if [ -n "\$SSH_CLIENT" ] && [ -n "\$SSH_CONNECTION" ]; then
 		SOURCE_HOST=\$(echo \$SSH_CLIENT | awk '{ print \$1 }')
 		PORT=\$(echo \$SSH_CLIENT | awk '{ print \$3 }')
 	fi
-	echo_and_eval "scp -P \$PORT -r PanXuehai@\$SOURCE_HOST:\\"\$SOURCE\\" \\"\$TARGET\\""
+	echo_and_eval "scp -P \$PORT -r \$USER_NAME@\$SOURCE_HOST:\\"\$SOURCE\\" \\"\$TARGET\\""
 }
 
 function auto_reannounce_trackers() {

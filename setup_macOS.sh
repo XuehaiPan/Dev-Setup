@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
 DATETIME=$(date +"%Y-%m-%d-%T")
-BACKUP_DIR=.dotfiles/backups/$DATETIME
+BACKUP_DIR=".dotfiles/backups/$DATETIME"
+mkdir -p "$BACKUP_DIR/.dotfiles"
 
 function echo_and_eval() {
 	local CMD="$*"
@@ -31,18 +32,14 @@ function echo_and_eval() {
 }
 
 function backup_dotfiles() {
-	cd $HOME
-
-	mkdir -p $BACKUP_DIR/.dotfiles
-
-	for file in $@; do
-		if [ -f $file ] || [ -d $file ]; then
-			if [ -L $file ]; then
-				local original_file=$(readlink $file)
-				rm -f $file
-				cp -rf $original_file $file
+	for file in "$@"; do
+		if [[ -f $file ]] || [[ -d $file ]]; then
+			if [[ -L $file ]]; then
+				local original_file=$(readlink "$file")
+				rm -f "$file"
+				cp -rf "$original_file" "$file"
 			fi
-			cp -rf $file $BACKUP_DIR/$file
+			cp -rf "$file" "$BACKUP_DIR/$file"
 		fi
 	done
 }
@@ -80,7 +77,7 @@ if ! grep -qF "/usr/local/bin/zsh" /etc/shells; then
 	echo_and_eval 'echo "/usr/local/bin/zsh" | sudo tee -a /etc/shells'
 fi
 
-if [ "$SHELL" != "/usr/local/bin/zsh" ]; then
+if [[ $SHELL != "/usr/local/bin/zsh" ]]; then
 	echo_and_eval 'chsh -s /usr/local/bin/zsh'
 fi
 
@@ -1328,7 +1325,7 @@ ln -sf .dotfiles/.condarc .
 
 echo_and_eval 'wget -c https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-latest-MacOSX-x86_64.sh'
 CONDA_ARGS="-b -p $HOME/Miniconda3"
-if [ -d $HOME/Miniconda3 ]; then
+if [[ -d "$HOME/Miniconda3" ]]; then
 	CONDA_ARGS="$CONDA_ARGS -u"
 fi
 echo_and_eval "bash Miniconda3-latest-MacOSX-x86_64.sh $CONDA_ARGS"

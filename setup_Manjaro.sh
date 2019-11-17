@@ -49,14 +49,12 @@ function backup_dotfiles() {
 	done
 }
 
-if ! grep -qF "mirrors.tuna.tsinghua.edu.cn" /etc/pacman.conf; then
-	echo_and_eval 'printf "\n%s\n%s\n\n%s\n%s\n" \
-						  "[arch4edu]" \
-						  "Server = https://mirrors.tuna.tsinghua.edu.cn/arch4edu/\$arch" \
-						  "[archlinuxcn]" \
-						  "Server = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/\$arch" \
-				   | sudo tee -a /etc/pacman.conf'
-fi
+for repo in "arch4edu" "archlinuxcn"; do
+	if ! grep -qF "[$repo]" /etc/pacman.conf; then
+		echo_and_eval 'printf "\n%s\n%s\n" "[$repo]" "Server = https://mirrors.tuna.tsinghua.edu.cn/$repo/\$arch" \
+					   | sudo tee -a /etc/pacman.conf'
+	fi
+done
 
 sudo sed -i -e 's/^\s*#\s*Color$/Color/g' /etc/pacman.conf
 sudo sed -i -e 's/^\s*#\s*DisableDownloadTimeout$/DisableDownloadTimeout/g' /etc/pacman.conf

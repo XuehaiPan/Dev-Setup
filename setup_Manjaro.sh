@@ -58,6 +58,12 @@ if ! grep -qF "mirrors.tuna.tsinghua.edu.cn" /etc/pacman.conf; then
 				   | sudo tee -a /etc/pacman.conf'
 fi
 
+sudo sed -i -e 's/^\s*#\s*Color$/Color/g' /etc/pacman.conf
+sudo sed -i -e 's/^\s*#\s*DisableDownloadTimeout$/DisableDownloadTimeout/g' /etc/pacman.conf
+if ! grep -q '^DisableDownloadTimeout$' /etc/pacman.conf; then
+	sudo sed -i -e 's/^Color$/Color\nDisableDownloadTimeout/g' /etc/pacman.conf
+fi
+
 echo_and_eval 'sudo pacman -Syy'
 echo_and_eval 'sudo pacman-key --recv-keys 7931B6D628C8D3BA'
 echo_and_eval 'sudo pacman-key --finger 7931B6D628C8D3BA'

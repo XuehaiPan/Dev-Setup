@@ -74,7 +74,7 @@ echo_and_eval 'sudo pacman -Syy'
 
 echo_and_eval 'sudo pacman -S zsh --noconfirm'
 
-if ! grep -qF "/usr/bin/zsh" /etc/shells; then
+if ! grep -qF '/usr/bin/zsh' /etc/shells; then
 	echo_and_eval 'echo "/usr/bin/zsh" | sudo tee -a /etc/shells'
 fi
 
@@ -399,7 +399,7 @@ EOF
 
 chmod +x .dotfiles/zsh_purepower/zsh
 echo_and_eval 'sudo ln -sf $HOME/.dotfiles/zsh_purepower/zsh /usr/local/bin/zsh_purepower'
-if ! grep -qF "/usr/local/bin/zsh_purepower" /etc/shells; then
+if ! grep -qF '/usr/local/bin/zsh_purepower' /etc/shells; then
 	echo_and_eval 'echo "/usr/local/bin/zsh_purepower" | sudo tee -a /etc/shells'
 fi
 
@@ -558,7 +558,7 @@ EOF
 
 backup_dotfiles .bashrc .dotfiles/.bashrc
 
-if ! grep -qF "export PS1=" .bashrc; then
+if ! grep -qF 'export PS1=' .bashrc; then
 	cat >>.bashrc <<EOF
 
 # User specific environment and startup programs

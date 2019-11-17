@@ -38,8 +38,8 @@ function echo_and_eval() {
 
 function backup_dotfiles() {
 	for file in "$@"; do
-		if [[ -f "$file" ]] || [[ -d "$file" ]]; then
-			if [[ -L "$file" ]]; then
+		if [[ -f $file ]] || [[ -d $file ]]; then
+			if [[ -L $file ]]; then
 				local original_file=$(readlink "$file")
 				rm -f "$file"
 				cp -rf "$original_file" "$file"
@@ -51,11 +51,11 @@ function backup_dotfiles() {
 
 if ! grep -qF "mirrors.tuna.tsinghua.edu.cn" /etc/pacman.conf; then
 	echo_and_eval 'printf "\n%s\n%s\n\n%s\n%s\n" \
-		"[arch4edu]" \
-		"Server = https://mirrors.tuna.tsinghua.edu.cn/arch4edu/\$arch" \
-		"[archlinuxcn]" \
-		"Server = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/\$arch" \
-		| sudo tee -a /etc/pacman.conf'
+						  "[arch4edu]" \
+						  "Server = https://mirrors.tuna.tsinghua.edu.cn/arch4edu/\$arch" \
+						  "[archlinuxcn]" \
+						  "Server = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/\$arch" \
+				   | sudo tee -a /etc/pacman.conf'
 fi
 
 echo_and_eval 'sudo pacman -Syy'
@@ -74,7 +74,7 @@ if ! grep -qF "/usr/bin/zsh" /etc/shells; then
 	echo_and_eval 'echo "/usr/bin/zsh" | sudo tee -a /etc/shells'
 fi
 
-if [[ "$SHELL" != "/usr/bin/zsh" ]]; then
+if [[ $SHELL != "/usr/bin/zsh" ]]; then
 	echo_and_eval 'chsh -s /usr/bin/zsh'
 fi
 

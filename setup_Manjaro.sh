@@ -517,7 +517,7 @@ function send_to_mac() {
 
 function recieve_from_mac() {
 	local SOURCE="\$1"
-	local TARGET=\${2:-'~/Downloads/'}
+	local TARGET=\${2:-'\$HOME/Downloads/'}
 	local USER_NAME="PanXuehai"
 	local SOURCE_HOST="PanXuehai-MacBook-Pro.local"
 	local PORT="22"

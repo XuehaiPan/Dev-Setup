@@ -494,7 +494,7 @@ function send_to_mac() {
 	if [ -n "\$SSH_CLIENT" ] && [ -n "\$SSH_CONNECTION" ]; then
 		TARGET_HOST=\$(echo \$SSH_CLIENT | awk '{ print \$1 }')
 	fi
-	echo_and_eval "rsync -P -r \\"\$SOURCE\\" \$USER_NAME@\$TARGET_HOST:\\"\$TARGET\\""
+	echo_and_eval "rsync -Phh -l -r \\"\$SOURCE\\" \$USER_NAME@\$TARGET_HOST:\\"\$TARGET\\""
 }
 
 function recieve_from_mac() {
@@ -505,7 +505,7 @@ function recieve_from_mac() {
 	if [ -n "\$SSH_CLIENT" ] && [ -n "\$SSH_CONNECTION" ]; then
 		SOURCE_HOST=\$(echo \$SSH_CLIENT | awk '{ print \$1 }')
 	fi
-	echo_and_eval "rsync -P -r \$USER_NAME@\$SOURCE_HOST:\\"\$SOURCE\\" \\"\$TARGET\\""
+	echo_and_eval "rsync -Phh -l -r \$USER_NAME@\$SOURCE_HOST:\\"\$SOURCE\\" \\"\$TARGET\\""
 }
 
 function auto_reannounce_trackers() {

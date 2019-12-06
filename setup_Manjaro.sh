@@ -82,7 +82,7 @@ if [[ $SHELL != "/usr/bin/zsh" ]]; then
 	echo_and_eval 'chsh -s /usr/bin/zsh'
 fi
 
-echo_and_eval 'sudo pacman -S wget curl git git-lfs --noconfirm'
+echo_and_eval 'sudo pacman -S bash-completion wget curl git git-lfs --noconfirm'
 echo_and_eval 'sudo pacman -S vim tmux htop openssh net-tools exfat-utils xclip --noconfirm'
 echo_and_eval 'sudo pacman -S gcc gdb clang llvm lldb make cmake ruby --noconfirm'
 
@@ -655,6 +655,11 @@ export LIBRARY_PATH=\$(remove_duplicate \$LIBRARY_PATH)
 export LD_LIBRARY_PATH=\$(remove_duplicate \$LD_LIBRARY_PATH)
 export MANPATH=\$(remove_duplicate \$MANPATH)
 unset -f remove_duplicate
+
+# Bash Completion
+if [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]]; then
+	. "/usr/local/etc/profile.d/bash_completion.sh"
+fi
 EOF
 
 ln -sf .dotfiles/.profile .

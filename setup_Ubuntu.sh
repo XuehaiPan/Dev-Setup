@@ -66,7 +66,7 @@ if [[ $SHELL != "/usr/bin/zsh" ]]; then
 	echo_and_eval 'chsh -s /usr/bin/zsh'
 fi
 
-echo_and_eval 'sudo apt install wget curl git git-lfs --yes'
+echo_and_eval 'sudo apt install bash-completion wget curl git git-lfs --yes'
 echo_and_eval 'sudo apt install vim tmux htop ssh net-tools exfat-utils xclip --yes'
 echo_and_eval 'sudo apt install gcc gdb clang clang-format llvm lldb make cmake ruby ruby-dev --yes'
 
@@ -639,6 +639,11 @@ export LIBRARY_PATH=\$(remove_duplicate \$LIBRARY_PATH)
 export LD_LIBRARY_PATH=\$(remove_duplicate \$LD_LIBRARY_PATH)
 export MANPATH=\$(remove_duplicate \$MANPATH)
 unset -f remove_duplicate
+
+# Bash Completion
+if [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]]; then
+	. "/usr/local/etc/profile.d/bash_completion.sh"
+fi
 EOF
 
 ln -sf .dotfiles/.profile .

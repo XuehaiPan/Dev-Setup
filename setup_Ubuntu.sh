@@ -640,6 +640,11 @@ export LD_LIBRARY_PATH=\$(remove_duplicate \$LD_LIBRARY_PATH)
 export MANPATH=\$(remove_duplicate \$MANPATH)
 unset -f remove_duplicate
 
+# Utilities
+if [ -f \$HOME/.dotfiles/utilities.sh ]; then
+	. \$HOME/.dotfiles/utilities.sh
+fi
+
 # Bash Completion
 if [[ -r "/etc/profile.d/bash_completion.sh" ]]; then
 	. "/etc/profile.d/bash_completion.sh"

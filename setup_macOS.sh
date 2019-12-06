@@ -258,14 +258,14 @@ function remove_duplicate() {
 		echo \$(printf "%s" "\$item" | awk -v RS=':' 'BEGIN { idx = 0; delete flag; } { if (!(flag[\$0]++)) { printf("%s%s", (!idx++ ? "" : ":"), \$0); } }')
 	done
 }
-export PATH=\$(remove_duplicate \$PATH)
-export C_INCLUDE_PATH=\$(remove_duplicate \$C_INCLUDE_PATH)
-export CPLUS_INCLUDE_PATH=\$(remove_duplicate \$CPLUS_INCLUDE_PATH)
-export LIBRARY_PATH=\$(remove_duplicate \$LIBRARY_PATH)
-export DYLD_LIBRARY_PATH=\$(remove_duplicate \$DYLD_LIBRARY_PATH)
-export DYLD_FALLBACK_LIBRARY_PATH=\$(remove_duplicate \$DYLD_FALLBACK_LIBRARY_PATH)
-export CLASSPATH=\$(remove_duplicate \$CLASSPATH)
-export MANPATH=\$(remove_duplicate \$MANPATH)
+export PATH=\$(remove_duplicate "\$PATH")
+export C_INCLUDE_PATH=\$(remove_duplicate "\$C_INCLUDE_PATH")
+export CPLUS_INCLUDE_PATH=\$(remove_duplicate "\$CPLUS_INCLUDE_PATH")
+export LIBRARY_PATH=\$(remove_duplicate "\$LIBRARY_PATH")
+export DYLD_LIBRARY_PATH=\$(remove_duplicate "\$DYLD_LIBRARY_PATH")
+export DYLD_FALLBACK_LIBRARY_PATH=\$(remove_duplicate "\$DYLD_FALLBACK_LIBRARY_PATH")
+export CLASSPATH=\$(remove_duplicate "\$CLASSPATH")
+export MANPATH=\$(remove_duplicate "\$MANPATH")
 unset -f remove_duplicate
 
 # X11
@@ -426,16 +426,16 @@ mkdir -p .dotfiles/zsh_purepower
 
 cat >.dotfiles/zsh_purepower/.zshrc <<EOF
 # Source common configrations
-source \$HOME/.dotfiles/.zshrc-common
+source "\$HOME/.dotfiles/.zshrc-common"
 
 # Use powerlevel10k purepower theme
-source \$ZSH_CUSTOM/themes/powerlevel10k/config/p10k-lean.zsh
+source "\$ZSH_CUSTOM/themes/powerlevel10k/config/p10k-lean.zsh"
 EOF
 
 cat >.dotfiles/zsh_purepower/zsh <<EOF
 #!/usr/local/bin/zsh -df
 
-export ZDOTDIR=\$HOME/.dotfiles/zsh_purepower
+export ZDOTDIR="\$HOME/.dotfiles/zsh_purepower"
 
 /usr/local/bin/zsh "\$@"
 
@@ -443,7 +443,7 @@ exit
 EOF
 
 chmod +x .dotfiles/zsh_purepower/zsh
-echo_and_eval 'sudo ln -sf $HOME/.dotfiles/zsh_purepower/zsh /usr/local/bin/zsh_purepower'
+echo_and_eval 'sudo ln -sf "$HOME/.dotfiles/zsh_purepower/zsh" /usr/local/bin/zsh_purepower'
 if ! grep -qF '/usr/local/bin/zsh_purepower' /etc/shells; then
 	echo_and_eval 'echo "/usr/local/bin/zsh_purepower" | sudo tee -a /etc/shells'
 fi
@@ -595,14 +595,14 @@ function remove_duplicate() {
 		echo \$(printf "%s" "\$item" | awk -v RS=':' 'BEGIN { idx = 0; delete flag; } { if (!(flag[\$0]++)) { printf("%s%s", (!idx++ ? "" : ":"), \$0); } }')
 	done
 }
-export PATH=\$(remove_duplicate \$PATH)
-export C_INCLUDE_PATH=\$(remove_duplicate \$C_INCLUDE_PATH)
-export CPLUS_INCLUDE_PATH=\$(remove_duplicate \$CPLUS_INCLUDE_PATH)
-export LIBRARY_PATH=\$(remove_duplicate \$LIBRARY_PATH)
-export DYLD_LIBRARY_PATH=\$(remove_duplicate \$DYLD_LIBRARY_PATH)
-export DYLD_FALLBACK_LIBRARY_PATH=\$(remove_duplicate \$DYLD_FALLBACK_LIBRARY_PATH)
-export CLASSPATH=\$(remove_duplicate \$CLASSPATH)
-export MANPATH=\$(remove_duplicate \$MANPATH)
+export PATH=\$(remove_duplicate "\$PATH")
+export C_INCLUDE_PATH=\$(remove_duplicate "\$C_INCLUDE_PATH")
+export CPLUS_INCLUDE_PATH=\$(remove_duplicate "\$CPLUS_INCLUDE_PATH")
+export LIBRARY_PATH=\$(remove_duplicate "\$LIBRARY_PATH")
+export DYLD_LIBRARY_PATH=\$(remove_duplicate "\$DYLD_LIBRARY_PATH")
+export DYLD_FALLBACK_LIBRARY_PATH=\$(remove_duplicate "\$DYLD_FALLBACK_LIBRARY_PATH")
+export CLASSPATH=\$(remove_duplicate "\$CLASSPATH")
+export MANPATH=\$(remove_duplicate "\$MANPATH")
 unset -f remove_duplicate
 
 # X11
@@ -1402,15 +1402,15 @@ function upgrade_ohmyzsh() {
 
 	# Upgrade themes
 	for theme in \$(basename -a \$(/bin/ls -Ad \$ZSH_CUSTOM/themes/*/)); do
-		if [ -d \$ZSH_CUSTOM/themes/\$theme/.git ]; then
-			echo_and_eval "git -C \\\$ZSH_CUSTOM/themes/\$theme pull"
+		if [ -d "\$ZSH_CUSTOM/themes/\$theme/.git" ]; then
+			echo_and_eval "git -C \\"\\\$ZSH_CUSTOM/themes/\$theme\\" pull"
 		fi
 	done
 
 	# Upgrade plugins
 	for plugin in \$(basename -a \$(/bin/ls -Ad \$ZSH_CUSTOM/plugins/*/)); do
-		if [ -d \$ZSH_CUSTOM/plugins/\$plugin/.git ]; then
-			echo_and_eval "git -C \\\$ZSH_CUSTOM/plugins/\$plugin pull"
+		if [ -d "\$ZSH_CUSTOM/plugins/\$plugin/.git" ]; then
+			echo_and_eval "git -C \\"\\\$ZSH_CUSTOM/plugins/\$plugin\\" pull"
 		fi
 	done
 }
@@ -1454,12 +1454,12 @@ upgrade_gems
 # upgrade_conda
 
 if [ -n "\$ZSH_VERSION" ]; then
-	if [ -f \$HOME/.zshrc ]; then
-		source \$HOME/.zshrc
+	if [ -f "\$HOME/.zshrc" ]; then
+		source "\$HOME/.zshrc"
 	fi
 elif [ -n "\$BASH_VERSION" ]; then
-	if [ -f \$HOME/.bash_profile ]; then
-		source \$HOME/.bash_profile
+	if [ -f "\$HOME/.bash_profile" ]; then
+		source "\$HOME/.bash_profile"
 	fi
 fi
 EOF

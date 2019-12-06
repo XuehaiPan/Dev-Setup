@@ -453,7 +453,7 @@ function upgrade_ohmyzsh() {
 	export ZSH_CUSTOM=\${ZSH_CUSTOM:-"\$ZSH/custom"}
 
 	# Upgrade oh my zsh
-	echo_and_eval 'zsh \$ZSH/tools/upgrade.sh'
+	echo_and_eval 'zsh "\$ZSH/tools/upgrade.sh"'
 
 	# Upgrade themes
 	for theme in \$(basename -a \$(/bin/ls -Ad "\$ZSH_CUSTOM/themes"/*/)); do
@@ -1438,7 +1438,7 @@ function upgrade_ohmyzsh() {
 	export ZSH_CUSTOM=\${ZSH_CUSTOM:-"\$ZSH/custom"}
 
 	# Upgrade oh my zsh
-	echo_and_eval 'zsh \$ZSH/tools/upgrade.sh'
+	echo_and_eval 'zsh "\$ZSH/tools/upgrade.sh"'
 
 	# Upgrade themes
 	for theme in \$(basename -a \$(/bin/ls -Ad "\$ZSH_CUSTOM/themes"/*/)); do

@@ -81,7 +81,7 @@ if [[ $SHELL != "/usr/local/bin/zsh" ]]; then
 	echo_and_eval 'chsh -s /usr/local/bin/zsh'
 fi
 
-echo_and_eval 'brew install wget curl git git-lfs'
+echo_and_eval 'brew install bash-completion wget curl git git-lfs'
 echo_and_eval 'brew install vim tmux htop reattach-to-user-namespace'
 
 echo_and_eval 'brew install ruby perl'
@@ -608,6 +608,11 @@ unset -f remove_duplicate
 # X11
 export DISPLAY=":0.0"
 xhost +local: &>/dev/null
+
+# Bash Completion
+if [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]]; then
+	. "/usr/local/etc/profile.d/bash_completion.sh"
+fi
 EOF
 
 ln -sf .dotfiles/.bash_profile .

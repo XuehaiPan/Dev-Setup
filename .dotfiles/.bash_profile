@@ -154,3 +154,8 @@ unset -f remove_duplicate
 # X11
 export DISPLAY=":0.0"
 xhost +local: &>/dev/null
+
+# Bash Completion
+if [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]]; then
+	. "/usr/local/etc/profile.d/bash_completion.sh"
+fi

@@ -456,14 +456,14 @@ function upgrade_ohmyzsh() {
 	echo_and_eval 'zsh \$ZSH/tools/upgrade.sh'
 
 	# Upgrade themes
-	for theme in \$(basename -a \$(/bin/ls -Ad "\$ZSH_CUSTOM/themes/*/")); do
+	for theme in \$(basename -a \$(/bin/ls -Ad "\$ZSH_CUSTOM/themes"/*/)); do
 		if [ -d "\$ZSH_CUSTOM/themes/\$theme/.git" ]; then
 			echo_and_eval "git -C \\"\\\$ZSH_CUSTOM/themes/\$theme\\" pull"
 		fi
 	done
 
 	# Upgrade plugins
-	for plugin in \$(basename -a \$(/bin/ls -Ad "\$ZSH_CUSTOM/plugins/*/")); do
+	for plugin in \$(basename -a \$(/bin/ls -Ad "\$ZSH_CUSTOM/plugins"/*/)); do
 		if [ -d "\$ZSH_CUSTOM/plugins/\$plugin/.git" ]; then
 			echo_and_eval "git -C \\"\\\$ZSH_CUSTOM/plugins/\$plugin\\" pull"
 		fi
@@ -1441,14 +1441,14 @@ function upgrade_ohmyzsh() {
 	echo_and_eval 'zsh \$ZSH/tools/upgrade.sh'
 
 	# Upgrade themes
-	for theme in \$(basename -a \$(/bin/ls -Ad "\$ZSH_CUSTOM/themes/*/")); do
+	for theme in \$(basename -a \$(/bin/ls -Ad "\$ZSH_CUSTOM/themes"/*/)); do
 		if [ -d "\$ZSH_CUSTOM/themes/\$theme/.git" ]; then
 			echo_and_eval "git -C \\"\\\$ZSH_CUSTOM/themes/\$theme\\" pull"
 		fi
 	done
 
 	# Upgrade plugins
-	for plugin in \$(basename -a \$(/bin/ls -Ad "\$ZSH_CUSTOM/plugins/*/")); do
+	for plugin in \$(basename -a \$(/bin/ls -Ad "\$ZSH_CUSTOM/plugins"/*/)); do
 		if [ -d "\$ZSH_CUSTOM/plugins/\$plugin/.git" ]; then
 			echo_and_eval "git -C \\"\\\$ZSH_CUSTOM/plugins/\$plugin\\" pull"
 		fi

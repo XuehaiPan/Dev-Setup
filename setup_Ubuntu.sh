@@ -641,8 +641,8 @@ export MANPATH=\$(remove_duplicate \$MANPATH)
 unset -f remove_duplicate
 
 # Bash Completion
-if [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]]; then
-	. "/usr/local/etc/profile.d/bash_completion.sh"
+if [[ -r "/etc/profile.d/bash_completion.sh" ]]; then
+	. "/etc/profile.d/bash_completion.sh"
 fi
 EOF
 

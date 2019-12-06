@@ -1,5 +1,5 @@
 # Source common configrations
-source $HOME/.dotfiles/.zshrc-common
+source "$HOME/.dotfiles/.zshrc-common"
 
 # Setup colorls
 source $(dirname $(gem which colorls))/tab_complete.sh

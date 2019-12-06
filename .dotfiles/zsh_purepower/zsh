@@ -1,6 +1,6 @@
 #!/usr/bin/env /usr/local/bin/zsh --no-globalrcs --no-rcs
 
-export ZDOTDIR=$HOME/.dotfiles/zsh_purepower
+export ZDOTDIR="$HOME/.dotfiles/zsh_purepower"
 
 /usr/local/bin/zsh "$@"
 

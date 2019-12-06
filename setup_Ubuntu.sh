@@ -76,17 +76,17 @@ echo_and_eval 'sudo apt upgrade --yes'
 echo_and_eval 'sudo apt autoremove --yes'
 echo_and_eval 'sudo apt autoclean --yes'
 
-export ZSH=${ZSH:-$HOME/.oh-my-zsh}
-export ZSH_CUSTOM=${ZSH_CUSTOM:-$ZSH/custom}
+export ZSH=${ZSH:-"$HOME/.oh-my-zsh"}
+export ZSH_CUSTOM=${ZSH_CUSTOM:-"$ZSH/custom"}
 export CHSH=${CHSH:-no}
 export RUNZSH=${RUNZSH:-no}
 
 echo_and_eval 'sh -c "$(wget -O- https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"'
 
-echo_and_eval 'git clone https://github.com/romkatv/powerlevel10k.git $ZSH_CUSTOM/themes/powerlevel10k'
+echo_and_eval 'git clone https://github.com/romkatv/powerlevel10k.git "$ZSH_CUSTOM/themes/powerlevel10k"'
 
 for plugin in zsh-syntax-highlighting zsh-autosuggestions zsh-completions; do
-	echo_and_eval "git clone https://github.com/zsh-users/$plugin \$ZSH_CUSTOM/plugins/$plugin"
+	echo_and_eval "git clone https://github.com/zsh-users/$plugin \"\$ZSH_CUSTOM/plugins/$plugin\""
 done
 
 rm -f $HOME/.zcompdump* 2>/dev/null
@@ -344,7 +344,7 @@ backup_dotfiles .zshrc .dotfiles/.zshrc
 
 cat >.dotfiles/.zshrc <<EOF
 # Source common configrations
-source \$HOME/.dotfiles/.zshrc-common
+source "\$HOME/.dotfiles/.zshrc-common"
 
 # Setup colorls
 source \$(dirname \$(gem which colorls))/tab_complete.sh
@@ -433,21 +433,21 @@ function upgrade_ubuntu() {
 
 function upgrade_ohmyzsh() {
 	# Config
-	export ZSH=\${ZSH:-\$HOME/.oh-my-zsh}
-	export ZSH_CUSTOM=\${ZSH_CUSTOM:-\$ZSH/custom}
+	export ZSH=\${ZSH:-"\$HOME/.oh-my-zsh"}
+	export ZSH_CUSTOM=\${ZSH_CUSTOM:-"\$ZSH/custom"}
 
 	# Upgrade oh my zsh
 	echo_and_eval 'zsh \$ZSH/tools/upgrade.sh'
 
 	# Upgrade themes
-	for theme in \$(basename -a \$(/bin/ls -Ad \$ZSH_CUSTOM/themes/*/)); do
+	for theme in \$(basename -a \$(/bin/ls -Ad "\$ZSH_CUSTOM/themes/*/")); do
 		if [ -d "\$ZSH_CUSTOM/themes/\$theme/.git" ]; then
 			echo_and_eval "git -C \\"\\\$ZSH_CUSTOM/themes/\$theme\\" pull"
 		fi
 	done
 
 	# Upgrade plugins
-	for plugin in \$(basename -a \$(/bin/ls -Ad \$ZSH_CUSTOM/plugins/*/)); do
+	for plugin in \$(basename -a \$(/bin/ls -Ad "\$ZSH_CUSTOM/plugins/*/")); do
 		if [ -d "\$ZSH_CUSTOM/plugins/\$plugin/.git" ]; then
 			echo_and_eval "git -C \\"\\\$ZSH_CUSTOM/plugins/\$plugin\\" pull"
 		fi
@@ -1420,21 +1420,21 @@ function upgrade_ubuntu() {
 
 function upgrade_ohmyzsh() {
 	# Config
-	export ZSH=\${ZSH:-\$HOME/.oh-my-zsh}
-	export ZSH_CUSTOM=\${ZSH_CUSTOM:-\$ZSH/custom}
+	export ZSH=\${ZSH:-"\$HOME/.oh-my-zsh"}
+	export ZSH_CUSTOM=\${ZSH_CUSTOM:-"\$ZSH/custom"}
 
 	# Upgrade oh my zsh
 	echo_and_eval 'zsh \$ZSH/tools/upgrade.sh'
 
 	# Upgrade themes
-	for theme in \$(basename -a \$(/bin/ls -Ad \$ZSH_CUSTOM/themes/*/)); do
+	for theme in \$(basename -a \$(/bin/ls -Ad "\$ZSH_CUSTOM/themes/*/")); do
 		if [ -d "\$ZSH_CUSTOM/themes/\$theme/.git" ]; then
 			echo_and_eval "git -C \\"\\\$ZSH_CUSTOM/themes/\$theme\\" pull"
 		fi
 	done
 
 	# Upgrade plugins
-	for plugin in \$(basename -a \$(/bin/ls -Ad \$ZSH_CUSTOM/plugins/*/)); do
+	for plugin in \$(basename -a \$(/bin/ls -Ad "\$ZSH_CUSTOM/plugins/*/")); do
 		if [ -d "\$ZSH_CUSTOM/plugins/\$plugin/.git" ]; then
 			echo_and_eval "git -C \\"\\\$ZSH_CUSTOM/plugins/\$plugin\\" pull"
 		fi

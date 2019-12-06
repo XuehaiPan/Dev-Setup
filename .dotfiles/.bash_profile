@@ -141,14 +141,14 @@ function remove_duplicate() {
 		echo $(printf "%s" "$item" | awk -v RS=':' 'BEGIN { idx = 0; delete flag; } { if (!(flag[$0]++)) { printf("%s%s", (!idx++ ? "" : ":"), $0); } }')
 	done
 }
-export PATH=$(remove_duplicate $PATH)
-export C_INCLUDE_PATH=$(remove_duplicate $C_INCLUDE_PATH)
-export CPLUS_INCLUDE_PATH=$(remove_duplicate $CPLUS_INCLUDE_PATH)
-export LIBRARY_PATH=$(remove_duplicate $LIBRARY_PATH)
-export DYLD_LIBRARY_PATH=$(remove_duplicate $DYLD_LIBRARY_PATH)
-export DYLD_FALLBACK_LIBRARY_PATH=$(remove_duplicate $DYLD_FALLBACK_LIBRARY_PATH)
-export CLASSPATH=$(remove_duplicate $CLASSPATH)
-export MANPATH=$(remove_duplicate $MANPATH)
+export PATH=$(remove_duplicate "$PATH")
+export C_INCLUDE_PATH=$(remove_duplicate "$C_INCLUDE_PATH")
+export CPLUS_INCLUDE_PATH=$(remove_duplicate "$CPLUS_INCLUDE_PATH")
+export LIBRARY_PATH=$(remove_duplicate "$LIBRARY_PATH")
+export DYLD_LIBRARY_PATH=$(remove_duplicate "$DYLD_LIBRARY_PATH")
+export DYLD_FALLBACK_LIBRARY_PATH=$(remove_duplicate "$DYLD_FALLBACK_LIBRARY_PATH")
+export CLASSPATH=$(remove_duplicate "$CLASSPATH")
+export MANPATH=$(remove_duplicate "$MANPATH")
 unset -f remove_duplicate
 
 # X11

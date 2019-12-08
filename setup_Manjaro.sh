@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 DATETIME=$(date +"%Y-%m-%d-%T")
-BACKUP_DIR=".dotfiles/backups/$DATETIME"
+BACKUP_DIR="$HOME/.dotfiles/backups/$DATETIME"
 mkdir -p "$BACKUP_DIR/.dotfiles"
 
 IS_WSL=false

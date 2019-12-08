@@ -105,10 +105,18 @@ export RUNZSH=${RUNZSH:-no}
 
 echo_and_eval 'sh -c "$(wget -O- https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"'
 
-echo_and_eval 'git clone https://github.com/romkatv/powerlevel10k.git "$ZSH_CUSTOM/themes/powerlevel10k"'
+if [[ ! -d "$ZSH_CUSTOM/themes/powerlevel10k/.git" ]]; then
+	echo_and_eval 'git clone https://github.com/romkatv/powerlevel10k.git "$ZSH_CUSTOM/themes/powerlevel10k"'
+else
+	echo_and_eval 'git -C "$ZSH_CUSTOM/themes/powerlevel10k" pull'
+fi
 
 for plugin in zsh-syntax-highlighting zsh-autosuggestions zsh-completions; do
-	echo_and_eval "git clone https://github.com/zsh-users/$plugin \"\$ZSH_CUSTOM/plugins/$plugin\""
+	if [[ ! -d "$ZSH_CUSTOM/plugins/$plugin/.git" ]]; then
+		echo_and_eval "git clone https://github.com/zsh-users/$plugin \"\$ZSH_CUSTOM/plugins/$plugin\""
+	else
+		echo_and_eval "git -C \"\$ZSH_CUSTOM/plugins/$plugin\" pull"
+	fi
 done
 
 rm -f $HOME/.zcompdump* 2>/dev/null

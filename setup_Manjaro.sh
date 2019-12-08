@@ -1380,7 +1380,7 @@ EOF
 
 ln -sf .dotfiles/.condarc .
 
-echo_and_eval 'wget -c https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-latest-Linux-x86_64.sh'
+echo_and_eval 'wget https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-latest-Linux-x86_64.sh'
 CONDA_ARGS="-b -p $HOME/Miniconda3"
 if [[ -d "$HOME/Miniconda3" ]]; then
 	CONDA_ARGS="$CONDA_ARGS -u"
@@ -1520,12 +1520,12 @@ if $IS_WSL; then
 else
 	mkdir -p "$FONT_DIR"
 fi
-echo_and_eval 'wget -O DejaVuSansMono.zip -c https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/DejaVuSansMono.zip'
-echo_and_eval 'wget -O Menlo.zip -c https://raw.githubusercontent.com/XuehaiPan/OS-Setup/master/Menlo.zip'
-echo_and_eval "wget -O $FONT_DIR/Cascadia.ttf -c https://github.com/microsoft/cascadia-code/releases/download/v1911.21/Cascadia.ttf"
-echo_and_eval "wget -O $FONT_DIR/CascadiaPL.ttf -c https://github.com/microsoft/cascadia-code/releases/download/v1911.21/CascadiaPL.ttf"
-echo_and_eval "wget -O $FONT_DIR/CascadiaMono.ttf -c https://github.com/microsoft/cascadia-code/releases/download/v1911.21/CascadiaMono.ttf"
-echo_and_eval "wget -O $FONT_DIR/CascadiaMonoPL.ttf -c https://github.com/microsoft/cascadia-code/releases/download/v1911.21/CascadiaMonoPL.ttf"
+echo_and_eval 'wget -O DejaVuSansMono.zip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/DejaVuSansMono.zip'
+echo_and_eval 'wget -O Menlo.zip https://raw.githubusercontent.com/XuehaiPan/OS-Setup/master/Menlo.zip'
+echo_and_eval "wget -O $FONT_DIR/Cascadia.ttf https://github.com/microsoft/cascadia-code/releases/download/v1911.21/Cascadia.ttf"
+echo_and_eval "wget -O $FONT_DIR/CascadiaPL.ttf https://github.com/microsoft/cascadia-code/releases/download/v1911.21/CascadiaPL.ttf"
+echo_and_eval "wget -O $FONT_DIR/CascadiaMono.ttf https://github.com/microsoft/cascadia-code/releases/download/v1911.21/CascadiaMono.ttf"
+echo_and_eval "wget -O $FONT_DIR/CascadiaMonoPL.ttf https://github.com/microsoft/cascadia-code/releases/download/v1911.21/CascadiaMonoPL.ttf"
 echo_and_eval "unzip -o DejaVuSansMono.zip -d $FONT_DIR/"
 echo_and_eval "unzip -o Menlo.zip -d $FONT_DIR/"
 echo_and_eval 'rm -f DejaVuSansMono.zip Menlo.zip'

@@ -70,6 +70,7 @@ autocmd BufEnter * if (winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isT
                  \ q |
                  \ endif
 
+let g:rainbow_active = 1
 
 call plug#begin('~/.vim/plugged')
     Plug 'scrooloose/nerdtree'
@@ -82,4 +83,5 @@ call plug#begin('~/.vim/plugged')
     Plug 'jiangmiao/auto-pairs'
     Plug 'airblade/vim-gitgutter'
     Plug 'tpope/vim-fugitive'
+    Plug 'luochen1990/rainbow'
 call plug#end()

@@ -84,7 +84,7 @@ fi
 
 echo_and_eval 'sudo pacman -S bash-completion wget curl git git-lfs --noconfirm'
 echo_and_eval 'sudo pacman -S vim tmux htop openssh net-tools exfat-utils xclip --noconfirm'
-echo_and_eval 'sudo pacman -S gcc g++ gdb clang llvm lldb make cmake ruby --noconfirm'
+echo_and_eval 'sudo pacman -S gcc g++ gdb clang llvm lldb make cmake autoconf ruby --noconfirm'
 
 echo_and_eval 'sudo pacman -Syy'
 echo_and_eval 'sudo pacman -Syu --noconfirm'

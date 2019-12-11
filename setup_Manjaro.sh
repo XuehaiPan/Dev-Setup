@@ -1367,6 +1367,7 @@ create_default_packages:
   - notebook
   - jupyterlab
   - ipdb
+  - tqdm
   - cython
   - numpy
   - numba
@@ -1392,7 +1393,7 @@ echo_and_eval 'rm -f Miniconda3-latest-Linux-x86_64.sh'
 
 source .zshrc 2>/dev/null
 echo_and_eval 'conda update conda --yes'
-echo_and_eval 'conda install pip jupyter ipython notebook jupyterlab ipdb \
+echo_and_eval 'conda install pip jupyter ipython notebook jupyterlab ipdb tqdm \
 							 cython numpy numba matplotlib pandas seaborn pygraphviz \
 							 yapf autopep8 pycodestyle pylint --yes'
 echo_and_eval 'conda update --all --yes'

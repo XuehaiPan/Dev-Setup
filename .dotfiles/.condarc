@@ -27,6 +27,7 @@ create_default_packages:
   - notebook
   - jupyterlab
   - ipdb
+  - tqdm
   - cython
   - numpy
   - numba

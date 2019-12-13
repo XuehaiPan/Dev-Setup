@@ -52,7 +52,7 @@ function remove_duplicate() {
 	done
 }
 PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin:/Library/Apple/bin:$PATH"
-export PATH=$(remove_duplicate $PATH)
+export PATH=$(remove_duplicate "$PATH")
 
 # Install and Setup Homebrew
 echo_and_eval 'xcode-select --install'

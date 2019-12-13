@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 
+# Set Configuration Backup Directory
 DATETIME=$(date +"%Y-%m-%d-%T")
 BACKUP_DIR="$HOME/.dotfiles/backups/$DATETIME"
 mkdir -p "$BACKUP_DIR/.dotfiles"
 
+# Common Functions
 function echo_and_eval() {
 	local CMD="$*"
 	printf "%s" "$CMD" | awk \
@@ -52,6 +54,7 @@ function remove_duplicate() {
 PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin:/Library/Apple/bin:$PATH"
 export PATH=$(remove_duplicate $PATH)
 
+# Install and Setup Homebrew
 echo_and_eval 'xcode-select --install'
 
 echo_and_eval '/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"'
@@ -67,6 +70,7 @@ echo_and_eval 'git -C "$( brew --repo homebrew/cask )" fetch --unshallow'
 export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles"
 echo_and_eval 'brew update'
 
+# Install and Setup Shells
 echo_and_eval 'brew install zsh bash'
 
 if ! grep -qF '/usr/local/bin/bash' /etc/shells; then
@@ -81,6 +85,7 @@ if [[ $SHELL != "/usr/local/bin/zsh" ]]; then
 	echo_and_eval 'chsh -s /usr/local/bin/zsh'
 fi
 
+# Install Packages
 echo_and_eval 'brew install bash-completion wget curl git git-lfs'
 echo_and_eval 'brew install vim tmux htop reattach-to-user-namespace'
 
@@ -91,13 +96,16 @@ export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
 eval '$(perl -I/usr/local/opt/perl/lib/perl5 -Mlocal::lib=/usr/local/opt/perl)'
 echo_and_eval 'sudo cpan install local::lib'
 
+# Install Casks and Fonts
 echo_and_eval 'brew cask install iterm2 keka sogouinput'
 echo_and_eval 'brew cask install font-cascadia'
 echo_and_eval 'brew cask install font-dejavusansmono-nerd-font font-dejavusansmono-nerd-font-mono'
 
+# Color Theme for iTerm
 wget -O "$HOME/Desktop/SpaceGray Eighties.itermcolors" \
 	https://raw.githubusercontent.com/mbadolato/iTerm2-Color-Schemes/master/schemes/SpaceGray%20Eighties.itermcolors
 
+# Install Oh-My-Zsh
 export ZSH=${ZSH:-"$HOME/.oh-my-zsh"}
 export ZSH_CUSTOM=${ZSH_CUSTOM:-"$ZSH/custom"}
 export CHSH=${CHSH:-no}
@@ -105,12 +113,14 @@ export RUNZSH=${RUNZSH:-no}
 
 echo_and_eval 'sh -c "$(wget -O- https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"'
 
+# Install Powerlevel10k Theme
 if [[ ! -d "$ZSH_CUSTOM/themes/powerlevel10k/.git" ]]; then
 	echo_and_eval 'git clone https://github.com/romkatv/powerlevel10k.git "$ZSH_CUSTOM/themes/powerlevel10k"'
 else
 	echo_and_eval 'git -C "$ZSH_CUSTOM/themes/powerlevel10k" pull'
 fi
 
+# Install Zsh Plugins
 for plugin in zsh-syntax-highlighting zsh-autosuggestions zsh-completions; do
 	if [[ ! -d "$ZSH_CUSTOM/plugins/$plugin/.git" ]]; then
 		echo_and_eval "git clone https://github.com/zsh-users/$plugin \"\$ZSH_CUSTOM/plugins/$plugin\""
@@ -126,6 +136,7 @@ echo_and_eval 'cd $HOME'
 
 mkdir -p .dotfiles
 
+# Configurations for RubyGems
 backup_dotfiles .gemrc .dotfiles/.gemrc
 
 cat >.dotfiles/.gemrc <<EOF
@@ -141,6 +152,7 @@ EOF
 
 ln -sf .dotfiles/.gemrc .
 
+# Update RubyGems and Install Colorls
 echo_and_eval 'sudo /usr/bin/gem update --system'
 echo_and_eval 'sudo /usr/bin/gem update'
 echo_and_eval 'sudo /usr/bin/gem cleanup'
@@ -149,6 +161,7 @@ echo_and_eval 'sudo gem update'
 echo_and_eval 'sudo gem install colorls'
 echo_and_eval 'sudo gem cleanup'
 
+# Configurations for Zsh
 backup_dotfiles .dotfiles/.zshrc-common
 
 cat >.dotfiles/.zshrc-common <<EOF
@@ -429,6 +442,7 @@ EOF
 
 ln -sf .dotfiles/.zshrc .
 
+# Configurations for Zsh Purepower
 backup_dotfiles .dotfiles/zsh_purepower
 mkdir -p .dotfiles/zsh_purepower
 
@@ -456,6 +470,7 @@ if ! grep -qF '/usr/local/bin/zsh_purepower' /etc/shells; then
 	echo_and_eval 'echo "/usr/local/bin/zsh_purepower" | sudo tee -a /etc/shells'
 fi
 
+# Configurations for Bash
 backup_dotfiles .bashrc .dotfiles/.bashrc
 
 cat >.dotfiles/.bashrc <<EOF
@@ -625,6 +640,7 @@ EOF
 
 ln -sf .dotfiles/.bash_profile .
 
+# Configurations for Vim
 backup_dotfiles .vimrc .dotfiles/.vimrc
 
 cat >.dotfiles/.vimrc <<EOF
@@ -719,9 +735,11 @@ EOF
 
 ln -sf .dotfiles/.vimrc .
 
+# Install Vim-Plug Plugin Manager
 echo_and_eval 'curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
 	https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 
+# Add Vim Monokai Color Theme
 mkdir -p .vim/colors
 
 cat >.vim/colors/monokai.vim <<EOF
@@ -836,8 +854,10 @@ hi cssCommonAttr ctermfg=81 ctermbg=NONE cterm=NONE guifg=#66d9ef guibg=NONE gui
 hi cssBraces ctermfg=NONE ctermbg=NONE cterm=NONE guifg=NONE guibg=NONE gui=NONE
 EOF
 
+# Install Vim Plugins
 echo_and_eval 'vim -c "PlugUpgrade | PlugInstall | PlugUpdate | qa"'
 
+# Configurations for Tmux
 backup_dotfiles .tmux.conf .dotfiles/.tmux.conf \
 	.tmux.conf.local .dotfiles/.tmux.conf.local \
 	.tmux.conf.user .dotfiles/.tmux.conf.user
@@ -964,6 +984,7 @@ cat >>.dotfiles/.tmux.conf.local <<EOF
 %endif
 EOF
 
+# Configurations for Git
 backup_dotfiles .gitconfig .dotfiles/.gitconfig
 
 cat >.dotfiles/.gitconfig <<EOF
@@ -1283,6 +1304,7 @@ EOF
 
 ln -sf .dotfiles/.gitignore_global .
 
+# Configurations for GDB
 backup_dotfiles .gdbinit .dotfiles/.gdbinit
 
 cat >.dotfiles/.gdbinit <<EOF
@@ -1291,6 +1313,7 @@ EOF
 
 ln -sf .dotfiles/.gdbinit .
 
+# Configurations for Conda
 backup_dotfiles .condarc .dotfiles/.condarc
 
 cat >.dotfiles/.condarc <<EOF
@@ -1339,6 +1362,7 @@ EOF
 
 ln -sf .dotfiles/.condarc .
 
+# Install Miniconda
 echo_and_eval 'wget https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-latest-MacOSX-x86_64.sh'
 CONDA_ARGS="-b -p $HOME/Miniconda3"
 if [[ -d "$HOME/Miniconda3" ]]; then
@@ -1347,6 +1371,7 @@ fi
 echo_and_eval "bash Miniconda3-latest-MacOSX-x86_64.sh $CONDA_ARGS"
 echo_and_eval 'rm -f Miniconda3-latest-MacOSX-x86_64.sh'
 
+# Install Conda Packages
 source .zshrc 2>/dev/null
 echo_and_eval 'conda update conda --yes'
 echo_and_eval 'conda install pip jupyter ipython notebook jupyterlab ipdb tqdm \
@@ -1357,6 +1382,7 @@ echo_and_eval 'conda clean --all --yes'
 rm -r .cph_tmp* 2>/dev/null
 rm -r Miniconda3/.cph_tmp* 2>/dev/null
 
+# Add Script file for Upgrading Packages
 cat >upgrade_packages.sh <<EOF
 #!/usr/bin/env bash
 
@@ -1477,15 +1503,18 @@ EOF
 
 chmod +x upgrade_packages.sh
 
+# Install Casks
 echo_and_eval 'brew cask install visual-studio-code xquartz'
 echo_and_eval 'brew cask install typora transmission teamviewer google-chrome'
 echo_and_eval 'brew cask install neteasemusic iina'
 
+# Install Develop Casks and Packages
 echo_and_eval 'brew install gcc gdb llvm make cmake autoconf'
 echo_and_eval 'brew cask install oracle-jdk'
 echo_and_eval '/usr/libexec/java_home --request'
 echo_and_eval 'brew cleanup'
 
+# Miscellaneous Settings
 echo_and_eval 'defaults write com.apple.screencapture disable-shadow -boolean true'
 echo_and_eval 'killall SystemUIServer'
 echo_and_eval 'rm -rf $HOME/.bash_sessions/'

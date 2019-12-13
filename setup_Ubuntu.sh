@@ -1,14 +1,17 @@
 #!/usr/bin/env bash
 
+# Set Configuration Backup Directory
 DATETIME=$(date +"%Y-%m-%d-%T")
 BACKUP_DIR="$HOME/.dotfiles/backups/$DATETIME"
 mkdir -p "$BACKUP_DIR/.dotfiles"
 
+# Check if in WSL
 IS_WSL=false
 if $(uname -r | grep -qF 'Microsoft'); then
 	IS_WSL=true
 fi
 
+# Common Functions
 function echo_and_eval() {
 	local CMD="$*"
 	printf "%s" "$CMD" | awk \
@@ -49,6 +52,7 @@ function backup_dotfiles() {
 	done
 }
 
+# Setup Apt Sources
 echo_and_eval "sudo sed -i -e 's/http:\\/\\/archive\\.ubuntu\\.com/https:\\/\\/mirrors\\.tuna\\.tsinghua\\.edu\\.cn/g' /etc/apt/sources.list"
 echo_and_eval "sudo sed -i -e 's/http:\\/\\/cn\\.archive\\.ubuntu\\.com/https:\\/\\/mirrors\\.tuna\\.tsinghua\\.edu\\.cn/g' /etc/apt/sources.list"
 echo_and_eval "sudo sed -i -e 's/http:\\/\\/security\\.ubuntu\\.com/https:\\/\\/mirrors\\.tuna\\.tsinghua\\.edu\\.cn/g' /etc/apt/sources.list"
@@ -56,6 +60,7 @@ echo_and_eval "sudo sed -i -e 's/http:\\/\\/mirrors\\.tuna\\.tsinghua\\.edu\\.cn
 
 echo_and_eval 'sudo apt update'
 
+# Install and Setup Shells
 echo_and_eval 'sudo apt install zsh --yes'
 
 if ! grep -qF '/usr/bin/zsh' /etc/shells; then
@@ -66,6 +71,7 @@ if [[ $SHELL != "/usr/bin/zsh" ]]; then
 	echo_and_eval 'chsh -s /usr/bin/zsh'
 fi
 
+# Install Packages
 echo_and_eval 'sudo apt install bash-completion wget curl git git-lfs --yes'
 echo_and_eval 'sudo apt install vim tmux htop ssh net-tools exfat-utils xclip --yes'
 echo_and_eval 'sudo apt install gcc g++ gdb clang clang-format llvm lldb make cmake autoconf ruby ruby-dev --yes'
@@ -76,6 +82,7 @@ echo_and_eval 'sudo apt upgrade --yes'
 echo_and_eval 'sudo apt autoremove --yes'
 echo_and_eval 'sudo apt autoclean --yes'
 
+# Install Oh-My-Zsh
 export ZSH=${ZSH:-"$HOME/.oh-my-zsh"}
 export ZSH_CUSTOM=${ZSH_CUSTOM:-"$ZSH/custom"}
 export CHSH=${CHSH:-no}
@@ -83,12 +90,14 @@ export RUNZSH=${RUNZSH:-no}
 
 echo_and_eval 'sh -c "$(wget -O- https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"'
 
+# Install Powerlevel10k Theme
 if [[ ! -d "$ZSH_CUSTOM/themes/powerlevel10k/.git" ]]; then
 	echo_and_eval 'git clone https://github.com/romkatv/powerlevel10k.git "$ZSH_CUSTOM/themes/powerlevel10k"'
 else
 	echo_and_eval 'git -C "$ZSH_CUSTOM/themes/powerlevel10k" pull'
 fi
 
+# Install Zsh Plugins
 for plugin in zsh-syntax-highlighting zsh-autosuggestions zsh-completions; do
 	if [[ ! -d "$ZSH_CUSTOM/plugins/$plugin/.git" ]]; then
 		echo_and_eval "git clone https://github.com/zsh-users/$plugin \"\$ZSH_CUSTOM/plugins/$plugin\""
@@ -104,6 +113,7 @@ echo_and_eval 'cd $HOME'
 
 mkdir -p .dotfiles
 
+# Configurations for RubyGems
 backup_dotfiles .gemrc .dotfiles/.gemrc
 
 cat >.dotfiles/.gemrc <<EOF
@@ -119,6 +129,7 @@ EOF
 
 ln -sf .dotfiles/.gemrc .
 
+# Update RubyGems and Install Colorls
 export PATH="$(ruby -r rubygems -e 'puts Gem.dir')/bin:$PATH"
 export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
 echo_and_eval 'sudo gem update --system'
@@ -126,6 +137,7 @@ echo_and_eval 'sudo gem update'
 echo_and_eval 'sudo gem install colorls'
 echo_and_eval 'sudo gem cleanup'
 
+# Configurations for Zsh
 backup_dotfiles .dotfiles/.zshrc-common
 
 cat >.dotfiles/.zshrc-common <<EOF
@@ -366,6 +378,7 @@ EOF
 
 ln -sf .dotfiles/.zshrc .
 
+# Configurations for Zsh Purepower
 backup_dotfiles .dotfiles/zsh_purepower
 mkdir -p .dotfiles/zsh_purepower
 
@@ -395,6 +408,7 @@ fi
 
 backup_dotfiles .dotfiles/utilities.sh
 
+# Add Utility Script File
 cat >.dotfiles/utilities.sh <<EOF
 #!/usr/bin/env bash
 
@@ -544,6 +558,7 @@ function auto_reannounce_trackers() {
 }
 EOF
 
+# Configurations for Bash
 backup_dotfiles .bashrc .dotfiles/.bashrc
 
 if ! grep -qF 'export PS1=' .bashrc; then
@@ -661,6 +676,7 @@ EOF
 
 ln -sf .dotfiles/.profile .
 
+# Configurations for Vim
 backup_dotfiles .vimrc .dotfiles/.vimrc
 
 cat >.dotfiles/.vimrc <<EOF
@@ -755,9 +771,11 @@ EOF
 
 ln -sf .dotfiles/.vimrc .
 
+# Install Vim-Plug Plugin Manager
 echo_and_eval 'curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
 	https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 
+# Add Vim Monokai Color Theme
 mkdir -p .vim/colors
 
 cat >.vim/colors/monokai.vim <<EOF
@@ -872,8 +890,10 @@ hi cssCommonAttr ctermfg=81 ctermbg=NONE cterm=NONE guifg=#66d9ef guibg=NONE gui
 hi cssBraces ctermfg=NONE ctermbg=NONE cterm=NONE guifg=NONE guibg=NONE gui=NONE
 EOF
 
+# Install Vim Plugins
 echo_and_eval 'vim -c "PlugUpgrade | PlugInstall | PlugUpdate | qa"'
 
+# Configurations for Tmux
 backup_dotfiles .tmux.conf .dotfiles/.tmux.conf \
 	.tmux.conf.local .dotfiles/.tmux.conf.local \
 	.tmux.conf.user .dotfiles/.tmux.conf.user
@@ -1000,6 +1020,7 @@ cat >>.dotfiles/.tmux.conf.local <<EOF
 %endif
 EOF
 
+# Configurations for Git
 backup_dotfiles .gitconfig .dotfiles/.gitconfig
 
 cat >.dotfiles/.gitconfig <<EOF
@@ -1319,6 +1340,7 @@ EOF
 
 ln -sf .dotfiles/.gitignore_global .
 
+# Configurations for Conda
 backup_dotfiles .condarc .dotfiles/.condarc
 
 cat >.dotfiles/.condarc <<EOF
@@ -1367,6 +1389,7 @@ EOF
 
 ln -sf .dotfiles/.condarc .
 
+# Install Miniconda
 echo_and_eval 'wget https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-latest-Linux-x86_64.sh'
 CONDA_ARGS="-b -p $HOME/Miniconda3"
 if [[ -d "$HOME/Miniconda3" ]]; then
@@ -1375,6 +1398,7 @@ fi
 echo_and_eval "bash Miniconda3-latest-Linux-x86_64.sh $CONDA_ARGS"
 echo_and_eval 'rm -f Miniconda3-latest-Linux-x86_64.sh'
 
+# Install Conda Packages
 source .zshrc 2>/dev/null
 echo_and_eval 'conda update conda --yes'
 echo_and_eval 'conda install pip jupyter ipython notebook jupyterlab ipdb tqdm \
@@ -1385,6 +1409,7 @@ echo_and_eval 'conda clean --all --yes'
 rm -r .cph_tmp* 2>/dev/null
 rm -r Miniconda3/.cph_tmp* 2>/dev/null
 
+# Add Script file for Upgrading Packages
 cat >upgrade_packages.sh <<EOF
 #!/usr/bin/env bash
 
@@ -1503,6 +1528,7 @@ EOF
 
 chmod +x upgrade_packages.sh
 
+# Install Fonts
 FONT_DIR=".local/share/fonts"
 if $IS_WSL; then
 	FONT_DIR="/mnt/c/Windows/Fonts"
@@ -1522,4 +1548,5 @@ if ! $IS_WSL; then
 	echo_and_eval 'sudo fc-cache --force'
 fi
 
+# Select Default Editor
 echo_and_eval 'sudo select-editor'

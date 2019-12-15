@@ -80,16 +80,6 @@ export PATH="$JAVA_HOME/bin:$PATH"
 # Perl
 eval "$(perl -I/usr/local/opt/perl/lib/perl5 -Mlocal::lib=/usr/local/opt/perl)"
 
-# Go
-export GOPATH="/usr/local/opt/go"
-export GOBIN="$GOPATH/bin"
-export GOROOT="$GOPATH/libexec"
-export GOPATH="$HOME/GolandProjects:$GOPATH"
-export PATH="$GOBIN:$PATH"
-
-# Haskell-Stack
-export PATH="$(stack path --bin-path)"
-
 # Mono
 export MONO_GAC_PREFIX="/usr/local"
 
@@ -119,6 +109,9 @@ export PATH="/usr/local/opt/gettext/bin:$PATH"
 # ncurses
 export PATH="/usr/local/opt/ncurses/bin:$PATH"
 
+# Bison
+export PATH="/usr/local/opt/bison/bin:$PATH"
+
 # SQLite
 export PATH="/usr/local/opt/sqlite/bin:$PATH"
 
@@ -129,8 +122,8 @@ export PATH="/usr/local/opt/llvm/bin:$PATH"
 export PATH="/usr/local/mysql/bin:$PATH"
 
 # Wine
-export WINEARCH="win32"
-export WINEPREFIX="$HOME/.wine32"
+export WINEARCH="win64"
+export WINEPREFIX="$HOME/.wine64"
 export WINEDEBUG="-all"
 export DYLD_FALLBACK_LIBRARY_PATH="$DYLD_FALLBACK_LIBRARY_PATH:/usr/X11/lib:/usr/local/lib"
 export DYLD_FALLBACK_LIBRARY_PATH="$DYLD_FALLBACK_LIBRARY_PATH:/usr/local/opt/ncurses/lib"

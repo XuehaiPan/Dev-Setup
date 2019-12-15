@@ -388,7 +388,7 @@ plugins=(
 
 ZSH_DISABLE_COMPFIX=true
 
-source \$ZSH/oh-my-zsh.sh
+source "\$ZSH/oh-my-zsh.sh"
 
 # User configuration
 

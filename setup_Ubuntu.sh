@@ -74,7 +74,8 @@ fi
 # Install Packages
 echo_and_eval 'sudo apt install bash-completion wget curl git git-lfs --yes'
 echo_and_eval 'sudo apt install vim tmux htop ssh net-tools exfat-utils xclip --yes'
-echo_and_eval 'sudo apt install gcc g++ gdb clang clang-format llvm lldb make cmake autoconf ruby ruby-dev --yes'
+echo_and_eval 'sudo apt install make cmake autoconf build-essential gcc g++ gdb --yes'
+echo_and_eval 'sudo apt install clang clang-format llvm lldb ruby ruby-dev --yes'
 
 echo_and_eval 'sudo apt dist-upgrade --yes'
 echo_and_eval 'sudo apt full-upgrade --yes'

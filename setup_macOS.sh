@@ -87,7 +87,7 @@ fi
 
 # Install Packages
 echo_and_eval 'brew install bash-completion wget curl git git-lfs'
-echo_and_eval 'brew install vim tmux htop reattach-to-user-namespace'
+echo_and_eval 'brew install vim tmux htop tree reattach-to-user-namespace'
 
 echo_and_eval 'brew install ruby perl'
 export PATH="/usr/local/opt/ruby/bin:$PATH"

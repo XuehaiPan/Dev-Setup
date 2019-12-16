@@ -124,6 +124,7 @@ The following packages will be setup:
 | [htop](https://hisham.hm/htop/)                                                                                                  |   ✔   |      ✔       |       ✔       |
 | [net-tools](https://sourceforge.net/projects/net-tools/)                                                                         |   ✔   |      ✔       |       ✔       |
 | [exfat-utils](https://pkgs.org/download/exfat-utils)                                                                             |   ✔   |      ✔       |       ✔       |
+| [tree](http://mama.indstate.edu/users/ice/tree/)                                                                                 |   ✔   |      ✔       |       ✔       |
 |                                                                                                                                  |       |              |               |
 | [Miniconda3](https://docs.conda.io/en/latest/miniconda.html)                                                                     |   ✔   |      ✔       |       ✔       |
 | [gcc](https://gcc.gnu.org)                                                                                                       |   ✔   |      ✔       |       ✔       |

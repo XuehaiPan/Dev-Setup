@@ -1509,7 +1509,7 @@ echo_and_eval 'brew cask install typora transmission teamviewer google-chrome'
 echo_and_eval 'brew cask install neteasemusic iina'
 
 # Install Develop Casks and Packages
-echo_and_eval 'brew install gcc gdb llvm make cmake autoconf'
+echo_and_eval 'brew install gcc gdb llvm make cmake automake autoconf'
 echo_and_eval 'brew cask install oracle-jdk'
 echo_and_eval '/usr/libexec/java_home --request'
 echo_and_eval 'brew cleanup'

@@ -246,6 +246,7 @@ export PATH="\$JAVA_HOME/bin:\$PATH"
 eval "\$(perl -I/usr/local/opt/perl/lib/perl5 -Mlocal::lib=/usr/local/opt/perl)"
 
 # Ruby
+export RUBYOPT="-W0"
 export PATH="/usr/local/opt/ruby/bin:\$PATH"
 export PATH="\$(ruby -r rubygems -e 'puts Gem.dir')/bin:\$PATH"
 export PATH="\$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:\$PATH"
@@ -589,6 +590,7 @@ export PATH="\$JAVA_HOME/bin:\$PATH"
 eval "\$(perl -I/usr/local/opt/perl/lib/perl5 -Mlocal::lib=/usr/local/opt/perl)"
 
 # Ruby
+export RUBYOPT="-W0"
 export PATH="/usr/local/opt/ruby/bin:\$PATH"
 export PATH="\$(ruby -r rubygems -e 'puts Gem.dir')/bin:\$PATH"
 export PATH="\$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:\$PATH"

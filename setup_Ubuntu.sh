@@ -216,6 +216,7 @@ unset __conda_setup
 # <<< conda initialize <<<
 
 # Ruby
+export RUBYOPT="-W0"
 export PATH="\$(ruby -r rubygems -e 'puts Gem.dir')/bin:\$PATH"
 export PATH="\$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:\$PATH"
 
@@ -654,6 +655,7 @@ unset __conda_setup
 # <<< conda initialize <<<
 
 # Ruby
+export RUBYOPT="-W0"
 export PATH="\$(ruby -r rubygems -e 'puts Gem.dir')/bin:\$PATH"
 export PATH="\$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:\$PATH"
 

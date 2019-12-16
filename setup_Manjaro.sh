@@ -192,6 +192,10 @@ if [ -d "\$HOME/.local/lib" ]; then
 	export LIBRARY_PATH="\$HOME/.local/lib:\$LIBRARY_PATH"
 	export LD_LIBRARY_PATH="\$HOME/.local/lib:\$LD_LIBRARY_PATH"
 fi
+if [ -d "\$HOME/.local/lib64" ]; then
+	export LIBRARY_PATH="\$HOME/.local/lib64:\$LIBRARY_PATH"
+	export LD_LIBRARY_PATH="\$HOME/.local/lib64:\$LD_LIBRARY_PATH"
+fi
 
 # set MANPATH so it includes user's private man if it exists
 if [ -d "\$HOME/.local/man" ]; then
@@ -629,6 +633,10 @@ fi
 if [ -d "\$HOME/.local/lib" ]; then
 	export LIBRARY_PATH="\$HOME/.local/lib:\$LIBRARY_PATH"
 	export LD_LIBRARY_PATH="\$HOME/.local/lib:\$LD_LIBRARY_PATH"
+fi
+if [ -d "\$HOME/.local/lib64" ]; then
+	export LIBRARY_PATH="\$HOME/.local/lib64:\$LIBRARY_PATH"
+	export LD_LIBRARY_PATH="\$HOME/.local/lib64:\$LD_LIBRARY_PATH"
 fi
 
 # set MANPATH so it includes user's private man if it exists

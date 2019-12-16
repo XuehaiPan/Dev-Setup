@@ -197,6 +197,10 @@ if [ -d "\$HOME/.local/lib" ]; then
 	export LIBRARY_PATH="\$HOME/.local/lib:\$LIBRARY_PATH"
 	export DYLD_LIBRARY_PATH="\$HOME/.local/lib:\$DYLD_LIBRARY_PATH"
 fi
+if [ -d "\$HOME/.local/lib64" ]; then
+	export LIBRARY_PATH="\$HOME/.local/lib:\$LIBRARY_PATH"
+	export DYLD_LIBRARY_PATH="\$HOME/.local/lib:\$DYLD_LIBRARY_PATH"
+fi
 
 # set MANPATH so it includes user's private man if it exists
 if [ -d "\$HOME/.local/man" ]; then
@@ -529,6 +533,10 @@ fi
 
 # set LIBRARY_PATH and DYLD_LIBRARY_PATH so it includes user's private lib if it exists
 if [ -d "\$HOME/.local/lib" ]; then
+	export LIBRARY_PATH="\$HOME/.local/lib:\$LIBRARY_PATH"
+	export DYLD_LIBRARY_PATH="\$HOME/.local/lib:\$DYLD_LIBRARY_PATH"
+fi
+if [ -d "\$HOME/.local/lib64" ]; then
 	export LIBRARY_PATH="\$HOME/.local/lib:\$LIBRARY_PATH"
 	export DYLD_LIBRARY_PATH="\$HOME/.local/lib:\$DYLD_LIBRARY_PATH"
 fi

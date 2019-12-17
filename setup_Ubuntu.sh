@@ -1571,4 +1571,4 @@ if ! $IS_WSL; then
 fi
 
 # Select Default Editor
-echo_and_eval 'sudo select-editor'
+echo_and_eval 'select-editor'

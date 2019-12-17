@@ -748,20 +748,22 @@ colorscheme monokai
 
 autocmd GUIEnter * set lines=50 columns=160
 
-autocmd BufWritePre,FileWritePre * let pos=getpos('.') |
+autocmd BufWritePre,FileWritePre * let pos = getpos('.') |
                                  \\ %s/\\r\\+\$//ge |
                                  \\ %s/\\s\\+\$//ge |
                                  \\ call setpos('.', pos) |
                                  \\ unlet pos
 
-let g:NERDChristmasTree=1
-let g:NERDTreeMouseMode=2
-let g:NERDTreeShowBookmarks=1
-let g:NERDTreeShowFiles=1
-let g:NERDTreeShowHidden=1
-let g:NERDTreeShowLineNumbers=0
-let g:NERDTreeWinPos='left'
-let g:NERDTreeWinSize=31
+autocmd Filetype python set expandtab
+
+let g:NERDChristmasTree = 1
+let g:NERDTreeMouseMode = 2
+let g:NERDTreeShowBookmarks = 1
+let g:NERDTreeShowFiles = 1
+let g:NERDTreeShowHidden = 1
+let g:NERDTreeShowLineNumbers = 0
+let g:NERDTreeWinPos = 'left'
+let g:NERDTreeWinSize = 31
 autocmd VimEnter * if str2nr(system("ls -l \$PWD | wc -l")) <= 1000 |
                  \\     let width = winwidth('%') |
                  \\     let numberwidth = ((&number || &relativenumber)? max([&numberwidth, strlen(line('\$')) + 1]) : 0) |
@@ -778,6 +780,13 @@ autocmd BufEnter * if (winnr('\$') == 1 && exists('b:NERDTree') && b:NERDTree.is
                  \\ q |
                  \\ endif
 
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_wq = 0
+
 let g:rainbow_active = 1
 
 call plug#begin('~/.vim/plugged')
@@ -791,6 +800,7 @@ call plug#begin('~/.vim/plugged')
     Plug 'jiangmiao/auto-pairs'
     Plug 'airblade/vim-gitgutter'
     Plug 'tpope/vim-fugitive'
+    Plug 'vim-syntastic/syntastic'
     Plug 'luochen1990/rainbow'
 call plug#end()
 EOF

@@ -89,7 +89,11 @@ export ZSH_CUSTOM=${ZSH_CUSTOM:-"$ZSH/custom"}
 export CHSH=${CHSH:-no}
 export RUNZSH=${RUNZSH:-no}
 
-echo_and_eval 'sh -c "$(wget -O- https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"'
+if [[ -d "$ZSH/.git" && -f "$ZSH/tools/upgrade.sh" ]]; then
+	echo_and_eval 'zsh "$ZSH/tools/upgrade.sh"'
+else
+	echo_and_eval 'sh -c "$(wget -O- https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"'
+fi
 
 # Install Powerlevel10k Theme
 if [[ ! -d "$ZSH_CUSTOM/themes/powerlevel10k/.git" ]]; then

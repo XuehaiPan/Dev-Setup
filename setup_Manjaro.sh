@@ -206,7 +206,7 @@ fi
 export TERM="xterm-256color"
 
 # locale
-export LANG="en_US.utf8"
+export LC_ALL="en_US.utf8"
 
 # Compilers
 export CC="/usr/bin/gcc"
@@ -590,7 +590,7 @@ export TERM="xterm-256color"
 export PS1='[\\[\\e[1;33m\\]\\u\\[\\e[0m\\]@\\[\\e[1;32m\\]\\h\\[\\e[0m\\]:\\[\\e[1;35m\\]\\W\\[\\e[0m\\]]\\\$ '
 
 # locale
-export LANG="en_US.UTF-8"
+export LC_ALL="en_US.utf8"
 EOF
 fi
 

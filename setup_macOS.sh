@@ -87,7 +87,7 @@ fi
 
 # Install Packages
 echo_and_eval 'brew install bash-completion wget curl git git-lfs'
-echo_and_eval 'brew install vim tmux htop openssh tree reattach-to-user-namespace'
+echo_and_eval 'brew install macvim tmux htop openssh tree reattach-to-user-namespace'
 
 echo_and_eval 'brew install ruby perl'
 export PATH="/usr/local/opt/ruby/bin:$PATH"
@@ -694,7 +694,7 @@ set wildmenu
 set wildmode=longest:list,full
 set background=dark
 set t_Co=256
-set guifont=DejaVuSansMono\\ Nerd\\ Font\\ Mono\\ 10
+set guifont=DejaVuSansMonoNerdFontComplete-Book:h14
 colorscheme monokai
 
 

@@ -1571,7 +1571,7 @@ echo_and_eval "unzip -o DejaVuSansMono.zip -d $FONT_DIR/"
 echo_and_eval "unzip -o Menlo.zip -d $FONT_DIR/"
 echo_and_eval 'rm -f DejaVuSansMono.zip Menlo.zip'
 if ! $IS_WSL; then
-	echo_and_eval 'sudo fc-cache --force'
+	echo_and_eval 'fc-cache --force'
 fi
 
 # Select Default Editor

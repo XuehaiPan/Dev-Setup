@@ -1024,6 +1024,7 @@ cat >.dotfiles/.gitconfig <<EOF
 
 [diff]
 	tool = vimdiff
+	guitool = gvimdiff
 	algorithm = minimal
 
 [difftool]
@@ -1031,6 +1032,7 @@ cat >.dotfiles/.gitconfig <<EOF
 
 [merge]
 	tool = vimdiff
+	guitool = gvimdiff
 
 [mergetool]
 	prompt = false

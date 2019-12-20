@@ -206,11 +206,6 @@ if [ -d "\$HOME/.local/lib64" ]; then
 	export DYLD_LIBRARY_PATH="\$HOME/.local/lib:\$DYLD_LIBRARY_PATH"
 fi
 
-# set MANPATH so it includes user's private man if it exists
-if [ -d "\$HOME/.local/man" ]; then
-	export MANPATH="\$HOME/.local/man:\$MANPATH"
-fi
-
 # User specific environment and startup programs
 export TERM="xterm-256color"
 
@@ -295,7 +290,6 @@ export LIBRARY_PATH=\$(remove_duplicate "\$LIBRARY_PATH")
 export DYLD_LIBRARY_PATH=\$(remove_duplicate "\$DYLD_LIBRARY_PATH")
 export DYLD_FALLBACK_LIBRARY_PATH=\$(remove_duplicate "\$DYLD_FALLBACK_LIBRARY_PATH")
 export CLASSPATH=\$(remove_duplicate "\$CLASSPATH")
-export MANPATH=\$(remove_duplicate "\$MANPATH")
 unset -f remove_duplicate
 
 # X11
@@ -546,11 +540,6 @@ if [ -d "\$HOME/.local/lib64" ]; then
 	export DYLD_LIBRARY_PATH="\$HOME/.local/lib:\$DYLD_LIBRARY_PATH"
 fi
 
-# set MANPATH so it includes user's private man if it exists
-if [ -d "\$HOME/.local/man" ]; then
-	export MANPATH="\$HOME/.local/man:\$MANPATH"
-fi
-
 # User specific environment and startup programs
 export TERM="xterm-256color"
 export PS1='[\\[\\e[1;33m\\]\\u\\[\\e[0m\\]@\\[\\e[1;32m\\]\\h\\[\\e[0m\\]:\\[\\e[1;35m\\]\\W\\[\\e[0m\\]]\\\$ '
@@ -639,7 +628,6 @@ export LIBRARY_PATH=\$(remove_duplicate "\$LIBRARY_PATH")
 export DYLD_LIBRARY_PATH=\$(remove_duplicate "\$DYLD_LIBRARY_PATH")
 export DYLD_FALLBACK_LIBRARY_PATH=\$(remove_duplicate "\$DYLD_FALLBACK_LIBRARY_PATH")
 export CLASSPATH=\$(remove_duplicate "\$CLASSPATH")
-export MANPATH=\$(remove_duplicate "\$MANPATH")
 unset -f remove_duplicate
 
 # X11

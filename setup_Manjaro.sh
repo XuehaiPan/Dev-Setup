@@ -201,11 +201,6 @@ if [ -d "\$HOME/.local/lib64" ]; then
 	export LD_LIBRARY_PATH="\$HOME/.local/lib64:\$LD_LIBRARY_PATH"
 fi
 
-# set MANPATH so it includes user's private man if it exists
-if [ -d "\$HOME/.local/man" ]; then
-	export MANPATH="\$HOME/.local/man:\$MANPATH"
-fi
-
 # User specific environment and startup programs
 export TERM="xterm-256color"
 
@@ -253,7 +248,6 @@ export CPLUS_INCLUDE_PATH=\$(remove_duplicate "\$CPLUS_INCLUDE_PATH")
 export INCLUDE_PATH=\$(remove_duplicate "\$INCLUDE_PATH")
 export LIBRARY_PATH=\$(remove_duplicate "\$LIBRARY_PATH")
 export LD_LIBRARY_PATH=\$(remove_duplicate "\$LD_LIBRARY_PATH")
-export MANPATH=\$(remove_duplicate "\$MANPATH")
 unset -f remove_duplicate
 
 # Utilities
@@ -644,11 +638,6 @@ if [ -d "\$HOME/.local/lib64" ]; then
 	export LD_LIBRARY_PATH="\$HOME/.local/lib64:\$LD_LIBRARY_PATH"
 fi
 
-# set MANPATH so it includes user's private man if it exists
-if [ -d "\$HOME/.local/man" ]; then
-	export MANPATH="\$HOME/.local/man:\$MANPATH"
-fi
-
 # Compilers
 export CC="/usr/bin/gcc"
 export CXX="/usr/bin/g++"
@@ -690,7 +679,6 @@ export CPLUS_INCLUDE_PATH=\$(remove_duplicate "\$CPLUS_INCLUDE_PATH")
 export INCLUDE_PATH=\$(remove_duplicate "\$INCLUDE_PATH")
 export LIBRARY_PATH=\$(remove_duplicate "\$LIBRARY_PATH")
 export LD_LIBRARY_PATH=\$(remove_duplicate "\$LD_LIBRARY_PATH")
-export MANPATH=\$(remove_duplicate "\$MANPATH")
 unset -f remove_duplicate
 
 # Utilities

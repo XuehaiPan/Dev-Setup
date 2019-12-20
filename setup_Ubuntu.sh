@@ -194,9 +194,9 @@ export LC_ALL="en_US.utf8"
 export CC="/usr/bin/gcc"
 export CXX="/usr/bin/g++"
 export FC="/usr/bin/gfortran"
-export OMPI_CC="\$CC"
-export OMPI_CXX="\$CXX"
-export OMPI_FC="\$FC"
+export OMPI_CC="\$CC" MPICH_CC="\$CC"
+export OMPI_CXX="\$CXX" MPICH_CXX="\$CXX"
+export OMPI_FC="\$FC" MPICH_FC="\$FC"
 
 # Anaconda
 # >>> conda initialize >>>
@@ -627,9 +627,9 @@ fi
 export CC="/usr/bin/gcc"
 export CXX="/usr/bin/g++"
 export FC="/usr/bin/gfortran"
-export OMPI_CC="\$CC"
-export OMPI_CXX="\$CXX"
-export OMPI_FC="\$FC"
+export OMPI_CC="\$CC" MPICH_CC="\$CC"
+export OMPI_CXX="\$CXX" MPICH_CXX="\$CXX"
+export OMPI_FC="\$FC" MPICH_FC="\$FC"
 
 # Anaconda
 # >>> conda initialize >>>

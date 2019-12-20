@@ -216,9 +216,9 @@ export LC_ALL="en_US.UTF-8"
 export CC="/usr/bin/gcc"
 export CXX="/usr/bin/g++"
 export FC="/usr/local/bin/gfortran"
-export OMPI_CC="\$CC"
-export OMPI_CXX="\$CXX"
-export OMPI_FC="\$FC"
+export OMPI_CC="\$CC" MPICH_CC="\$CC"
+export OMPI_CXX="\$CXX" MPICH_CXX="\$CXX"
+export OMPI_FC="\$FC" MPICH_FC="\$FC"
 
 # Anaconda
 # >>> conda initialize >>>
@@ -551,9 +551,9 @@ export LC_ALL="en_US.UTF-8"
 export CC="/usr/bin/gcc"
 export CXX="/usr/bin/g++"
 export FC="/usr/local/bin/gfortran"
-export OMPI_CC="\$CC"
-export OMPI_CXX="\$CXX"
-export OMPI_FC="\$FC"
+export OMPI_CC="\$CC" MPICH_CC="\$CC"
+export OMPI_CXX="\$CXX" MPICH_CXX="\$CXX"
+export OMPI_FC="\$FC" MPICH_FC="\$FC"
 
 # Homebrew
 export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles"

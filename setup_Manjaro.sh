@@ -698,8 +698,8 @@ ln -sf .dotfiles/.profile .
 backup_dotfiles .vimrc .dotfiles/.vimrc
 
 MARKDOWN_HOST='127.0.0.1'
-if [[ -n $SSH_CLIENT && -n $SSH_CONNECTION ]]; then
-	MARKDOWN_HOST=$(echo "$SSH_CLIENT" | awk '{ print \$1 }')
+if [[ -n "$SSH_CLIENT" && -n "$SSH_CONNECTION" ]]; then
+	MARKDOWN_HOST=$(echo "$SSH_CLIENT" | awk '{ print $3 }')
 fi
 
 cat >.dotfiles/.vimrc <<EOF

@@ -533,7 +533,7 @@ function send_to_mac() {
 	local USER_NAME="PanXuehai"
 	local TARGET_HOST="PanXuehai-MacBook-Pro.local"
 	if [[ -n "\$SSH_CLIENT" && -n "\$SSH_CONNECTION" ]]; then
-		TARGET_HOST=\$(echo \$SSH_CLIENT | awk '{ print \$1 }')
+		TARGET_HOST=\$(echo "\$SSH_CLIENT" | awk '{ print \$1 }')
 	fi
 	echo_and_eval "rsync -avhh -P \\"\$SOURCE\\" \$USER_NAME@\$TARGET_HOST:\\"\$TARGET\\""
 }
@@ -544,7 +544,7 @@ function recieve_from_mac() {
 	local USER_NAME="PanXuehai"
 	local SOURCE_HOST="PanXuehai-MacBook-Pro.local"
 	if [[ -n "\$SSH_CLIENT" && -n "\$SSH_CONNECTION" ]]; then
-		SOURCE_HOST=\$(echo \$SSH_CLIENT | awk '{ print \$1 }')
+		SOURCE_HOST=\$(echo "\$SSH_CLIENT" | awk '{ print \$1 }')
 	fi
 	echo_and_eval "rsync -avhh -P \$USER_NAME@\$SOURCE_HOST:\\"\$SOURCE\\" \\"\$TARGET\\""
 }

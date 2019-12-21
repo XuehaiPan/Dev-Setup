@@ -72,6 +72,8 @@ autocmd BufEnter * if (winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isT
                  \ q |
                  \ endif
 
+let g:rainbow_active = 1
+
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
@@ -81,7 +83,7 @@ let g:syntastic_loc_list_height = 5
 let g:syntastic_check_on_wq = 0
 autocmd GUIEnter * let g:syntastic_check_on_open = 1
 
-let g:rainbow_active = 1
+let g:mkdp_auto_start = 0
 
 call plug#begin('~/.vim/plugged')
     Plug 'scrooloose/nerdtree'
@@ -94,6 +96,9 @@ call plug#begin('~/.vim/plugged')
     Plug 'jiangmiao/auto-pairs'
     Plug 'airblade/vim-gitgutter'
     Plug 'tpope/vim-fugitive'
-    Plug 'vim-syntastic/syntastic'
     Plug 'luochen1990/rainbow'
+    Plug 'vim-syntastic/syntastic'
+    Plug 'godlygeek/tabular'
+    Plug 'plasticboy/vim-markdown'
+    Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() } }
 call plug#end()

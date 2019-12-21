@@ -35,7 +35,7 @@ function echo_and_eval() {
 
 function backup_dotfiles() {
 	for file in "$@"; do
-		if [[ -f $file ]] || [[ -d $file ]]; then
+		if [[ -f $file || -d $file ]]; then
 			if [[ -L $file ]]; then
 				local original_file=$(readlink "$file")
 				rm -f "$file"
@@ -171,37 +171,37 @@ backup_dotfiles .dotfiles/.zshrc-common
 cat >.dotfiles/.zshrc-common <<EOF
 # Source global definitions
 # include /etc/zshrc if it exists
-if [ -f /etc/zshrc ]; then
+if [[ -f /etc/zshrc ]]; then
 	. /etc/zshrc
 fi
 
 # include /etc/profile if it exists
-if [ -f /etc/profile ]; then
+if [[ -f /etc/profile ]]; then
 	. /etc/profile
 fi
 
 # include /etc/zprofile if it exists
-if [ -f /etc/zprofile ]; then
+if [[ -f /etc/zprofile ]]; then
 	. /etc/zprofile
 fi
 
 # set PATH so it includes user's private bin if it exists
-if [ -d "\$HOME/.local/bin" ]; then
+if [[ -d "\$HOME/.local/bin" ]]; then
 	export PATH="\$HOME/.local/bin:\$PATH"
 fi
 
 # set C_INCLUDE_PATH and CPLUS_INCLUDE_PATH so it includes user's private include if it exists
-if [ -d "\$HOME/.local/include" ]; then
+if [[ -d "\$HOME/.local/include" ]]; then
 	export C_INCLUDE_PATH="\$HOME/.local/include:\$C_INCLUDE_PATH"
 	export CPLUS_INCLUDE_PATH="\$HOME/.local/include:\$CPLUS_INCLUDE_PATH"
 fi
 
 # set LIBRARY_PATH and DYLD_LIBRARY_PATH so it includes user's private lib if it exists
-if [ -d "\$HOME/.local/lib" ]; then
+if [[ -d "\$HOME/.local/lib" ]]; then
 	export LIBRARY_PATH="\$HOME/.local/lib:\$LIBRARY_PATH"
 	export DYLD_LIBRARY_PATH="\$HOME/.local/lib:\$DYLD_LIBRARY_PATH"
 fi
-if [ -d "\$HOME/.local/lib64" ]; then
+if [[ -d "\$HOME/.local/lib64" ]]; then
 	export LIBRARY_PATH="\$HOME/.local/lib:\$LIBRARY_PATH"
 	export DYLD_LIBRARY_PATH="\$HOME/.local/lib:\$DYLD_LIBRARY_PATH"
 fi
@@ -224,10 +224,10 @@ export OMPI_FC="\$FC" MPICH_FC="\$FC"
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
 __conda_setup="\$('\$HOME/Miniconda3/bin/conda' 'shell.zsh' 'hook' 2>/dev/null)"
-if [ \$? -eq 0 ]; then
+if [[ \$? -eq 0 ]]; then
 	eval "\$__conda_setup"
 else
-	if [ -f "\$HOME/Miniconda3/etc/profile.d/conda.sh" ]; then
+	if [[ -f "\$HOME/Miniconda3/etc/profile.d/conda.sh" ]]; then
 		. "\$HOME/Miniconda3/etc/profile.d/conda.sh"
 	else
 		export PATH="\$HOME/Miniconda3/bin:\$PATH"
@@ -482,7 +482,7 @@ cat >.dotfiles/.bashrc <<EOF
 # Source global definitions
 
 # include /etc/bashrc if it exists
-if [ -f /etc/bashrc ]; then
+if [[ -f /etc/bashrc ]]; then
 	. /etc/bashrc
 fi
 
@@ -510,32 +510,32 @@ cat >.dotfiles/.bash_profile <<EOF
 # Get the aliases and functions
 # Source global definitions
 # include /etc/profile if it exists
-if [ -f /etc/profile ]; then
+if [[ -f /etc/profile ]]; then
 	. /etc/profile
 fi
 
 # include ~/.bashrc if it exists
-if [ -f ~/.bashrc ]; then
+if [[ -f ~/.bashrc ]]; then
 	. ~/.bashrc
 fi
 
 # set PATH so it includes user's private bin if it exists
-if [ -d "\$HOME/.local/bin" ]; then
+if [[ -d "\$HOME/.local/bin" ]]; then
 	export PATH="\$HOME/.local/bin:\$PATH"
 fi
 
 # set C_INCLUDE_PATH and CPLUS_INCLUDE_PATH so it includes user's private include if it exists
-if [ -d "\$HOME/.local/include" ]; then
+if [[ -d "\$HOME/.local/include" ]]; then
 	export C_INCLUDE_PATH="\$HOME/.local/include:\$C_INCLUDE_PATH"
 	export CPLUS_INCLUDE_PATH="\$HOME/.local/include:\$CPLUS_INCLUDE_PATH"
 fi
 
 # set LIBRARY_PATH and DYLD_LIBRARY_PATH so it includes user's private lib if it exists
-if [ -d "\$HOME/.local/lib" ]; then
+if [[ -d "\$HOME/.local/lib" ]]; then
 	export LIBRARY_PATH="\$HOME/.local/lib:\$LIBRARY_PATH"
 	export DYLD_LIBRARY_PATH="\$HOME/.local/lib:\$DYLD_LIBRARY_PATH"
 fi
-if [ -d "\$HOME/.local/lib64" ]; then
+if [[ -d "\$HOME/.local/lib64" ]]; then
 	export LIBRARY_PATH="\$HOME/.local/lib:\$LIBRARY_PATH"
 	export DYLD_LIBRARY_PATH="\$HOME/.local/lib:\$DYLD_LIBRARY_PATH"
 fi
@@ -562,10 +562,10 @@ export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bot
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
 __conda_setup="\$('\$HOME/Miniconda3/bin/conda' 'shell.bash' 'hook' 2>/dev/null)"
-if [ \$? -eq 0 ]; then
+if [[ \$? -eq 0 ]]; then
 	eval "\$__conda_setup"
 else
-	if [ -f "\$HOME/Miniconda3/etc/profile.d/conda.sh" ]; then
+	if [[ -f "\$HOME/Miniconda3/etc/profile.d/conda.sh" ]]; then
 		. "\$HOME/Miniconda3/etc/profile.d/conda.sh"
 	else
 		export PATH="\$HOME/Miniconda3/bin:\$PATH"
@@ -1460,14 +1460,14 @@ function upgrade_ohmyzsh() {
 
 	# Upgrade themes
 	for theme in \$(basename -a \$(/bin/ls -Ad "\$ZSH_CUSTOM/themes"/*/)); do
-		if [ -d "\$ZSH_CUSTOM/themes/\$theme/.git" ]; then
+		if [[ -d "\$ZSH_CUSTOM/themes/\$theme/.git" ]]; then
 			echo_and_eval "git -C \\"\\\$ZSH_CUSTOM/themes/\$theme\\" pull"
 		fi
 	done
 
 	# Upgrade plugins
 	for plugin in \$(basename -a \$(/bin/ls -Ad "\$ZSH_CUSTOM/plugins"/*/)); do
-		if [ -d "\$ZSH_CUSTOM/plugins/\$plugin/.git" ]; then
+		if [[ -d "\$ZSH_CUSTOM/plugins/\$plugin/.git" ]]; then
 			echo_and_eval "git -C \\"\\\$ZSH_CUSTOM/plugins/\$plugin\\" pull"
 		fi
 	done
@@ -1511,12 +1511,12 @@ upgrade_vim
 upgrade_gems
 # upgrade_conda
 
-if [ -n "\$ZSH_VERSION" ]; then
-	if [ -f "\$HOME/.zshrc" ]; then
+if [[ -n "\$ZSH_VERSION" ]]; then
+	if [[ -f "\$HOME/.zshrc" ]]; then
 		source "\$HOME/.zshrc"
 	fi
-elif [ -n "\$BASH_VERSION" ]; then
-	if [ -f "\$HOME/.bash_profile" ]; then
+elif [[ -n "\$BASH_VERSION" ]]; then
+	if [[ -f "\$HOME/.bash_profile" ]]; then
 		source "\$HOME/.bash_profile"
 	fi
 fi

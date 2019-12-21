@@ -3,7 +3,7 @@
 # Source global definitions
 
 # include /etc/bashrc if it exists
-if [ -f /etc/bashrc ]; then
+if [[ -f /etc/bashrc ]]; then
 	. /etc/bashrc
 fi
 

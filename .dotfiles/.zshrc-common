@@ -1,36 +1,36 @@
 # Source global definitions
 # include /etc/zshrc if it exists
-if [ -f /etc/zshrc ]; then
+if [[ -f /etc/zshrc ]]; then
 	. /etc/zshrc
 fi
 
 # include /etc/profile if it exists
-if [ -f /etc/profile ]; then
+if [[ -f /etc/profile ]]; then
 	. /etc/profile
 fi
 
 # include /etc/zprofile if it exists
-if [ -f /etc/zprofile ]; then
+if [[ -f /etc/zprofile ]]; then
 	. /etc/zprofile
 fi
 
 # set PATH so it includes user's private bin if it exists
-if [ -d "$HOME/.local/bin" ]; then
+if [[ -d "$HOME/.local/bin" ]]; then
 	export PATH="$HOME/.local/bin:$PATH"
 fi
 
 # set C_INCLUDE_PATH and CPLUS_INCLUDE_PATH so it includes user's private include if it exists
-if [ -d "$HOME/.local/include" ]; then
+if [[ -d "$HOME/.local/include" ]]; then
 	export C_INCLUDE_PATH="$HOME/.local/include:$C_INCLUDE_PATH"
 	export CPLUS_INCLUDE_PATH="$HOME/.local/include:$CPLUS_INCLUDE_PATH"
 fi
 
 # set LIBRARY_PATH and DYLD_LIBRARY_PATH so it includes user's private lib if it exists
-if [ -d "$HOME/.local/lib" ]; then
+if [[ -d "$HOME/.local/lib" ]]; then
 	export LIBRARY_PATH="$HOME/.local/lib:$LIBRARY_PATH"
 	export DYLD_LIBRARY_PATH="$HOME/.local/lib:$DYLD_LIBRARY_PATH"
 fi
-if [ -d "$HOME/.local/lib64" ]; then
+if [[ -d "$HOME/.local/lib64" ]]; then
 	export LIBRARY_PATH="$HOME/.local/lib64:$LIBRARY_PATH"
 	export DYLD_LIBRARY_PATH="$HOME/.local/lib64:$DYLD_LIBRARY_PATH"
 fi
@@ -56,10 +56,10 @@ export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bot
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
 __conda_setup="$('$HOME/Anaconda3/bin/conda' 'shell.zsh' 'hook' 2>/dev/null)"
-if [ $? -eq 0 ]; then
+if [[ $? -eq 0 ]]; then
 	eval "$__conda_setup"
 else
-	if [ -f "$HOME/Anaconda3/etc/profile.d/conda.sh" ]; then
+	if [[ -f "$HOME/Anaconda3/etc/profile.d/conda.sh" ]]; then
 		. "$HOME/Anaconda3/etc/profile.d/conda.sh"
 	else
 		export PATH="$HOME/Anaconda3/bin:$PATH"

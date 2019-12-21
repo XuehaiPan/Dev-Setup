@@ -83,7 +83,7 @@ let g:syntastic_loc_list_height = 5
 let g:syntastic_check_on_wq = 0
 autocmd GUIEnter * let g:syntastic_check_on_open = 1
 
-let g:mkdp_auto_start = 0
+let g:mkdp_auto_start = 1
 
 call plug#begin('~/.vim/plugged')
     Plug 'scrooloose/nerdtree'

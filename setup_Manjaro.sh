@@ -131,7 +131,7 @@ done
 rm -f $HOME/.zcompdump* 2>/dev/null
 rm -f $HOME/.shell.pre-oh-my-zsh 2>/dev/null
 
-echo_and_eval 'cd $HOME'
+echo_and_eval 'cd "$HOME"'
 
 mkdir -p .dotfiles
 
@@ -698,7 +698,7 @@ ln -sf .dotfiles/.profile .
 backup_dotfiles .vimrc .dotfiles/.vimrc
 
 MARKDOWN_HOST='127.0.0.1'
-if [[ -n "$SSH_CLIENT" && -n "$SSH_CONNECTION" ]]; then
+if [[ -n $SSH_CLIENT && -n $SSH_CONNECTION ]]; then
 	MARKDOWN_HOST=$(echo "$SSH_CLIENT" | awk '{ print $3 }')
 fi
 
@@ -935,7 +935,7 @@ echo_and_eval 'curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
 
 # Install Vim Plugins
 echo_and_eval 'vim -c "PlugUpgrade | PlugInstall | PlugUpdate | qa"'
-echo_and_eval 'vim -c "call mkdp#util#install() | qa"'
+echo_and_eval 'cd "$HOME/.vim/plugged/markdown-preview.nvim/app"; ./install.sh; cd "$HOME"'
 
 # Configurations for Tmux
 backup_dotfiles .tmux.conf .dotfiles/.tmux.conf \

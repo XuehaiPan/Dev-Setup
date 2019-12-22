@@ -791,17 +791,13 @@ call plug#begin('~/.vim/plugged')
     Plug 'vim-syntastic/syntastic'
     Plug 'godlygeek/tabular'
     Plug 'plasticboy/vim-markdown'
-    Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() } }
+    Plug 'iamcco/markdown-preview.nvim'
 call plug#end()
 EOF
 
 unset MARKDOWN_HOST
 
 ln -sf .dotfiles/.vimrc .
-
-# Install Vim-Plug Plugin Manager
-echo_and_eval 'curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-	https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 
 # Add Vim Monokai Color Theme
 mkdir -p .vim/colors
@@ -918,8 +914,13 @@ hi cssCommonAttr ctermfg=81 ctermbg=NONE cterm=NONE guifg=#66d9ef guibg=NONE gui
 hi cssBraces ctermfg=NONE ctermbg=NONE cterm=NONE guifg=NONE guibg=NONE gui=NONE
 EOF
 
+# Install Vim-Plug Plugin Manager
+echo_and_eval 'curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+	https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+
 # Install Vim Plugins
 echo_and_eval 'vim -c "PlugUpgrade | PlugInstall | PlugUpdate | qa"'
+echo_and_eval '$HOME/.vim/plugged/markdown-preview.nvim/app/install.sh'
 
 # Configurations for Tmux
 backup_dotfiles .tmux.conf .dotfiles/.tmux.conf \

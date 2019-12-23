@@ -1488,13 +1488,11 @@ EOF
 ln -sf .dotfiles/.condarc .
 
 # Install Miniconda
-echo_and_eval 'wget https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-latest-Linux-x86_64.sh'
-CONDA_ARGS="-b -p $HOME/Miniconda3"
-if [[ -d "$HOME/Miniconda3" ]]; then
-	CONDA_ARGS="$CONDA_ARGS -u"
+if [[ ! -d "$HOME/Miniconda3" ]]; then
+	echo_and_eval 'wget https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-latest-Linux-x86_64.sh'
+	echo_and_eval 'bash Miniconda3-latest-Linux-x86_64.sh -b -p $HOME/Miniconda3'
+	echo_and_eval 'rm -f Miniconda3-latest-Linux-x86_64.sh'
 fi
-echo_and_eval "bash Miniconda3-latest-Linux-x86_64.sh $CONDA_ARGS"
-echo_and_eval 'rm -f Miniconda3-latest-Linux-x86_64.sh'
 
 # Install Conda Packages
 source .zshrc 2>/dev/null

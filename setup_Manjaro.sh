@@ -6,9 +6,9 @@ BACKUP_DIR="$HOME/.dotfiles/backups/$DATETIME"
 mkdir -p "$BACKUP_DIR/.dotfiles"
 
 # Check if in WSL
-IS_WSL=false
+IN_WSL=false
 if $(uname -r | grep -qF 'Microsoft'); then
-	IS_WSL=true
+	IN_WSL=true
 fi
 
 # Common Functions
@@ -1646,7 +1646,7 @@ chmod +x upgrade_packages.sh
 
 # Install Fonts
 FONT_DIR=".local/share/fonts"
-if $IS_WSL; then
+if $IN_WSL; then
 	FONT_DIR="/mnt/c/Windows/Fonts"
 else
 	mkdir -p "$FONT_DIR"
@@ -1660,6 +1660,6 @@ echo_and_eval "wget -O $FONT_DIR/CascadiaMonoPL.ttf https://github.com/microsoft
 echo_and_eval "unzip -o DejaVuSansMono.zip -d $FONT_DIR/"
 echo_and_eval "unzip -o Menlo.zip -d $FONT_DIR/"
 echo_and_eval 'rm -f DejaVuSansMono.zip Menlo.zip'
-if ! $IS_WSL; then
+if ! $IN_WSL; then
 	echo_and_eval 'fc-cache --force'
 fi

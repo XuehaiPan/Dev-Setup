@@ -16,10 +16,13 @@ function echo_and_eval() {
 	local CMD="$*"
 	printf "%s" "$CMD" | awk \
 		'BEGIN {
-			BoldGreen="\033[1;32m";
-			BoldYellow="\033[1;33m";
-			BoldWhite="\033[1;37m";
-			Reset="\033[0m";
+			UnderlineBoldGreen = "\033[4;1;32m";
+			BoldGreen = "\033[1;32m";
+			BoldYellow = "\033[1;33m";
+			BoldWhite = "\033[1;37m";
+			Reset = "\033[0m";
+			idx = 0;
+			in_string = 0;
 			printf("%s$%s", BoldWhite, Reset);
 		}
 		{
@@ -27,10 +30,31 @@ function echo_and_eval() {
 				Style = BoldWhite;
 				if ($i ~ /^-/) {
 					Style = BoldYellow;
-				} else if (i == 1 || $i == "sudo" || $(i - 1) == "sudo") {
-					Style = BoldGreen;
+				} else if ($i == "sudo") {
+					Style = UnderlineBoldGreen;
+				} else if (!in_string) {
+					++idx;
+					if ($i ~ /^"/) {
+						in_string = 1;
+					}
+					else if (idx == 1) {
+						Style = BoldGreen;
+					}
 				}
-				printf(" %s%s%s", Style, $i, Reset);
+				if (in_string && $i ~ /";?$/) {
+					in_string = 0;
+				}
+				if ($i ~ /;$/) {
+					printf(" %s%s%s;%s", Style, substr($i, 1, length($i) - 1), BoldWhite, Reset);
+				} else {
+					printf(" %s%s%s", Style, $i, Reset);
+				}
+				if ($i == "\\") {
+					printf("\n\t");
+				}
+				if ($i ~ /;$/ || $i == "|" || $i == "||" || $i == "&&") {
+					idx = 0;
+				}
 			}
 		}
 		END {
@@ -420,10 +444,13 @@ function echo_and_eval() {
 	local CMD="\$*"
 	printf "%s" "\$CMD" | awk \\
 		'BEGIN {
-			BoldGreen="\\033[1;32m";
-			BoldYellow="\\033[1;33m";
-			BoldWhite="\\033[1;37m";
-			Reset="\\033[0m";
+			UnderlineBoldGreen = "\\033[4;1;32m";
+			BoldGreen = "\\033[1;32m";
+			BoldYellow = "\\033[1;33m";
+			BoldWhite = "\\033[1;37m";
+			Reset = "\\033[0m";
+			idx = 0;
+			in_string = 0;
 			printf("%s\$%s", BoldWhite, Reset);
 		}
 		{
@@ -431,10 +458,31 @@ function echo_and_eval() {
 				Style = BoldWhite;
 				if (\$i ~ /^-/) {
 					Style = BoldYellow;
-				} else if (i == 1 || \$i == "sudo" || \$(i - 1) == "sudo") {
-					Style = BoldGreen;
+				} else if (\$i == "sudo") {
+					Style = UnderlineBoldGreen;
+				} else if (!in_string) {
+					++idx;
+					if (\$i ~ /^"/) {
+						in_string = 1;
+					}
+					else if (idx == 1) {
+						Style = BoldGreen;
+					}
 				}
-				printf(" %s%s%s", Style, \$i, Reset);
+				if (in_string && \$i ~ /";?\$/) {
+					in_string = 0;
+				}
+				if (\$i ~ /;\$/) {
+					printf(" %s%s%s;%s", Style, substr(\$i, 1, length(\$i) - 1), BoldWhite, Reset);
+				} else {
+					printf(" %s%s%s", Style, \$i, Reset);
+				}
+				if (\$i == "\\\\") {
+					printf("\\n\\t");
+				}
+				if (\$i ~ /;\$/ || \$i == "|" || \$i == "||" || \$i == "&&") {
+					idx = 0;
+				}
 			}
 		}
 		END {
@@ -1448,10 +1496,13 @@ function echo_and_eval() {
 	local CMD="\$*"
 	printf "%s" "\$CMD" | awk \\
 		'BEGIN {
-			BoldGreen="\\033[1;32m";
-			BoldYellow="\\033[1;33m";
-			BoldWhite="\\033[1;37m";
-			Reset="\\033[0m";
+			UnderlineBoldGreen = "\\033[4;1;32m";
+			BoldGreen = "\\033[1;32m";
+			BoldYellow = "\\033[1;33m";
+			BoldWhite = "\\033[1;37m";
+			Reset = "\\033[0m";
+			idx = 0;
+			in_string = 0;
 			printf("%s\$%s", BoldWhite, Reset);
 		}
 		{
@@ -1459,10 +1510,31 @@ function echo_and_eval() {
 				Style = BoldWhite;
 				if (\$i ~ /^-/) {
 					Style = BoldYellow;
-				} else if (i == 1 || \$i == "sudo" || \$(i - 1) == "sudo") {
-					Style = BoldGreen;
+				} else if (\$i == "sudo") {
+					Style = UnderlineBoldGreen;
+				} else if (!in_string) {
+					++idx;
+					if (\$i ~ /^"/) {
+						in_string = 1;
+					}
+					else if (idx == 1) {
+						Style = BoldGreen;
+					}
 				}
-				printf(" %s%s%s", Style, \$i, Reset);
+				if (in_string && \$i ~ /";?\$/) {
+					in_string = 0;
+				}
+				if (\$i ~ /;\$/) {
+					printf(" %s%s%s;%s", Style, substr(\$i, 1, length(\$i) - 1), BoldWhite, Reset);
+				} else {
+					printf(" %s%s%s", Style, \$i, Reset);
+				}
+				if (\$i == "\\\\") {
+					printf("\\n\\t");
+				}
+				if (\$i ~ /;\$/ || \$i == "|" || \$i == "||" || \$i == "&&") {
+					idx = 0;
+				}
 			}
 		}
 		END {

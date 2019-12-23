@@ -28,17 +28,19 @@ function echo_and_eval() {
 		{
 			for (i = 1; i <= NF; ++i) {
 				Style = BoldWhite;
-				if ($i ~ /^-/) {
-					Style = BoldYellow;
-				} else if ($i == "sudo") {
-					Style = UnderlineBoldGreen;
-				} else if (!in_string) {
-					++idx;
-					if ($i ~ /^"/) {
-						in_string = 1;
-					}
-					else if (idx == 1) {
-						Style = BoldGreen;
+				if (!in_string) {
+					if ($i ~ /^-/) {
+						Style = BoldYellow;
+					} else if ($i == "sudo") {
+						Style = UnderlineBoldGreen;
+					} else {
+						++idx;
+						if ($i ~ /^"/) {
+							in_string = 1;
+						}
+						else if (idx == 1) {
+							Style = BoldGreen;
+						}
 					}
 				}
 				if (in_string && $i ~ /";?$/) {
@@ -473,17 +475,19 @@ function echo_and_eval() {
 		{
 			for (i = 1; i <= NF; ++i) {
 				Style = BoldWhite;
-				if (\$i ~ /^-/) {
-					Style = BoldYellow;
-				} else if (\$i == "sudo") {
-					Style = UnderlineBoldGreen;
-				} else if (!in_string) {
-					++idx;
-					if (\$i ~ /^"/) {
-						in_string = 1;
-					}
-					else if (idx == 1) {
-						Style = BoldGreen;
+				if (!in_string) {
+					if (\$i ~ /^-/) {
+						Style = BoldYellow;
+					} else if (\$i == "sudo") {
+						Style = UnderlineBoldGreen;
+					} else {
+						++idx;
+						if (\$i ~ /^"/) {
+							in_string = 1;
+						}
+						else if (idx == 1) {
+							Style = BoldGreen;
+						}
 					}
 				}
 				if (in_string && \$i ~ /";?\$/) {
@@ -1523,17 +1527,19 @@ function echo_and_eval() {
 		{
 			for (i = 1; i <= NF; ++i) {
 				Style = BoldWhite;
-				if (\$i ~ /^-/) {
-					Style = BoldYellow;
-				} else if (\$i == "sudo") {
-					Style = UnderlineBoldGreen;
-				} else if (!in_string) {
-					++idx;
-					if (\$i ~ /^"/) {
-						in_string = 1;
-					}
-					else if (idx == 1) {
-						Style = BoldGreen;
+				if (!in_string) {
+					if (\$i ~ /^-/) {
+						Style = BoldYellow;
+					} else if (\$i == "sudo") {
+						Style = UnderlineBoldGreen;
+					} else {
+						++idx;
+						if (\$i ~ /^"/) {
+							in_string = 1;
+						}
+						else if (idx == 1) {
+							Style = BoldGreen;
+						}
 					}
 				}
 				if (in_string && \$i ~ /";?\$/) {

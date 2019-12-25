@@ -67,8 +67,8 @@ function echo_and_eval() {
 
 function backup_dotfiles() {
 	for file in "$@"; do
-		if [[ -f $file || -d $file ]]; then
-			if [[ -L $file ]]; then
+		if [[ -f "$file" || -d "$file" ]]; then
+			if [[ -L "$file" ]]; then
 				local original_file=$(readlink "$file")
 				rm -f "$file"
 				cp -rf "$original_file" "$file"
@@ -750,7 +750,7 @@ ln -sf .dotfiles/.profile .
 backup_dotfiles .vimrc .dotfiles/.vimrc
 
 MARKDOWN_HOST='127.0.0.1'
-if [[ -n $SSH_CLIENT && -n $SSH_CONNECTION ]]; then
+if [[ -n "$SSH_CLIENT" && -n "$SSH_CONNECTION" ]]; then
 	MARKDOWN_HOST=$(echo "$SSH_CLIENT" | awk '{ print $3 }')
 fi
 

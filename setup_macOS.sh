@@ -74,7 +74,19 @@ function backup_dotfiles() {
 
 function remove_duplicate() {
 	for item in "$@"; do
-		echo $(printf "%s" "$item" | awk -v RS=':' 'BEGIN { idx = 0; delete flag; } { if (!(flag[$0]++)) { printf("%s%s", (!idx++ ? "" : ":"), $0); } }')
+		printf "%s" "$item" | awk -v RS=':' \
+			'BEGIN {
+				idx = 0;
+				delete flag;
+			}
+			{
+				if (!(flag[$0]++)) {
+					printf("%s%s", (!idx++ ? "" : ":"), $0);
+				}
+			}
+			END {
+				printf("\n");
+			}'
 	done
 }
 PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin:/Library/Apple/bin:$PATH"
@@ -306,7 +318,19 @@ export PATH="/usr/local/opt/llvm/bin:\$PATH"
 # Remove duplicate entries
 function remove_duplicate() {
 	for item in "\$@"; do
-		echo \$(printf "%s" "\$item" | awk -v RS=':' 'BEGIN { idx = 0; delete flag; } { if (!(flag[\$0]++)) { printf("%s%s", (!idx++ ? "" : ":"), \$0); } }')
+		printf "%s" "\$item" | awk -v RS=':' \\
+			'BEGIN {
+				idx = 0;
+				delete flag;
+			}
+			{
+				if (!(flag[\$0]++)) {
+					printf("%s%s", (!idx++ ? "" : ":"), \$0);
+				}
+			}
+			END {
+				printf("\\n");
+			}'
 	done
 }
 export PATH=\$(remove_duplicate "\$PATH")
@@ -644,7 +668,19 @@ export PATH="/usr/local/opt/llvm/bin:\$PATH"
 # Remove duplicate entries
 function remove_duplicate() {
 	for item in "\$@"; do
-		echo \$(printf "%s" "\$item" | awk -v RS=':' 'BEGIN { idx = 0; delete flag; } { if (!(flag[\$0]++)) { printf("%s%s", (!idx++ ? "" : ":"), \$0); } }')
+		printf "%s" "\$item" | awk -v RS=':' \\
+			'BEGIN {
+				idx = 0;
+				delete flag;
+			}
+			{
+				if (!(flag[\$0]++)) {
+					printf("%s%s", (!idx++ ? "" : ":"), \$0);
+				}
+			}
+			END {
+				printf("\\n");
+			}'
 	done
 }
 export PATH=\$(remove_duplicate "\$PATH")

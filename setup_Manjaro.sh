@@ -1011,7 +1011,9 @@ echo_and_eval 'curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
 
 # Install Vim Plugins
 echo_and_eval 'vim -c "PlugUpgrade | PlugInstall | PlugUpdate | qa"'
-echo_and_eval 'cd "$HOME/.vim/plugged/markdown-preview.nvim/app"; ./install.sh; cd "$HOME"'
+if [[ ! -f "$HOME/.vim/plugged/markdown-preview.nvim/app/bin/markdown-preview-linux" ]]; then
+	echo_and_eval 'cd "$HOME/.vim/plugged/markdown-preview.nvim/app"; ./install.sh; cd "$HOME"'
+fi
 
 # Configurations for Tmux
 backup_dotfiles .tmux.conf .dotfiles/.tmux.conf \

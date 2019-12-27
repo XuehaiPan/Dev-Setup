@@ -1126,7 +1126,7 @@ EOF
 
 backup_dotfiles .dotfiles/.tmux
 rm -rf .dotfiles/.tmux
-git clone https://github.com/gpakosz/.tmux.git .dotfiles/.tmux
+echo_and_eval 'git clone https://github.com/gpakosz/.tmux.git "$HOME/.dotfiles/.tmux"'
 
 cp -f .dotfiles/.tmux/.tmux.conf.local .dotfiles/
 ln -sf .dotfiles/.tmux/.tmux.conf .

@@ -180,7 +180,7 @@ ln -sf .dotfiles/.gemrc .
 # Update RubyGems and Install Colorls
 export PATH="$(ruby -r rubygems -e 'puts Gem.dir')/bin:$PATH"
 export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
-echo_and_eval 'gem update --system'
+echo_and_eval 'sudo gem update --system'
 echo_and_eval 'gem update'
 echo_and_eval 'gem install colorls'
 echo_and_eval 'gem cleanup'
@@ -564,7 +564,7 @@ function upgrade_vim() {
 }
 
 function upgrade_gems() {
-	echo_and_eval 'gem update --system'
+	echo_and_eval 'sudo gem update --system'
 	echo_and_eval 'gem update'
 	echo_and_eval 'gem cleanup'
 }
@@ -1628,7 +1628,7 @@ function upgrade_vim() {
 }
 
 function upgrade_gems() {
-	echo_and_eval 'gem update --system'
+	echo_and_eval 'sudo gem update --system'
 	echo_and_eval 'gem update'
 	echo_and_eval 'gem cleanup'
 }

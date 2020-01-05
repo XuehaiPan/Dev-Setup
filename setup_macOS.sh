@@ -148,6 +148,10 @@ echo_and_eval 'brew cask install iterm2 keka sogouinput'
 echo_and_eval 'brew cask install font-cascadia'
 echo_and_eval 'brew cask install font-dejavusansmono-nerd-font font-dejavusansmono-nerd-font-mono'
 
+# Upgrade Packages
+echo_and_eval 'brew upgrade'
+echo_and_eval 'brew cask upgrade'
+
 # Color Theme for iTerm
 wget -O "$HOME/Desktop/SpaceGray Eighties.itermcolors" \
 	https://raw.githubusercontent.com/mbadolato/iTerm2-Color-Schemes/master/schemes/SpaceGray%20Eighties.itermcolors

@@ -11,6 +11,16 @@ if $(uname -r | grep -qF 'Microsoft'); then
 	IN_WSL=true
 fi
 
+# Set Default Conda Installation Directory
+CONDA_DIR="Miniconda3"
+if [[ -d "$HOME/miniconda3" ]]; then
+	CONDA_DIR="miniconda3"
+elif [[ -d "$HOME/Anaconda3" ]]; then
+	CONDA_DIR="Anaconda3"
+elif [[ -d "$HOME/anaconda3" ]]; then
+	CONDA_DIR="anaconda3"
+fi
+
 # Common Functions
 function echo_and_eval() {
 	local CMD="$*"
@@ -227,14 +237,14 @@ export OMPI_FC="\$FC" MPICH_FC="\$FC"
 # Anaconda
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-__conda_setup="\$('\$HOME/Miniconda3/bin/conda' 'shell.zsh' 'hook' 2>/dev/null)"
+__conda_setup="\$('\$HOME/$CONDA_DIR/bin/conda' 'shell.zsh' 'hook' 2>/dev/null)"
 if [[ \$? -eq 0 ]]; then
 	eval "\$__conda_setup"
 else
-	if [[ -f "\$HOME/Miniconda3/etc/profile.d/conda.sh" ]]; then
-		. "\$HOME/Miniconda3/etc/profile.d/conda.sh"
+	if [[ -f "\$HOME/$CONDA_DIR/etc/profile.d/conda.sh" ]]; then
+		. "\$HOME/$CONDA_DIR/etc/profile.d/conda.sh"
 	else
-		export PATH="\$HOME/Miniconda3/bin:\$PATH"
+		export PATH="\$HOME/$CONDA_DIR/bin:\$PATH"
 	fi
 fi
 unset __conda_setup
@@ -698,14 +708,14 @@ export OMPI_FC="\$FC" MPICH_FC="\$FC"
 # Anaconda
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-__conda_setup="\$('\$HOME/Miniconda3/bin/conda' 'shell.bash' 'hook' 2>/dev/null)"
+__conda_setup="\$('\$HOME/$CONDA_DIR/bin/conda' 'shell.bash' 'hook' 2>/dev/null)"
 if [[ \$? -eq 0 ]]; then
 	eval "\$__conda_setup"
 else
-	if [[ -f "\$HOME/Miniconda3/etc/profile.d/conda.sh" ]]; then
-		. "\$HOME/Miniconda3/etc/profile.d/conda.sh"
+	if [[ -f "\$HOME/$CONDA_DIR/etc/profile.d/conda.sh" ]]; then
+		. "\$HOME/$CONDA_DIR/etc/profile.d/conda.sh"
 	else
-		export PATH="\$HOME/Miniconda3/bin:\$PATH"
+		export PATH="\$HOME/$CONDA_DIR/bin:\$PATH"
 	fi
 fi
 unset __conda_setup
@@ -1499,7 +1509,7 @@ EOF
 ln -sf .dotfiles/.condarc .
 
 # Install Miniconda
-if [[ ! -d "$HOME/Miniconda3" ]]; then
+if [[ ! -d "$HOME/$CONDA_DIR" ]]; then
 	echo_and_eval 'wget https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-latest-Linux-x86_64.sh'
 	echo_and_eval 'bash Miniconda3-latest-Linux-x86_64.sh -b -p $HOME/Miniconda3'
 	echo_and_eval 'rm -f Miniconda3-latest-Linux-x86_64.sh'
@@ -1514,7 +1524,7 @@ echo_and_eval 'conda install pip jupyter ipython notebook jupyterlab ipdb tqdm \
 echo_and_eval 'conda update --all --yes'
 echo_and_eval 'conda clean --all --yes'
 rm -r .cph_tmp* 2>/dev/null
-rm -r Miniconda3/.cph_tmp* 2>/dev/null
+rm -r "$CONDA_DIR"/.cph_tmp* 2>/dev/null
 
 # Add Script file for Upgrading Packages
 cat >upgrade_packages.sh <<EOF

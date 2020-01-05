@@ -195,6 +195,16 @@ echo_and_eval 'gem update'
 echo_and_eval 'gem install colorls'
 echo_and_eval 'gem cleanup'
 
+# Configurations for CPAN
+eval '$(perl -I/usr/local/opt/perl/lib/perl5 -Mlocal::lib=/usr/local/opt/perl)'
+echo_and_eval 'printf "%s\n%s\n%s\n" \
+					  "o conf urllist https://mirrors.tuna.tsinghua.edu.cn/CPAN/" \
+					  "o conf commit" \
+					  "quit" \
+					  | sudo cpan'
+echo_and_eval 'sudo cpan -i CPAN'
+echo_and_eval 'sudo cpan -i Log::Log4perl'
+
 # Configurations for Zsh
 backup_dotfiles .dotfiles/.zshrc-common
 

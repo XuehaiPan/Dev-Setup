@@ -93,7 +93,7 @@ ln -sf .dotfiles/${cfg_file_name} .
 
 ## Packages
 
-The source of package managers (HomeBrew (macOS), APT (Ubuntu), Pacman (Manjaro), Gem and Conda) will be set to the open source mirrors at [TUNA](https://mirrors.tuna.tsinghua.edu.cn).
+The source of package managers (HomeBrew (macOS), APT (Ubuntu), Pacman (Manjaro), CPAN, Gem and Conda) will be set to the open source mirrors at [TUNA](https://mirrors.tuna.tsinghua.edu.cn).
 
 The following packages will be setup:
 

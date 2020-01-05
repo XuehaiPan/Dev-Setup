@@ -103,9 +103,10 @@ PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin:/Libra
 export PATH=$(remove_duplicate "$PATH")
 
 # Install and Setup Homebrew
-echo_and_eval 'xcode-select --install'
-
-echo_and_eval '/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"'
+if [[ ! -x "/usr/local/bin/brew" ]]; then
+	echo_and_eval 'xcode-select --install'
+	echo_and_eval '/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"'
+fi
 echo_and_eval 'brew tap homebrew/cask'
 echo_and_eval 'brew tap homebrew/cask-fonts'
 

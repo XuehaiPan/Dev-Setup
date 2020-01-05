@@ -180,6 +180,7 @@ echo_and_eval 'sudo gem cleanup'
 
 # Configurations for CPAN
 eval '$(perl -I/usr/local/opt/perl/lib/perl5 -Mlocal::lib=/usr/local/opt/perl)'
+printf "\n\n\nquit\n" | cpan
 echo_and_eval 'printf "%s\n%s\n%s\n" \
 					  "o conf urllist https://mirrors.tuna.tsinghua.edu.cn/CPAN/" \
 					  "o conf commit" \

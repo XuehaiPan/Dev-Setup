@@ -71,8 +71,8 @@ function echo_and_eval() {
 
 function backup_dotfiles() {
 	for file in "$@"; do
-		if [[ -f "$file" || -d "$file" ]]; then
-			if [[ -L "$file" ]]; then
+		if [[ -f $file || -d $file ]]; then
+			if [[ -L $file ]]; then
 				local original_file=$(readlink "$file")
 				rm -f "$file"
 				cp -rf "$original_file" "$file"
@@ -217,15 +217,16 @@ echo_and_eval 'sudo gem install colorls'
 echo_and_eval 'sudo gem cleanup'
 
 # Configurations for CPAN
-eval '$(perl -I/usr/local/opt/perl/lib/perl5 -Mlocal::lib=/usr/local/opt/perl)'
 printf "\n\n\nquit\n" | cpan
 echo_and_eval 'printf "%s\n%s\n%s\n" \
 					  "o conf urllist https://mirrors.tuna.tsinghua.edu.cn/CPAN/" \
 					  "o conf commit" \
 					  "quit" \
-					  | sudo cpan'
-echo_and_eval 'sudo cpan -i CPAN'
-echo_and_eval 'sudo cpan -i Log::Log4perl'
+					  | cpan'
+echo_and_eval 'PERL_MM_OPT="INSTALL_BASE=/usr/local/opt/perl/lib/perl5" cpan install local::lib'
+eval '$(perl -I/usr/local/opt/perl/lib/perl5 -Mlocal::lib=/usr/local/opt/perl)'
+echo_and_eval 'cpan -i CPAN'
+echo_and_eval 'cpan -i Log::Log4perl'
 
 # Configurations for Zsh
 backup_dotfiles .dotfiles/.zshrc-common

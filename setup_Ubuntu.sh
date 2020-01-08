@@ -179,7 +179,7 @@ echo_and_eval 'sudo gem install colorls'
 echo_and_eval 'sudo gem cleanup'
 
 # Configurations for CPAN
-printf "\n\n\nquit\n" | cpan
+echo_and_eval 'printf "\n\n\n%s\n" "quit" | cpan'
 echo_and_eval 'printf "%s\n%s\n%s\n" \
 					  "o conf urllist https://mirrors.tuna.tsinghua.edu.cn/CPAN/" \
 					  "o conf commit" \

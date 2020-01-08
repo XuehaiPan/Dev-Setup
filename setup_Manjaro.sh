@@ -196,12 +196,12 @@ echo_and_eval 'gem install colorls'
 echo_and_eval 'gem cleanup'
 
 # Configurations for CPAN
-echo_and_eval 'printf "\n\n\n%s\n" "quit" | cpan'
+echo_and_eval 'printf "\n\n\n%s\n" "quit" | sudo cpan'
 echo_and_eval 'printf "%s\n%s\n%s\n" \
 					  "o conf urllist https://mirrors.tuna.tsinghua.edu.cn/CPAN/" \
 					  "o conf commit" \
 					  "quit" \
-					  | cpan'
+					  | sudo cpan'
 echo_and_eval 'sudo cpan -i local::lib'
 echo_and_eval 'sudo cpan -i CPAN'
 echo_and_eval 'sudo cpan -i Log::Log4perl'

@@ -468,6 +468,8 @@ source "\$HOME/.dotfiles/.zshrc-common"
 
 # Use powerlevel10k purepower theme
 source "\$ZSH_CUSTOM/themes/powerlevel10k/config/p10k-lean.zsh"
+POWERLEVEL9K_TRANSIENT_PROMPT="same-dir"
+p10k reload
 EOF
 
 cat >.dotfiles/zsh_purepower/zsh <<EOF

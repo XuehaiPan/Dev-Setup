@@ -119,7 +119,7 @@ if ! grep -qF '/usr/bin/zsh' /etc/shells; then
 	echo_and_eval 'echo "/usr/bin/zsh" | sudo tee -a /etc/shells'
 fi
 
-if [[ $SHELL != "/usr/bin/zsh" ]]; then
+if [[ "$SHELL" != "/usr/bin/zsh" ]]; then
 	echo_and_eval 'chsh -s /usr/bin/zsh'
 fi
 
@@ -1553,6 +1553,8 @@ rm -r .cph_tmp* 2>/dev/null
 rm -r "$CONDA_DIR"/.cph_tmp* 2>/dev/null
 
 # Add Script file for Upgrading Packages
+backup_dotfiles upgrade_packages.sh
+
 cat >upgrade_packages.sh <<EOF
 #!/usr/bin/env bash
 

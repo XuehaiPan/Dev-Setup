@@ -71,8 +71,8 @@ function echo_and_eval() {
 
 function backup_dotfiles() {
 	for file in "$@"; do
-		if [[ -f $file || -d $file ]]; then
-			if [[ -L $file ]]; then
+		if [[ -f "$file" || -d "$file" ]]; then
+			if [[ -L "$file" ]]; then
 				local original_file=$(readlink "$file")
 				rm -f "$file"
 				cp -rf "$original_file" "$file"
@@ -130,7 +130,7 @@ if ! grep -qF '/usr/local/bin/zsh' /etc/shells; then
 	echo_and_eval 'echo "/usr/local/bin/zsh" | sudo tee -a /etc/shells'
 fi
 
-if [[ $SHELL != "/usr/local/bin/zsh" ]]; then
+if [[ "$SHELL" != "/usr/local/bin/zsh" ]]; then
 	echo_and_eval 'chsh -s /usr/local/bin/zsh'
 fi
 
@@ -1492,6 +1492,8 @@ rm -r .cph_tmp* 2>/dev/null
 rm -r "$CONDA_DIR"/.cph_tmp* 2>/dev/null
 
 # Add Script file for Upgrading Packages
+backup_dotfiles upgrade_packages.sh
+
 cat >upgrade_packages.sh <<EOF
 #!/usr/bin/env bash
 

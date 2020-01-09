@@ -103,7 +103,7 @@ if ! grep -qF '/usr/bin/zsh' /etc/shells; then
 	echo_and_eval 'echo "/usr/bin/zsh" | sudo tee -a /etc/shells'
 fi
 
-if [[ $SHELL != "/usr/bin/zsh" ]]; then
+if [[ "$SHELL" != "/usr/bin/zsh" ]]; then
 	echo_and_eval 'chsh -s /usr/bin/zsh'
 fi
 
@@ -469,9 +469,9 @@ if ! grep -qF '/usr/local/bin/zsh_purepower' /etc/shells; then
 	echo_and_eval 'echo "/usr/local/bin/zsh_purepower" | sudo tee -a /etc/shells'
 fi
 
+# Add Utility Script File
 backup_dotfiles .dotfiles/utilities.sh
 
-# Add Utility Script File
 cat >.dotfiles/utilities.sh <<EOF
 #!/usr/bin/env bash
 
@@ -780,7 +780,7 @@ ln -sf .dotfiles/.profile .
 backup_dotfiles .vimrc .dotfiles/.vimrc
 
 MARKDOWN_HOST='127.0.0.1'
-if [[ -n $SSH_CLIENT && -n $SSH_CONNECTION ]]; then
+if [[ -n "$SSH_CLIENT" && -n "$SSH_CONNECTION" ]]; then
 	MARKDOWN_HOST=$(echo "$SSH_CLIENT" | awk '{ print $3 }')
 fi
 
@@ -1538,6 +1538,8 @@ rm -r .cph_tmp* 2>/dev/null
 rm -r "$CONDA_DIR"/.cph_tmp* 2>/dev/null
 
 # Add Script file for Upgrading Packages
+backup_dotfiles upgrade_packages.sh
+
 cat >upgrade_packages.sh <<EOF
 #!/usr/bin/env bash
 

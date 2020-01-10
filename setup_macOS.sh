@@ -223,9 +223,9 @@ echo_and_eval 'printf "%s\n%s\n%s\n" \
 					  "o conf commit" \
 					  "quit" \
 					  | cpan'
-echo_and_eval 'PERL_MM_OPT="INSTALL_BASE=/usr/local/opt/perl/lib/perl5" cpan -i local::lib'
+export PERL_MB_OPT='--install_base "/usr/local/opt/perl"'
+export PERL_MM_OPT='INSTALL_BASE="/usr/local/opt/perl"'
 echo_and_eval 'cpan -i local::lib'
-echo_and_eval "eval '\$(perl -I/usr/local/opt/perl/lib/perl5 -Mlocal::lib=/usr/local/opt/perl)'"
 echo_and_eval 'cpan -i CPAN'
 echo_and_eval 'cpan -i Log::Log4perl'
 

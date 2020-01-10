@@ -459,10 +459,10 @@ EOF
 ln -sf .dotfiles/.zshrc .
 
 # Configurations for Zsh Purepower
-backup_dotfiles .dotfiles/zsh_purepower
-mkdir -p .dotfiles/zsh_purepower
+backup_dotfiles .dotfiles/zsh-purepower
+mkdir -p .dotfiles/zsh-purepower
 
-cat >.dotfiles/zsh_purepower/.zshrc <<EOF
+cat >.dotfiles/zsh-purepower/.zshrc <<EOF
 # Source common configrations
 source "\$HOME/.dotfiles/.zshrc-common"
 
@@ -472,20 +472,20 @@ POWERLEVEL9K_TRANSIENT_PROMPT="same-dir"
 p10k reload
 EOF
 
-cat >.dotfiles/zsh_purepower/zsh <<EOF
+cat >.dotfiles/zsh-purepower/zsh <<EOF
 #!/usr/bin/zsh -df
 
-export ZDOTDIR="\$HOME/.dotfiles/zsh_purepower"
+export ZDOTDIR="\$HOME/.dotfiles/zsh-purepower"
 
 /usr/bin/zsh "\$@"
 
 exit
 EOF
 
-chmod +x .dotfiles/zsh_purepower/zsh
-echo_and_eval 'sudo ln -sf "$HOME/.dotfiles/zsh_purepower/zsh" /usr/local/bin/zsh_purepower'
-if ! grep -qF '/usr/local/bin/zsh_purepower' /etc/shells; then
-	echo_and_eval 'echo "/usr/local/bin/zsh_purepower" | sudo tee -a /etc/shells'
+chmod +x .dotfiles/zsh-purepower/zsh
+echo_and_eval 'sudo ln -sf "$HOME/.dotfiles/zsh-purepower/zsh" /usr/local/bin/zsh-purepower'
+if ! grep -qF '/usr/local/bin/zsh-purepower' /etc/shells; then
+	echo_and_eval 'echo "/usr/local/bin/zsh-purepower" | sudo tee -a /etc/shells'
 fi
 
 # Add Utility Script File

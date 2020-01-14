@@ -647,7 +647,7 @@ function auto_reannounce_trackers() {
 	echo -ne "\\033[?25l"
 
 	for ((t = 0; t <= TIMES; ++t)); do
-		if [[ \$((t % 5)) -ne 0 ]]; then
+		if [[ \$((t % 5)) != 0 ]]; then
 			TORRENT="active"
 		else
 			TORRENT="all"

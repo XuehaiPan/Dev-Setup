@@ -5,6 +5,14 @@ DATETIME=$(date +"%Y-%m-%d-%T")
 BACKUP_DIR="$HOME/.dotfiles/backups/$DATETIME"
 mkdir -p "$BACKUP_DIR/.dotfiles"
 
+# Check if has sudo privileges
+IS_SUDOER=false
+COMMENT_PREFIX="# "
+if $(groups "$USER" | grep -qF 'sudo'); then
+	IS_SUDOER=true
+	COMMENT_PREFIX=""
+fi
+
 # Check if in WSL
 IN_WSL=false
 if $(uname -r | grep -qF 'Microsoft'); then
@@ -88,36 +96,38 @@ function backup_dotfiles() {
 	done
 }
 
-# Setup Apt Sources
-echo_and_eval "sudo sed -i -e 's/http:\\/\\/archive\\.ubuntu\\.com/https:\\/\\/mirrors\\.tuna\\.tsinghua\\.edu\\.cn/g' /etc/apt/sources.list"
-echo_and_eval "sudo sed -i -e 's/http:\\/\\/cn\\.archive\\.ubuntu\\.com/https:\\/\\/mirrors\\.tuna\\.tsinghua\\.edu\\.cn/g' /etc/apt/sources.list"
-echo_and_eval "sudo sed -i -e 's/http:\\/\\/security\\.ubuntu\\.com/https:\\/\\/mirrors\\.tuna\\.tsinghua\\.edu\\.cn/g' /etc/apt/sources.list"
-echo_and_eval "sudo sed -i -e 's/http:\\/\\/mirrors\\.tuna\\.tsinghua\\.edu\\.cn/https:\\/\\/mirrors\\.tuna\\.tsinghua\\.edu\\.cn/g' /etc/apt/sources.list"
+if $IS_SUDOER; then
+	# Setup Apt Sources
+	echo_and_eval "sudo sed -i -e 's/http:\\/\\/archive\\.ubuntu\\.com/https:\\/\\/mirrors\\.tuna\\.tsinghua\\.edu\\.cn/g' /etc/apt/sources.list"
+	echo_and_eval "sudo sed -i -e 's/http:\\/\\/cn\\.archive\\.ubuntu\\.com/https:\\/\\/mirrors\\.tuna\\.tsinghua\\.edu\\.cn/g' /etc/apt/sources.list"
+	echo_and_eval "sudo sed -i -e 's/http:\\/\\/security\\.ubuntu\\.com/https:\\/\\/mirrors\\.tuna\\.tsinghua\\.edu\\.cn/g' /etc/apt/sources.list"
+	echo_and_eval "sudo sed -i -e 's/http:\\/\\/mirrors\\.tuna\\.tsinghua\\.edu\\.cn/https:\\/\\/mirrors\\.tuna\\.tsinghua\\.edu\\.cn/g' /etc/apt/sources.list"
 
-echo_and_eval 'sudo apt update'
+	echo_and_eval 'sudo apt update'
 
-# Install and Setup Shells
-echo_and_eval 'sudo apt install zsh --yes'
+	# Install and Setup Shells
+	echo_and_eval 'sudo apt install zsh --yes'
 
-if ! grep -qF '/usr/bin/zsh' /etc/shells; then
-	echo_and_eval 'echo "/usr/bin/zsh" | sudo tee -a /etc/shells'
+	if ! grep -qF '/usr/bin/zsh' /etc/shells; then
+		echo_and_eval 'echo "/usr/bin/zsh" | sudo tee -a /etc/shells'
+	fi
+
+	if [[ "$SHELL" != "/usr/bin/zsh" ]]; then
+		echo_and_eval 'chsh -s /usr/bin/zsh'
+	fi
+
+	# Install Packages
+	echo_and_eval 'sudo apt install bash-completion wget curl git git-lfs --yes'
+	echo_and_eval 'sudo apt install vim tmux htop ssh net-tools exfat-utils tree xclip --yes'
+	echo_and_eval 'sudo apt install make cmake automake autoconf build-essential gcc g++ gdb --yes'
+	echo_and_eval 'sudo apt install clang clang-format llvm lldb ruby-full --yes'
+
+	echo_and_eval 'sudo apt dist-upgrade --yes'
+	echo_and_eval 'sudo apt full-upgrade --yes'
+	echo_and_eval 'sudo apt upgrade --yes'
+	echo_and_eval 'sudo apt autoremove --yes'
+	echo_and_eval 'sudo apt autoclean --yes'
 fi
-
-if [[ "$SHELL" != "/usr/bin/zsh" ]]; then
-	echo_and_eval 'chsh -s /usr/bin/zsh'
-fi
-
-# Install Packages
-echo_and_eval 'sudo apt install bash-completion wget curl git git-lfs --yes'
-echo_and_eval 'sudo apt install vim tmux htop ssh net-tools exfat-utils tree xclip --yes'
-echo_and_eval 'sudo apt install make cmake automake autoconf build-essential gcc g++ gdb --yes'
-echo_and_eval 'sudo apt install clang clang-format llvm lldb ruby-full --yes'
-
-echo_and_eval 'sudo apt dist-upgrade --yes'
-echo_and_eval 'sudo apt full-upgrade --yes'
-echo_and_eval 'sudo apt upgrade --yes'
-echo_and_eval 'sudo apt autoremove --yes'
-echo_and_eval 'sudo apt autoclean --yes'
 
 # Install Oh-My-Zsh
 export ZSH=${ZSH:-"$HOME/.oh-my-zsh"}
@@ -170,24 +180,26 @@ EOF
 
 ln -sf .dotfiles/.gemrc .
 
-# Update RubyGems and Install Colorls
-export PATH="$(ruby -r rubygems -e 'puts Gem.dir')/bin:$PATH"
-export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
-echo_and_eval 'sudo gem update --system'
-echo_and_eval 'sudo gem update'
-echo_and_eval 'sudo gem install colorls'
-echo_and_eval 'sudo gem cleanup'
+if $IS_SUDOER; then
+	# Update RubyGems and Install Colorls
+	export PATH="$(ruby -r rubygems -e 'puts Gem.dir')/bin:$PATH"
+	export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
+	echo_and_eval 'sudo gem update --system'
+	echo_and_eval 'sudo gem update'
+	echo_and_eval 'sudo gem install colorls'
+	echo_and_eval 'sudo gem cleanup'
 
-# Configurations for CPAN
-echo_and_eval 'printf "\n\n\n%s\n" "quit" | cpan'
-echo_and_eval 'printf "%s\n%s\n%s\n" \
-					  "o conf urllist https://mirrors.tuna.tsinghua.edu.cn/CPAN/" \
-					  "o conf commit" \
-					  "quit" \
-					  | cpan'
-echo_and_eval 'sudo cpan -i local::lib'
-echo_and_eval 'sudo cpan -i CPAN'
-echo_and_eval 'sudo cpan -i Log::Log4perl'
+	# Configurations for CPAN
+	echo_and_eval 'printf "\n\n\n%s\n" "quit" | cpan'
+	echo_and_eval 'printf "%s\n%s\n%s\n" \
+						  "o conf urllist https://mirrors.tuna.tsinghua.edu.cn/CPAN/" \
+						  "o conf commit" \
+						  "quit" \
+						  | cpan'
+	echo_and_eval 'sudo cpan -i local::lib'
+	echo_and_eval 'sudo cpan -i CPAN'
+	echo_and_eval 'sudo cpan -i Log::Log4perl'
+fi
 
 # Configurations for Zsh
 backup_dotfiles .dotfiles/.zshrc-common
@@ -430,13 +442,13 @@ cat >.dotfiles/.zshrc <<EOF
 source "\$HOME/.dotfiles/.zshrc-common"
 
 # Setup colorls
-source \$(dirname \$(gem which colorls))/tab_complete.sh
-alias lc='colorls --sd --gs'
-alias ls='lc'
-alias lsa='ls -A'
-alias l='ls -la'
-alias ll='ls -l'
-alias la='ls -lA'
+${COMMENT_PREFIX}source \$(dirname \$(gem which colorls))/tab_complete.sh
+${COMMENT_PREFIX}alias lc='colorls --sd --gs'
+${COMMENT_PREFIX}alias ls='lc'
+${COMMENT_PREFIX}alias lsa='ls -A'
+${COMMENT_PREFIX}alias l='ls -la'
+${COMMENT_PREFIX}alias ll='ls -l'
+${COMMENT_PREFIX}alias la='ls -lA'
 EOF
 
 ln -sf .dotfiles/.zshrc .
@@ -466,9 +478,14 @@ exit
 EOF
 
 chmod +x .dotfiles/zsh-purepower/zsh
-echo_and_eval 'sudo ln -sf "$HOME/.dotfiles/zsh-purepower/zsh" /usr/local/bin/zsh-purepower'
-if ! grep -qF '/usr/local/bin/zsh-purepower' /etc/shells; then
-	echo_and_eval 'echo "/usr/local/bin/zsh-purepower" | sudo tee -a /etc/shells'
+if $IS_SUDOER; then
+	echo_and_eval 'sudo ln -sf "$HOME/.dotfiles/zsh-purepower/zsh" /usr/local/bin/zsh-purepower'
+	if ! grep -qF '/usr/local/bin/zsh-purepower' /etc/shells; then
+		echo_and_eval 'echo "/usr/local/bin/zsh-purepower" | sudo tee -a /etc/shells'
+	fi
+else
+	mkdir -p "$HOME/.local/bin"
+	echo_and_eval 'ln -sf "$HOME/.dotfiles/zsh-purepower/zsh" "$HOME/.local/bin/zsh-purepower"'
 fi
 
 # Add Utility Script File
@@ -1667,10 +1684,10 @@ function upgrade_conda() {
 	echo_and_eval 'conda clean --all --yes'
 }
 
-upgrade_ubuntu
+${COMMENT_PREFIX}upgrade_ubuntu
 upgrade_ohmyzsh
 upgrade_vim
-upgrade_gems
+${COMMENT_PREFIX}upgrade_gems
 # upgrade_conda
 
 if [[ -n "\$ZSH_VERSION" ]]; then

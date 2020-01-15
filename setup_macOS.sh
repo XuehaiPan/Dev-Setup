@@ -365,7 +365,6 @@ export CPLUS_INCLUDE_PATH=\$(remove_duplicate "\$CPLUS_INCLUDE_PATH")
 export LIBRARY_PATH=\$(remove_duplicate "\$LIBRARY_PATH")
 export DYLD_LIBRARY_PATH=\$(remove_duplicate "\$DYLD_LIBRARY_PATH")
 export DYLD_FALLBACK_LIBRARY_PATH=\$(remove_duplicate "\$DYLD_FALLBACK_LIBRARY_PATH")
-export CLASSPATH=\$(remove_duplicate "\$CLASSPATH")
 unset -f remove_duplicate
 
 # X11
@@ -716,7 +715,6 @@ export CPLUS_INCLUDE_PATH=\$(remove_duplicate "\$CPLUS_INCLUDE_PATH")
 export LIBRARY_PATH=\$(remove_duplicate "\$LIBRARY_PATH")
 export DYLD_LIBRARY_PATH=\$(remove_duplicate "\$DYLD_LIBRARY_PATH")
 export DYLD_FALLBACK_LIBRARY_PATH=\$(remove_duplicate "\$DYLD_FALLBACK_LIBRARY_PATH")
-export CLASSPATH=\$(remove_duplicate "\$CLASSPATH")
 unset -f remove_duplicate
 
 # X11

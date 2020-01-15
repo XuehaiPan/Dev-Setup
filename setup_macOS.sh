@@ -329,6 +329,10 @@ export PATH="/usr/local/opt/gettext/bin:\$PATH"
 
 # ncurses
 export PATH="/usr/local/opt/ncurses/bin:\$PATH"
+export C_INCLUDE_PATH="/usr/local/opt/ncurses/include:\$C_INCLUDE_PATH"
+export CPLUS_INCLUDE_PATH="/usr/local/opt/ncurses/include:\$CPLUS_INCLUDE_PATH"
+export LIBRARY_PATH="/usr/local/opt/ncurses/lib:\$LIBRARY_PATH"
+export DYLD_LIBRARY_PATH="/usr/local/opt/ncurses/lib:\$DYLD_LIBRARY_PATH"
 
 # SQLite
 export PATH="/usr/local/opt/sqlite/bin:\$PATH"
@@ -676,6 +680,10 @@ export PATH="/usr/local/opt/gettext/bin:\$PATH"
 
 # ncurses
 export PATH="/usr/local/opt/ncurses/bin:\$PATH"
+export C_INCLUDE_PATH="/usr/local/opt/ncurses/include:\$C_INCLUDE_PATH"
+export CPLUS_INCLUDE_PATH="/usr/local/opt/ncurses/include:\$CPLUS_INCLUDE_PATH"
+export LIBRARY_PATH="/usr/local/opt/ncurses/lib:\$LIBRARY_PATH"
+export DYLD_LIBRARY_PATH="/usr/local/opt/ncurses/lib:\$DYLD_LIBRARY_PATH"
 
 # SQLite
 export PATH="/usr/local/opt/sqlite/bin:\$PATH"

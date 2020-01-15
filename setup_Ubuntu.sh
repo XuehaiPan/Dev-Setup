@@ -1549,7 +1549,7 @@ if [[ ! -d "$HOME/$CONDA_DIR" ]]; then
 fi
 
 # Install Conda Packages
-source .zshrc 2>/dev/null
+export PATH="$PATH:$HOME/$CONDA_DIR/condabin"
 echo_and_eval 'conda update conda --yes'
 echo_and_eval 'conda install pip jupyter ipython notebook jupyterlab ipdb tqdm \
 							 cython numpy numba matplotlib pandas seaborn pygraphviz \

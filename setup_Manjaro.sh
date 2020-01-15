@@ -119,10 +119,6 @@ if ! grep -qF '/usr/bin/zsh' /etc/shells; then
 	echo_and_eval 'echo "/usr/bin/zsh" | sudo tee -a /etc/shells'
 fi
 
-if [[ "$SHELL" != "/usr/bin/zsh" ]]; then
-	echo_and_eval 'chsh -s /usr/bin/zsh'
-fi
-
 # Install Packages
 echo_and_eval 'sudo pacman -S bash-completion wget curl git git-lfs --noconfirm'
 echo_and_eval 'sudo pacman -S vim tmux htop openssh net-tools exfat-utils tree xclip --noconfirm'
@@ -135,6 +131,11 @@ echo_and_eval 'sudo paccache -ruk0'
 
 echo_and_eval 'systemctl start sshd'
 echo_and_eval 'systemctl enable sshd.service'
+
+# Change default shell to zsh
+if [[ "$SHELL" != "/usr/bin/zsh" ]]; then
+	echo_and_eval 'chsh -s /usr/bin/zsh'
+fi
 
 # Install Oh-My-Zsh
 export ZSH=${ZSH:-"$HOME/.oh-my-zsh"}

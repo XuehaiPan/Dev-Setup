@@ -130,10 +130,6 @@ if ! grep -qF '/usr/local/bin/zsh' /etc/shells; then
 	echo_and_eval 'echo "/usr/local/bin/zsh" | sudo tee -a /etc/shells'
 fi
 
-if [[ "$SHELL" != "/usr/local/bin/zsh" ]]; then
-	echo_and_eval 'chsh -s /usr/local/bin/zsh'
-fi
-
 # Install Packages
 echo_and_eval 'brew install bash-completion wget curl git git-lfs'
 echo_and_eval 'brew install macvim tmux htop openssh tree reattach-to-user-namespace'
@@ -155,6 +151,11 @@ echo_and_eval 'brew cask upgrade'
 # Color Theme for iTerm
 wget -O "$HOME/Desktop/SpaceGray Eighties.itermcolors" \
 	https://raw.githubusercontent.com/mbadolato/iTerm2-Color-Schemes/master/schemes/SpaceGray%20Eighties.itermcolors
+
+# Change default shell to zsh
+if [[ "$SHELL" != "/usr/local/bin/zsh" ]]; then
+	echo_and_eval 'chsh -s /usr/local/bin/zsh'
+fi
 
 # Install Oh-My-Zsh
 export ZSH=${ZSH:-"$HOME/.oh-my-zsh"}

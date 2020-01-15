@@ -112,10 +112,6 @@ if $IS_SUDOER; then
 		echo_and_eval 'echo "/usr/bin/zsh" | sudo tee -a /etc/shells'
 	fi
 
-	if [[ "$SHELL" != "/usr/bin/zsh" ]]; then
-		echo_and_eval 'chsh -s /usr/bin/zsh'
-	fi
-
 	# Install Packages
 	echo_and_eval 'sudo apt install bash-completion wget curl git git-lfs --yes'
 	echo_and_eval 'sudo apt install vim tmux htop ssh net-tools exfat-utils tree xclip --yes'
@@ -127,6 +123,13 @@ if $IS_SUDOER; then
 	echo_and_eval 'sudo apt upgrade --yes'
 	echo_and_eval 'sudo apt autoremove --yes'
 	echo_and_eval 'sudo apt autoclean --yes'
+fi
+
+# Change default shell to zsh
+if $(grep -qF '/usr/bin/zsh' /etc/shells) && [[ "$SHELL" != "/usr/bin/zsh" ]]; then
+	echo_and_eval 'chsh -s /usr/bin/zsh'
+elif $(grep -qF '/bin/zsh' /etc/shells) && [[ "$SHELL" != "/bin/zsh" ]]; then
+	echo_and_eval 'chsh -s /bin/zsh'
 fi
 
 # Install Oh-My-Zsh

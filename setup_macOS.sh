@@ -727,6 +727,73 @@ EOF
 
 ln -sf .dotfiles/.bash_profile .
 
+# Configurations for X11
+backup_dotfiles .Xdefaults .dotfiles/.Xdefaults
+
+cat >.dotfiles/.Xdefaults <<EOF
+! Use a nice truetype font and size by default...
+*faceName: DejaVuSansMono Nerd Font
+*faceSize: 11
+*geometry: 120x40
+
+! Every shell is a login shell by default (for inclusion of all necessary environment variables)
+*loginShell: true
+
+! Scrollback...
+*saveLines: 10000
+
+! SpaceGray Eighties color theme...
+*.foreground:  #bdbaae
+*.background:  #222222
+*.cursorColor: #bbbbbb
+!
+! Black
+*.color0:      #15171c
+*.color8:      #555555
+!
+! Red
+*.color1:      #ec5f67
+*.color9:      #ff6973
+!
+! Green
+*.color2:      #81a764
+*.color10:     #93d493
+!
+! Yellow
+*.color3:      #fec254
+*.color11:     #ffd256
+!
+! Blue
+*.color4:      #5486c0
+*.color12:     #4d84d1
+!
+! Magenta
+*.color5:      #bf83c1
+*.color13:     #ff55ff
+!
+! Cyan
+*.color6:      #57c2c1
+*.color14:     #83e9e4
+!
+! White
+*.color7:      #efece7
+*.color15:     #ffffff
+!
+! Bold, Italic, Underline
+*.colorBD:     #ffffff
+!*.colorIT:
+!*.colorUL:
+
+! Right hand side scrollbar...
+*rightScrollBar: true
+*ScrollBar: true
+
+! Stop output to terminal from jumping down to bottom of scroll again
+*scrollTtyOutput: false
+EOF
+
+ln -sf .dotfiles/.Xdefaults .
+
 # Configurations for Vim
 backup_dotfiles .vimrc .dotfiles/.vimrc
 

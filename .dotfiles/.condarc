@@ -7,11 +7,6 @@ channels:
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r/
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/pytorch/
-  # - defaults
-  # - default
-  # - conda-forge
-  # - r
-  # - pytorch
 
 ssl_verify: true
 
@@ -20,8 +15,8 @@ show_channel_urls: false
 auto_activate_base: false
 
 create_default_packages:
+  # - anaconda
   - pip
-  - anaconda
   - jupyter
   - ipython
   - notebook

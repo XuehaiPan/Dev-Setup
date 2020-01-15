@@ -142,17 +142,16 @@ The following packages will be setup:
 
 Currently macOS only casks installed by HomeBrew:
 
-| Package                                                                          | Description                                                                                | macOS | Ubuntu / Manjaro Linux |
-| :------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | :---: | :--------------------: |
-| [iTerm2](https://iterm2.com)                                                     | A terminal emulator for macOS that does amazing things                                     |   ✔   |           ✘            |
-| [Google Chrome](https://www.google.com/chrome/index.html)                        | A fast, secure, and free web browser built for the modern web                              |   ✔   |           ✘            |
-| [Keka](https://www.keka.io)                                                      | The macOS file archiver                                                                    |   ✔   |           ✘            |
-| [Sogou Pinyin](https://pinyin.sogou.com/mac/)                                    | A popular Chinese Pinyin input method editor                                               |   ✔   |           ✘            |
-| [NetEase Music](https://music.163.com)                                           | A freemium music streaming service                                                         |   ✔   |           ✘            |
-| [IINA](https://iina.io)                                                          | The modern media player for macOS                                                          |   ✔   |           ✘            |
-| [Typora](https://typora.io)                                                      | A truly minimal markdown editor                                                            |   ✔   |           ✘            |
-| [Transmission](https://transmissionbt.com)                                       | A fast, easy, and free BitTorrent client                                                   |   ✔   |           ✘            |
-| [TeamViewer](https://www.teamviewer.com/)                                        | The world’s most-loved remote desktop tool                                                 |   ✔   |           ✘            |
-| [Visual Studio Code](https://code.visualstudio.com)                              | A lightweight but powerful source code editor                                              |   ✔   |           ✘            |
-| [XQuartz](https://www.xquartz.org)                                               | An open-source effort to develop a version of the X.Org X Window System that runs on macOS |   ✔   |           ✘            |
-| [Oracle JDK](https://www.oracle.com/technetwork/java/javase/overview/index.html) | Java™ Platform Standard Edition Development Kit                                            |   ✔   |           ✘            |
+| Package                                                   | Description                                                                                | macOS | Ubuntu / Manjaro Linux |
+| :-------------------------------------------------------- | ------------------------------------------------------------------------------------------ | :---: | :--------------------: |
+| [iTerm2](https://iterm2.com)                              | A terminal emulator for macOS that does amazing things                                     |   ✔   |           ✘            |
+| [Google Chrome](https://www.google.com/chrome/index.html) | A fast, secure, and free web browser built for the modern web                              |   ✔   |           ✘            |
+| [Keka](https://www.keka.io)                               | The macOS file archiver                                                                    |   ✔   |           ✘            |
+| [Sogou Pinyin](https://pinyin.sogou.com/mac/)             | A popular Chinese Pinyin input method editor                                               |   ✔   |           ✘            |
+| [NetEase Music](https://music.163.com)                    | A freemium music streaming service                                                         |   ✔   |           ✘            |
+| [IINA](https://iina.io)                                   | The modern media player for macOS                                                          |   ✔   |           ✘            |
+| [Typora](https://typora.io)                               | A truly minimal markdown editor                                                            |   ✔   |           ✘            |
+| [Transmission](https://transmissionbt.com)                | A fast, easy, and free BitTorrent client                                                   |   ✔   |           ✘            |
+| [TeamViewer](https://www.teamviewer.com/)                 | The world’s most-loved remote desktop tool                                                 |   ✔   |           ✘            |
+| [Visual Studio Code](https://code.visualstudio.com)       | A lightweight but powerful source code editor                                              |   ✔   |           ✘            |
+| [XQuartz](https://www.xquartz.org)                        | An open-source effort to develop a version of the X.Org X Window System that runs on macOS |   ✔   |           ✘            |

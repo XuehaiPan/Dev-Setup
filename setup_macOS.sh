@@ -300,11 +300,6 @@ fi
 unset __conda_setup
 # <<< conda initialize <<<
 
-# Java
-export JAVA_HOME=\$(/usr/libexec/java_home)
-export CLASSPATH=".:\$JAVA_HOME/lib/tools.jar:\$JAVA_HOME/lib/dt.jar"
-export PATH="\$JAVA_HOME/bin:\$PATH"
-
 # Perl
 eval "\$(perl -I/usr/local/opt/perl/lib/perl5 -Mlocal::lib=/usr/local/opt/perl)"
 
@@ -651,11 +646,6 @@ else
 fi
 unset __conda_setup
 # <<< conda initialize <<<
-
-# Java
-export JAVA_HOME=\$(/usr/libexec/java_home)
-export CLASSPATH=".:\$JAVA_HOME/lib/tools.jar:\$JAVA_HOME/lib/dt.jar"
-export PATH="\$JAVA_HOME/bin:\$PATH"
 
 # Perl
 eval "\$(perl -I/usr/local/opt/perl/lib/perl5 -Mlocal::lib=/usr/local/opt/perl)"
@@ -1650,8 +1640,6 @@ echo_and_eval 'brew cask install neteasemusic iina'
 
 # Install Develop Casks and Packages
 echo_and_eval 'brew install gcc gdb llvm make cmake automake autoconf'
-echo_and_eval 'brew cask install oracle-jdk'
-echo_and_eval '/usr/libexec/java_home --request'
 echo_and_eval 'brew cleanup'
 
 # Miscellaneous Settings

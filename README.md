@@ -3,12 +3,12 @@
 Bash scripts for setting up a freshly new installed OS automatically.
 
 - [OS-Setup](#os-setup)
-    - [Usage](#usage)
-        - [Installation](#installation)
-        - [Upgrade Packages](#upgrade-packages)
-        - [Font Settings](#font-settings)
-    - [Customization](#customization)
-    - [Packages](#packages)
+  - [Usage](#usage)
+    - [Installation](#installation)
+    - [Upgrade Packages](#upgrade-packages)
+    - [Font Settings](#font-settings)
+  - [Customization](#customization)
+  - [Packages](#packages)
 
 ## Usage
 
@@ -23,6 +23,7 @@ bash setup_${OS_name}.sh
 **Note**: If you are using **WSL on Windows**, you need to run [Windows Terminal](https://github.com/Microsoft/Terminal) as **administrator** to get the permissions to unpack fonts to `C:\Windows\Fonts`. Otherwise, the fonts will not install successfully on Windows. You can download them from [nerdfonts.com](https://www.nerdfonts.com) and install them manually.
 
 - Change the user profiles in `$HOME/.gitconfig` after the script is done. Run:
+
 ```shell
 git config --global user.name "YourName"
 git config --global user.email "example@example.com"

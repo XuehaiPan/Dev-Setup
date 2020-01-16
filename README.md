@@ -37,7 +37,7 @@ bash setup_${OS_name}.sh
 
 **Note**: If you are using **WSL on Windows**, you need to run [Windows Terminal](https://github.com/Microsoft/Terminal) as **administrator** to get the permissions to unpack fonts to `C:\Windows\Fonts`. Otherwise, the fonts will not install successfully on Windows. You can download them from [nerdfonts.com](https://www.nerdfonts.com) and install them manually.
 
-- Change the user profiles in `$HOME/.gitconfig` after the script is done. Run:
+- **!** Change the user profiles in `$HOME/.gitconfig` after the script is done. Run:
 
 ```shell
 git config --global user.name "YourName"
@@ -46,7 +46,11 @@ git config --global user.email "example@example.com"
 
 - If you are using Linux, modify the default user name and host name in function `send_to_mac` and `receive_from_mac` in `$HOME/.dotfiles/utilities.sh`.
 
-- After running the script, all the old configuration files involved will be backed up to the folder `$HOME/.dotfiles/backups/$DATETIME`, and the symbolic link `$HOME/.dotfiles/backups/latest` links to the latest one.
+- After running the script, all the old configuration files involved will be backed up to the folder `$HOME/.dotfiles/backups/$DATETIME`, and the symbolic link `$HOME/.dotfiles/backups/latest` links to the latest one. You can compare the differences using:
+
+```shell
+colordiff -EB ~/.dotfiles ~/.dotfiles/backups/$DATETIME
+```
 
 ### Upgrade Packages
 

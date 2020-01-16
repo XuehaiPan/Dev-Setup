@@ -799,11 +799,6 @@ ln -sf .dotfiles/.profile .
 # Configurations for Vim
 backup_dotfiles .vimrc .dotfiles/.vimrc
 
-MARKDOWN_HOST='127.0.0.1'
-if [[ -n "$SSH_CLIENT" && -n "$SSH_CONNECTION" ]]; then
-	MARKDOWN_HOST=$(echo "$SSH_CLIENT" | awk '{ print $3 }')
-fi
-
 cat >.dotfiles/.vimrc <<EOF
 set nocompatible
 set backspace=indent,eol,start
@@ -891,7 +886,6 @@ let g:syntastic_check_on_wq = 0
 autocmd GUIEnter * let g:syntastic_check_on_open = 1
 
 let g:mkdp_auto_start = 1
-let g:mkdp_open_ip = '$MARKDOWN_HOST'
 
 call plug#begin('~/.vim/plugged')
     Plug 'scrooloose/nerdtree'
@@ -911,8 +905,6 @@ call plug#begin('~/.vim/plugged')
     Plug 'iamcco/markdown-preview.nvim'
 call plug#end()
 EOF
-
-unset MARKDOWN_HOST
 
 ln -sf .dotfiles/.vimrc .
 

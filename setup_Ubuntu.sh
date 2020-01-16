@@ -127,10 +127,12 @@ if $IS_SUDOER; then
 fi
 
 # Change default shell to zsh
-if $(grep -qF '/usr/bin/zsh' /etc/shells) && [[ "$SHELL" != "/usr/bin/zsh" ]]; then
-	echo_and_eval 'chsh -s /usr/bin/zsh'
-elif $(grep -qF '/bin/zsh' /etc/shells) && [[ "$SHELL" != "/bin/zsh" ]]; then
-	echo_and_eval 'chsh -s /bin/zsh'
+if [[ "$SHELL" != "/usr/bin/zsh" ]]; then
+	if $(grep -qF '/usr/bin/zsh' /etc/shells); then
+		echo_and_eval 'chsh -s /usr/bin/zsh'
+	elif $(grep -qF '/bin/zsh' /etc/shells) && [[ "$SHELL" != "/bin/zsh" ]]; then
+		echo_and_eval 'chsh -s /bin/zsh'
+	fi
 fi
 
 # Install Oh-My-Zsh

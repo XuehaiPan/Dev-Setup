@@ -29,7 +29,7 @@ Live markdown preview support for vim:
 
 ### Installation
 
-Open Terminal and run:
+Download the script file using [git](https://git-scm.com) or [wget](https://www.gnu.org/software/wget/) or any browser, then open `Terminal` and run:
 
 ```shell
 bash setup_${OS_name}.sh

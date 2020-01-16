@@ -1726,4 +1726,4 @@ echo_and_eval 'killall SystemUIServer'
 echo_and_eval 'rm -rf $HOME/.bash_sessions/'
 echo_and_eval 'sudo scutil --set HostName MacBook-Pro'
 
-open "$(brew --prefix)/Caskroom/sogouinput"
+find "$(brew --prefix)/Caskroom/sogouinput" -name "*.app" -exec '{}/Contents/MacOS/SogouInstaller' \; &

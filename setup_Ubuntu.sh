@@ -233,7 +233,6 @@ fi
 if [[ -d "\$HOME/.local/include" ]]; then
 	export C_INCLUDE_PATH="\$HOME/.local/include:\$C_INCLUDE_PATH"
 	export CPLUS_INCLUDE_PATH="\$HOME/.local/include:\$CPLUS_INCLUDE_PATH"
-	export INCLUDE_PATH="\$HOME/.local/include:\$INCLUDE_PATH"
 fi
 
 # set LIBRARY_PATH and LD_LIBRARY_PATH so it includes user's private lib if it exists
@@ -302,7 +301,6 @@ function remove_duplicate() {
 export PATH=\$(remove_duplicate "\$PATH")
 export C_INCLUDE_PATH=\$(remove_duplicate "\$C_INCLUDE_PATH")
 export CPLUS_INCLUDE_PATH=\$(remove_duplicate "\$CPLUS_INCLUDE_PATH")
-export INCLUDE_PATH=\$(remove_duplicate "\$INCLUDE_PATH")
 export LIBRARY_PATH=\$(remove_duplicate "\$LIBRARY_PATH")
 export LD_LIBRARY_PATH=\$(remove_duplicate "\$LD_LIBRARY_PATH")
 unset -f remove_duplicate
@@ -719,7 +717,6 @@ fi
 if [[ -d "\$HOME/.local/include" ]]; then
 	export C_INCLUDE_PATH="\$HOME/.local/include:\$C_INCLUDE_PATH"
 	export CPLUS_INCLUDE_PATH="\$HOME/.local/include:\$CPLUS_INCLUDE_PATH"
-	export INCLUDE_PATH="\$HOME/.local/include:\$INCLUDE_PATH"
 fi
 
 # set LIBRARY_PATH and LD_LIBRARY_PATH so it includes user's private lib if it exists
@@ -782,7 +779,6 @@ function remove_duplicate() {
 export PATH=\$(remove_duplicate "\$PATH")
 export C_INCLUDE_PATH=\$(remove_duplicate "\$C_INCLUDE_PATH")
 export CPLUS_INCLUDE_PATH=\$(remove_duplicate "\$CPLUS_INCLUDE_PATH")
-export INCLUDE_PATH=\$(remove_duplicate "\$INCLUDE_PATH")
 export LIBRARY_PATH=\$(remove_duplicate "\$LIBRARY_PATH")
 export LD_LIBRARY_PATH=\$(remove_duplicate "\$LD_LIBRARY_PATH")
 unset -f remove_duplicate

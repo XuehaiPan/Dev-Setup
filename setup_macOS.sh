@@ -1548,11 +1548,14 @@ fi
 # Install Conda Packages
 export PATH="$PATH:$HOME/$CONDA_DIR/condabin"
 echo_and_eval 'conda update conda --yes'
-echo_and_eval 'conda install pip jupyter ipython notebook jupyterlab ipdb tqdm \
+echo_and_eval 'conda install pip jupyter ipython notebook jupyterlab ipdb \
+							 jupyterthemes jupyter_contrib_nbextensions \
 							 cython numpy numba matplotlib pandas seaborn pygraphviz \
-							 yapf autopep8 pycodestyle pylint --yes'
+							 tqdm yapf autopep8 pycodestyle pylint --yes'
 echo_and_eval 'conda update --all --yes'
 echo_and_eval 'conda clean --all --yes'
+echo_and_eval "\$HOME/$CONDA_DIR/bin/jt --theme monokai"
+echo_and_eval "\$HOME/$CONDA_DIR/bin/jupyter contrib nbextension install --user"
 rm -r .cph_tmp* 2>/dev/null
 rm -r "$CONDA_DIR"/.cph_tmp* 2>/dev/null
 

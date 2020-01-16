@@ -43,7 +43,7 @@ wget https://raw.githubusercontent.com/XuehaiPan/OS-Setup/master/setup_${OS_name
 bash setup_${OS_name}.sh
 ```
 
-**Note**: If you are using **WSL on Windows**, you need to run [Windows Terminal](https://github.com/Microsoft/Terminal) as **administrator** to get the permissions to unpack fonts to `C:\Windows\Fonts`. Otherwise, the fonts will not install successfully on Windows. You can download them from [nerdfonts.com](https://www.nerdfonts.com) and install them manually.
+**Note**: If you are using **WSL on Windows**, you need to run [Windows Terminal](https://github.com/Microsoft/Terminal) as **administrator** to get the permissions to unpack fonts to `C:\Windows\Fonts`. Otherwise, the fonts will not be installed successfully on Windows. You can download them from [nerdfonts.com](https://www.nerdfonts.com) and install them manually.
 
 - **!** Change the user profiles in `$HOME/.gitconfig` after the script is done. Run:
 

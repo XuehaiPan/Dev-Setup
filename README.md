@@ -31,7 +31,7 @@ git config --global user.email "example@example.com"
 
 - If you are using Linux, modify the default user name and host name in function `send_to_mac` and `receive_from_mac` in `$HOME/.dotfiles/utilities.sh`.
 
-- After running the script, all the old configuration files involved will be backed up to the folder `$HOME/.dotfiles/backups/$DATETIME`.
+- After running the script, all the old configuration files involved will be backed up to the folder `$HOME/.dotfiles/backups/$DATETIME`, and the symbolic link `$HOME/.dotfiles/backups/latest` links to the latest one.
 
 ### Upgrade Packages
 

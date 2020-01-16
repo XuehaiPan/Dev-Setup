@@ -4,6 +4,7 @@
 DATETIME=$(date +"%Y-%m-%d-%T")
 BACKUP_DIR="$HOME/.dotfiles/backups/$DATETIME"
 mkdir -p "$BACKUP_DIR/.dotfiles"
+ln -sf "$DATETIME" "$HOME/.dotfiles/backups/latest"
 
 # Check if has sudo privileges
 IS_SUDOER=false

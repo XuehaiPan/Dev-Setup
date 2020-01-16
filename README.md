@@ -3,12 +3,27 @@
 Bash scripts for setting up a freshly new installed OS automatically.
 
 - [OS-Setup](#os-setup)
+  - [Screen Shots](#screen-shots)
   - [Usage](#usage)
     - [Installation](#installation)
     - [Upgrade Packages](#upgrade-packages)
     - [Font Settings](#font-settings)
   - [Customization](#customization)
   - [Packages](#packages)
+
+## Screen Shots
+
+Shell:
+![shell](screenshots/shell.png)
+
+Tmux:
+![tmux](screenshots/tmux.png)
+
+Vim:
+![vim](screenshots/vim.png)
+
+Live markdown preview support for vim:
+![markdown](screenshots/markdown.png)
 
 ## Usage
 

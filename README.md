@@ -57,7 +57,8 @@ git config --global user.email "example@example.com"
 - After running the script, all the old configuration files involved will be backed up to the folder `$HOME/.dotfiles/backups/$DATETIME`, and the symbolic link `$HOME/.dotfiles/backups/latest` links to the latest one. You can compare the differences using:
 
 ```shell
-colordiff -EB ~/.dotfiles/backups/$DATETIME/.dotfiles ~/.dotfiles
+colordiff -EB ~/.dotfiles/backups/latest ~/.dotfiles
+colordiff -EB ~/.dotfiles/backups/latest/.dotfiles ~/.dotfiles
 ```
 
 ### Upgrade Packages

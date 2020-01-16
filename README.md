@@ -141,6 +141,8 @@ The following packages will be setup:
 | [net-tools](https://sourceforge.net/projects/net-tools/)                                                                         |   ✔   |      ✔       |       ✔       |
 | [exfat-utils](https://pkgs.org/download/exfat-utils)                                                                             |   ✔   |      ✔       |       ✔       |
 | [tree](http://mama.indstate.edu/users/ice/tree/)                                                                                 |   ✔   |      ✔       |       ✔       |
+| [diffutils](https://www.gnu.org/software/diffutils/)                                                                             |   ✔   |      ✔       |       ✔       |
+| [colordiff](https://www.colordiff.org)                                                                                           |   ✔   |      ✔       |       ✔       |
 |                                                                                                                                  |       |              |               |
 | [Miniconda3](https://docs.conda.io/en/latest/miniconda.html)                                                                     |   ✔   |      ✔       |       ✔       |
 | [gcc](https://gcc.gnu.org)                                                                                                       |   ✔   |      ✔       |       ✔       |

@@ -2,10 +2,9 @@
 
 # Get system infomation
 OS_NAME=""
-KERNEL_NAME=$(uname -s)
-if [[ $KERNEL_NAME == "Darwin" ]]; then
+if [[ "$(uname -s)" == "Darwin" ]]; then
 	OS_NAME="macOS"
-elif [[ $KERNEL_NAME == "Linux" ]]; then
+elif [[ "$(uname -s)" == "Linux" ]]; then
 	if $(lsb_release -d | grep -qF 'Ubuntu'); then
 		OS_NAME="Ubuntu"
 	elif $(lsb_release -d | grep -qF 'Manjaro'); then

@@ -148,6 +148,9 @@ if [[ -d "$ZSH/.git" && -f "$ZSH/tools/upgrade.sh" ]]; then
 	echo_and_eval 'zsh "$ZSH/tools/upgrade.sh"'
 else
 	echo_and_eval 'sh -c "$(wget -O- https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"'
+	mv -f "$HOME"/.zshrc.pre-oh-my-zsh* "$BACKUP_DIR" 2>/dev/null
+	rm -f "$HOME"/.zcompdump* 2>/dev/null
+	rm -f "$HOME"/.shell.pre-oh-my-zsh 2>/dev/null
 fi
 
 # Install Powerlevel10k Theme
@@ -165,9 +168,6 @@ for plugin in zsh-syntax-highlighting zsh-autosuggestions zsh-completions; do
 		echo_and_eval "git -C \"\$ZSH_CUSTOM/plugins/$plugin\" pull"
 	fi
 done
-
-rm -f $HOME/.zcompdump* 2>/dev/null
-rm -f $HOME/.shell.pre-oh-my-zsh 2>/dev/null
 
 echo_and_eval 'cd "$HOME"'
 

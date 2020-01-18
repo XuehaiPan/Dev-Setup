@@ -29,17 +29,20 @@ Live markdown preview support for vim:
 
 ### Installation
 
-Download the script file using [git](https://git-scm.com) or [wget](https://www.gnu.org/software/wget/) or any browser. And then open `Terminal` and run:
+Download the script file using [wget](https://www.gnu.org/software/wget/) or [curl](https://curl.haxx.se) or [git](https://git-scm.com) or any browser. And then open `Terminal` and run:
 
 ```shell
-# Download using git
+# Download and run via wget (set or replace variable "OS_name")
+bash -c "$(wget -O- https://raw.githubusercontent.com/XuehaiPan/OS-Setup/master/setup_${OS_name}.sh)"
+
+# Download and run via curl (set or replace variable "OS_name")
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/XuehaiPan/OS-Setup/master/setup_${OS_name}.sh)"
+
+# Download via git
 git clone https://github.com/XuehaiPan/OS-Setup.git
+
+# Run the script file (set or replace variable "OS_name")
 cd OS-Setup
-
-# Or download using wget
-wget https://raw.githubusercontent.com/XuehaiPan/OS-Setup/master/setup_${OS_name}.sh
-
-# Run the script file
 bash setup_${OS_name}.sh
 ```
 

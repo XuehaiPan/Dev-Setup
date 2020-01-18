@@ -32,18 +32,18 @@ Live markdown preview support for vim:
 Download the script file using [wget](https://www.gnu.org/software/wget/) / [curl](https://curl.haxx.se) / [git](https://git-scm.com) or any browser ([click to download zip](https://codeload.github.com/XuehaiPan/OS-Setup/zip/master)). And then open `Terminal` and run:
 
 ```shell
-# Download and run via wget (set or replace variable "OS_name")
-bash -c "$(wget -O- https://raw.githubusercontent.com/XuehaiPan/OS-Setup/master/setup_${OS_name}.sh)"
+# Download and run via wget
+bash -c "$(wget -qO- https://raw.githubusercontent.com/XuehaiPan/OS-Setup/master/setup.sh)"
 
-# Download and run via curl (set or replace variable "OS_name")
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/XuehaiPan/OS-Setup/master/setup_${OS_name}.sh)"
+# Download and run via curl
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/XuehaiPan/OS-Setup/master/setup.sh)"
 
 # Download via git
 git clone https://github.com/XuehaiPan/OS-Setup.git
 
-# Run the script file (set or replace variable "OS_name")
+# Run the script file
 cd OS-Setup
-bash setup_${OS_name}.sh
+bash setup.sh
 ```
 
 **Note**: If you are using **WSL on Windows**, you need to run [Windows Terminal](https://github.com/Microsoft/Terminal) as **administrator** to get the permissions to unpack fonts to `C:\Windows\Fonts`. Otherwise, the fonts will not be installed successfully on Windows. You can download them from [nerdfonts.com](https://www.nerdfonts.com) and install them manually.

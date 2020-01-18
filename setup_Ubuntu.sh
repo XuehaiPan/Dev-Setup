@@ -126,7 +126,7 @@ if $IS_SUDOER; then
 	echo_and_eval 'sudo apt autoclean --yes'
 fi
 
-# Change default shell to zsh
+# Change Default Shell to Zsh
 if [[ "$SHELL" != "/usr/bin/zsh" ]]; then
 	if $(grep -qF '/usr/bin/zsh' /etc/shells); then
 		echo_and_eval 'chsh -s /usr/bin/zsh'
@@ -167,8 +167,6 @@ for plugin in zsh-syntax-highlighting zsh-autosuggestions zsh-completions; do
 done
 
 echo_and_eval 'cd "$HOME"'
-
-mkdir -p .dotfiles
 
 # Configurations for RubyGems
 backup_dotfiles .gemrc .dotfiles/.gemrc

@@ -153,7 +153,7 @@ echo_and_eval 'brew cask upgrade'
 wget -O "$HOME/Desktop/SpaceGray Eighties.itermcolors" \
 	https://raw.githubusercontent.com/mbadolato/iTerm2-Color-Schemes/master/schemes/SpaceGray%20Eighties.itermcolors
 
-# Change default shell to zsh
+# Change Default Shell to Zsh
 if [[ "$SHELL" != "/usr/local/bin/zsh" ]]; then
 	echo_and_eval 'chsh -s /usr/local/bin/zsh'
 fi
@@ -190,8 +190,6 @@ for plugin in zsh-syntax-highlighting zsh-autosuggestions zsh-completions; do
 done
 
 echo_and_eval 'cd "$HOME"'
-
-mkdir -p .dotfiles
 
 # Configurations for RubyGems
 backup_dotfiles .gemrc .dotfiles/.gemrc

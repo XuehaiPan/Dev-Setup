@@ -133,7 +133,7 @@ echo_and_eval 'sudo paccache -ruk0'
 echo_and_eval 'systemctl start sshd'
 echo_and_eval 'systemctl enable sshd.service'
 
-# Change default shell to zsh
+# Change Default Shell to Zsh
 if [[ "$SHELL" != "/usr/bin/zsh" ]]; then
 	echo_and_eval 'chsh -s /usr/bin/zsh'
 fi
@@ -170,8 +170,6 @@ for plugin in zsh-syntax-highlighting zsh-autosuggestions zsh-completions; do
 done
 
 echo_and_eval 'cd "$HOME"'
-
-mkdir -p .dotfiles
 
 # Configurations for RubyGems
 backup_dotfiles .gemrc .dotfiles/.gemrc

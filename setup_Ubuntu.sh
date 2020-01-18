@@ -1701,24 +1701,23 @@ EOF
 chmod +x upgrade_packages.sh
 
 # Install Fonts
-FONT_DIR=".local/share/fonts"
+mkdir -p "$HOME/.local/share/fonts"
+FONT_DIR_LIST=('$HOME/.local/share/fonts')
 if $IN_WSL; then
-	FONT_DIR="/mnt/c/Windows/Fonts"
-else
-	mkdir -p "$FONT_DIR"
+	FONT_DIR_LIST+=('/mnt/c/Windows/Fonts')
 fi
 echo_and_eval 'wget -O DejaVuSansMono.zip https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/DejaVuSansMono.zip'
 echo_and_eval 'wget -O Menlo.zip https://raw.githubusercontent.com/XuehaiPan/OS-Setup/master/Menlo.zip'
-echo_and_eval "wget -O $FONT_DIR/Cascadia.ttf https://github.com/microsoft/cascadia-code/releases/download/v1911.21/Cascadia.ttf"
-echo_and_eval "wget -O $FONT_DIR/CascadiaPL.ttf https://github.com/microsoft/cascadia-code/releases/download/v1911.21/CascadiaPL.ttf"
-echo_and_eval "wget -O $FONT_DIR/CascadiaMono.ttf https://github.com/microsoft/cascadia-code/releases/download/v1911.21/CascadiaMono.ttf"
-echo_and_eval "wget -O $FONT_DIR/CascadiaMonoPL.ttf https://github.com/microsoft/cascadia-code/releases/download/v1911.21/CascadiaMonoPL.ttf"
-echo_and_eval "unzip -o DejaVuSansMono.zip -d $FONT_DIR/"
-echo_and_eval "unzip -o Menlo.zip -d $FONT_DIR/"
+for font_dir in "${FONT_DIR_LIST[@]}"; do
+	echo_and_eval "wget -O \"$font_dir/Cascadia.ttf\" https://github.com/microsoft/cascadia-code/releases/download/v1911.21/Cascadia.ttf"
+	echo_and_eval "wget -O \"$font_dir/CascadiaPL.ttf\" https://github.com/microsoft/cascadia-code/releases/download/v1911.21/CascadiaPL.ttf"
+	echo_and_eval "wget -O \"$font_dir/CascadiaMono.ttf\" https://github.com/microsoft/cascadia-code/releases/download/v1911.21/CascadiaMono.ttf"
+	echo_and_eval "wget -O \"$font_dir/CascadiaMonoPL.ttf\" https://github.com/microsoft/cascadia-code/releases/download/v1911.21/CascadiaMonoPL.ttf"
+	echo_and_eval "unzip -o DejaVuSansMono.zip -d \"$font_dir\""
+	echo_and_eval "unzip -o Menlo.zip -d \"$font_dir\""
+done
 echo_and_eval 'rm -f DejaVuSansMono.zip Menlo.zip'
-if ! $IN_WSL; then
-	echo_and_eval 'fc-cache --force'
-fi
+echo_and_eval 'fc-cache --force'
 
 # Select Default Editor
 echo_and_eval 'select-editor'

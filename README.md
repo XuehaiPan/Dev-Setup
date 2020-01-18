@@ -110,7 +110,7 @@ Add a new config file to the script:
 ```shell
 cd $HOME   # this line has already been added at the top of the script
 
-# change ${cfg_file_name} to the config file's name
+# replace ${cfg_file_name} with the config file's name
 backup_dotfiles ${cfg_file_name} ./dotfiles/${cfg_file_name}
 
 cat >.dotfiles/${cfg_file_name} <<EOF

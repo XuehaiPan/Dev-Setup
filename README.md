@@ -29,7 +29,7 @@ Live markdown preview support for vim:
 
 ### Installation
 
-Download the script file using [wget](https://www.gnu.org/software/wget/) or [curl](https://curl.haxx.se) or [git](https://git-scm.com) or any browser. And then open `Terminal` and run:
+Download the script file using [wget](https://www.gnu.org/software/wget/) / [curl](https://curl.haxx.se) / [git](https://git-scm.com) or any browser ([click to download zip](https://codeload.github.com/XuehaiPan/OS-Setup/zip/master)). And then open `Terminal` and run:
 
 ```shell
 # Download and run via wget (set or replace variable "OS_name")

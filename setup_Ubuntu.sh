@@ -598,6 +598,10 @@ function upgrade_gems() {
 	echo_and_eval 'sudo gem cleanup'
 }
 
+function upgrade_cpan() {
+	echo_and_eval 'sudo cpan -u'
+}
+
 function upgrade_conda() {
 	# Upgrade Conda
 	echo_and_eval 'conda update conda --name base --yes'
@@ -1659,6 +1663,10 @@ function upgrade_gems() {
 	echo_and_eval 'sudo gem cleanup'
 }
 
+function upgrade_cpan() {
+	echo_and_eval 'sudo cpan -u'
+}
+
 function upgrade_conda() {
 	# Upgrade Conda
 	echo_and_eval 'conda update conda --name base --yes'
@@ -1685,6 +1693,7 @@ ${COMMENT_PREFIX}upgrade_ubuntu
 upgrade_ohmyzsh
 upgrade_vim
 ${COMMENT_PREFIX}upgrade_gems
+# upgrade_cpan
 # upgrade_conda
 
 if [[ -n "\$ZSH_VERSION" ]]; then

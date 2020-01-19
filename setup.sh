@@ -12,7 +12,7 @@ elif [[ "$(uname -s)" == "Linux" ]]; then
 	fi
 fi
 
-if [ -z "$OS_NAME" ]; then
+if [[ -z "$OS_NAME" ]]; then
 	echo "The operating system is not supported yet." >&2
 	exit
 fi
@@ -41,5 +41,5 @@ elif [[ -x "$(command -v git)" ]]; then
 	git clone https://github.com/XuehaiPan/OS-Setup.git
 	bash "OS-Setup/setup_${OS_NAME}.sh"
 else
-	echo "Please download the script from https://github.com/XuehaiPan/OS-Setup"
+	echo "Please download the script from https://github.com/XuehaiPan/OS-Setup."
 fi

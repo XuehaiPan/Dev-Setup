@@ -1162,48 +1162,26 @@ EOF
 # Configurations for Git
 backup_dotfiles .gitconfig .dotfiles/.gitconfig
 
-cat >.dotfiles/.gitconfig <<EOF
-[user]
-	name = XuehaiPan
-	email = XuehaiPan@pku.edu.cn
+git config --global core.excludesfile '~/.gitignore_global'
+git config --global core.editor vim
+git config --global diff.tool vimdiff
+git config --global diff.guitool gvimdiff
+git config --global diff.algorithm minimal
+git config --global difftool.prompt false
+git config --global merge.tool vimdiff
+git config --global merge.guitool gvimdiff
+git config --global mergetool.prompt false
+git config --global fetch.prune true
+git config --global fetch.parallel 0
+git config --global submodule.recurse true
+git config --global submodule.fetchJobs 0
+git config --global filter.lfs.clean 'git-lfs clean -- %f'
+git config --global filter.lfs.smudge 'git-lfs smudge -- %f'
+git config --global filter.lfs.process 'git-lfs filter-process'
+git config --global filter.lfs.required true
+git config --global color.ui true
 
-[core]
-	excludesfile = ~/.gitignore_global
-	editor = vim
-
-[diff]
-	tool = vimdiff
-	guitool = gvimdiff
-	algorithm = minimal
-
-[difftool]
-	prompt = false
-
-[merge]
-	tool = vimdiff
-	guitool = gvimdiff
-
-[mergetool]
-	prompt = false
-
-[fetch]
-	prune = true
-	parallel = 0
-
-[submodule]
-	recurse = true
-	fetchJobs = 0
-
-[filter "lfs"]
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	required = true
-
-[color]
-	ui = true
-EOF
-
+mv -f .gitconfig .dotfiles/
 ln -sf .dotfiles/.gitconfig .
 
 backup_dotfiles .gitignore_global .dotfiles/.gitignore_global

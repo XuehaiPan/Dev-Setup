@@ -14,7 +14,7 @@ fi
 
 if [[ -z "$OS_NAME" ]]; then
 	echo "The operating system is not supported yet." >&2
-	exit
+	exit 1
 fi
 
 echo "Operating System: $OS_NAME"

@@ -7,7 +7,7 @@ if [[ ! -d "$BACKUP_DIR" ]]; then
 	exit 1
 fi
 
-echo "Restore dotfiles in backup directory  \"$BACKUP_DIR\"."
+echo "Restore dotfiles in backup directory \"$BACKUP_DIR\"."
 
 DOTFILES=(
 	.zshrc .dotfiles/.zshrc
@@ -27,7 +27,7 @@ DOTFILES=(
 	.condarc .dotfiles/.condarc
 	.gdbinit .dotfiles/.gdbinit
 	.Xdefaults .dotfiles/.Xdefaults
-	utilities.sh
+	.dotfiles/utilities.sh
 	upgrade_packages.sh
 )
 
@@ -35,14 +35,14 @@ cd "$HOME"
 
 for file in "${DOTFILES[@]}"; do
 	if [[ -f "$BACKUP_DIR/$file" || -d "$BACKUP_DIR/$file" ]]; then
-		backup_prefix="$(basename "$BACKUP_DIR/$file")"
-		prefix="$(basename "$HOME/$file")"
+		backup_prefix="$(dirname "$BACKUP_DIR/$file")"
+		prefix="$(dirname "$HOME/$file")"
 		file="$(basename "$file")"
 		echo "Restore \"$file\" from \"$backup_prefix\" to \"$prefix\"."
-		cp -rf "$BACKUP_DIR/$file" "$file"
+		cp -rf "$backup_prefix/$file" "$prefix/$file"
 		if [[ "$prefix" == "$HOME/.dotfiles" ]]; then
 			if diff -EB "$file" ".dotfiles/$file" &>/dev/null; then
-				echo "\"$file\" in \"$HOME\" is same as the one in \"$HOME/.dotfiles\", make symbolic link."
+				echo "The file \"$file\" in \"$HOME\" is same as the one in \"$HOME/.dotfiles\". Make symbolic link."
 				ln -sf ".dotfiles/$file" .
 			fi
 		fi

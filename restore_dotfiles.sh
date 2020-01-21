@@ -38,12 +38,16 @@ for file in "${DOTFILES[@]}"; do
 		backup_prefix="$(dirname "$BACKUP_DIR/$file")"
 		prefix="$(dirname "$HOME/$file")"
 		file="$(basename "$file")"
-		echo "Restore \"$file\" from \"$backup_prefix\" to \"$prefix\"."
-		cp -rf "$backup_prefix/$file" "$prefix/"
-		if [[ "$prefix" == "$HOME/.dotfiles" ]]; then
-			if diff -EB "$file" ".dotfiles/$file" &>/dev/null; then
-				echo "The file \"$file\" in \"$HOME\" is same as the one in \"$HOME/.dotfiles\". Make symbolic link."
-				ln -sf ".dotfiles/$file" .
+		if diff -EB "$backup_prefix/$file" "$prefix/$file" &>/dev/null; then
+			echo "The file \"$file\" in \"$backup_prefix\" is same as the one in \"$prefix\". Skip."
+		else
+			echo "Restore \"$file\" from \"$backup_prefix\" to \"$prefix\"."
+			cp -rf "$backup_prefix/$file" "$prefix/"
+			if [[ "$prefix" == "$HOME/.dotfiles" ]]; then
+				if diff -EB "$file" ".dotfiles/$file" &>/dev/null; then
+					echo "The file \"$file\" in \"$HOME\" is same as the one in \"$HOME/.dotfiles\". Make symbolic link."
+					ln -sf ".dotfiles/$file" .
+				fi
 			fi
 		fi
 	fi

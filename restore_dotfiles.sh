@@ -39,7 +39,7 @@ for file in "${DOTFILES[@]}"; do
 		prefix="$(dirname "$HOME/$file")"
 		file="$(basename "$file")"
 		echo "Restore \"$file\" from \"$backup_prefix\" to \"$prefix\"."
-		cp -rf "$backup_prefix/$file" "$prefix/$file"
+		cp -rf "$backup_prefix/$file" "$prefix/"
 		if [[ "$prefix" == "$HOME/.dotfiles" ]]; then
 			if diff -EB "$file" ".dotfiles/$file" &>/dev/null; then
 				echo "The file \"$file\" in \"$HOME\" is same as the one in \"$HOME/.dotfiles\". Make symbolic link."

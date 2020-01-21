@@ -122,7 +122,7 @@ Add a new config file to the script:
 cd $HOME   # this line has already been added at the top of the script
 
 # replace ${cfg_file_name} with the config file's name
-backup_dotfiles ${cfg_file_name} ./dotfiles/${cfg_file_name}
+backup_dotfiles ${cfg_file_name} .dotfiles/${cfg_file_name}
 
 cat >.dotfiles/${cfg_file_name} <<EOF
 # paste the contents in the temp file `temp.txt` here
@@ -131,7 +131,7 @@ EOF
 ln -sf .dotfiles/${cfg_file_name} .
 ```
 
-7. add `${cfg_file_name}` and `./dotfiles/${cfg_file_name}` to `DOTFILES` in [`restore_dotfiles.sh`](restore_dotfiles.sh#L12).
+7. add `${cfg_file_name}` and `.dotfiles/${cfg_file_name}` to `DOTFILES` in [`restore_dotfiles.sh`](restore_dotfiles.sh#L12).
 
 ## Packages
 

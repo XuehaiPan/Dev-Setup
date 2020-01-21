@@ -3,7 +3,7 @@
 BACKUP_DIR="${1:-"$HOME/.dotfiles/backups/latest"}"
 
 if [[ ! -d "$BACKUP_DIR" ]]; then
-	echo "Backup directory \"$BACKUP_DIR\" does not exist."
+	echo "Backup directory \"$BACKUP_DIR\" does not exist." >&2
 	exit 1
 fi
 

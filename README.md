@@ -6,6 +6,7 @@ Bash scripts for setting up a freshly new installed OS automatically.
   - [Screen Shots](#screen-shots)
   - [Usage](#usage)
     - [Installation](#installation)
+    - [Restoration](#restoration)
     - [Upgrade Packages](#upgrade-packages)
     - [Font Settings](#font-settings)
   - [Customization](#customization)
@@ -56,6 +57,20 @@ bash setup.sh
 colordiff -EB ~/.dotfiles/backups/latest ~/.dotfiles
 colordiff -EB ~/.dotfiles/backups/latest/.dotfiles ~/.dotfiles
 ```
+
+### Restoration
+
+You can restore your previous dotfiles using:
+
+```shell
+# Restore the latest backup
+bash restore_dotfiles.sh
+
+# Restore specific version
+bash restore_dotfiles.sh "$HOME/.dotfiles/backups/$DATETIME"
+```
+
+**Note**: the packages installed by [`setup.sh`](setup.sh) will remain on your system.
 
 ### Upgrade Packages
 
@@ -115,6 +130,8 @@ EOF
 
 ln -sf .dotfiles/${cfg_file_name} .
 ```
+
+7. add `${cfg_file_name}` and `./dotfiles/${cfg_file_name}` to `DOTFILES` in [`restore_dotfiles.sh`](restore_dotfiles.sh#L12).
 
 ## Packages
 

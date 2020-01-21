@@ -63,10 +63,10 @@ colordiff -EB ~/.dotfiles/backups/latest/.dotfiles ~/.dotfiles
 You can restore your previous dotfiles using:
 
 ```shell
-# Restore the latest backup
+# Restore the latest backup in "$HOME/.dotfiles/backups/latest"
 bash restore_dotfiles.sh
 
-# Restore specific version
+# Restore a specific version
 bash restore_dotfiles.sh "$HOME/.dotfiles/backups/$DATETIME"
 ```
 

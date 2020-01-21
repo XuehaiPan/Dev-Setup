@@ -70,7 +70,7 @@ bash restore_dotfiles.sh
 bash restore_dotfiles.sh "$HOME/.dotfiles/backups/$DATETIME"
 ```
 
-**Note**: the packages installed by [`setup.sh`](setup.sh) will remain on your system.
+**Note**: the packages installed by [`setup.sh`](setup.sh) (see section [Packages](#packages)) will remain on your system.
 
 ### Upgrade Packages
 

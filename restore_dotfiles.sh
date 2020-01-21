@@ -10,24 +10,24 @@ fi
 echo "Restore dotfiles in backup directory \"$BACKUP_DIR\"."
 
 DOTFILES=(
-	.zshrc .dotfiles/.zshrc
-	.gemrc .dotfiles/.gemrc
-	.dotfiles/.zshrc-common
-	.dotfiles/zsh-purepower
-	.profile .dotfiles/.profile
-	.bash_profile .dotfiles/.bash_profile
-	.bashrc .dotfiles/.bashrc
-	.vimrc .dotfiles/.vimrc
-	.tmux.conf .dotfiles/.tmux.conf
-	.tmux.conf.local .dotfiles/.tmux.conf.local
-	.dotfiles/.tmux.conf.user
-	.dotfiles/.tmux
-	.gitconfig .dotfiles/.gitconfig
-	.gitignore_global .dotfiles/.gitignore_global
-	.condarc .dotfiles/.condarc
-	.gdbinit .dotfiles/.gdbinit
-	.Xdefaults .dotfiles/.Xdefaults
-	.dotfiles/utilities.sh
+	.zshrc				.dotfiles/.zshrc
+	.gemrc				.dotfiles/.gemrc
+						.dotfiles/.zshrc-common
+						.dotfiles/zsh-purepower
+	.profile			.dotfiles/.profile
+	.bash_profile		.dotfiles/.bash_profile
+	.bashrc				.dotfiles/.bashrc
+	.vimrc				.dotfiles/.vimrc
+	.tmux.conf			.dotfiles/.tmux.conf
+	.tmux.conf.local	.dotfiles/.tmux.conf.local
+						.dotfiles/.tmux.conf.user
+						.dotfiles/.tmux
+	.gitconfig			.dotfiles/.gitconfig
+	.gitignore_global	.dotfiles/.gitignore_global
+	.condarc			.dotfiles/.condarc
+	.gdbinit			.dotfiles/.gdbinit
+	.Xdefaults			.dotfiles/.Xdefaults
+						.dotfiles/utilities.sh
 	upgrade_packages.sh
 )
 

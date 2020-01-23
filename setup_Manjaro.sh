@@ -107,27 +107,27 @@ echo_and_eval 'sudo pacman -Syy'
 echo_and_eval 'sudo pacman-key --recv-keys 7931B6D628C8D3BA'
 echo_and_eval 'sudo pacman-key --finger 7931B6D628C8D3BA'
 echo_and_eval 'sudo pacman-key --lsign-key 7931B6D628C8D3BA'
-echo_and_eval 'sudo pacman -S archlinuxcn-keyring --noconfirm'
+echo_and_eval 'yes | sudo pacman -S archlinuxcn-keyring'
 
 echo_and_eval 'sudo pacman-mirrors --country China --method rank'
 
 echo_and_eval 'sudo pacman -Syy'
 
 # Install and Setup Shells
-echo_and_eval 'sudo pacman -S zsh --noconfirm'
+echo_and_eval 'yes | sudo pacman -S zsh'
 
 if ! grep -qF '/usr/bin/zsh' /etc/shells; then
 	echo_and_eval 'echo "/usr/bin/zsh" | sudo tee -a /etc/shells'
 fi
 
 # Install Packages
-echo_and_eval 'sudo pacman -S bash-completion wget curl git git-lfs vim tmux --noconfirm'
-echo_and_eval 'sudo pacman -S htop openssh net-tools exfat-utils tree colordiff xclip --noconfirm'
-echo_and_eval 'sudo pacman -S gcc gdb clang llvm lldb make cmake automake autoconf ruby --noconfirm'
+echo_and_eval 'yes | sudo pacman -S bash-completion wget curl git git-lfs vim tmux'
+echo_and_eval 'yes | sudo pacman -S htop openssh net-tools exfat-utils tree colordiff xclip'
+echo_and_eval 'yes | sudo pacman -S gcc gdb clang llvm lldb make cmake automake autoconf ruby'
 
 echo_and_eval 'sudo pacman -Syy'
-echo_and_eval 'sudo pacman -Syu --noconfirm'
-echo_and_eval 'sudo pacman -Scc --noconfirm'
+echo_and_eval 'yes | sudo pacman -Syu'
+echo_and_eval 'yes | sudo pacman -Scc'
 echo_and_eval 'sudo paccache -ruk0'
 
 echo_and_eval 'systemctl start sshd'
@@ -549,13 +549,13 @@ function echo_and_eval() {
 function upgrade_manjaro() {
 	# Upgrade Packages
 	echo_and_eval 'sudo pacman -Syy'
-	echo_and_eval 'sudo pacman -Syu --noconfirm'
+	echo_and_eval 'yes | sudo pacman -Syu'
 
 	# Remove Unused Packages
 	echo_and_eval 'sudo paccache -ruk0'
 
 	# Clean Cache
-	echo_and_eval 'sudo pacman -Scc --noconfirm'
+	echo_and_eval 'yes | sudo pacman -Scc'
 }
 
 function upgrade_ohmyzsh() {
@@ -1590,13 +1590,13 @@ function echo_and_eval() {
 function upgrade_manjaro() {
 	# Upgrade Packages
 	echo_and_eval 'sudo pacman -Syy'
-	echo_and_eval 'sudo pacman -Syu --noconfirm'
+	echo_and_eval 'yes | sudo pacman -Syu'
 
 	# Remove Unused Packages
 	echo_and_eval 'sudo paccache -ruk0'
 
 	# Clean Cache
-	echo_and_eval 'sudo pacman -Scc --noconfirm'
+	echo_and_eval 'yes | sudo pacman -Scc'
 }
 
 function upgrade_ohmyzsh() {

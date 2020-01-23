@@ -124,7 +124,7 @@ if ! grep -qF '/usr/bin/zsh' /etc/shells; then
 fi
 
 # Install Packages
-echo_and_eval 'yes | sudo pacman -S bash-completion wget curl git git-lfs vim tmux'
+echo_and_eval 'yes | sudo pacman -S bash-completion wget curl git git-lfs gvim tmux'
 echo_and_eval 'yes | sudo pacman -S htop openssh net-tools exfat-utils tree colordiff xclip'
 echo_and_eval 'yes | sudo pacman -S gcc gdb clang llvm lldb make cmake automake autoconf ruby'
 

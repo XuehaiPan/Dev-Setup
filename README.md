@@ -51,12 +51,21 @@ bash setup.sh
 
 - If you are using Linux, modify the default user name and host name in function `send_to_mac` and `receive_from_mac` in `$HOME/.dotfiles/utilities.sh`.
 
-- After running the script, all the old configuration files involved will be backed up to the folder `$HOME/.dotfiles/backups/$DATETIME`, and the symbolic link `$HOME/.dotfiles/backups/latest` links to the latest one. You can compare the differences using:
+- After running the script, all the old configuration files involved will be backed up to the folder `$HOME/.dotfiles/backups/$DATETIME`, and a symbolic link `$HOME/.dotfiles/backups/latest` links to the latest one. You can compare the differences using:
 
-```shell
-colordiff -EB ~/.dotfiles/backups/latest ~/.dotfiles
-colordiff -EB ~/.dotfiles/backups/latest/.dotfiles ~/.dotfiles
-```
+  ```shell
+  colordiff -EB ~/.dotfiles/backups/latest ~/.dotfiles
+  colordiff -EB ~/.dotfiles/backups/latest/.dotfiles ~/.dotfiles
+  ```
+
+  There is a nice way to inspect and move changes from one version to another version of the same file using [`vimdiff`](https://www.vim.org) or [`meld`](http://meldmerge.org). Run:
+
+  ```shell
+  # Inspect and move changes using vimdiff
+  vimdiff ~/.dotfiles/$FILE ~/.dotfiles/backups/latest/.dotfiles/$FILE
+  ```
+
+  You can get vimdiff reference manual from [https://vimhelp.org/diff.txt.html](https://vimhelp.org/diff.txt.html), especially section 4 [Diff copying](https://vimhelp.org/diff.txt.html#copy-diffs).
 
 ### Restoration
 

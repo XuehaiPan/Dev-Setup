@@ -130,8 +130,8 @@ echo_and_eval 'yes | sudo pacman -S gcc gdb clang llvm lldb make cmake automake 
 
 echo_and_eval 'sudo pacman -Syy'
 echo_and_eval 'yes | sudo pacman -Syu'
-echo_and_eval 'yes | sudo pacman -Scc'
 echo_and_eval 'sudo paccache -ruk0'
+echo_and_eval 'yes | sudo pacman -Scc'
 
 echo_and_eval 'systemctl start sshd'
 echo_and_eval 'systemctl enable sshd.service'

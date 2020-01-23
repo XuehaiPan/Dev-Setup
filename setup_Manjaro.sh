@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# Set locale
+export LC_ALL="en_US.utf8"
+
 # Set Configuration Backup Directory
 DATETIME=$(date +"%Y-%m-%d-%T")
 BACKUP_DIR="$HOME/.dotfiles/backups/$DATETIME"

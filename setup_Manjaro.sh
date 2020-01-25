@@ -106,15 +106,14 @@ if ! grep -q '^DisableDownloadTimeout$' /etc/pacman.conf; then
 	sudo sed -i -e 's/^Color$/Color\nDisableDownloadTimeout/g' /etc/pacman.conf
 fi
 
+echo_and_eval 'sudo pacman-mirrors --country China --method rank'
+
 echo_and_eval 'sudo pacman -Syy'
+
 echo_and_eval 'sudo pacman-key --recv-keys 7931B6D628C8D3BA'
 echo_and_eval 'sudo pacman-key --finger 7931B6D628C8D3BA'
 echo_and_eval 'sudo pacman-key --lsign-key 7931B6D628C8D3BA'
 echo_and_eval 'yes | sudo pacman -S archlinuxcn-keyring'
-
-echo_and_eval 'sudo pacman-mirrors --country China --method rank'
-
-echo_and_eval 'sudo pacman -Syy'
 
 # Install and Setup Shells
 echo_and_eval 'yes | sudo pacman -S zsh'

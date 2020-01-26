@@ -200,7 +200,11 @@ export ZSH_CUSTOM=${ZSH_CUSTOM:-"$ZSH/custom"}
 if [[ -d "$ZSH/.git" && -f "$ZSH/tools/upgrade.sh" ]]; then
 	echo_and_eval 'zsh "$ZSH/tools/upgrade.sh"'
 else
-	echo_and_eval 'git clone https://github.com/robbyrussell/oh-my-zsh.git "${ZSH:-"$HOME/.oh-my-zsh"}"'
+	echo_and_eval 'git clone -c core.eol=lf -c core.autocrlf=false \
+		-c fsck.zeroPaddedFilemode=ignore \
+		-c fetch.fsck.zeroPaddedFilemode=ignore \
+		-c receive.fsck.zeroPaddedFilemode=ignore \
+		--depth=1 https://github.com/robbyrussell/oh-my-zsh.git "${ZSH:-"$HOME/.oh-my-zsh"}"'
 	rm -f "$HOME"/.zcompdump* 2>/dev/null
 fi
 

@@ -34,10 +34,10 @@ Download the script file using [wget](https://www.gnu.org/software/wget/) / [cur
 
 ```shell
 # Download and run via wget
-bash -c "$(wget -qO- https://raw.githubusercontent.com/XuehaiPan/OS-Setup/master/setup.sh)"
+bash -c "$(wget -O - https://raw.githubusercontent.com/XuehaiPan/OS-Setup/master/setup.sh)"
 
 # Download and run via curl
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/XuehaiPan/OS-Setup/master/setup.sh)"
+bash -c "$(curl -fL https://raw.githubusercontent.com/XuehaiPan/OS-Setup/master/setup.sh)"
 
 # Download via git
 git clone https://github.com/XuehaiPan/OS-Setup.git

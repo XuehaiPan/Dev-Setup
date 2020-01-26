@@ -32,10 +32,10 @@ fi
 # Download and run
 if [[ -x "$(command -v wget)" ]]; then
 	echo "Download and run script via wget."
-	bash -c "$(wget -qO- https://raw.githubusercontent.com/XuehaiPan/OS-Setup/master/setup_${OS_NAME}.sh)"
+	bash -c "$(wget -O - https://raw.githubusercontent.com/XuehaiPan/OS-Setup/master/setup_${OS_NAME}.sh)"
 elif [[ -x "$(command -v curl)" ]]; then
 	echo "Download and run script via curl."
-	bash -c "$(curl -fsSL https://raw.githubusercontent.com/XuehaiPan/OS-Setup/master/setup_${OS_NAME}.sh)"
+	bash -c "$(curl -fL https://raw.githubusercontent.com/XuehaiPan/OS-Setup/master/setup_${OS_NAME}.sh)"
 elif [[ -x "$(command -v git)" ]]; then
 	echo "Download and run script via git."
 	git clone https://github.com/XuehaiPan/OS-Setup.git

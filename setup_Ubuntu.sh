@@ -1704,12 +1704,12 @@ if $IN_WSL; then
 	FONT_DIR_LIST+=('/mnt/c/Windows/Fonts')
 fi
 mkdir -p "$TMP_DIR/Cascadia"
-echo_and_eval "wget -O \"$TMP_DIR/DejaVuSansMono.zip\" https://github.com/ryanoasis/nerd-fonts/releases/download/v2.0.0/DejaVuSansMono.zip"
+echo_and_eval "wget -O \"$TMP_DIR/DejaVuSansMono.zip\" https://github.com/ryanoasis/nerd-fonts/releases/latest/download/DejaVuSansMono.zip"
 echo_and_eval "wget -O \"$TMP_DIR/Menlo.zip\" https://raw.githubusercontent.com/XuehaiPan/OS-Setup/master/Menlo.zip"
-echo_and_eval "wget -O \"$TMP_DIR/Cascadia/Cascadia.ttf\" https://github.com/microsoft/cascadia-code/releases/download/v1911.21/Cascadia.ttf"
-echo_and_eval "wget -O \"$TMP_DIR/Cascadia/CascadiaPL.ttf\" https://github.com/microsoft/cascadia-code/releases/download/v1911.21/CascadiaPL.ttf"
-echo_and_eval "wget -O \"$TMP_DIR/Cascadia/CascadiaMono.ttf\" https://github.com/microsoft/cascadia-code/releases/download/v1911.21/CascadiaMono.ttf"
-echo_and_eval "wget -O \"$TMP_DIR/Cascadia/CascadiaMonoPL.ttf\" https://github.com/microsoft/cascadia-code/releases/download/v1911.21/CascadiaMonoPL.ttf"
+echo_and_eval "wget -O \"$TMP_DIR/Cascadia/Cascadia.ttf\" https://github.com/microsoft/cascadia-code/releases/latest/download/Cascadia.ttf"
+echo_and_eval "wget -O \"$TMP_DIR/Cascadia/CascadiaPL.ttf\" https://github.com/microsoft/cascadia-code/releases/latest/download/CascadiaPL.ttf"
+echo_and_eval "wget -O \"$TMP_DIR/Cascadia/CascadiaMono.ttf\" https://github.com/microsoft/cascadia-code/releases/latest/download/CascadiaMono.ttf"
+echo_and_eval "wget -O \"$TMP_DIR/Cascadia/CascadiaMonoPL.ttf\" https://github.com/microsoft/cascadia-code/releases/latest/download/CascadiaMonoPL.ttf"
 for font_dir in "${FONT_DIR_LIST[@]}"; do
 	echo_and_eval "unzip -o \"$TMP_DIR/DejaVuSansMono.zip\" -d \"$font_dir\""
 	echo_and_eval "unzip -o \"$TMP_DIR/Menlo.zip\" -d \"$font_dir\""

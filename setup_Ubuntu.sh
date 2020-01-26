@@ -89,8 +89,8 @@ function echo_and_eval() {
 
 function backup_dotfiles() {
 	for file in "$@"; do
-		if [[ -f "$file" || -d "$file" ]]; then
-			if [[ -L "$file" ]]; then
+		if [[ -f $file || -d $file ]]; then
+			if [[ -L $file ]]; then
 				local original_file=$(readlink "$file")
 				rm -f "$file"
 				cp -rf "$original_file" "$file"
@@ -130,10 +130,10 @@ if $IS_SUDOER; then
 fi
 
 # Change Default Shell to Zsh
-if [[ "$SHELL" != "/usr/bin/zsh" ]]; then
+if [[ $SHELL != "/usr/bin/zsh" ]]; then
 	if $(grep -qF '/usr/bin/zsh' /etc/shells); then
 		echo_and_eval 'chsh -s /usr/bin/zsh'
-	elif $(grep -qF '/bin/zsh' /etc/shells) && [[ "$SHELL" != "/bin/zsh" ]]; then
+	elif $(grep -qF '/bin/zsh' /etc/shells) && [[ $SHELL != "/bin/zsh" ]]; then
 		echo_and_eval 'chsh -s /bin/zsh'
 	fi
 fi
@@ -1062,7 +1062,7 @@ hi cssBraces ctermfg=NONE ctermbg=NONE cterm=NONE guifg=NONE guibg=NONE gui=NONE
 EOF
 
 # Install Vim-Plug Plugin Manager
-echo_and_eval 'curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+echo_and_eval 'curl -fLo "$HOME/.vim/autoload/plug.vim" --create-dirs \
 	https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 
 # Install Vim Plugins

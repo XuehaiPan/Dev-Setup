@@ -75,8 +75,8 @@ function echo_and_eval() {
 
 function backup_dotfiles() {
 	for file in "$@"; do
-		if [[ -f "$file" || -d "$file" ]]; then
-			if [[ -L "$file" ]]; then
+		if [[ -f $file || -d $file ]]; then
+			if [[ -L $file ]]; then
 				local original_file=$(readlink "$file")
 				rm -f "$file"
 				cp -rf "$original_file" "$file"
@@ -157,7 +157,7 @@ wget -O "$HOME/Desktop/SpaceGray Eighties.itermcolors" \
 	https://raw.githubusercontent.com/mbadolato/iTerm2-Color-Schemes/master/schemes/SpaceGray%20Eighties.itermcolors
 
 # Change Default Shell to Zsh
-if [[ "$SHELL" != "/usr/local/bin/zsh" ]]; then
+if [[ $SHELL != "/usr/local/bin/zsh" ]]; then
 	echo_and_eval 'chsh -s /usr/local/bin/zsh'
 fi
 
@@ -1056,7 +1056,7 @@ hi cssBraces ctermfg=NONE ctermbg=NONE cterm=NONE guifg=NONE guibg=NONE gui=NONE
 EOF
 
 # Install Vim-Plug Plugin Manager
-echo_and_eval 'curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+echo_and_eval 'curl -fLo "$HOME/.vim/autoload/plug.vim" --create-dirs \
 	https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 
 # Install Vim Plugins

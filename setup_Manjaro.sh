@@ -100,10 +100,10 @@ for repo in "arch4edu" "archlinuxcn"; do
 	fi
 done
 
-sudo sed -i -e 's/^\s*#\s*Color$/Color/g' /etc/pacman.conf
-sudo sed -i -e 's/^\s*#\s*DisableDownloadTimeout$/DisableDownloadTimeout/g' /etc/pacman.conf
+echo_and_eval "sudo sed -i -e 's/^\\s*#\\s*Color$/Color/g' /etc/pacman.conf"
+echo_and_eval "sudo sed -i -e 's/^\\s*#\\s*DisableDownloadTimeout$/DisableDownloadTimeout/g' /etc/pacman.conf"
 if ! grep -q '^DisableDownloadTimeout$' /etc/pacman.conf; then
-	sudo sed -i -e 's/^Color$/Color\nDisableDownloadTimeout/g' /etc/pacman.conf
+	echo_and_eval "sudo sed -i -e 's/^Color$/Color\\nDisableDownloadTimeout/g' /etc/pacman.conf"
 fi
 
 echo_and_eval 'sudo pacman-mirrors --country China --method rank'

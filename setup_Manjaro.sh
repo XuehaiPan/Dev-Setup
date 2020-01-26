@@ -113,19 +113,19 @@ echo_and_eval 'sudo pacman -Syy'
 echo_and_eval 'sudo pacman-key --recv-keys 7931B6D628C8D3BA'
 echo_and_eval 'sudo pacman-key --finger 7931B6D628C8D3BA'
 echo_and_eval 'sudo pacman-key --lsign-key 7931B6D628C8D3BA'
-echo_and_eval 'yes | sudo pacman -S archlinuxcn-keyring'
+echo_and_eval 'yes | sudo pacman -S archlinuxcn-keyring --needed'
 
 # Install and Setup Shells
-echo_and_eval 'yes | sudo pacman -S zsh'
+echo_and_eval 'yes | sudo pacman -S zsh --needed'
 
 if ! grep -qF '/usr/bin/zsh' /etc/shells; then
 	echo_and_eval 'echo "/usr/bin/zsh" | sudo tee -a /etc/shells'
 fi
 
 # Install Packages
-echo_and_eval 'yes | sudo pacman -S bash-completion wget curl git git-lfs gvim tmux'
-echo_and_eval 'yes | sudo pacman -S htop openssh net-tools exfat-utils tree colordiff xclip'
-echo_and_eval 'yes | sudo pacman -S gcc gdb clang llvm lldb make cmake automake autoconf ruby'
+echo_and_eval 'yes | sudo pacman -S bash-completion wget curl git git-lfs gvim tmux --needed'
+echo_and_eval 'yes | sudo pacman -S htop openssh net-tools exfat-utils tree colordiff xclip --needed'
+echo_and_eval 'yes | sudo pacman -S gcc gdb clang llvm lldb make cmake automake autoconf ruby --needed'
 
 echo_and_eval 'sudo pacman -Syy'
 echo_and_eval 'yes | sudo pacman -Syu'

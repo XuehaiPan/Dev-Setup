@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
 
+# Colors
+BOLDRED="\033[1;31m"
+BOLDGREEN="\033[1;32m"
+BOLDYELLOW="\033[1;33m"
+BOLDWHITE="\033[1;37m"
+RESET="\033[0m"
+
 # Get system infomation
 OS_NAME=""
 if [[ "$(uname -s)" == "Darwin" ]]; then
@@ -13,17 +20,17 @@ elif [[ "$(uname -s)" == "Linux" ]]; then
 fi
 
 if [[ -z "$OS_NAME" ]]; then
-	echo "The operating system is not supported yet." >&2
+	echo -e "${BOLDRED}The operating system is not supported yet. ${BOLDYELLOW}Only macOS, Ubuntu Linux, and Manjaro Linux are supported.${RESET}" >&2
 	exit 1
 fi
 
-echo "Operating System: $OS_NAME"
+echo -e "${BOLDWHITE}Operating System: ${BOLDGREEN}${OS_NAME}${RESET}"
 
 # Run script if it exists
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 if [[ -x "$SCRIPT_DIR/setup_${OS_NAME}.sh" && "$(basename "$0")" == "setup.sh" ]]; then
 	if [[ -d "$SCRIPT_DIR/.git" || "$(basename "$SCRIPT_DIR")" == "OS-Setup-master" ]]; then
-		echo "Run existing script "$SCRIPT_DIR/setup_${OS_NAME}.sh"."
+		echo -e "${BOLDWHITE}Run existing script ${BOLDGREEN}\"$SCRIPT_DIR/setup_${OS_NAME}.sh\"${BOLDWHITE}.${RESET}"
 		bash "$SCRIPT_DIR/setup_${OS_NAME}.sh"
 		exit
 	fi
@@ -31,15 +38,15 @@ fi
 
 # Download and run
 if [[ -x "$(command -v wget)" ]]; then
-	echo "Download and run script via wget."
+	echo -e "${BOLDWHITE}Download and run script via ${BOLDGREEN}wget${BOLDWHITE}.${RESET}"
 	bash -c "$(wget -O - https://raw.githubusercontent.com/XuehaiPan/OS-Setup/master/setup_${OS_NAME}.sh)"
 elif [[ -x "$(command -v curl)" ]]; then
-	echo "Download and run script via curl."
+	echo -e "${BOLDWHITE}Download and run script via ${BOLDGREEN}curl${BOLDWHITE}.${RESET}"
 	bash -c "$(curl -fL https://raw.githubusercontent.com/XuehaiPan/OS-Setup/master/setup_${OS_NAME}.sh)"
 elif [[ -x "$(command -v git)" ]]; then
-	echo "Download and run script via git."
+	echo -e "${BOLDWHITE}Download and run script via ${BOLDGREEN}git${BOLDWHITE}.${RESET}"
 	git clone https://github.com/XuehaiPan/OS-Setup.git
 	bash "OS-Setup/setup_${OS_NAME}.sh"
 else
-	echo "Please download the script from https://github.com/XuehaiPan/OS-Setup."
+	echo -e "${BOLDWHITE}Please download the script from ${BOLDYELLOW}https://github.com/XuehaiPan/OS-Setup${BOLDWHITE} manually.${RESET}"
 fi

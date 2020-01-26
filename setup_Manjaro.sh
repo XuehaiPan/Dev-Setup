@@ -1163,6 +1163,7 @@ EOF
 # Configurations for Git
 backup_dotfiles .gitconfig .dotfiles/.gitconfig
 
+git config --global core.compression -1
 git config --global core.excludesfile '~/.gitignore_global'
 git config --global core.editor vim
 git config --global diff.tool vimdiff
@@ -1172,6 +1173,7 @@ git config --global difftool.prompt false
 git config --global merge.tool vimdiff
 git config --global merge.guitool gvimdiff
 git config --global mergetool.prompt false
+git config --global http.postBuffer 524288000
 git config --global fetch.prune true
 git config --global fetch.parallel 0
 git config --global submodule.recurse true

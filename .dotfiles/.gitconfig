@@ -3,6 +3,7 @@
 	email = XuehaiPan@pku.edu.cn
 
 [core]
+	compression = -1
 	excludesfile = ~/.gitignore_global
 	editor = vim
 
@@ -20,6 +21,9 @@
 
 [mergetool]
 	prompt = false
+
+[http]
+	postBuffer = 524288000
 
 [fetch]
 	prune = true

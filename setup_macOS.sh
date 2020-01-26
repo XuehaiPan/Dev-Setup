@@ -161,6 +161,38 @@ if [[ "$SHELL" != "/usr/local/bin/zsh" ]]; then
 	echo_and_eval 'chsh -s /usr/local/bin/zsh'
 fi
 
+echo_and_eval 'cd "$HOME"'
+
+# Configurations for Git
+export GIT_HTTP_LOW_SPEED_LIMIT=0
+export GIT_HTTP_LOW_SPEED_TIME=999999
+
+backup_dotfiles .gitconfig .dotfiles/.gitconfig
+
+git config --global core.compression -1
+git config --global core.excludesfile '~/.gitignore_global'
+git config --global core.editor vim
+git config --global diff.tool vimdiff
+git config --global diff.guitool gvimdiff
+git config --global diff.algorithm minimal
+git config --global difftool.prompt false
+git config --global merge.tool vimdiff
+git config --global merge.guitool gvimdiff
+git config --global mergetool.prompt false
+git config --global http.postBuffer 524288000
+git config --global fetch.prune true
+git config --global fetch.parallel 0
+git config --global submodule.recurse true
+git config --global submodule.fetchJobs 0
+git config --global filter.lfs.clean 'git-lfs clean -- %f'
+git config --global filter.lfs.smudge 'git-lfs smudge -- %f'
+git config --global filter.lfs.process 'git-lfs filter-process'
+git config --global filter.lfs.required true
+git config --global color.ui true
+
+mv -f .gitconfig .dotfiles/
+ln -sf .dotfiles/.gitconfig .
+
 # Install Oh-My-Zsh
 export ZSH=${ZSH:-"$HOME/.oh-my-zsh"}
 export ZSH_CUSTOM=${ZSH_CUSTOM:-"$ZSH/custom"}
@@ -187,8 +219,6 @@ for plugin in zsh-syntax-highlighting zsh-autosuggestions zsh-completions; do
 		echo_and_eval "git -C \"\$ZSH_CUSTOM/plugins/$plugin\" pull"
 	fi
 done
-
-echo_and_eval 'cd "$HOME"'
 
 # Configurations for RubyGems
 backup_dotfiles .gemrc .dotfiles/.gemrc
@@ -1158,33 +1188,7 @@ cat >>.dotfiles/.tmux.conf.local <<EOF
 %endif
 EOF
 
-# Configurations for Git
-backup_dotfiles .gitconfig .dotfiles/.gitconfig
-
-git config --global core.compression -1
-git config --global core.excludesfile '~/.gitignore_global'
-git config --global core.editor vim
-git config --global diff.tool vimdiff
-git config --global diff.guitool gvimdiff
-git config --global diff.algorithm minimal
-git config --global difftool.prompt false
-git config --global merge.tool vimdiff
-git config --global merge.guitool gvimdiff
-git config --global mergetool.prompt false
-git config --global http.postBuffer 524288000
-git config --global fetch.prune true
-git config --global fetch.parallel 0
-git config --global submodule.recurse true
-git config --global submodule.fetchJobs 0
-git config --global filter.lfs.clean 'git-lfs clean -- %f'
-git config --global filter.lfs.smudge 'git-lfs smudge -- %f'
-git config --global filter.lfs.process 'git-lfs filter-process'
-git config --global filter.lfs.required true
-git config --global color.ui true
-
-mv -f .gitconfig .dotfiles/
-ln -sf .dotfiles/.gitconfig .
-
+# Configurations for Gitignore
 backup_dotfiles .gitignore_global .dotfiles/.gitignore_global
 
 cat >.dotfiles/.gitignore_global <<EOF

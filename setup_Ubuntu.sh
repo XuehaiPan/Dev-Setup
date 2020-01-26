@@ -121,11 +121,6 @@ if $IS_SUDOER; then
 	echo_and_eval 'sudo apt install htop ssh net-tools exfat-utils tree colordiff xclip --yes'
 	echo_and_eval 'sudo apt install make cmake automake autoconf build-essential gcc g++ gdb --yes'
 	echo_and_eval 'sudo apt install clang clang-format llvm lldb ruby-full --yes'
-
-	echo_and_eval 'sudo apt dist-upgrade --yes'
-	echo_and_eval 'sudo apt full-upgrade --yes'
-	echo_and_eval 'sudo apt upgrade --yes'
-	echo_and_eval 'sudo apt autoremove --yes'
 	echo_and_eval 'sudo apt autoclean --yes'
 fi
 

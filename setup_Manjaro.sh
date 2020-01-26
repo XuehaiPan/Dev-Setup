@@ -126,10 +126,6 @@ fi
 echo_and_eval 'yes | sudo pacman -S bash-completion wget curl git git-lfs gvim tmux --needed'
 echo_and_eval 'yes | sudo pacman -S htop openssh net-tools exfat-utils tree colordiff xclip --needed'
 echo_and_eval 'yes | sudo pacman -S gcc gdb clang llvm lldb make cmake automake autoconf ruby --needed'
-
-echo_and_eval 'sudo pacman -Syy'
-echo_and_eval 'yes | sudo pacman -Syu'
-echo_and_eval 'sudo paccache -ruk0'
 echo_and_eval 'yes | sudo pacman -Scc'
 
 echo_and_eval 'systemctl start sshd'

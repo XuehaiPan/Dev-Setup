@@ -1704,7 +1704,7 @@ echo_and_eval "wget -O \"$TMP_DIR/Cascadia/CascadiaMonoPL.ttf\" https://github.c
 for font_dir in "${FONT_DIR_LIST[@]}"; do
 	echo_and_eval "unzip -o \"$TMP_DIR/DejaVuSansMono.zip\" -d \"$font_dir\""
 	echo_and_eval "unzip -o \"$TMP_DIR/Menlo.zip\" -d \"$font_dir\""
-	echo_and_eval "cp -f \"$TMP_DIR/Cascadia/*.ttf\" \"$font_dir/\""
+	echo_and_eval "cp -f \"$TMP_DIR/Cascadia\"/*.ttf \"$font_dir/\""
 done
 rm -rf "$TMP_DIR"
 echo_and_eval 'fc-cache --force'

@@ -141,14 +141,11 @@ fi
 # Install Oh-My-Zsh
 export ZSH=${ZSH:-"$HOME/.oh-my-zsh"}
 export ZSH_CUSTOM=${ZSH_CUSTOM:-"$ZSH/custom"}
-export CHSH=${CHSH:-no}
-export RUNZSH=${RUNZSH:-no}
 
 if [[ -d "$ZSH/.git" && -f "$ZSH/tools/upgrade.sh" ]]; then
 	echo_and_eval 'zsh "$ZSH/tools/upgrade.sh"'
 else
-	echo_and_eval 'sh -c "$(wget -O- https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"'
-	mv -f "$HOME"/.zshrc.pre-oh-my-zsh "$HOME"/.zshrc
+	echo_and_eval 'git clone https://github.com/robbyrussell/oh-my-zsh.git "${ZSH:-"$HOME/.oh-my-zsh"}"'
 	rm -f "$HOME"/.zcompdump* 2>/dev/null
 fi
 

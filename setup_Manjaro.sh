@@ -185,7 +185,7 @@ fi
 
 # Install Powerlevel10k Theme
 if [[ ! -d "$ZSH_CUSTOM/themes/powerlevel10k/.git" ]]; then
-	echo_and_eval 'git clone https://github.com/romkatv/powerlevel10k.git "$ZSH_CUSTOM/themes/powerlevel10k"'
+	echo_and_eval 'git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "$ZSH_CUSTOM/themes/powerlevel10k"'
 else
 	echo_and_eval 'git -C "$ZSH_CUSTOM/themes/powerlevel10k" pull'
 fi
@@ -193,7 +193,7 @@ fi
 # Install Zsh Plugins
 for plugin in zsh-syntax-highlighting zsh-autosuggestions zsh-completions; do
 	if [[ ! -d "$ZSH_CUSTOM/plugins/$plugin/.git" ]]; then
-		echo_and_eval "git clone https://github.com/zsh-users/$plugin \"\$ZSH_CUSTOM/plugins/$plugin\""
+		echo_and_eval "git clone --depth=1 https://github.com/zsh-users/$plugin \"\$ZSH_CUSTOM/plugins/$plugin\""
 	else
 		echo_and_eval "git -C \"\$ZSH_CUSTOM/plugins/$plugin\" pull"
 	fi
@@ -1170,7 +1170,7 @@ EOF
 
 backup_dotfiles .dotfiles/.tmux
 rm -rf .dotfiles/.tmux
-echo_and_eval 'git clone https://github.com/gpakosz/.tmux.git "$HOME/.dotfiles/.tmux"'
+echo_and_eval 'git clone --depth=1 https://github.com/gpakosz/.tmux.git "$HOME/.dotfiles/.tmux"'
 
 cp -f .dotfiles/.tmux/.tmux.conf.local .dotfiles/
 ln -sf .dotfiles/.tmux/.tmux.conf .

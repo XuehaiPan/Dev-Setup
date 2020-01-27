@@ -45,7 +45,7 @@ elif [[ -x "$(command -v curl)" ]]; then
 	bash -c "$(curl -fL https://raw.githubusercontent.com/XuehaiPan/OS-Setup/master/setup_${OS_NAME}.sh)"
 elif [[ -x "$(command -v git)" ]]; then
 	echo -e "${BOLDWHITE}Download and run script via ${BOLDGREEN}git${BOLDWHITE}.${RESET}"
-	git clone https://github.com/XuehaiPan/OS-Setup.git
+	git clone --depth=1 https://github.com/XuehaiPan/OS-Setup.git
 	bash "OS-Setup/setup_${OS_NAME}.sh"
 else
 	echo -e "${BOLDWHITE}Please download the script from ${BOLDYELLOW}https://github.com/XuehaiPan/OS-Setup${BOLDWHITE} manually.${RESET}"

@@ -1747,6 +1747,5 @@ echo_and_eval 'brew cleanup'
 echo_and_eval 'defaults write com.apple.screencapture disable-shadow -boolean true'
 echo_and_eval 'killall SystemUIServer'
 echo_and_eval 'rm -rf $HOME/.bash_sessions/'
-echo_and_eval 'sudo scutil --set HostName MacBook-Pro'
 
 find "$(brew --prefix)/Caskroom/sogouinput" -name "*.app" -exec '{}/Contents/MacOS/SogouInstaller' \; &>/dev/null &

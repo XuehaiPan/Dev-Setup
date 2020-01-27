@@ -1182,9 +1182,9 @@ cp -f .dotfiles/.tmux/.tmux.conf.local .dotfiles/
 ln -sf .dotfiles/.tmux/.tmux.conf .
 ln -sf .dotfiles/.tmux.conf.local .
 
-sed -n -e 's/tmux_conf_copy_to_os_clipboard=false/tmux_conf_copy_to_os_clipboard=true/g' .dotfiles/.tmux.conf.local
-sed -n -e 's/#set -g history-limit 10000/set -g history-limit 10000/g' .dotfiles/.tmux.conf.local
-sed -n -e 's/#set -g mouse on/set -g mouse on/g' .dotfiles/.tmux.conf.local
+sed -i "" -e 's/tmux_conf_copy_to_os_clipboard=false/tmux_conf_copy_to_os_clipboard=true/g' .dotfiles/.tmux.conf.local
+sed -i "" -e 's/#set -g history-limit 10000/set -g history-limit 10000/g' .dotfiles/.tmux.conf.local
+sed -i "" -e 's/#set -g mouse on/set -g mouse on/g' .dotfiles/.tmux.conf.local
 cat >>.dotfiles/.tmux.conf.local <<EOF
 
 %if '[ -f ~/.dotfiles/.tmux.conf.user ]'

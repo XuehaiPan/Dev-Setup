@@ -781,16 +781,18 @@ ITERM_UTILITIES=(
 
 mkdir -p "$HOME/.iterm2"
 
+ALIASES_ARRAY=()
+for utility in "${ITERM_UTILITIES[@]}"; do
+	echo_and_eval "wget --quiet --show-progress -O \"\$HOME/.iterm2/$utility\" \"https://iterm2.com/utilities/$utility\" && chmod +x \"\$HOME/.iterm2/$utility\""
+	ALIASES_ARRAY+=("alias $utility='~/.iterm2/$utility'")
+done
+
+ALIASES="${"$(printf "; %s" "${ALIASES_ARRAY[@]}")":2}"
+
 for shell in "bash" "zsh"; do
 	echo_and_eval "wget --quiet --show-progress -O \"\$HOME/.iterm2/.iterm2_shell_integration.$shell\" \"https://iterm2.com/shell_integration/$shell\" && chmod +x \"\$HOME/.iterm2/.iterm2_shell_integration.$shell\""
 	printf "\n# Utilities\n" >>"$HOME/.iterm2/.iterm2_shell_integration.$shell"
-done
-
-for utility in "${ITERM_UTILITIES[@]}"; do
-	echo_and_eval "wget --quiet --show-progress -O \"\$HOME/.iterm2/$utility\" \"https://iterm2.com/utilities/$utility\" && chmod +x \"\$HOME/.iterm2/$utility\""
-	for shell in "bash" "zsh"; do
-		echo_and_eval "echo \"alias $utility='~/.iterm2/$utility'\" >> \"\$HOME/.iterm2/.iterm2_shell_integration.$shell\""
-	done
+	echo_and_eval "echo \"$ALIASES\" >> \"\$HOME/.iterm2/.iterm2_shell_integration.$shell\""
 done
 
 # Configurations for X11

@@ -473,8 +473,7 @@ source "\$HOME/.dotfiles/.zshrc-common"
 
 # Setup colorls
 ${COMMENT_PREFIX}source "\$(dirname "\$(gem which colorls)")"/tab_complete.sh
-${COMMENT_PREFIX}alias lc='colorls --sd --gs'
-${COMMENT_PREFIX}alias ls='lc'
+${COMMENT_PREFIX}alias ls='colorls --sd --gs'
 ${COMMENT_PREFIX}alias lsa='ls -A'
 ${COMMENT_PREFIX}alias l='ls -la'
 ${COMMENT_PREFIX}alias ll='ls -l'

@@ -1,0 +1,592 @@
+{
+    //! Editor settings */
+    //* Editor */
+    "editor.fontSize": 13,
+    "editor.fontFamily": "Menlo, Monaco, Consolas, 'Courier New', monospace",
+    "editor.fontWeight": "600",
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    "editor.lineNumbers": "on",
+    "editor.renderLineHighlight": "line",
+    "editor.trimAutoWhitespace": true,
+    "editor.useTabStops": true,
+    "editor.autoIndent": "full",
+    "editor.detectIndentation": true,
+    "editor.folding": true,
+    "editor.foldingStrategy": "auto",
+    "editor.highlightActiveIndentGuide": true,
+    "editor.renderIndentGuides": true,
+    "editor.wordWrapColumn": 120,
+    "editor.rulers": [
+        80,
+        100,
+        120,
+        140
+    ],
+    "editor.cursorStyle": "line",
+    "editor.cursorSmoothCaretAnimation": false,
+    "editor.smoothScrolling": true,
+    "editor.mouseWheelZoom": false,
+    "editor.multiCursorModifier": "ctrlCmd",
+    "editor.occurrencesHighlight": true,
+    "editor.selectionHighlight": true,
+    "editor.parameterHints.enabled": true,
+    "editor.matchBrackets": "always",
+    "editor.links": true,
+    "editor.minimap.enabled": true,
+    "editor.minimap.maxColumn": 120,
+    "editor.minimap.renderCharacters": true,
+    "editor.formatOnPaste": true,
+    "editor.formatOnSave": true,
+    "editor.formatOnType": true,
+    "editor.suggestSelection": "first",
+    "editor.snippetSuggestions": "inline",
+    "editor.suggest.filterGraceful": true,
+    "editor.quickSuggestions": {
+        "other": true,
+        "comments": true,
+        "strings": true
+    },
+    "diffEditor.ignoreTrimWhitespace": false,
+    "diffEditor.renderIndicators": true,
+    "diffEditor.renderSideBySide": true,
+    "workbench.colorTheme": "Monokai",
+    "workbench.iconTheme": "material-icon-theme",
+    "workbench.startupEditor": "welcomePage",
+    "workbench.activityBar.visible": true,
+    "workbench.sideBar.location": "left",
+    "workbench.statusBar.visible": true,
+    "workbench.enableExperiments": false,
+    "workbench.editor.showIcons": true,
+    "workbench.editor.showTabs": true,
+    "workbench.editor.closeEmptyGroups": true,
+    "workbench.editor.closeOnFileDelete": false,
+    "workbench.editor.enablePreview": true,
+    "workbench.editor.highlightModifiedTabs": true,
+    "workbench.fontAliasing": "auto",
+    "workbench.settings.editor": "ui",
+    "workbench.settings.useSplitJSON": true,
+
+    //* Window */
+    "window.zoomLevel": -0.25,
+    "window.closeWhenEmpty": false,
+    "window.titleBarStyle": "custom",
+    "window.newWindowDimensions": "maximized",
+    "window.openFilesInNewWindow": "default",
+    "window.openFoldersInNewWindow": "default",
+    "window.title": "${dirty}${activeEditorMedium}${separator}${rootName}",
+
+    //* Breadcrumb Navigation */
+    "breadcrumbs.enabled": true,
+    "breadcrumbs.filePath": "on",
+    "breadcrumbs.symbolPath": "on",
+
+    //* Files */
+    "files.autoGuessEncoding": false,
+    "files.encoding": "utf8",
+    "files.eol": "auto",
+    "files.autoSave": "afterDelay",
+    "files.autoSaveDelay": 1000,
+    "files.insertFinalNewline": true,
+    "files.trimFinalNewlines": true,
+    "files.trimTrailingWhitespace": true,
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/.classpath": true,
+        "**/.factorypath": true,
+        "**/.project": true,
+        "**/.settings": true,
+        "**/.idea": true,
+        "**/*.pyc": true,
+        "**/__pycache__": true
+    },
+
+    //* File Explorer */
+    "explorer.autoReveal": true,
+    "explorer.confirmDragAndDrop": true,
+    "explorer.enableDragAndDrop": true,
+
+    //* Search */
+    "search.showLineNumbers": true,
+    "search.smartCase": true,
+    "search.useIgnoreFiles": true,
+
+    //* Outline */
+    "outline.icons": true,
+    "outline.problems.badges": true,
+    "outline.problems.colors": true,
+    "outline.problems.enabled": true,
+
+    //* Debug */
+    "debug.inlineValues": true,
+    "debug.openExplorerOnEnd": true,
+
+    //* Integrated Terminal */
+    "terminal.integrated.fontSize": 14,
+    "terminal.integrated.fontFamily": "'DejaVuSansMono Nerd Font', Menlo",
+    "terminal.integrated.showExitAlert": true,
+    "terminal.integrated.confirmOnExit": true,
+    "terminal.integrated.scrollback": 10000,
+    "terminal.integrated.detectLocale": "auto",
+    "terminal.integrated.shell.linux": "/usr/bin/zsh",
+    "terminal.integrated.shell.osx": "/usr/local/bin/zsh",
+    "terminal.integrated.shell.windows": "C:\\Program Files\\PowerShell\\6\\pwsh.exe",
+
+    //* External Terminal */
+    "terminal.explorerKind": "integrated",
+    "terminal.external.linuxExec": "xterm",
+    "terminal.external.osxExec": "iTerm.app",
+    "terminal.external.windowsExec": "C:\\Program Files\\PowerShell\\6\\pwsh.exe",
+
+    //* Extensions */
+    "extensions.autoCheckUpdates": true,
+    "extensions.autoUpdate": true,
+    "extensions.closeExtensionDetailsOnViewChange": true,
+
+    //* Update */
+    "update.mode": "default",
+
+    //! Default Configuration Overrides */
+    "[c]": {
+        "editor.insertSpaces": false
+    },
+    "[cpp]": {
+        "editor.insertSpaces": false
+    },
+    "[java]": {},
+    "[julia]": {},
+    "[latex]": {
+        "editor.tabSize": 2,
+        "editor.detectIndentation": false,
+        "editor.formatOnSave": false,
+        "editor.formatOnType": false,
+        "editor.suggestSelection": "recentlyUsedByPrefix",
+        "editor.wordWrap": "bounded"
+    },
+    "[makefile]": {
+        "editor.insertSpaces": false
+    },
+    "[markdown]": {
+        "editor.wordWrap": "on",
+        "editor.renderWhitespace": "all",
+        "editor.quickSuggestions": true,
+        "editor.acceptSuggestionOnEnter": "off"
+    },
+    "[python]": {
+        "editor.formatOnSave": false,
+        "editor.formatOnType": false
+    },
+    "[shellscript]": {
+        "editor.insertSpaces": false
+    },
+
+    //! Extension settings */
+    //* Azure Machine Learning */
+    // "ai.homepage.openOnStartup": false,
+
+    //* Better Comments */
+    "better-comments.highlightPlainText": true,
+    "better-comments.multilineComments": true,
+
+    //* Bracket Pair Colorizer */
+    "bracket-pair-colorizer-2.colorMode": "Consecutive",
+    "bracket-pair-colorizer-2.colors": [
+        "Gold",
+        "DeepPink",
+        "Cyan",
+        "DarkOrange",
+        "LimeGreen",
+        "Magenta",
+        "DeepSkyBlue",
+        "HotPink",
+        "LightSeaGreen",
+        "Orchid"
+    ],
+    "bracket-pair-colorizer-2.showBracketsInGutter": true,
+    "bracket-pair-colorizer-2.showBracketsInRuler": true,
+    "bracket-pair-colorizer-2.showHorizontalScopeLine": true,
+    "bracket-pair-colorizer-2.showVerticalScopeLine": true,
+    "bracket-pair-colorizer-2.highlightActiveScope": true,
+
+    //* C/C++ */
+    "C_Cpp.default.compilerPath": "clang",
+    "C_Cpp.clang_format_path": "clang-format",
+    "C_Cpp.default.cppStandard": "c++17",
+    "C_Cpp.default.cStandard": "c11",
+    "C_Cpp.default.intelliSenseMode": "clang-x64",
+    "C_Cpp.autocomplete": "Default",
+    "C_Cpp.formatting": "Default",
+    "C_Cpp.configurationWarnings": "Enabled",
+
+    //* C/C++ Clang Command Adapter */
+    "clang.executable": "clang",
+    "clang.cflags": [
+        "-std=c11"
+    ],
+    "clang.cxxflags": [
+        "-std=c++17"
+    ],
+    "clang.objcflags": [],
+    "clang.completion.completeMacros": true,
+    "clang.completion.enable": true,
+    "clang.diagnostic.enable": true,
+
+    //* Cmake Tools */
+    "cmake.cmakePath": "cmake",
+    "cmake.sourceDirectory": "${workspaceRoot}",
+    "cmake.buildDirectory": "${workspaceRoot}/cmake-build-${buildType}",
+    "cmake.clearOutputBeforeBuild": true,
+    "cmake.saveBeforeBuild": true,
+    "cmake.buildBeforeRun": true,
+
+    //* Code Runner */
+    "code-runner.clearPreviousOutput": false,
+    "code-runner.runInTerminal": true,
+    "code-runner.saveAllFilesBeforeRun": true,
+    "code-runner.saveFileBeforeRun": true,
+    "code-runner.executorMap": {
+        "javascript": "node",
+        "java": "cd $dir && javac $fileName && java $fileNameWithoutExt",
+        "c": "cd $dir && gcc -std=c11 $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
+        "cpp": "cd $dir && g++ -std=c++17 $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
+        "objective-c": "cd $dir && gcc -framework Cocoa $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
+        "php": "php",
+        "python": "$pythonPath -u $fullFileName",
+        "perl": "perl",
+        "perl6": "perl6",
+        "ruby": "ruby",
+        "go": "go run",
+        "lua": "lua",
+        "groovy": "groovy",
+        "powershell": "powershell -ExecutionPolicy ByPass -File",
+        "bat": "cmd /c",
+        "shellscript": "bash",
+        "fsharp": "fsi",
+        "csharp": "scriptcs",
+        "vbscript": "cscript //Nologo",
+        "typescript": "ts-node",
+        "coffeescript": "coffee",
+        "scala": "scala",
+        "swift": "swift",
+        "julia": "julia",
+        "crystal": "crystal",
+        "ocaml": "ocaml",
+        "r": "Rscript",
+        "applescript": "osascript",
+        "clojure": "lein exec",
+        "haxe": "haxe --cwd $dirWithoutTrailingSlash --run $fileNameWithoutExt",
+        "rust": "cd $dir && rustc $fileName && $dir$fileNameWithoutExt",
+        "racket": "racket",
+        "scheme": "scheme --batch-mode < $fullFileName",
+        "ahk": "autohotkey",
+        "autoit": "autoit3",
+        "dart": "dart",
+        "pascal": "cd $dir && fpc $fileName && $dir$fileNameWithoutExt",
+        "d": "cd $dir && dmd $fileName && $dir$fileNameWithoutExt",
+        "haskell": "stack runhaskell",
+        "nim": "nim compile --verbosity:0 --hints:off --run",
+        "lisp": "sbcl --script",
+        "kit": "kitc --run"
+    },
+    "code-runner.executorMapByFileExtension": {
+        ".vb": "cd $dir && vbc /nologo $fileName && $dir$fileNameWithoutExt",
+        ".vbs": "cscript //Nologo",
+        ".scala": "scala",
+        ".jl": "julia",
+        ".cr": "crystal",
+        ".ml": "ocaml",
+        ".exs": "elixir",
+        ".hx": "haxe --cwd $dirWithoutTrailingSlash --run $fileNameWithoutExt",
+        ".rkt": "racket",
+        ".scm": "scheme --batch-mode < $fullFileName",
+        ".ahk": "autohotkey",
+        ".au3": "autoit3",
+        ".kt": "cd $dir && kotlinc $fileName -include-runtime -d $fileNameWithoutExt.jar && java -jar $fileNameWithoutExt.jar",
+        ".kts": "kotlinc -script",
+        ".dart": "dart",
+        ".pas": "cd $dir && fpc $fileName && $dir$fileNameWithoutExt",
+        ".pp": "cd $dir && fpc $fileName && $dir$fileNameWithoutExt",
+        ".d": "cd $dir && dmd $fileName && $dir$fileNameWithoutExt",
+        ".hs": "stack runhaskell",
+        ".nim": "nim compile --verbosity:0 --hints:off --run",
+        ".csproj": "dotnet run --project",
+        ".fsproj": "dotnet run --project",
+        ".lisp": "sbcl --script",
+        ".kit": "kitc --run"
+    },
+
+    //* Code Spell Checker */
+    "cSpell.language": "en,en-US",
+    "cSpell.showStatus": false,
+
+    //* Git */
+    "git.enabled": true,
+    "git.path": "git",
+    "git.autoRepositoryDetection": true,
+    "git.autoStash": true,
+    "git.autorefresh": true,
+    "git.detectSubmodules": true,
+    "git.autofetch": true,
+    "git.checkoutType": "all",
+    "git.confirmSync": true,
+
+    //* Git History */
+    "gitHistory.hideCommitViewExplorer": false,
+    "gitHistory.showEditorTitleMenuBarIcons": true,
+
+    //* Java Extension Pack */
+    "java.home": "/Library/Java/JavaVirtualMachines/Home/",
+    "java.autobuild.enabled": true,
+    "java.completion.enabled": true,
+    "java.completion.guessMethodArguments": true,
+    "java.completion.importOrder": [
+        "java",
+        "javax",
+        "com",
+        "org"
+    ],
+    "java.signatureHelp.enabled": true,
+    "java.format.enabled": true,
+    "java.format.onType.enabled": true,
+    "java.format.comments.enabled": true,
+    "java.format.settings.profile": "GoogleStyle",
+    "java.format.settings.url": "https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml",
+
+    //* Julia */
+    "julia.executablePath": "julia",
+    "julia.enableCrashReporter": false,
+    "julia.enableTelemetry": false,
+    "julia.runLinter": true,
+    "julia.usePlotPane": true,
+
+    //* LaTeX Workshop */
+    "latex-workshop.intellisense.package.enabled": true,
+    "latex-workshop.intellisense.unimathsymbols.enabled": true,
+    "latex-workshop.latex.recipe.default": "lastUsed",
+    "latex-workshop.latex.autoBuild.run": "onFileChange",
+    "latex-workshop.latex.autoBuild.cleanAndRetry.enabled": true,
+    "latex-workshop.latex.autoBuild.interval": 300000,
+    "latex-workshop.latex.autoClean.run": "onFailed",
+    "latex-workshop.latex.clean.subfolder.enabled": true,
+    "latex-workshop.synctex.afterBuild.enabled": true,
+    "latex-workshop.view.autoFocus.enabled": true,
+    "latex-workshop.view.pdf.viewer": "tab",
+    "latex-workshop.view.pdf.zoom": "page-width",
+    "latex-workshop.view.pdf.trim": 0,
+    "latex-workshop.latex.outDir": "%DIR%",
+    "latex-workshop.latex.tools": [
+        {
+            "name": "latexmk",
+            "command": "latexmk",
+            "args": [
+                "-xelatex",
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "-pdfxe",
+                "-shell-escape",
+                "-outdir=%OUTDIR%",
+                "%DOC%"
+            ],
+            "env": {}
+        },
+        {
+            "name": "pdflatex",
+            "command": "pdflatex",
+            "args": [
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "-shell-escape",
+                "%DOC%"
+            ],
+            "env": {}
+        },
+        {
+            "name": "xelatex",
+            "command": "xelatex",
+            "args": [
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "-shell-escape",
+                "%DOC%"
+            ],
+            "env": {}
+        },
+        {
+            "name": "bibtex",
+            "command": "bibtex",
+            "args": [
+                "%DOCFILE%"
+            ],
+            "env": {}
+        }
+    ],
+    "latex-workshop.latex.recipes": [
+        {
+            "name": "LaTeXmk",
+            "tools": [
+                "latexmk"
+            ]
+        },
+        {
+            "name": "XeLaTeX",
+            "tools": [
+                "xelatex"
+            ]
+        },
+        {
+            "name": "PDFLaTeX",
+            "tools": [
+                "pdflatex"
+            ]
+        },
+        {
+            "name": "BibTeX",
+            "tools": [
+                "bibtex"
+            ]
+        },
+        {
+            "name": "XeLaTeX ➞ BibTeX ➞ XeLaTeX × 2",
+            "tools": [
+                "xelatex",
+                "bibtex",
+                "xelatex",
+                "xelatex"
+            ]
+        },
+        {
+            "name": "PDFLaTeX ➞ BibTeX ➞ PDFLaTeX × 2",
+            "tools": [
+                "pdflatex",
+                "bibtex",
+                "pdflatex",
+                "pdflatex"
+            ]
+        }
+    ],
+    "latex-workshop.latex.clean.fileTypes": [
+        "*.xdv",
+        "*.aux",
+        "*.bbl",
+        "*.bcf",
+        "*.blg",
+        "*.idx",
+        "*.ind",
+        "*.lof",
+        "*.lot",
+        "*.out",
+        "*.toc",
+        "*.acn",
+        "*.acr",
+        "*.alg",
+        "*.glg",
+        "*.glo",
+        "*.gls",
+        "*.ist",
+        "*.fls",
+        "*.log",
+        "*.nav",
+        "*.snm",
+        "*.vrb",
+        "*.fdb_latexmk",
+        "*.run.xml"
+    ],
+
+    //* Markdown All in One */
+    "markdown.extension.list.indentationSize": "inherit",
+    "markdown.extension.preview.autoShowPreviewToSide": false,
+    "markdown.extension.orderedList.autoRenumber": true,
+    "markdown.extension.tableFormatter.enabled": true,
+    "markdown.extension.toc.githubCompatibility": true,
+    "markdown.extension.toc.updateOnSave": true,
+
+    //* Matlab */
+    "matlab.matlabpath": "/Applications/MATLAB_R2019b.app/bin/matlab",
+    "matlab.mlintpath": "/Applications/MATLAB_R2019b.app/bin/maci64/mlint",
+    "matlab.lintOnSave": true,
+    "matlab.linterEncoding": "utf8",
+
+    //* MySQL */
+    "vscode-mysql.enableTelemetry": false,
+
+    //* PlantUML */
+    "plantuml.jar": "/usr/local/opt/plantuml/libexec/plantuml.jar",
+    "plantuml.previewAutoUpdate": true,
+    "plantuml.render": "PlantUMLServer",
+    "plantuml.server": "https://www.plantuml.com/plantuml",
+
+    //* Python */
+    "python.autoComplete.addBrackets": true,
+    "python.autoComplete.showAdvancedMembers": true,
+    "python.autoUpdateLanguageServer": true,
+    "python.condaPath": "~/Anaconda3/condabin/conda",
+    "python.pythonPath": "~/Anaconda3/envs/python37/bin/python",
+    "python.terminal.activateEnvironment": true,
+    "python.jediEnabled": true,
+    "python.formatting.provider": "autopep8",
+    "python.formatting.autopep8Path": "autopep8",
+    "python.formatting.autopep8Args": [
+        "--aggressive",
+        "--aggressive",
+        "--aggressive",
+        "--max-line-length",
+        "120"
+    ],
+    "python.linting.enabled": true,
+    "python.linting.lintOnSave": true,
+    "python.linting.pylintEnabled": true,
+    "python.linting.pylintPath": "pylint",
+
+    //* Remote */
+    "remote.extensionKind": {
+        "coenraads.bracket-pair-colorizer-2": "ui"
+    },
+    "remote.SSH.defaultExtensions": [
+        "ms-python.anaconda-extension-pack",
+        "ms-ceintl.vscode-language-pack-zh-hans",
+        "formulahendry.code-runner",
+        "streetsidesoftware.code-spell-checker",
+        "donjayamanne.githistory",
+        "eamodio.gitlens",
+        "yzhang.markdown-all-in-one",
+        "ryu1kn.partial-diff",
+        "christian-kohler.path-intellisense",
+        "ms-python.python",
+        "gruntfuggly.todo-tree"
+    ],
+
+    //* Settings Sync */
+    "sync.autoDownload": false,
+    "sync.autoUpload": false,
+    "sync.forceUpload": true,
+    "sync.forceDownload": false,
+    "sync.syncExtensions": true,
+    "sync.removeExtensions": false,
+
+    //* Shell-format */
+    "shellformat.flag": "-s -i 0 -bn",
+
+    //* SQL Server (mssql) */
+    "mssql.format.datatypeCasing": "lowercase",
+    "mssql.format.keywordCasing": "lowercase",
+    "mssql.format.alignColumnDefinitionsInColumns": true,
+    "mssql.intelliSense.enableErrorChecking": true,
+    "mssql.intelliSense.enableIntelliSense": true,
+    "mssql.intelliSense.enableQuickInfo": true,
+    "mssql.intelliSense.enableSuggestions": true,
+    "mssql.intelliSense.lowerCaseSuggestions": true,
+    "mssql.showBatchTime": true,
+
+    //* Visual Studio IntelliCode */
+    "vsintellicode.java.completionsEnabled": true,
+    "vsintellicode.python.completionsEnabled": false,
+    "vsintellicode.typescript.completionsEnabled": true,
+    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue"
+}

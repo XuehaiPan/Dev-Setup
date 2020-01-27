@@ -373,6 +373,11 @@ export PATH="/usr/local/opt/sqlite/bin:\$PATH"
 # LLVM
 export PATH="/usr/local/opt/llvm/bin:\$PATH"
 
+# iTerm
+if [[ -f "\$HOME/.iterm2/.iterm2_shell_integration.zsh" ]]; then
+	source "\$HOME/.iterm2/.iterm2_shell_integration.zsh"
+fi
+
 # Remove duplicate entries
 function remove_duplicate() {
 	for item in "\$@"; do
@@ -724,6 +729,11 @@ export PATH="/usr/local/opt/sqlite/bin:\$PATH"
 # LLVM
 export PATH="/usr/local/opt/llvm/bin:\$PATH"
 
+# iTerm
+if [[ -f "\$HOME/.iterm2/.iterm2_shell_integration.bash" ]]; then
+	source "\$HOME/.iterm2/.iterm2_shell_integration.bash"
+fi
+
 # Remove duplicate entries
 function remove_duplicate() {
 	for item in "\$@"; do
@@ -760,6 +770,28 @@ fi
 EOF
 
 ln -sf .dotfiles/.bash_profile .
+
+# iTerm2 Shell Integration and Utilities
+ITERM_UTILITIES=(
+	imgcat imgls it2api it2attention
+	it2check it2copy it2dl it2getvar
+	it2git it2setcolor it2setkeylabel
+	it2ul it2universion
+)
+
+mkdir -p "$HOME/.iterm2"
+
+for shell in "bash" "zsh"; do
+	echo_and_eval "wget --quiet --show-progress -O \"\$HOME/.iterm2/.iterm2_shell_integration.$shell\" \"https://iterm2.com/shell_integration/$shell\" && chmod +x \"\$HOME/.iterm2/.iterm2_shell_integration.$shell\""
+	printf "\n# Utilities\n" >>"$HOME/.iterm2/.iterm2_shell_integration.$shell"
+done
+
+for utility in "${ITERM_UTILITIES[@]}"; do
+	echo_and_eval "wget --quiet --show-progress -O \"\$HOME/.iterm2/$utility\" \"https://iterm2.com/utilities/$utility\" && chmod +x \"\$HOME/.iterm2/$utility\""
+	for shell in "bash" "zsh"; do
+		echo_and_eval "echo \"alias $utility='~/.iterm2/$utility'\" >> \"\$HOME/.iterm2/.iterm2_shell_integration.$shell\""
+	done
+done
 
 # Configurations for X11
 backup_dotfiles .Xdefaults .dotfiles/.Xdefaults

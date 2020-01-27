@@ -132,6 +132,11 @@ export WINEDEBUG="-all"
 export DYLD_FALLBACK_LIBRARY_PATH="$DYLD_FALLBACK_LIBRARY_PATH:/usr/X11/lib:/usr/local/lib"
 export DYLD_FALLBACK_LIBRARY_PATH="$DYLD_FALLBACK_LIBRARY_PATH:/usr/local/opt/ncurses/lib"
 
+# iTerm
+if [[ -f "$HOME/.iterm2/.iterm2_shell_integration.bash" ]]; then
+	source "$HOME/.iterm2/.iterm2_shell_integration.bash"
+fi
+
 # Remove duplicate entries
 function remove_duplicate() {
 	for item in "$@"; do

@@ -1514,7 +1514,7 @@ ln -sf .dotfiles/.condarc .
 
 # Install Miniconda
 if [[ ! -d "$HOME/$CONDA_DIR" ]]; then
-	echo_and_eval 'wget https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-latest-Linux-x86_64.sh'
+	echo_and_eval 'wget --quiet --show-progress https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-latest-Linux-x86_64.sh'
 	echo_and_eval 'bash Miniconda3-latest-Linux-x86_64.sh -b -p $HOME/$CONDA_DIR'
 	echo_and_eval 'rm -f Miniconda3-latest-Linux-x86_64.sh'
 fi
@@ -1691,12 +1691,12 @@ if $IN_WSL; then
 	FONT_DIR_LIST+=('/mnt/c/Windows/Fonts')
 fi
 mkdir -p "$TMP_DIR/Cascadia"
-echo_and_eval "wget -O \"$TMP_DIR/DejaVuSansMono.zip\" https://github.com/ryanoasis/nerd-fonts/releases/latest/download/DejaVuSansMono.zip"
-echo_and_eval "wget -O \"$TMP_DIR/Menlo.zip\" https://raw.githubusercontent.com/XuehaiPan/OS-Setup/master/Menlo.zip"
-echo_and_eval "wget -O \"$TMP_DIR/Cascadia/Cascadia.ttf\" https://github.com/microsoft/cascadia-code/releases/latest/download/Cascadia.ttf"
-echo_and_eval "wget -O \"$TMP_DIR/Cascadia/CascadiaPL.ttf\" https://github.com/microsoft/cascadia-code/releases/latest/download/CascadiaPL.ttf"
-echo_and_eval "wget -O \"$TMP_DIR/Cascadia/CascadiaMono.ttf\" https://github.com/microsoft/cascadia-code/releases/latest/download/CascadiaMono.ttf"
-echo_and_eval "wget -O \"$TMP_DIR/Cascadia/CascadiaMonoPL.ttf\" https://github.com/microsoft/cascadia-code/releases/latest/download/CascadiaMonoPL.ttf"
+echo_and_eval "wget --quiet --show-progress -O \"$TMP_DIR/DejaVuSansMono.zip\" https://github.com/ryanoasis/nerd-fonts/releases/latest/download/DejaVuSansMono.zip"
+echo_and_eval "wget --quiet --show-progress -O \"$TMP_DIR/Menlo.zip\" https://raw.githubusercontent.com/XuehaiPan/OS-Setup/master/Menlo.zip"
+echo_and_eval "wget --quiet --show-progress -O \"$TMP_DIR/Cascadia/Cascadia.ttf\" https://github.com/microsoft/cascadia-code/releases/latest/download/Cascadia.ttf"
+echo_and_eval "wget --quiet --show-progress -O \"$TMP_DIR/Cascadia/CascadiaPL.ttf\" https://github.com/microsoft/cascadia-code/releases/latest/download/CascadiaPL.ttf"
+echo_and_eval "wget --quiet --show-progress -O \"$TMP_DIR/Cascadia/CascadiaMono.ttf\" https://github.com/microsoft/cascadia-code/releases/latest/download/CascadiaMono.ttf"
+echo_and_eval "wget --quiet --show-progress -O \"$TMP_DIR/Cascadia/CascadiaMonoPL.ttf\" https://github.com/microsoft/cascadia-code/releases/latest/download/CascadiaMonoPL.ttf"
 for font_dir in "${FONT_DIR_LIST[@]}"; do
 	echo_and_eval "unzip -o \"$TMP_DIR/DejaVuSansMono.zip\" -d \"$font_dir\""
 	echo_and_eval "unzip -o \"$TMP_DIR/Menlo.zip\" -d \"$font_dir\""

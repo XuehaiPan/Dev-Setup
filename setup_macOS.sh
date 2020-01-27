@@ -1528,7 +1528,7 @@ ln -sf .dotfiles/.condarc .
 
 # Install Miniconda
 if [[ ! -d "$HOME/$CONDA_DIR" ]]; then
-	echo_and_eval 'wget https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-latest-MacOSX-x86_64.sh'
+	echo_and_eval 'wget --quiet --show-progress https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-latest-MacOSX-x86_64.sh'
 	echo_and_eval 'bash Miniconda3-latest-MacOSX-x86_64.sh -b -p $HOME/$CONDA_DIR'
 	echo_and_eval 'rm -f Miniconda3-latest-MacOSX-x86_64.sh'
 fi

@@ -296,8 +296,8 @@ if [[ -d "\$HOME/.local/lib" ]]; then
 	export DYLD_LIBRARY_PATH="\$HOME/.local/lib:\$DYLD_LIBRARY_PATH"
 fi
 if [[ -d "\$HOME/.local/lib64" ]]; then
-	export LIBRARY_PATH="\$HOME/.local/lib:\$LIBRARY_PATH"
-	export DYLD_LIBRARY_PATH="\$HOME/.local/lib:\$DYLD_LIBRARY_PATH"
+	export LIBRARY_PATH="\$HOME/.local/lib64:\$LIBRARY_PATH"
+	export DYLD_LIBRARY_PATH="\$HOME/.local/lib64:\$DYLD_LIBRARY_PATH"
 fi
 
 # User specific environment and startup programs
@@ -313,6 +313,9 @@ export FC="/usr/local/bin/gfortran"
 export OMPI_CC="\$CC" MPICH_CC="\$CC"
 export OMPI_CXX="\$CXX" MPICH_CXX="\$CXX"
 export OMPI_FC="\$FC" MPICH_FC="\$FC"
+
+# Homebrew
+export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles"
 
 # Anaconda
 # >>> conda initialize >>>
@@ -643,8 +646,8 @@ if [[ -d "\$HOME/.local/lib" ]]; then
 	export DYLD_LIBRARY_PATH="\$HOME/.local/lib:\$DYLD_LIBRARY_PATH"
 fi
 if [[ -d "\$HOME/.local/lib64" ]]; then
-	export LIBRARY_PATH="\$HOME/.local/lib:\$LIBRARY_PATH"
-	export DYLD_LIBRARY_PATH="\$HOME/.local/lib:\$DYLD_LIBRARY_PATH"
+	export LIBRARY_PATH="\$HOME/.local/lib64:\$LIBRARY_PATH"
+	export DYLD_LIBRARY_PATH="\$HOME/.local/lib64:\$DYLD_LIBRARY_PATH"
 fi
 
 # User specific environment and startup programs

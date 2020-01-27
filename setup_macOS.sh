@@ -11,7 +11,7 @@ ln -sf "$DATETIME" "$HOME/.dotfiles/backups/latest"
 
 # Set Default Conda Installation Directory
 CONDA_DIR="Miniconda3"
-if [[ -d "$HOME/miniconda3" ]]; then
+if [[ -d "$HOME/miniconda3" && ! -d "$HOME/Miniconda3" ]]; then
 	CONDA_DIR="miniconda3"
 elif [[ -d "$HOME/Anaconda3" ]]; then
 	CONDA_DIR="Anaconda3"

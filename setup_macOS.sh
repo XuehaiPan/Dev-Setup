@@ -778,12 +778,12 @@ ITERM_UTILITIES=(
 	it2ul it2universion
 )
 
-mkdir -p "$HOME/.iterm2"
+mkdir -p "$HOME/.iterm2/bin"
 
 ALIASES_ARRAY=()
 for utility in "${ITERM_UTILITIES[@]}"; do
-	echo_and_eval "wget --quiet --show-progress -O \"\$HOME/.iterm2/$utility\" \"https://iterm2.com/utilities/$utility\" && chmod +x \"\$HOME/.iterm2/$utility\""
-	ALIASES_ARRAY+=("alias $utility='~/.iterm2/$utility'")
+	echo_and_eval "wget --quiet --show-progress -O \"\$HOME/.iterm2/bin/$utility\" \"https://iterm2.com/utilities/$utility\" && chmod +x \"\$HOME/.iterm2/bin/$utility\""
+	ALIASES_ARRAY+=("alias $utility='~/.iterm2/bin/$utility'")
 done
 
 ALIASES="${"$(printf "; %s" "${ALIASES_ARRAY[@]}")":2}"

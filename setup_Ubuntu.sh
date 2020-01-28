@@ -12,7 +12,7 @@ ln -sf "$DATETIME" "$HOME/.dotfiles/backups/latest"
 # Check if has sudo privileges
 IS_SUDOER=false
 SUDO_COMMENT_PREFIX="# "
-if $(groups "$USER" | grep -qF 'sudo'); then
+if $(groups "$USER" | grep -qE '(sudo|root)'); then
 	IS_SUDOER=true
 	SUDO_COMMENT_PREFIX=""
 fi

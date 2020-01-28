@@ -11,10 +11,10 @@ ln -sf "$DATETIME" "$HOME/.dotfiles/backups/latest"
 
 # Check if has sudo privileges
 IS_SUDOER=false
-COMMENT_PREFIX="# "
+SUDO_COMMENT_PREFIX="# "
 if $(groups "$USER" | grep -qF 'sudo'); then
 	IS_SUDOER=true
-	COMMENT_PREFIX=""
+	SUDO_COMMENT_PREFIX=""
 fi
 
 # Check if in WSL
@@ -220,26 +220,35 @@ EOF
 
 ln -sf .dotfiles/.gemrc .
 
-if $IS_SUDOER; then
-	# Update RubyGems and Install Colorls
+# Update RubyGems and Install Colorls
+RUBY_COMMENT_PREFIX="# "
+if [[ -x "$(command -v ruby)" && -x "$(command -v gem)" ]]; then
+	RUBY_COMMENT_PREFIX=""
 	export PATH="$(ruby -r rubygems -e 'puts Gem.dir')/bin:$PATH"
 	export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
-	echo_and_eval 'sudo gem update --system'
-	echo_and_eval 'sudo gem update'
-	echo_and_eval 'sudo gem install colorls'
-	echo_and_eval 'sudo gem cleanup'
-
-	# Configurations for CPAN
-	echo_and_eval 'printf "\n\n\n%s\n" "quit" | cpan'
-	echo_and_eval 'printf "%s\n%s\n%s\n" \
-						  "o conf urllist https://mirrors.tuna.tsinghua.edu.cn/CPAN/" \
-						  "o conf commit" \
-						  "quit" \
-						  | cpan'
-	echo_and_eval 'sudo cpan -i local::lib'
-	echo_and_eval 'sudo cpan -i CPAN'
-	echo_and_eval 'sudo cpan -i Log::Log4perl'
+	if $IS_SUDOER; then
+		echo_and_eval 'sudo gem update --system'
+		echo_and_eval 'sudo gem update'
+		echo_and_eval 'sudo gem cleanup'
+	fi
+	echo_and_eval 'gem update --system'
+	echo_and_eval 'gem update'
+	echo_and_eval 'gem install colorls'
+	echo_and_eval 'gem cleanup'
 fi
+
+# Configurations for CPAN
+export PERL_MB_OPT="--install_base \"$HOME/.perl\""
+export PERL_MM_OPT="INSTALL_BASE=\"$HOME/.perl\""
+echo_and_eval 'printf "\n\n\n%s\n" "quit" | cpan'
+echo_and_eval 'printf "%s\n%s\n%s\n" \
+					  "o conf urllist https://mirrors.tuna.tsinghua.edu.cn/CPAN/" \
+					  "o conf commit" \
+					  "quit" \
+					  | cpan'
+echo_and_eval 'cpan -i local::lib'
+echo_and_eval 'cpan -i CPAN'
+echo_and_eval 'cpan -i Log::Log4perl'
 
 # Configurations for Zsh
 backup_dotfiles .dotfiles/.zshrc-common
@@ -313,9 +322,13 @@ unset __conda_setup
 # <<< conda initialize <<<
 
 # Ruby
-${COMMENT_PREFIX}export RUBYOPT="-W0"
-${COMMENT_PREFIX}export PATH="\$(ruby -r rubygems -e 'puts Gem.dir')/bin:\$PATH"
-${COMMENT_PREFIX}export PATH="\$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:\$PATH"
+${RUBY_COMMENT_PREFIX}export RUBYOPT="-W0"
+${RUBY_COMMENT_PREFIX}export PATH="\$(ruby -r rubygems -e 'puts Gem.dir')/bin:\$PATH"
+${RUBY_COMMENT_PREFIX}export PATH="\$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:\$PATH"
+
+# Perl
+export PERL_MB_OPT="--install_base \\"\$HOME/.perl\\""
+export PERL_MM_OPT="INSTALL_BASE=\\"\$HOME/.perl\\""
 
 # Remove duplicate entries
 function remove_duplicate() {
@@ -480,12 +493,12 @@ cat >.dotfiles/.zshrc <<EOF
 source "\$HOME/.dotfiles/.zshrc-common"
 
 # Setup colorls
-${COMMENT_PREFIX}source "\$(dirname "\$(gem which colorls)")"/tab_complete.sh
-${COMMENT_PREFIX}alias ls='colorls --sd --gs'
-${COMMENT_PREFIX}alias lsa='ls -A'
-${COMMENT_PREFIX}alias l='ls -la'
-${COMMENT_PREFIX}alias ll='ls -l'
-${COMMENT_PREFIX}alias la='ls -lA'
+${RUBY_COMMENT_PREFIX}source "\$(dirname "\$(gem which colorls)")"/tab_complete.sh
+${RUBY_COMMENT_PREFIX}alias ls='colorls --sd --gs'
+${RUBY_COMMENT_PREFIX}alias lsa='ls -A'
+${RUBY_COMMENT_PREFIX}alias l='ls -la'
+${RUBY_COMMENT_PREFIX}alias ll='ls -l'
+${RUBY_COMMENT_PREFIX}alias la='ls -lA'
 EOF
 
 ln -sf .dotfiles/.zshrc .
@@ -636,13 +649,13 @@ function upgrade_vim() {
 }
 
 function upgrade_gems() {
-	echo_and_eval 'sudo gem update --system'
-	echo_and_eval 'sudo gem update'
-	echo_and_eval 'sudo gem cleanup'
+	echo_and_eval 'gem update --system'
+	echo_and_eval 'gem update'
+	echo_and_eval 'gem cleanup'
 }
 
 function upgrade_cpan() {
-	echo_and_eval 'sudo cpan -u'
+	echo_and_eval 'cpan -u'
 }
 
 function upgrade_conda() {
@@ -802,9 +815,13 @@ unset __conda_setup
 # <<< conda initialize <<<
 
 # Ruby
-${COMMENT_PREFIX}export RUBYOPT="-W0"
-${COMMENT_PREFIX}export PATH="\$(ruby -r rubygems -e 'puts Gem.dir')/bin:\$PATH"
-${COMMENT_PREFIX}export PATH="\$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:\$PATH"
+${RUBY_COMMENT_PREFIX}export RUBYOPT="-W0"
+${RUBY_COMMENT_PREFIX}export PATH="\$(ruby -r rubygems -e 'puts Gem.dir')/bin:\$PATH"
+${RUBY_COMMENT_PREFIX}export PATH="\$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:\$PATH"
+
+# Perl
+export PERL_MB_OPT="--install_base \\"\$HOME/.perl\\""
+export PERL_MM_OPT="INSTALL_BASE=\\"\$HOME/.perl\\""
 
 # Remove duplicate entries
 function remove_duplicate() {
@@ -1663,13 +1680,13 @@ function upgrade_vim() {
 }
 
 function upgrade_gems() {
-	echo_and_eval 'sudo gem update --system'
-	echo_and_eval 'sudo gem update'
-	echo_and_eval 'sudo gem cleanup'
+	echo_and_eval 'gem update --system'
+	echo_and_eval 'gem update'
+	echo_and_eval 'gem cleanup'
 }
 
 function upgrade_cpan() {
-	echo_and_eval 'sudo cpan -u'
+	echo_and_eval 'cpan -u'
 }
 
 function upgrade_conda() {
@@ -1694,10 +1711,10 @@ function upgrade_conda() {
 	echo_and_eval 'conda clean --all --yes'
 }
 
-${COMMENT_PREFIX}upgrade_ubuntu
+${SUDO_COMMENT_PREFIX}upgrade_ubuntu
 upgrade_ohmyzsh
 upgrade_vim
-${COMMENT_PREFIX}upgrade_gems
+${RUBY_COMMENT_PREFIX}upgrade_gems
 # upgrade_cpan
 # upgrade_conda
 

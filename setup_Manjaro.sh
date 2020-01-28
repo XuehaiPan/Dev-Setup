@@ -231,20 +231,25 @@ ln -sf .dotfiles/.gemrc .
 export PATH="$(ruby -r rubygems -e 'puts Gem.dir')/bin:$PATH"
 export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
 echo_and_eval 'sudo gem update --system'
+echo_and_eval 'sudo gem update'
+echo_and_eval 'sudo gem cleanup'
+echo_and_eval 'gem update --system'
 echo_and_eval 'gem update'
 echo_and_eval 'gem install colorls'
 echo_and_eval 'gem cleanup'
 
 # Configurations for CPAN
-echo_and_eval 'printf "\n\n\n%s\n" "quit" | sudo cpan'
+export PERL_MB_OPT="--install_base \"$HOME/.perl\""
+export PERL_MM_OPT="INSTALL_BASE=\"$HOME/.perl\""
+echo_and_eval 'printf "\n\n\n%s\n" "quit" | cpan'
 echo_and_eval 'printf "%s\n%s\n%s\n" \
 					  "o conf urllist https://mirrors.tuna.tsinghua.edu.cn/CPAN/" \
 					  "o conf commit" \
 					  "quit" \
-					  | sudo cpan'
-echo_and_eval 'sudo cpan -i local::lib'
-echo_and_eval 'sudo cpan -i CPAN'
-echo_and_eval 'sudo cpan -i Log::Log4perl'
+					  | cpan'
+echo_and_eval 'cpan -i local::lib'
+echo_and_eval 'cpan -i CPAN'
+echo_and_eval 'cpan -i Log::Log4perl'
 
 # Configurations for Zsh
 backup_dotfiles .dotfiles/.zshrc-common
@@ -321,6 +326,10 @@ unset __conda_setup
 export RUBYOPT="-W0"
 export PATH="\$(ruby -r rubygems -e 'puts Gem.dir')/bin:\$PATH"
 export PATH="\$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:\$PATH"
+
+# Perl
+export PERL_MB_OPT="--install_base \\"\$HOME/.perl\\""
+export PERL_MM_OPT="INSTALL_BASE=\\"\$HOME/.perl\\""
 
 # Remove duplicate entries
 function remove_duplicate() {
@@ -634,13 +643,13 @@ function upgrade_vim() {
 }
 
 function upgrade_gems() {
-	echo_and_eval 'sudo gem update --system'
+	echo_and_eval 'gem update --system'
 	echo_and_eval 'gem update'
 	echo_and_eval 'gem cleanup'
 }
 
 function upgrade_cpan() {
-	echo_and_eval 'sudo cpan -u'
+	echo_and_eval 'cpan -u'
 }
 
 function upgrade_conda() {
@@ -803,6 +812,10 @@ unset __conda_setup
 export RUBYOPT="-W0"
 export PATH="\$(ruby -r rubygems -e 'puts Gem.dir')/bin:\$PATH"
 export PATH="\$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:\$PATH"
+
+# Perl
+export PERL_MB_OPT="--install_base \\"\$HOME/.perl\\""
+export PERL_MM_OPT="INSTALL_BASE=\\"\$HOME/.perl\\""
 
 # Remove duplicate entries
 function remove_duplicate() {
@@ -1659,13 +1672,13 @@ function upgrade_vim() {
 }
 
 function upgrade_gems() {
-	echo_and_eval 'sudo gem update --system'
+	echo_and_eval 'gem update --system'
 	echo_and_eval 'gem update'
 	echo_and_eval 'gem cleanup'
 }
 
 function upgrade_cpan() {
-	echo_and_eval 'sudo cpan -u'
+	echo_and_eval 'cpan -u'
 }
 
 function upgrade_conda() {

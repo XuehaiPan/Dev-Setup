@@ -77,17 +77,18 @@ export JAVA_HOME=$(/usr/libexec/java_home)
 export CLASSPATH=".:$JAVA_HOME/lib/tools.jar:$JAVA_HOME/lib/dt.jar"
 export PATH="$JAVA_HOME/bin:$PATH"
 
-# Perl
-eval "$(perl -I/usr/local/opt/perl/lib/perl5 -Mlocal::lib=/usr/local/opt/perl)"
-
-# Mono
-export MONO_GAC_PREFIX="/usr/local"
-
 # Ruby
 export RUBYOPT="-W0"
 export PATH="/usr/local/opt/ruby/bin:$PATH"
 export PATH="$(ruby -r rubygems -e 'puts Gem.dir')/bin:$PATH"
 export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
+
+# Perl
+export PERL_MB_OPT='--install_base "/usr/local/opt/perl"'
+export PERL_MM_OPT='INSTALL_BASE="/usr/local/opt/perl"'
+
+# Mono
+export MONO_GAC_PREFIX="/usr/local"
 
 # Qt
 export PATH="/usr/local/opt/qt/bin:$PATH"
@@ -296,5 +297,5 @@ source "$ZSH/oh-my-zsh.sh"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 # Set personal aliases
-alias bubo='brew update && brew outdated && brew cask outdated'
+alias bubo='brew update --verbose && brew outdated && brew cask outdated'
 alias bubc='brew upgrade && brew cask upgrade && brew cleanup'

@@ -149,7 +149,7 @@ export PATH="$(ruby -r rubygems -e 'puts Gem.dir')/bin:$PATH"
 export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
 
 # Install Casks and Fonts
-echo_and_eval 'brew cask install iterm2 keka sogouinput'
+echo_and_eval 'brew cask install iterm2 keka'
 echo_and_eval 'brew cask install font-cascadia'
 echo_and_eval 'brew cask install font-dejavusansmono-nerd-font font-dejavusansmono-nerd-font-mono'
 
@@ -1766,5 +1766,3 @@ echo_and_eval 'brew cleanup'
 echo_and_eval 'defaults write com.apple.screencapture disable-shadow -boolean true'
 echo_and_eval 'killall SystemUIServer'
 echo_and_eval 'rm -rf "$HOME"/.bash_sessions/'
-
-find "$(brew --prefix)/Caskroom/sogouinput" -name "*.app" -exec '{}/Contents/MacOS/SogouInstaller' \; &>/dev/null &

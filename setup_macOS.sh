@@ -84,7 +84,7 @@ function backup_dotfiles() {
 	for file in "$@"; do
 		if [[ -f "$file" || -d "$file" ]]; then
 			if [[ -L "$file" ]]; then
-				local original_file=$(readlink "$file")
+				local original_file="$(readlink "$file")"
 				rm -f "$file"
 				cp -rf "$original_file" "$file"
 			fi
@@ -111,7 +111,7 @@ function remove_duplicate() {
 	done
 }
 PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin:/Library/Apple/bin:$PATH"
-export PATH=$(remove_duplicate "$PATH")
+export PATH="$(remove_duplicate "$PATH")"
 
 # Install and Setup Homebrew
 if [[ ! -x "$(command -v brew)" ]]; then
@@ -407,11 +407,11 @@ function remove_duplicate() {
 			}'
 	done
 }
-export PATH=\$(remove_duplicate "\$PATH")
-export C_INCLUDE_PATH=\$(remove_duplicate "\$C_INCLUDE_PATH")
-export CPLUS_INCLUDE_PATH=\$(remove_duplicate "\$CPLUS_INCLUDE_PATH")
-export LIBRARY_PATH=\$(remove_duplicate "\$LIBRARY_PATH")
-export DYLD_LIBRARY_PATH=\$(remove_duplicate "\$DYLD_LIBRARY_PATH")
+export PATH="\$(remove_duplicate "\$PATH")"
+export C_INCLUDE_PATH="\$(remove_duplicate "\$C_INCLUDE_PATH")"
+export CPLUS_INCLUDE_PATH="\$(remove_duplicate "\$CPLUS_INCLUDE_PATH")"
+export LIBRARY_PATH="\$(remove_duplicate "\$LIBRARY_PATH")"
+export DYLD_LIBRARY_PATH="\$(remove_duplicate "\$DYLD_LIBRARY_PATH")"
 unset -f remove_duplicate
 
 # X11
@@ -762,11 +762,11 @@ function remove_duplicate() {
 			}'
 	done
 }
-export PATH=\$(remove_duplicate "\$PATH")
-export C_INCLUDE_PATH=\$(remove_duplicate "\$C_INCLUDE_PATH")
-export CPLUS_INCLUDE_PATH=\$(remove_duplicate "\$CPLUS_INCLUDE_PATH")
-export LIBRARY_PATH=\$(remove_duplicate "\$LIBRARY_PATH")
-export DYLD_LIBRARY_PATH=\$(remove_duplicate "\$DYLD_LIBRARY_PATH")
+export PATH="\$(remove_duplicate "\$PATH")"
+export C_INCLUDE_PATH="\$(remove_duplicate "\$C_INCLUDE_PATH")"
+export CPLUS_INCLUDE_PATH="\$(remove_duplicate "\$CPLUS_INCLUDE_PATH")"
+export LIBRARY_PATH="\$(remove_duplicate "\$LIBRARY_PATH")"
+export DYLD_LIBRARY_PATH="\$(remove_duplicate "\$DYLD_LIBRARY_PATH")"
 unset -f remove_duplicate
 
 # X11
@@ -1765,6 +1765,6 @@ echo_and_eval 'brew cleanup'
 # Miscellaneous Settings
 echo_and_eval 'defaults write com.apple.screencapture disable-shadow -boolean true'
 echo_and_eval 'killall SystemUIServer'
-echo_and_eval 'rm -rf $HOME/.bash_sessions/'
+echo_and_eval 'rm -rf "$HOME"/.bash_sessions/'
 
 find "$(brew --prefix)/Caskroom/sogouinput" -name "*.app" -exec '{}/Contents/MacOS/SogouInstaller' \; &>/dev/null &

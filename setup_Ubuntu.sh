@@ -98,7 +98,7 @@ function backup_dotfiles() {
 	for file in "$@"; do
 		if [[ -f "$file" || -d "$file" ]]; then
 			if [[ -L "$file" ]]; then
-				local original_file=$(readlink "$file")
+				local original_file="$(readlink "$file")"
 				rm -f "$file"
 				cp -rf "$original_file" "$file"
 			fi
@@ -334,11 +334,11 @@ function remove_duplicate() {
 			}'
 	done
 }
-export PATH=\$(remove_duplicate "\$PATH")
-export C_INCLUDE_PATH=\$(remove_duplicate "\$C_INCLUDE_PATH")
-export CPLUS_INCLUDE_PATH=\$(remove_duplicate "\$CPLUS_INCLUDE_PATH")
-export LIBRARY_PATH=\$(remove_duplicate "\$LIBRARY_PATH")
-export LD_LIBRARY_PATH=\$(remove_duplicate "\$LD_LIBRARY_PATH")
+export PATH="\$(remove_duplicate "\$PATH")"
+export C_INCLUDE_PATH="\$(remove_duplicate "\$C_INCLUDE_PATH")"
+export CPLUS_INCLUDE_PATH="\$(remove_duplicate "\$CPLUS_INCLUDE_PATH")"
+export LIBRARY_PATH="\$(remove_duplicate "\$LIBRARY_PATH")"
+export LD_LIBRARY_PATH="\$(remove_duplicate "\$LD_LIBRARY_PATH")"
 unset -f remove_duplicate
 
 # Utilities
@@ -822,11 +822,11 @@ function remove_duplicate() {
 			}'
 	done
 }
-export PATH=\$(remove_duplicate "\$PATH")
-export C_INCLUDE_PATH=\$(remove_duplicate "\$C_INCLUDE_PATH")
-export CPLUS_INCLUDE_PATH=\$(remove_duplicate "\$CPLUS_INCLUDE_PATH")
-export LIBRARY_PATH=\$(remove_duplicate "\$LIBRARY_PATH")
-export LD_LIBRARY_PATH=\$(remove_duplicate "\$LD_LIBRARY_PATH")
+export PATH="\$(remove_duplicate "\$PATH")"
+export C_INCLUDE_PATH="\$(remove_duplicate "\$C_INCLUDE_PATH")"
+export CPLUS_INCLUDE_PATH="\$(remove_duplicate "\$CPLUS_INCLUDE_PATH")"
+export LIBRARY_PATH="\$(remove_duplicate "\$LIBRARY_PATH")"
+export LD_LIBRARY_PATH="\$(remove_duplicate "\$LD_LIBRARY_PATH")"
 unset -f remove_duplicate
 
 # Utilities

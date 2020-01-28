@@ -82,8 +82,8 @@ function echo_and_eval() {
 
 function backup_dotfiles() {
 	for file in "$@"; do
-		if [[ -f $file || -d $file ]]; then
-			if [[ -L $file ]]; then
+		if [[ -f "$file" || -d "$file" ]]; then
+			if [[ -L "$file" ]]; then
 				local original_file=$(readlink "$file")
 				rm -f "$file"
 				cp -rf "$original_file" "$file"
@@ -161,7 +161,7 @@ wget -O "$HOME/Desktop/SpaceGray Eighties.itermcolors" \
 	https://raw.githubusercontent.com/mbadolato/iTerm2-Color-Schemes/master/schemes/SpaceGray%20Eighties.itermcolors
 
 # Change Default Shell to Zsh
-if [[ $SHELL != "/usr/local/bin/zsh" ]]; then
+if [[ "$SHELL" != "/usr/local/bin/zsh" ]]; then
 	echo_and_eval 'chsh -s /usr/local/bin/zsh'
 fi
 
@@ -793,7 +793,8 @@ for utility in "${ITERM_UTILITIES[@]}"; do
 	ALIASES_ARRAY+=("alias $utility='~/.iterm2/bin/$utility'")
 done
 
-ALIASES="${"$(printf "; %s" "${ALIASES_ARRAY[@]}")":2}"
+ALIASES="$(printf "; %s" "${ALIASES_ARRAY[@]}")"
+ALIASES="${ALIASES:2}"
 
 for shell in "bash" "zsh"; do
 	echo_and_eval "wget --quiet --show-progress -O \"\$HOME/.iterm2/.iterm2_shell_integration.$shell\" \"https://iterm2.com/shell_integration/$shell\" && chmod +x \"\$HOME/.iterm2/.iterm2_shell_integration.$shell\""

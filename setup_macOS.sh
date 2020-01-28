@@ -157,10 +157,6 @@ echo_and_eval 'brew cask install font-dejavusansmono-nerd-font font-dejavusansmo
 echo_and_eval 'brew upgrade'
 echo_and_eval 'brew cask upgrade'
 
-# Color Theme for iTerm
-wget -O "$HOME/Desktop/SpaceGray Eighties.itermcolors" \
-	https://raw.githubusercontent.com/mbadolato/iTerm2-Color-Schemes/master/schemes/SpaceGray%20Eighties.itermcolors
-
 # Change Default Shell to Zsh
 if [[ "$(basename "$SHELL")" != "zsh" ]]; then
 	if grep -qF '/usr/local/bin/zsh' /etc/shells; then
@@ -778,6 +774,11 @@ fi
 EOF
 
 ln -sf .dotfiles/.bash_profile .
+
+# Color Theme for iTerm
+echo_and_eval 'wget -O "$HOME/Desktop/SpaceGray Eighties.itermcolors" \
+	https://raw.githubusercontent.com/mbadolato/iTerm2-Color-Schemes/master/schemes/SpaceGray%20Eighties.itermcolors'
+open -R "$HOME/Desktop/SpaceGray Eighties.itermcolors"
 
 # iTerm2 Shell Integration and Utilities
 ITERM_UTILITIES=(

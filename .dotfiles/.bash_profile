@@ -86,8 +86,7 @@ export PATH="$(ruby -r rubygems -e 'puts Gem.dir')/bin:$PATH"
 export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
 
 # Perl
-export PERL_MB_OPT='--install_base "/usr/local/opt/perl"'
-export PERL_MM_OPT='INSTALL_BASE="/usr/local/opt/perl"'
+eval "$(perl -I/usr/local/opt/perl/lib/perl5 -Mlocal::lib=/usr/local/opt/perl)"
 
 # Mono
 export MONO_GAC_PREFIX="/usr/local"

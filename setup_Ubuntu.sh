@@ -238,15 +238,16 @@ if [[ -x "$(command -v ruby)" && -x "$(command -v gem)" ]]; then
 fi
 
 # Configurations for CPAN
-export PERL_MB_OPT="--install_base \"$HOME/.perl\""
-export PERL_MM_OPT="INSTALL_BASE=\"$HOME/.perl\""
 echo_and_eval 'printf "\n\n\n%s\n" "quit" | cpan'
 echo_and_eval 'printf "%s\n%s\n%s\n" \
 					  "o conf urllist https://mirrors.tuna.tsinghua.edu.cn/CPAN/" \
 					  "o conf commit" \
 					  "quit" \
 					  | cpan'
+export PERL_MB_OPT="--install_base \"$HOME/.perl\""
+export PERL_MM_OPT="INSTALL_BASE=\"$HOME/.perl\""
 echo_and_eval 'cpan -i local::lib'
+echo_and_eval 'eval "$(perl -I$HOME/.perl/lib/perl5 -Mlocal::lib=$HOME/.perl)"'
 echo_and_eval 'cpan -i CPAN'
 echo_and_eval 'cpan -i Log::Log4perl'
 
@@ -327,8 +328,7 @@ ${RUBY_COMMENT_PREFIX}export PATH="\$(ruby -r rubygems -e 'puts Gem.dir')/bin:\$
 ${RUBY_COMMENT_PREFIX}export PATH="\$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:\$PATH"
 
 # Perl
-export PERL_MB_OPT="--install_base \\"\$HOME/.perl\\""
-export PERL_MM_OPT="INSTALL_BASE=\\"\$HOME/.perl\\""
+eval "\$(perl -I\$HOME/.perl/lib/perl5 -Mlocal::lib=\$HOME/.perl)"
 
 # Remove duplicate entries
 function remove_duplicate() {
@@ -788,8 +788,7 @@ ${RUBY_COMMENT_PREFIX}export PATH="\$(ruby -r rubygems -e 'puts Gem.dir')/bin:\$
 ${RUBY_COMMENT_PREFIX}export PATH="\$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:\$PATH"
 
 # Perl
-export PERL_MB_OPT="--install_base \\"\$HOME/.perl\\""
-export PERL_MM_OPT="INSTALL_BASE=\\"\$HOME/.perl\\""
+eval "\$(perl -I\$HOME/.perl/lib/perl5 -Mlocal::lib=\$HOME/.perl)"
 
 # Remove duplicate entries
 function remove_duplicate() {

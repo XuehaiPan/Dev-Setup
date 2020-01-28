@@ -1083,8 +1083,10 @@ hi cssBraces ctermfg=NONE ctermbg=NONE cterm=NONE guifg=NONE guibg=NONE gui=NONE
 EOF
 
 # Install Vim-Plug Plugin Manager
-echo_and_eval 'curl -fLo "$HOME/.vim/autoload/plug.vim" --create-dirs \
-	https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+if [[ ! -f "$HOME/.vim/autoload/plug.vim" ]]; then
+	echo_and_eval 'curl -fLo "$HOME/.vim/autoload/plug.vim" --create-dirs \
+		https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+fi
 
 # Install Vim Plugins
 echo_and_eval 'vim -c "PlugUpgrade | PlugInstall | PlugUpdate | qa"'

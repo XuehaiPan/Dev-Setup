@@ -250,13 +250,10 @@ EOF
 ln -sf .dotfiles/.gemrc .
 
 # Update RubyGems and Install Colorls
-echo_and_eval 'sudo /usr/bin/gem update --system'
-echo_and_eval 'sudo /usr/bin/gem update'
-echo_and_eval 'sudo /usr/bin/gem cleanup'
-echo_and_eval 'sudo gem update --system'
-echo_and_eval 'sudo gem update'
-echo_and_eval 'sudo gem install colorls'
-echo_and_eval 'sudo gem cleanup'
+echo_and_eval 'gem update --system'
+echo_and_eval 'gem update'
+echo_and_eval 'gem install colorls'
+echo_and_eval 'gem cleanup'
 
 # Configurations for CPAN
 echo_and_eval 'printf "\n\n\n%s\n" "quit" | cpan'
@@ -1704,9 +1701,9 @@ function upgrade_vim() {
 }
 
 function upgrade_gems() {
-	echo_and_eval 'sudo gem update --system'
-	echo_and_eval 'sudo gem update'
-	echo_and_eval 'sudo gem cleanup'
+	echo_and_eval 'gem update --system'
+	echo_and_eval 'gem update'
+	echo_and_eval 'gem cleanup'
 }
 
 function upgrade_cpan() {

@@ -763,18 +763,12 @@ fi
 mv -f .bashrc .dotfiles/
 ln -sf .dotfiles/.bashrc .
 
-backup_dotfiles .profile .dotfiles/.profile
+backup_dotfiles .bash_profile .dotfiles/.bash_profile
 
-cat >.dotfiles/.profile <<EOF
-# ~/.profile: executed by the command interpreter for login shells.
-# This file is not read by bash(1), if ~/.bash_profile or ~/.bash_login
-# exists.
+cat >.dotfiles/.bash_profile <<EOF
+# ~/.bash_profile: executed by the command interpreter for login shells.
 # see /usr/share/doc/bash/examples/startup-files for examples.
 # the files are located in the bash-doc package.
-
-# the default umask is set in /etc/profile; for setting the umask
-# for ssh logins, install and configure the libpam-umask package.
-#umask 022
 
 # if running bash
 if [[ -n "\$BASH_VERSION" ]]; then
@@ -874,7 +868,7 @@ if [[ -r "/etc/profile.d/bash_completion.sh" ]]; then
 fi
 EOF
 
-ln -sf .dotfiles/.profile .
+ln -sf .dotfiles/.bash_profile .
 
 # Configurations for Vim
 backup_dotfiles .vimrc .dotfiles/.vimrc
@@ -1740,8 +1734,8 @@ if [[ -n "\$ZSH_VERSION" ]]; then
 		source "\$HOME/.zshrc"
 	fi
 elif [[ -n "\$BASH_VERSION" ]]; then
-	if [[ -f "\$HOME/.profile" ]]; then
-		source "\$HOME/.profile"
+	if [[ -f "\$HOME/.bash_profile" ]]; then
+		source "\$HOME/.bash_profile"
 	fi
 fi
 EOF

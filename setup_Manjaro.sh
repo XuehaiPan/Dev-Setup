@@ -1089,7 +1089,9 @@ if [[ ! -f "$HOME/.vim/autoload/plug.vim" ]]; then
 fi
 
 # Install Vim Plugins
-echo_and_eval 'vim -c "PlugUpgrade | PlugInstall | PlugUpdate | qa"'
+if [[ -x "$(command -v vim)" ]]; then
+	echo_and_eval 'vim -c "PlugUpgrade | PlugInstall | PlugUpdate | qa"'
+fi
 if [[ ! -f "$HOME/.vim/plugged/markdown-preview.nvim/app/bin/markdown-preview-linux" ]]; then
 	echo_and_eval 'cd "$HOME/.vim/plugged/markdown-preview.nvim/app"; ./install.sh; cd "$HOME"'
 fi

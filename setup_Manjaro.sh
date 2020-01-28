@@ -9,6 +9,14 @@ BACKUP_DIR="$HOME/.dotfiles/backups/$DATETIME"
 mkdir -p "$BACKUP_DIR/.dotfiles"
 ln -sf "$DATETIME" "$HOME/.dotfiles/backups/latest"
 
+# Check if has sudo privileges
+IS_SUDOER=false
+SUDO_COMMENT_PREFIX="# "
+if $(groups "$USER" | grep -qE '(wheel|root)'); then
+	IS_SUDOER=true
+	SUDO_COMMENT_PREFIX=""
+fi
+
 # Check if in WSL
 IN_WSL=false
 if $(uname -r | grep -qF 'Microsoft'); then
@@ -100,44 +108,46 @@ function backup_dotfiles() {
 	done
 }
 
-# Setup Pacman Configurations
-for repo in "arch4edu" "archlinuxcn"; do
-	if ! grep -qF "[$repo]" /etc/pacman.conf; then
-		echo_and_eval 'printf "\n%s\n%s\n" "[$repo]" "Server = https://mirrors.tuna.tsinghua.edu.cn/$repo/\$arch" \
-					   | sudo tee -a /etc/pacman.conf'
+if $IS_SUDOER; then
+	# Setup Pacman Configurations
+	for repo in "arch4edu" "archlinuxcn"; do
+		if ! grep -qF "[$repo]" /etc/pacman.conf; then
+			echo_and_eval 'printf "\n%s\n%s\n" "[$repo]" "Server = https://mirrors.tuna.tsinghua.edu.cn/$repo/\$arch" \
+						| sudo tee -a /etc/pacman.conf'
+		fi
+	done
+
+	echo_and_eval "sudo sed -i -e 's/^\\s*#\\s*Color$/Color/g' /etc/pacman.conf"
+	echo_and_eval "sudo sed -i -e 's/^\\s*#\\s*DisableDownloadTimeout$/DisableDownloadTimeout/g' /etc/pacman.conf"
+	if ! grep -q '^DisableDownloadTimeout$' /etc/pacman.conf; then
+		echo_and_eval "sudo sed -i -e 's/^Color$/Color\\nDisableDownloadTimeout/g' /etc/pacman.conf"
 	fi
-done
 
-echo_and_eval "sudo sed -i -e 's/^\\s*#\\s*Color$/Color/g' /etc/pacman.conf"
-echo_and_eval "sudo sed -i -e 's/^\\s*#\\s*DisableDownloadTimeout$/DisableDownloadTimeout/g' /etc/pacman.conf"
-if ! grep -q '^DisableDownloadTimeout$' /etc/pacman.conf; then
-	echo_and_eval "sudo sed -i -e 's/^Color$/Color\\nDisableDownloadTimeout/g' /etc/pacman.conf"
+	echo_and_eval 'sudo pacman-mirrors --country China --method rank'
+
+	echo_and_eval 'sudo pacman -Syy'
+
+	echo_and_eval 'sudo pacman-key --recv-keys 7931B6D628C8D3BA'
+	echo_and_eval 'sudo pacman-key --finger 7931B6D628C8D3BA'
+	echo_and_eval 'sudo pacman-key --lsign-key 7931B6D628C8D3BA'
+	echo_and_eval 'yes | sudo pacman -S archlinuxcn-keyring --needed'
+
+	# Install and Setup Shells
+	echo_and_eval 'yes | sudo pacman -S zsh --needed'
+
+	if ! grep -qF '/usr/bin/zsh' /etc/shells; then
+		echo_and_eval 'echo "/usr/bin/zsh" | sudo tee -a /etc/shells'
+	fi
+
+	# Install Packages
+	echo_and_eval 'yes | sudo pacman -S bash-completion wget curl git git-lfs gvim tmux --needed'
+	echo_and_eval 'yes | sudo pacman -S htop openssh net-tools exfat-utils tree colordiff xclip --needed'
+	echo_and_eval 'yes | sudo pacman -S gcc gdb clang llvm lldb make cmake automake autoconf ruby --needed'
+	echo_and_eval 'yes | sudo pacman -Scc'
+
+	echo_and_eval 'sudo systemctl start sshd'
+	echo_and_eval 'sudo systemctl enable sshd.service'
 fi
-
-echo_and_eval 'sudo pacman-mirrors --country China --method rank'
-
-echo_and_eval 'sudo pacman -Syy'
-
-echo_and_eval 'sudo pacman-key --recv-keys 7931B6D628C8D3BA'
-echo_and_eval 'sudo pacman-key --finger 7931B6D628C8D3BA'
-echo_and_eval 'sudo pacman-key --lsign-key 7931B6D628C8D3BA'
-echo_and_eval 'yes | sudo pacman -S archlinuxcn-keyring --needed'
-
-# Install and Setup Shells
-echo_and_eval 'yes | sudo pacman -S zsh --needed'
-
-if ! grep -qF '/usr/bin/zsh' /etc/shells; then
-	echo_and_eval 'echo "/usr/bin/zsh" | sudo tee -a /etc/shells'
-fi
-
-# Install Packages
-echo_and_eval 'yes | sudo pacman -S bash-completion wget curl git git-lfs gvim tmux --needed'
-echo_and_eval 'yes | sudo pacman -S htop openssh net-tools exfat-utils tree colordiff xclip --needed'
-echo_and_eval 'yes | sudo pacman -S gcc gdb clang llvm lldb make cmake automake autoconf ruby --needed'
-echo_and_eval 'yes | sudo pacman -Scc'
-
-echo_and_eval 'systemctl start sshd'
-echo_and_eval 'systemctl enable sshd.service'
 
 # Change Default Shell to Zsh
 if [[ "$(basename "$SHELL")" != "zsh" ]]; then
@@ -228,15 +238,21 @@ EOF
 ln -sf .dotfiles/.gemrc .
 
 # Update RubyGems and Install Colorls
-export PATH="$(ruby -r rubygems -e 'puts Gem.dir')/bin:$PATH"
-export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
-echo_and_eval 'sudo gem update --system'
-echo_and_eval 'sudo gem update'
-echo_and_eval 'sudo gem cleanup'
-echo_and_eval 'gem update --system'
-echo_and_eval 'gem update'
-echo_and_eval 'gem install colorls'
-echo_and_eval 'gem cleanup'
+RUBY_COMMENT_PREFIX="# "
+if [[ -x "$(command -v ruby)" && -x "$(command -v gem)" ]]; then
+	RUBY_COMMENT_PREFIX=""
+	export PATH="$(ruby -r rubygems -e 'puts Gem.dir')/bin:$PATH"
+	export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
+	if $IS_SUDOER; then
+		echo_and_eval 'sudo gem update --system'
+		echo_and_eval 'sudo gem update'
+		echo_and_eval 'sudo gem cleanup'
+	fi
+	echo_and_eval 'gem update --system'
+	echo_and_eval 'gem update'
+	echo_and_eval 'gem install colorls'
+	echo_and_eval 'gem cleanup'
+fi
 
 # Configurations for CPAN
 export PERL_MB_OPT="--install_base \"$HOME/.perl\""
@@ -323,9 +339,9 @@ unset __conda_setup
 # <<< conda initialize <<<
 
 # Ruby
-export RUBYOPT="-W0"
-export PATH="\$(ruby -r rubygems -e 'puts Gem.dir')/bin:\$PATH"
-export PATH="\$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:\$PATH"
+${RUBY_COMMENT_PREFIX}export RUBYOPT="-W0"
+${RUBY_COMMENT_PREFIX}export PATH="\$(ruby -r rubygems -e 'puts Gem.dir')/bin:\$PATH"
+${RUBY_COMMENT_PREFIX}export PATH="\$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:\$PATH"
 
 # Perl
 export PERL_MB_OPT="--install_base \\"\$HOME/.perl\\""
@@ -494,12 +510,12 @@ cat >.dotfiles/.zshrc <<EOF
 source "\$HOME/.dotfiles/.zshrc-common"
 
 # Setup colorls
-source "\$(dirname "\$(gem which colorls)")"/tab_complete.sh
-alias ls='colorls --sd --gs'
-alias lsa='ls -A'
-alias l='ls -la'
-alias ll='ls -l'
-alias la='ls -lA'
+${RUBY_COMMENT_PREFIX}source "\$(dirname "\$(gem which colorls)")"/tab_complete.sh
+${RUBY_COMMENT_PREFIX}alias ls='colorls --sd --gs'
+${RUBY_COMMENT_PREFIX}alias lsa='ls -A'
+${RUBY_COMMENT_PREFIX}alias l='ls -la'
+${RUBY_COMMENT_PREFIX}alias ll='ls -l'
+${RUBY_COMMENT_PREFIX}alias la='ls -lA'
 EOF
 
 ln -sf .dotfiles/.zshrc .
@@ -531,9 +547,14 @@ exit
 EOF
 
 chmod +x .dotfiles/zsh-purepower/zsh
-echo_and_eval 'sudo ln -sf "$HOME/.dotfiles/zsh-purepower/zsh" /usr/local/bin/zsh-purepower'
-if ! grep -qF '/usr/local/bin/zsh-purepower' /etc/shells; then
-	echo_and_eval 'echo "/usr/local/bin/zsh-purepower" | sudo tee -a /etc/shells'
+if $IS_SUDOER; then
+	echo_and_eval 'sudo ln -sf "$HOME/.dotfiles/zsh-purepower/zsh" /usr/local/bin/zsh-purepower'
+	if ! grep -qF '/usr/local/bin/zsh-purepower' /etc/shells; then
+		echo_and_eval 'echo "/usr/local/bin/zsh-purepower" | sudo tee -a /etc/shells'
+	fi
+else
+	mkdir -p "$HOME/.local/bin"
+	echo_and_eval 'ln -sf "$HOME/.dotfiles/zsh-purepower/zsh" "$HOME/.local/bin/zsh-purepower"'
 fi
 
 # Add Utility Script File
@@ -809,9 +830,9 @@ unset __conda_setup
 # <<< conda initialize <<<
 
 # Ruby
-export RUBYOPT="-W0"
-export PATH="\$(ruby -r rubygems -e 'puts Gem.dir')/bin:\$PATH"
-export PATH="\$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:\$PATH"
+${RUBY_COMMENT_PREFIX}export RUBYOPT="-W0"
+${RUBY_COMMENT_PREFIX}export PATH="\$(ruby -r rubygems -e 'puts Gem.dir')/bin:\$PATH"
+${RUBY_COMMENT_PREFIX}export PATH="\$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:\$PATH"
 
 # Perl
 export PERL_MB_OPT="--install_base \\"\$HOME/.perl\\""
@@ -1707,10 +1728,10 @@ function upgrade_conda() {
 	echo_and_eval 'conda clean --all --yes'
 }
 
-upgrade_manjaro
+${SUDO_COMMENT_PREFIX}upgrade_manjaro
 upgrade_ohmyzsh
 upgrade_vim
-upgrade_gems
+${RUBY_COMMENT_PREFIX}upgrade_gems
 # upgrade_cpan
 # upgrade_conda
 

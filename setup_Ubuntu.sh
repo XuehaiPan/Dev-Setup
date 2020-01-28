@@ -680,28 +680,6 @@ function upgrade_conda() {
 	echo_and_eval 'conda clean --all --yes'
 }
 
-function send_to_mac() {
-	local SOURCE="\$1"
-	local TARGET=\${2:-'~/Downloads/'}
-	local USER_NAME="PanXuehai"
-	local TARGET_HOST="PanXuehai-MacBook-Pro.local"
-	if [[ -n "\$SSH_CLIENT" && -n "\$SSH_CONNECTION" ]]; then
-		TARGET_HOST=\$(echo "\$SSH_CLIENT" | awk '{ print \$1 }')
-	fi
-	echo_and_eval "rsync -avhh -P \\"\$SOURCE\\" \$USER_NAME@\$TARGET_HOST:\\"\$TARGET\\""
-}
-
-function recieve_from_mac() {
-	local SOURCE="\$1"
-	local TARGET=\${2:-'\$HOME/Downloads/'}
-	local USER_NAME="PanXuehai"
-	local SOURCE_HOST="PanXuehai-MacBook-Pro.local"
-	if [[ -n "\$SSH_CLIENT" && -n "\$SSH_CONNECTION" ]]; then
-		SOURCE_HOST=\$(echo "\$SSH_CLIENT" | awk '{ print \$1 }')
-	fi
-	echo_and_eval "rsync -avhh -P \$USER_NAME@\$SOURCE_HOST:\\"\$SOURCE\\" \\"\$TARGET\\""
-}
-
 function auto_reannounce_trackers() {
 	local TIMES=\${1:-60}
 	local INTERVAL=\${2:-60}

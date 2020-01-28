@@ -161,8 +161,12 @@ wget -O "$HOME/Desktop/SpaceGray Eighties.itermcolors" \
 	https://raw.githubusercontent.com/mbadolato/iTerm2-Color-Schemes/master/schemes/SpaceGray%20Eighties.itermcolors
 
 # Change Default Shell to Zsh
-if [[ "$SHELL" != "/usr/local/bin/zsh" ]]; then
-	echo_and_eval 'chsh -s /usr/local/bin/zsh'
+if [[ "$(basename "$SHELL")" != "zsh" ]]; then
+	if grep -qF '/usr/local/bin/zsh' /etc/shells; then
+		echo_and_eval 'chsh -s /usr/local/bin/zsh'
+	elif grep -qF '/bin/zsh' /etc/shells; then
+		echo_and_eval 'chsh -s /bin/zsh'
+	fi
 fi
 
 echo_and_eval 'cd "$HOME"'

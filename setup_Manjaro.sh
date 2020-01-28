@@ -139,8 +139,12 @@ echo_and_eval 'systemctl start sshd'
 echo_and_eval 'systemctl enable sshd.service'
 
 # Change Default Shell to Zsh
-if [[ "$SHELL" != "/usr/bin/zsh" ]]; then
-	echo_and_eval 'chsh -s /usr/bin/zsh'
+if [[ "$(basename "$SHELL")" != "zsh" ]]; then
+	if grep -qF '/usr/bin/zsh' /etc/shells; then
+		echo_and_eval 'chsh -s /usr/bin/zsh'
+	elif grep -qF '/bin/zsh' /etc/shells; then
+		echo_and_eval 'chsh -s /bin/zsh'
+	fi
 fi
 
 echo_and_eval 'cd "$HOME"'

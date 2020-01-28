@@ -132,10 +132,10 @@ if $IS_SUDOER; then
 fi
 
 # Change Default Shell to Zsh
-if [[ "$SHELL" != "/usr/bin/zsh" ]]; then
-	if $(grep -qF '/usr/bin/zsh' /etc/shells); then
+if [[ "$(basename "$SHELL")" != "zsh" ]]; then
+	if grep -qF '/usr/bin/zsh' /etc/shells; then
 		echo_and_eval 'chsh -s /usr/bin/zsh'
-	elif $(grep -qF '/bin/zsh' /etc/shells) && [[ $SHELL != "/bin/zsh" ]]; then
+	elif grep -qF '/bin/zsh' /etc/shells; then
 		echo_and_eval 'chsh -s /bin/zsh'
 	fi
 fi

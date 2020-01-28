@@ -746,23 +746,6 @@ function auto_reannounce_trackers() {
 EOF
 
 # Configurations for Bash
-backup_dotfiles .bashrc .dotfiles/.bashrc
-
-if ! grep -qF 'export PS1=' .bashrc; then
-	cat >>.bashrc <<EOF
-
-# User specific environment and startup programs
-export TERM="xterm-256color"
-export PS1='[\\[\\e[1;33m\\]\\u\\[\\e[0m\\]@\\[\\e[1;32m\\]\\h\\[\\e[0m\\]:\\[\\e[1;35m\\]\\W\\[\\e[0m\\]]\\\$ '
-
-# locale
-export LC_ALL="en_US.utf8"
-EOF
-fi
-
-mv -f .bashrc .dotfiles/
-ln -sf .dotfiles/.bashrc .
-
 backup_dotfiles .bash_profile .dotfiles/.bash_profile
 
 cat >.dotfiles/.bash_profile <<EOF
@@ -798,6 +781,13 @@ if [[ -d "\$HOME/.local/lib64" ]]; then
 	export LIBRARY_PATH="\$HOME/.local/lib64:\$LIBRARY_PATH"
 	export LD_LIBRARY_PATH="\$HOME/.local/lib64:\$LD_LIBRARY_PATH"
 fi
+
+# User specific environment and startup programs
+export TERM="xterm-256color"
+export PS1='[\\[\\e[1;33m\\]\\u\\[\\e[0m\\]@\\[\\e[1;32m\\]\\h\\[\\e[0m\\]:\\[\\e[1;35m\\]\\W\\[\\e[0m\\]]\\\$ '
+
+# locale
+export LC_ALL="en_US.utf8"
 
 # Compilers
 export CC="/usr/bin/gcc"

@@ -120,13 +120,13 @@ if [[ ! -x "$(command -v brew)" ]]; then
 	echo_and_eval '/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"'
 fi
 
-echo_and_eval 'brew tap homebrew/cask'
-echo_and_eval 'brew tap homebrew/cask-fonts'
+echo_and_eval 'brew tap homebrew/cask --force-auto-update'
+echo_and_eval 'brew tap homebrew/cask-fonts --force-auto-update'
 echo_and_eval 'git -C "$(brew --repo)" remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git'
 echo_and_eval 'git -C "$(brew --repo homebrew/core)" remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git'
 echo_and_eval 'git -C "$(brew --repo homebrew/cask)" remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-cask.git'
 export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles"
-echo_and_eval 'brew update'
+echo_and_eval 'brew update --verbose'
 
 # Install and Setup Shells
 echo_and_eval 'brew install zsh bash'
@@ -546,7 +546,7 @@ source "\$ZSH/oh-my-zsh.sh"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 # Set personal aliases
-alias bubo='brew update && brew outdated && brew cask outdated'
+alias bubo='brew update --verbose && brew outdated && brew cask outdated'
 alias bubc='brew upgrade && brew cask upgrade && brew cleanup'
 EOF
 
@@ -1662,7 +1662,7 @@ function echo_and_eval() {
 
 function upgrade_homebrew() {
 	# Upgrade Homebrew
-	echo_and_eval 'brew update'
+	echo_and_eval 'brew update --verbose'
 
 	# Upgrade Homebrew Formulas
 	echo_and_eval 'brew outdated'

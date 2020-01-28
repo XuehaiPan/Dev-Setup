@@ -53,7 +53,8 @@ function echo_and_eval() {
 							Style = BoldGreen;
 						}
 					}
-				} else if ($i ~ /";?$/) {
+				}
+				if (in_string && $i ~ /";?$/) {
 					in_string = 0;
 				}
 				if ($i ~ /;$/ || $i == "|" || $i == "||" || $i == "&&") {
@@ -1631,7 +1632,8 @@ function echo_and_eval() {
 							Style = BoldGreen;
 						}
 					}
-				} else if (\$i ~ /";?\$/) {
+				}
+				if (in_string && \$i ~ /";?\$/) {
 					in_string = 0;
 				}
 				if (\$i ~ /;\$/ || \$i == "|" || \$i == "||" || \$i == "&&") {

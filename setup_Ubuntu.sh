@@ -113,7 +113,7 @@ if $IS_SUDOER; then
 		"http://security.ubuntu.com" "http://mirrors.tuna.tsinghua.edu.cn"
 	)
 	for url in "${URL_LIST[@]}"; do
-		if grep -qF "$url"; then
+		if grep -qF "$url" /etc/apt/sources.list; then
 			echo_and_eval "sudo sed -i 's|$url|https://mirrors.tuna.tsinghua.edu.cn|g' /etc/apt/sources.list"
 		fi
 	done

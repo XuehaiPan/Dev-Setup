@@ -252,14 +252,14 @@ echo_and_eval 'gem install colorls'
 echo_and_eval 'gem cleanup'
 
 # Configurations for CPAN
+export PERL_MB_OPT="--install_base \"/usr/local/opt/perl\""
+export PERL_MM_OPT="INSTALL_BASE=\"/usr/local/opt/perl\""
 echo_and_eval 'printf "\n\n\n%s\n" "quit" | cpan'
 echo_and_eval 'printf "%s\n%s\n%s\n" \
 					  "o conf urllist https://mirrors.tuna.tsinghua.edu.cn/CPAN/" \
 					  "o conf commit" \
 					  "quit" \
 					  | cpan'
-export PERL_MB_OPT="--install_base \"/usr/local/opt/perl\""
-export PERL_MM_OPT="INSTALL_BASE=\"/usr/local/opt/perl\""
 echo_and_eval 'cpan -i local::lib'
 echo_and_eval 'eval "$(perl -I/usr/local/opt/perl/lib/perl5 -Mlocal::lib=/usr/local/opt/perl)"'
 echo_and_eval 'cpan -i CPAN'

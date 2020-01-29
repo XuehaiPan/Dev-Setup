@@ -11,10 +11,8 @@ ln -sf "$DATETIME" "$HOME/.dotfiles/backups/latest"
 
 # Check if has sudo privileges
 IS_SUDOER=false
-SUDO_COMMENT_PREFIX="# "
 if $(groups "$USER" | grep -qE '(sudo|root)'); then
 	IS_SUDOER=true
-	SUDO_COMMENT_PREFIX=""
 fi
 
 # Check if in WSL
@@ -226,9 +224,8 @@ EOF
 ln -sf .dotfiles/.gemrc .
 
 # Update RubyGems and Install Colorls
-RUBY_COMMENT_PREFIX="# "
 if [[ -x "$(command -v ruby)" && -x "$(command -v gem)" ]]; then
-	RUBY_COMMENT_PREFIX=""
+	export RUBYOPT="-W0"
 	export PATH="$(ruby -r rubygems -e 'puts Gem.dir')/bin:$PATH"
 	export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
 	if $IS_SUDOER; then
@@ -328,9 +325,11 @@ unset __conda_setup
 # <<< conda initialize <<<
 
 # Ruby
-${RUBY_COMMENT_PREFIX}export RUBYOPT="-W0"
-${RUBY_COMMENT_PREFIX}export PATH="\$(ruby -r rubygems -e 'puts Gem.dir')/bin:\$PATH"
-${RUBY_COMMENT_PREFIX}export PATH="\$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:\$PATH"
+if [[ -x "\$(command -v ruby)" && -x "\$(command -v gem)" ]]; then
+	export RUBYOPT="-W0"
+	export PATH="\$(ruby -r rubygems -e 'puts Gem.dir')/bin:\$PATH"
+	export PATH="\$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:\$PATH"
+fi
 
 # Perl
 eval "\$(perl -I\$HOME/.perl/lib/perl5 -Mlocal::lib=\$HOME/.perl)"
@@ -498,12 +497,16 @@ cat >.dotfiles/.zshrc <<EOF
 source "\$HOME/.dotfiles/.zshrc-common"
 
 # Setup colorls
-${RUBY_COMMENT_PREFIX}source "\$(dirname "\$(gem which colorls)")"/tab_complete.sh
-${RUBY_COMMENT_PREFIX}alias ls='colorls --sd --gs'
-${RUBY_COMMENT_PREFIX}alias lsa='ls -A'
-${RUBY_COMMENT_PREFIX}alias l='ls -la'
-${RUBY_COMMENT_PREFIX}alias ll='ls -l'
-${RUBY_COMMENT_PREFIX}alias la='ls -lA'
+if [[ -x "\$(command -v ruby)" && -x "\$(command -v gem)" ]]; then
+	if gem query --installed colorls; then
+		source "\$(dirname "\$(gem which colorls)")"/tab_complete.sh
+		alias ls='colorls --sd --gs'
+		alias lsa='ls -A'
+		alias l='ls -al'
+		alias ll='ls -l'
+		alias la='ls -Al'
+	fi
+fi
 EOF
 
 ln -sf .dotfiles/.zshrc .
@@ -805,9 +808,11 @@ unset __conda_setup
 # <<< conda initialize <<<
 
 # Ruby
-${RUBY_COMMENT_PREFIX}export RUBYOPT="-W0"
-${RUBY_COMMENT_PREFIX}export PATH="\$(ruby -r rubygems -e 'puts Gem.dir')/bin:\$PATH"
-${RUBY_COMMENT_PREFIX}export PATH="\$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:\$PATH"
+if [[ -x "\$(command -v ruby)" && -x "\$(command -v gem)" ]]; then
+	export RUBYOPT="-W0"
+	export PATH="\$(ruby -r rubygems -e 'puts Gem.dir')/bin:\$PATH"
+	export PATH="\$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:\$PATH"
+fi
 
 # Perl
 eval "\$(perl -I\$HOME/.perl/lib/perl5 -Mlocal::lib=\$HOME/.perl)"
@@ -1708,10 +1713,16 @@ function upgrade_conda() {
 	echo_and_eval 'conda clean --all --yes'
 }
 
-${SUDO_COMMENT_PREFIX}upgrade_ubuntu
+if \$(groups "\$USER" | grep -qE '(sudo|root)'); then
+	upgrade_ubuntu
+fi
 upgrade_ohmyzsh
-upgrade_vim
-${RUBY_COMMENT_PREFIX}upgrade_gems
+if [[ -x "\$(command -v vim)" ]]; then
+	upgrade_vim
+fi
+if [[ -x "\$(command -v ruby)" && -x "\$(command -v gem)" ]]; then
+	upgrade_gems
+fi
 upgrade_cpan
 # upgrade_conda
 

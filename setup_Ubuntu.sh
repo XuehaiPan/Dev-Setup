@@ -781,7 +781,7 @@ fi
 
 # User specific environment and startup programs
 export TERM="xterm-256color"
-export PS1='[\\[\\e[1;33m\\]\\u\\[\\e[0m\\]@\\[\\e[1;32m\\]\\h\\[\\e[0m\\]:\\[\\e[1;35m\\]\\W\\[\\e[0m\\]]\\\$ '
+export PS1='[\\[\\e[1;33m\\]\\u\\[\\e[0m\\]@\\[\\e[1;32m\\]\\h\\[\\e[0m\\]:\\[\\e[1;35m\\]\\w\\[\\e[0m\\]]\\\$ '
 
 # locale
 export LC_ALL="en_US.utf8"

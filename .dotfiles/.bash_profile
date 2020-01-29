@@ -8,7 +8,7 @@ if [[ -f /etc/profile ]]; then
 fi
 
 # if running bash as login shell
-if [[ -n "$BASH_VERSION" ]] && shopt -q login_shell; then
+if [[ -n $BASH_VERSION ]] && shopt -q login_shell; then
 	# include ~/.bashrc if it exists
 	if [[ -f "$HOME/.bashrc" ]]; then
 		. "$HOME/.bashrc"
@@ -41,7 +41,7 @@ export TERM="xterm-256color"
 export GREP_OPTIONS='--color=auto'
 export CLICOLOR=1
 export LSCOLORS="GxFxCxDxBxegedabagaced"
-export PS1='[\[\e[1;33m\]\u\[\e[0m\]@\[\e[1;32m\]\h\[\e[0m\]:\[\e[1;35m\]\W\[\e[0m\]]\$ '
+export PS1='[\[\e[1;33m\]\u\[\e[0m\]@\[\e[1;32m\]\h\[\e[0m\]:\[\e[1;35m\]\w\[\e[0m\]]\$ '
 
 # locale
 export LC_ALL="en_US.UTF-8"

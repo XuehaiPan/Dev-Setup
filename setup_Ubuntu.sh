@@ -110,10 +110,15 @@ function backup_dotfiles() {
 
 if $IS_SUDOER; then
 	# Setup Apt Sources
-	echo_and_eval "sudo sed -i -e 's/http:\\/\\/archive\\.ubuntu\\.com/https:\\/\\/mirrors\\.tuna\\.tsinghua\\.edu\\.cn/g' /etc/apt/sources.list"
-	echo_and_eval "sudo sed -i -e 's/http:\\/\\/cn\\.archive\\.ubuntu\\.com/https:\\/\\/mirrors\\.tuna\\.tsinghua\\.edu\\.cn/g' /etc/apt/sources.list"
-	echo_and_eval "sudo sed -i -e 's/http:\\/\\/security\\.ubuntu\\.com/https:\\/\\/mirrors\\.tuna\\.tsinghua\\.edu\\.cn/g' /etc/apt/sources.list"
-	echo_and_eval "sudo sed -i -e 's/http:\\/\\/mirrors\\.tuna\\.tsinghua\\.edu\\.cn/https:\\/\\/mirrors\\.tuna\\.tsinghua\\.edu\\.cn/g' /etc/apt/sources.list"
+	URL_LIST=(
+		"http://archive.ubuntu.com" "http://cn.archive.ubuntu.com"
+		"http://security.ubuntu.com" "http://mirrors.tuna.tsinghua.edu.cn"
+	)
+	for url in "${URL_LIST[@]}"; do
+		if grep -qF "$url"; then
+			echo_and_eval "sudo sed -i 's|$url|https://mirrors.tuna.tsinghua.edu.cn|g' /etc/apt/sources.list"
+		fi
+	done
 
 	echo_and_eval 'sudo apt update'
 

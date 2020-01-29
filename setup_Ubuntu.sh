@@ -97,8 +97,8 @@ function echo_and_eval() {
 
 function backup_dotfiles() {
 	for file in "$@"; do
-		if [[ -f "$file" || -d "$file" ]]; then
-			if [[ -L "$file" ]]; then
+		if [[ -f $file || -d $file ]]; then
+			if [[ -L $file ]]; then
 				local original_file="$(readlink "$file")"
 				rm -f "$file"
 				cp -rf "$original_file" "$file"
@@ -1712,7 +1712,7 @@ ${SUDO_COMMENT_PREFIX}upgrade_ubuntu
 upgrade_ohmyzsh
 upgrade_vim
 ${RUBY_COMMENT_PREFIX}upgrade_gems
-# upgrade_cpan
+upgrade_cpan
 # upgrade_conda
 
 if [[ -n "\$ZSH_VERSION" ]]; then

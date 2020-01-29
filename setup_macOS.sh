@@ -83,8 +83,8 @@ function echo_and_eval() {
 
 function backup_dotfiles() {
 	for file in "$@"; do
-		if [[ -f "$file" || -d "$file" ]]; then
-			if [[ -L "$file" ]]; then
+		if [[ -f $file || -d $file ]]; then
+			if [[ -L $file ]]; then
 				local original_file="$(readlink "$file")"
 				rm -f "$file"
 				cp -rf "$original_file" "$file"
@@ -252,8 +252,8 @@ echo_and_eval 'gem install colorls'
 echo_and_eval 'gem cleanup'
 
 # Configurations for CPAN
-export PERL_MB_OPT="--install_base \"/usr/local/opt/perl\""
-export PERL_MM_OPT="INSTALL_BASE=\"/usr/local/opt/perl\""
+export PERL_MB_OPT='--install_base "/usr/local/opt/perl"'
+export PERL_MM_OPT='INSTALL_BASE="/usr/local/opt/perl"'
 echo_and_eval 'printf "\n\n\n%s\n" "quit" | cpan'
 echo_and_eval 'printf "%s\n%s\n%s\n" \
 					  "o conf urllist https://mirrors.tuna.tsinghua.edu.cn/CPAN/" \
@@ -1743,7 +1743,7 @@ upgrade_homebrew
 upgrade_ohmyzsh
 upgrade_vim
 upgrade_gems
-# upgrade_cpan
+upgrade_cpan
 # upgrade_conda
 
 if [[ -n "\$ZSH_VERSION" ]]; then

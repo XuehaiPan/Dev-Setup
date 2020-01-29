@@ -235,7 +235,7 @@ if [[ -x "$(command -v ruby)" && -x "$(command -v gem)" ]]; then
 	fi
 	echo_and_eval 'gem update --system'
 	echo_and_eval 'gem update'
-	echo_and_eval 'gem install colorls'
+	echo_and_eval 'gem install colorls --user-install'
 	echo_and_eval 'gem cleanup'
 fi
 

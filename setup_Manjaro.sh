@@ -853,8 +853,8 @@ if [[ -f "\$HOME/.dotfiles/utilities.sh" ]]; then
 fi
 
 # Bash Completion
-if [[ -r "/etc/profile.d/bash_completion.sh" ]]; then
-	. "/etc/profile.d/bash_completion.sh"
+if [[ -r "/usr/share/bash-completion/bash_completion" ]]; then
+	. "/usr/share/bash-completion/bash_completion"
 fi
 EOF
 

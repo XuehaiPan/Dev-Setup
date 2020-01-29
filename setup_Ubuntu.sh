@@ -498,7 +498,7 @@ source "\$HOME/.dotfiles/.zshrc-common"
 
 # Setup colorls
 if [[ -x "\$(command -v ruby)" && -x "\$(command -v gem)" ]]; then
-	if gem query --installed colorls; then
+	if gem query --silent --installed colorls; then
 		source "\$(dirname "\$(gem which colorls)")"/tab_complete.sh
 		alias ls='colorls --sd --gs'
 		alias lsa='ls -A'

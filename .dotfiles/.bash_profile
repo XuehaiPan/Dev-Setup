@@ -1,4 +1,4 @@
-# .bash_profile
+# ~/.bash_profile: executed by bash for login shells.
 
 # Get the aliases and functions
 # Source global definitions
@@ -7,8 +7,8 @@ if [[ -f /etc/profile ]]; then
 	. /etc/profile
 fi
 
-# if running bash
-if [[ -n "$BASH_VERSION" ]]; then
+# if running bash as login shell
+if [[ -n "$BASH_VERSION" ]] && shopt -q login_shell; then
 	# include ~/.bashrc if it exists
 	if [[ -f "$HOME/.bashrc" ]]; then
 		. "$HOME/.bashrc"
@@ -36,8 +36,11 @@ if [[ -d "$HOME/.local/lib64" ]]; then
 	export DYLD_LIBRARY_PATH="$HOME/.local/lib64:$DYLD_LIBRARY_PATH"
 fi
 
-# User specific environment and startup programs
+# User specific environment
 export TERM="xterm-256color"
+export GREP_OPTIONS='--color=auto'
+export CLICOLOR=1
+export LSCOLORS="GxFxCxDxBxegedabagaced"
 export PS1='[\[\e[1;33m\]\u\[\e[0m\]@\[\e[1;32m\]\h\[\e[0m\]:\[\e[1;35m\]\W\[\e[0m\]]\$ '
 
 # locale

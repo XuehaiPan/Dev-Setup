@@ -294,7 +294,7 @@ if [[ -d "\$HOME/.local/lib64" ]]; then
 	export LD_LIBRARY_PATH="\$HOME/.local/lib64:\$LD_LIBRARY_PATH"
 fi
 
-# User specific environment and startup programs
+# User specific environment
 export TERM="xterm-256color"
 
 # locale
@@ -502,9 +502,9 @@ if [[ -x "\$(command -v ruby)" && -x "\$(command -v gem)" ]]; then
 		source "\$(dirname "\$(gem which colorls)")"/tab_complete.sh
 		alias ls='colorls --sd --gs'
 		alias lsa='ls -A'
-		alias l='ls -al'
-		alias ll='ls -l'
-		alias la='ls -Al'
+		alias l='ls -alh'
+		alias ll='ls -lh'
+		alias la='ls -Alh'
 	fi
 fi
 EOF
@@ -719,15 +719,18 @@ EOF
 # Configurations for Bash
 backup_dotfiles .bashrc .dotfiles/.bashrc
 
-if ! grep -qF 'export PS1=' .bashrc; then
+if ! grep -qF 'shopt -q login_shell' .bashrc; then
 	cat >>.bashrc <<EOF
 
-# User specific environment and startup programs
-export TERM="xterm-256color"
-export PS1='[\\[\\e[1;33m\\]\\u\\[\\e[0m\\]@\\[\\e[1;32m\\]\\h\\[\\e[0m\\]:\\[\\e[1;35m\\]\\W\\[\\e[0m\\]]\\\$ '
-
-# locale
-export LC_ALL="en_US.utf8"
+# always source ~/.bash_profile
+if ! shopt -q login_shell; then
+	# include ~/.bash_profile if it exists
+	if [[ -f "\$HOME/.bash_profile" ]]; then
+		. "\$HOME/.bash_profile"
+	elif [[ -f "\$HOME/.profile" ]]; then
+		. "\$HOME/.profile"
+	fi
+fi
 EOF
 fi
 
@@ -747,9 +750,9 @@ cat >.dotfiles/.profile <<EOF
 # for ssh logins, install and configure the libpam-umask package.
 #umask 022
 
-# if running bash
-if [[ -n "\$BASH_VERSION" ]]; then
-	# include .bashrc if it exists
+# if running bash as login shell
+if [[ -n "\$BASH_VERSION" ]] && shopt -q login_shell; then
+	# include ~/.bashrc if it exists
 	if [[ -f "\$HOME/.bashrc" ]]; then
 		. "\$HOME/.bashrc"
 	fi

@@ -117,9 +117,13 @@ if $IS_SUDOER; then
 		fi
 	done
 
-	echo_and_eval "sudo sed -i -e 's/^\\s*#\\s*Color$/Color/g' /etc/pacman.conf"
-	echo_and_eval "sudo sed -i -e 's/^\\s*#\\s*DisableDownloadTimeout$/DisableDownloadTimeout/g' /etc/pacman.conf"
-	if ! grep -q '^DisableDownloadTimeout$' /etc/pacman.conf; then
+	if grep -q '^\s*#\s*Color$' /etc/pacman.conf; then
+		echo_and_eval "sudo sed -i -e 's/^\\s*#\\s*Color$/Color/g' /etc/pacman.conf"
+	fi
+	if grep -q '^\s*#\s*DisableDownloadTimeout$' /etc/pacman.conf; then
+		echo_and_eval "sudo sed -i -e 's/^\\s*#\\s*DisableDownloadTimeout$/DisableDownloadTimeout/g' /etc/pacman.conf"
+	fi
+	if grep -q '^Color$' /etc/pacman.conf && ! grep -q '^DisableDownloadTimeout$' /etc/pacman.conf; then
 		echo_and_eval "sudo sed -i -e 's/^Color$/Color\\nDisableDownloadTimeout/g' /etc/pacman.conf"
 	fi
 

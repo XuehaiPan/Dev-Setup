@@ -7,6 +7,7 @@ export LC_ALL="en_US.utf8"
 DATETIME=$(date +"%Y-%m-%d-%T")
 BACKUP_DIR="$HOME/.dotfiles/backups/$DATETIME"
 mkdir -p "$BACKUP_DIR/.dotfiles"
+rm -f "$HOME/.dotfiles/backups/latest"
 ln -sf "$DATETIME" "$HOME/.dotfiles/backups/latest"
 
 # Check if has sudo privileges

@@ -222,7 +222,7 @@ else
 fi
 
 # Install Zsh Plugins
-for plugin in zsh-syntax-highlighting zsh-autosuggestions zsh-completions; do
+for plugin in zsh-{syntax-highlighting,autosuggestions,completions}; do
 	if [[ ! -d "$ZSH_CUSTOM/plugins/$plugin/.git" ]]; then
 		echo_and_eval "git clone --depth=1 git://github.com/zsh-users/$plugin \"\$ZSH_CUSTOM/plugins/$plugin\""
 	else
@@ -844,17 +844,18 @@ ITERM_UTILITIES=(
 	it2ul it2universion
 )
 
-mkdir -p "$HOME/.iterm2/bin"
+function join_by() { local sep=$1; shift; echo -n "$1"; shift; printf "%s" "${@/#/$sep}"; }
 
 ALIASES_ARRAY=()
 for utility in "${ITERM_UTILITIES[@]}"; do
-	echo_and_eval "wget --quiet --show-progress -O \"\$HOME/.iterm2/bin/$utility\" \"https://iterm2.com/utilities/$utility\" && chmod +x \"\$HOME/.iterm2/bin/$utility\""
 	ALIASES_ARRAY+=("alias $utility='~/.iterm2/bin/$utility'")
 done
 
-ALIASES="$(printf "; %s" "${ALIASES_ARRAY[@]}")"
-ALIASES="${ALIASES:2}"
+ALIASES="$(join_by '; ' "${ALIASES_ARRAY[@]}")"
+ITERM_UTILITIES_ARRAY="$(join_by ',' "${ITERM_UTILITIES[@]}")"
 
+echo_and_eval "wget --quiet --show-progress -P \"\$HOME/.iterm2/bin/\" https://iterm2.com/utilities/{$ITERM_UTILITIES_ARRAY}"
+echo_and_eval "chmod +x \"\$HOME/.iterm2/bin\"/{$ITERM_UTILITIES_ARRAY}"
 for shell in "bash" "zsh"; do
 	echo_and_eval "wget --quiet --show-progress -O \"\$HOME/.iterm2/.iterm2_shell_integration.$shell\" \"https://iterm2.com/shell_integration/$shell\" && chmod +x \"\$HOME/.iterm2/.iterm2_shell_integration.$shell\""
 	printf "\n# Utilities\n" >>"$HOME/.iterm2/.iterm2_shell_integration.$shell"

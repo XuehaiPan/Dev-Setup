@@ -200,7 +200,7 @@ else
 fi
 
 # Install Zsh Plugins
-for plugin in zsh-syntax-highlighting zsh-autosuggestions zsh-completions; do
+for plugin in zsh-{syntax-highlighting,autosuggestions,completions}; do
 	if [[ ! -d "$ZSH_CUSTOM/plugins/$plugin/.git" ]]; then
 		echo_and_eval "git clone --depth=1 git://github.com/zsh-users/$plugin \"\$ZSH_CUSTOM/plugins/$plugin\""
 	else
@@ -1751,13 +1751,9 @@ FONT_DIR_LIST=('$HOME/.local/share/fonts')
 if $IN_WSL; then
 	FONT_DIR_LIST+=('/mnt/c/Windows/Fonts')
 fi
-mkdir -p "$TMP_DIR/Cascadia"
-echo_and_eval "wget --quiet --show-progress -O \"$TMP_DIR/DejaVuSansMono.zip\" https://github.com/ryanoasis/nerd-fonts/releases/latest/download/DejaVuSansMono.zip"
-echo_and_eval "wget --quiet --show-progress -O \"$TMP_DIR/Menlo.zip\" https://raw.githubusercontent.com/XuehaiPan/OS-Setup/master/Menlo.zip"
-echo_and_eval "wget --quiet --show-progress -O \"$TMP_DIR/Cascadia/Cascadia.ttf\" https://github.com/microsoft/cascadia-code/releases/latest/download/Cascadia.ttf"
-echo_and_eval "wget --quiet --show-progress -O \"$TMP_DIR/Cascadia/CascadiaPL.ttf\" https://github.com/microsoft/cascadia-code/releases/latest/download/CascadiaPL.ttf"
-echo_and_eval "wget --quiet --show-progress -O \"$TMP_DIR/Cascadia/CascadiaMono.ttf\" https://github.com/microsoft/cascadia-code/releases/latest/download/CascadiaMono.ttf"
-echo_and_eval "wget --quiet --show-progress -O \"$TMP_DIR/Cascadia/CascadiaMonoPL.ttf\" https://github.com/microsoft/cascadia-code/releases/latest/download/CascadiaMonoPL.ttf"
+echo_and_eval "wget --quiet --show-progress -P \"$TMP_DIR/\" https://github.com/ryanoasis/nerd-fonts/releases/latest/download/DejaVuSansMono.zip"
+echo_and_eval "wget --quiet --show-progress -P \"$TMP_DIR/\" https://raw.githubusercontent.com/XuehaiPan/OS-Setup/master/Menlo.zip"
+echo_and_eval "wget --quiet --show-progress -P \"$TMP_DIR/Cascadia/\" https://github.com/microsoft/cascadia-code/releases/latest/download/Cascadia{,Mono}{,PL}.ttf"
 for font_dir in "${FONT_DIR_LIST[@]}"; do
 	echo_and_eval "unzip -o \"$TMP_DIR/DejaVuSansMono.zip\" -d \"$font_dir\""
 	echo_and_eval "unzip -o \"$TMP_DIR/Menlo.zip\" -d \"$font_dir\""

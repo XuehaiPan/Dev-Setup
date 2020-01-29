@@ -724,12 +724,35 @@ function auto_reannounce_trackers() {
 EOF
 
 # Configurations for Bash
+backup_dotfiles .bashrc .dotfiles/.bashrc
+
+if ! grep -qF 'export PS1=' .bashrc; then
+	cat >>.bashrc <<EOF
+
+# User specific environment and startup programs
+export TERM="xterm-256color"
+export PS1='[\\[\\e[1;33m\\]\\u\\[\\e[0m\\]@\\[\\e[1;32m\\]\\h\\[\\e[0m\\]:\\[\\e[1;35m\\]\\W\\[\\e[0m\\]]\\\$ '
+
+# locale
+export LC_ALL="en_US.utf8"
+EOF
+fi
+
+mv -f .bashrc .dotfiles/
+ln -sf .dotfiles/.bashrc .
+
 backup_dotfiles .bash_profile .dotfiles/.bash_profile
 
 cat >.dotfiles/.bash_profile <<EOF
-# ~/.bash_profile: executed by the command interpreter for login shells.
+#
+# ~/.bash_profile
+#
 # see /usr/share/doc/bash/examples/startup-files for examples.
 # the files are located in the bash-doc package.
+
+# the default umask is set in /etc/profile; for setting the umask
+# for ssh logins, install and configure the libpam-umask package.
+#umask 022
 
 # if running bash
 if [[ -n "\$BASH_VERSION" ]]; then

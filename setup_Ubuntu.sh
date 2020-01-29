@@ -840,6 +840,10 @@ fi
 # Bash Completion
 if [[ -r "/etc/profile.d/bash_completion.sh" ]]; then
 	. "/etc/profile.d/bash_completion.sh"
+elif [[ -r "/usr/share/bash-completion/bash_completion" ]]; then
+	. "/usr/share/bash-completion/bash_completion"
+elif [[ -r "/etc/bash_completion" ]]; then
+	. "/etc/bash_completion"
 fi
 EOF
 

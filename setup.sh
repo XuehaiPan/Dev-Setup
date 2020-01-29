@@ -19,7 +19,7 @@ elif [[ "$(uname -s)" == "Linux" ]]; then
 	fi
 fi
 
-if [[ -z $OS_NAME ]]; then
+if [[ -z "$OS_NAME" ]]; then
 	echo -e "${BOLDRED}The operating system is not supported yet. ${BOLDYELLOW}Only macOS, Ubuntu Linux, and Manjaro Linux are supported.${RESET}" >&2
 	exit 1
 fi

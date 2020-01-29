@@ -8,7 +8,7 @@ if [[ -f /etc/profile ]]; then
 fi
 
 # if running bash as login shell
-if [[ -n $BASH_VERSION ]] && shopt -q login_shell; then
+if [[ -n "$BASH_VERSION" ]] && shopt -q login_shell; then
 	# include ~/.bashrc if it exists
 	if [[ -f "$HOME/.bashrc" ]]; then
 		. "$HOME/.bashrc"

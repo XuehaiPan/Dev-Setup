@@ -83,8 +83,8 @@ function echo_and_eval() {
 
 function backup_dotfiles() {
 	for file in "$@"; do
-		if [[ -f $file || -d $file ]]; then
-			if [[ -L $file ]]; then
+		if [[ -f "$file" || -d "$file" ]]; then
+			if [[ -L "$file" ]]; then
 				local original_file="$(readlink "$file")"
 				rm -f "$file"
 				cp -rf "$original_file" "$file"
@@ -520,7 +520,7 @@ source "\$ZSH/oh-my-zsh.sh"
 # export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
-# if [[ -n \$SSH_CONNECTION ]]; then
+# if [[ -n "\$SSH_CONNECTION" ]]; then
 #   export EDITOR='vim'
 # else
 #   export EDITOR='mvim'
@@ -1629,7 +1629,7 @@ ln -sf .dotfiles/.condarc .
 # Install Miniconda
 if [[ ! -d "$HOME/$CONDA_DIR" ]]; then
 	echo_and_eval 'wget --quiet --show-progress https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-latest-MacOSX-x86_64.sh'
-	echo_and_eval 'bash Miniconda3-latest-MacOSX-x86_64.sh -b -p $HOME/$CONDA_DIR'
+	echo_and_eval "bash Miniconda3-latest-MacOSX-x86_64.sh -b -p \"\$HOME/$CONDA_DIR\""
 	echo_and_eval 'rm -f Miniconda3-latest-MacOSX-x86_64.sh'
 fi
 

@@ -7,6 +7,14 @@ BOLDYELLOW="\033[1;33m"
 BOLDWHITE="\033[1;37m"
 RESET="\033[0m"
 
+# Start logging
+LOG_FILE="$PWD/os-setup.log"
+if [[ -f "$LOG_FILE" ]]; then
+	mv -f "$LOG_FILE" "${LOG_FILE}.old"
+fi
+exec &> >(tee -a "$LOG_FILE")
+echo -e "${BOLDWHITE}All of the script output will be logged to file ${BOLDYELLOW}\"$LOG_FILE\"${BOLDWHITE}.${RESET}"
+
 # Get system infomation
 OS_NAME=""
 if [[ "$(uname -s)" == "Darwin" ]]; then

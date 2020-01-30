@@ -50,7 +50,7 @@ if [[ -x "$(command -v wget)" ]]; then
 	bash -c "$(wget --progress=bar:force:noscroll -O - https://raw.githubusercontent.com/XuehaiPan/OS-Setup/master/setup_${OS_NAME}.sh)"
 elif [[ -x "$(command -v curl)" ]]; then
 	echo -e "${BOLDWHITE}Download and run script via ${BOLDGREEN}curl${BOLDWHITE}.${RESET}" >&2
-	bash -c "$(curl -fL https://raw.githubusercontent.com/XuehaiPan/OS-Setup/master/setup_${OS_NAME}.sh)"
+	bash -c "$(curl -fL# https://raw.githubusercontent.com/XuehaiPan/OS-Setup/master/setup_${OS_NAME}.sh)"
 elif [[ -x "$(command -v git)" ]]; then
 	echo -e "${BOLDWHITE}Download and run script via ${BOLDGREEN}git${BOLDWHITE}.${RESET}" >&2
 	git clone --depth=1 git://github.com/XuehaiPan/OS-Setup.git 2>&1

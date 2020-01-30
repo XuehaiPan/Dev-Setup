@@ -1160,7 +1160,7 @@ EOF
 
 # Install Vim-Plug Plugin Manager
 if [[ ! -f "$HOME/.vim/autoload/plug.vim" ]]; then
-	echo_and_eval 'curl -fLo "$HOME/.vim/autoload/plug.vim" --create-dirs \
+	echo_and_eval 'curl -fL#o "$HOME/.vim/autoload/plug.vim" --create-dirs \
 		https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 fi
 

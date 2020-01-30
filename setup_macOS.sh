@@ -835,7 +835,7 @@ EOF
 ln -sf .dotfiles/.bash_profile .
 
 # Color Theme for iTerm
-echo_and_eval 'wget -O "$HOME/Desktop/SpaceGray Eighties.itermcolors" \
+echo_and_eval 'wget --show-progress --progress=bar:force:noscroll -O "$HOME/Desktop/SpaceGray Eighties.itermcolors" \
 	https://raw.githubusercontent.com/mbadolato/iTerm2-Color-Schemes/master/schemes/SpaceGray%20Eighties.itermcolors'
 open -R "$HOME/Desktop/SpaceGray Eighties.itermcolors"
 

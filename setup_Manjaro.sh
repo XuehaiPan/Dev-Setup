@@ -1250,6 +1250,7 @@ fi
 # Configurations for Gitignore
 backup_dotfiles .gitignore_global .dotfiles/.gitignore_global
 
+TWO_CR=$(printf "\r\r")
 cat >.dotfiles/.gitignore_global <<EOF
 ##### macOS.gitignore #####
 # General
@@ -1258,8 +1259,7 @@ cat >.dotfiles/.gitignore_global <<EOF
 .LSOverride
 
 # Icon must end with two \\r
-Icon
-
+Icon${TWO_CR}
 
 # Thumbnails
 ._*

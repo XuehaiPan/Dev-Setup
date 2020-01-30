@@ -10,6 +10,9 @@ mkdir -p "$BACKUP_DIR/.dotfiles"
 rm -f "$HOME/.dotfiles/backups/latest"
 ln -sf "$DATETIME" "$HOME/.dotfiles/backups/latest"
 
+# Set Temporary Directory
+TMP_DIR="$(mktemp -d)"
+
 # Set Default Conda Installation Directory
 CONDA_DIR="Miniconda3"
 if [[ -d "$HOME/miniconda3" && ! -d "$HOME/Miniconda3" ]]; then
@@ -21,8 +24,6 @@ elif [[ -d "$HOME/anaconda3" ]]; then
 fi
 
 # Common Functions
-alias wget='wget --show-progress --progress=bar:force:noscroll'
-
 function echo_and_eval() {
 	local CMD="$*"
 	printf "%s" "$CMD" | awk \
@@ -856,10 +857,10 @@ done
 ALIASES="$(join_by '; ' "${ALIASES_ARRAY[@]}")"
 ITERM_UTILITIES_ARRAY="$(join_by ',' "${ITERM_UTILITIES[@]}")"
 
-echo_and_eval "wget -nv -P \"\$HOME/.iterm2/bin/\" https://iterm2.com/utilities/{$ITERM_UTILITIES_ARRAY}"
+echo_and_eval "wget -nv --show-progress --progress=bar:force:noscroll -P \"\$HOME/.iterm2/bin/\" https://iterm2.com/utilities/{$ITERM_UTILITIES_ARRAY}"
 echo_and_eval "chmod +x \"\$HOME/.iterm2/bin\"/{$ITERM_UTILITIES_ARRAY}"
 for shell in "bash" "zsh"; do
-	echo_and_eval "wget -nv -O \"\$HOME/.iterm2/.iterm2_shell_integration.$shell\" \"https://iterm2.com/shell_integration/$shell\" && chmod +x \"\$HOME/.iterm2/.iterm2_shell_integration.$shell\""
+	echo_and_eval "wget -nv --show-progress --progress=bar:force:noscroll -O \"\$HOME/.iterm2/.iterm2_shell_integration.$shell\" \"https://iterm2.com/shell_integration/$shell\" && chmod +x \"\$HOME/.iterm2/.iterm2_shell_integration.$shell\""
 	printf "\n# Utilities\n" >>"$HOME/.iterm2/.iterm2_shell_integration.$shell"
 	echo_and_eval "echo \"$ALIASES\" >> \"\$HOME/.iterm2/.iterm2_shell_integration.$shell\""
 done
@@ -1633,9 +1634,9 @@ ln -sf .dotfiles/.condarc .
 
 # Install Miniconda
 if [[ ! -d "$HOME/$CONDA_DIR" ]]; then
-	echo_and_eval 'wget -nv https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-latest-MacOSX-x86_64.sh'
-	echo_and_eval "bash Miniconda3-latest-MacOSX-x86_64.sh -b -p \"\$HOME/$CONDA_DIR\""
-	echo_and_eval 'rm -f Miniconda3-latest-MacOSX-x86_64.sh'
+	echo_and_eval "wget -nv --show-progress --progress=bar:force:noscroll -P \"$TMP_DIR/\" https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-latest-MacOSX-x86_64.sh"
+	echo_and_eval "bash \"$TMP_DIR/Miniconda3-latest-MacOSX-x86_64.sh\" -b -p \"\$HOME/$CONDA_DIR\""
+	echo_and_eval "rm -f \"$TMP_DIR/Miniconda3-latest-MacOSX-x86_64.sh\""
 fi
 
 # Install Conda Packages

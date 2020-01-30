@@ -10,6 +10,9 @@ mkdir -p "$BACKUP_DIR/.dotfiles"
 rm -f "$HOME/.dotfiles/backups/latest"
 ln -sf "$DATETIME" "$HOME/.dotfiles/backups/latest"
 
+# Set Temporary Directory
+TMP_DIR="$(mktemp -d)"
+
 # Check if has sudo privileges
 IS_SUDOER=false
 if $(groups "$USER" | grep -qE '(sudo|root)'); then
@@ -33,8 +36,6 @@ elif [[ -d "$HOME/anaconda3" ]]; then
 fi
 
 # Common Functions
-alias wget='wget --show-progress --progress=bar:force:noscroll'
-
 function echo_and_eval() {
 	local CMD="$*"
 	printf "%s" "$CMD" | awk \
@@ -1561,9 +1562,9 @@ ln -sf .dotfiles/.condarc .
 
 # Install Miniconda
 if [[ ! -d "$HOME/$CONDA_DIR" ]]; then
-	echo_and_eval 'wget -nv https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-latest-Linux-x86_64.sh'
-	echo_and_eval "bash Miniconda3-latest-Linux-x86_64.sh -b -p \"\$HOME/$CONDA_DIR\""
-	echo_and_eval 'rm -f Miniconda3-latest-Linux-x86_64.sh'
+	echo_and_eval "wget -nv --show-progress --progress=bar:force:noscroll -P \"$TMP_DIR/\" https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-latest-Linux-x86_64.sh"
+	echo_and_eval "bash \"$TMP_DIR/Miniconda3-latest-Linux-x86_64.sh\" -b -p \"\$HOME/$CONDA_DIR\""
+	echo_and_eval "rm -f \"$TMP_DIR/Miniconda3-latest-Linux-x86_64.sh\""
 fi
 
 # Install Conda Packages
@@ -1747,15 +1748,14 @@ EOF
 chmod +x upgrade_packages.sh
 
 # Install Fonts
-TMP_DIR="$(mktemp -d)"
 mkdir -p "$HOME/.local/share/fonts"
 FONT_DIR_LIST=('$HOME/.local/share/fonts')
 if $IN_WSL; then
 	FONT_DIR_LIST+=('/mnt/c/Windows/Fonts')
 fi
-echo_and_eval "wget -nv -P \"$TMP_DIR/\" https://github.com/ryanoasis/nerd-fonts/releases/latest/download/DejaVuSansMono.zip"
-echo_and_eval "wget -nv -P \"$TMP_DIR/\" https://raw.githubusercontent.com/XuehaiPan/OS-Setup/master/Menlo.zip"
-echo_and_eval "wget -nv -P \"$TMP_DIR/Cascadia/\" https://github.com/microsoft/cascadia-code/releases/latest/download/Cascadia{,Mono}{,PL}.ttf"
+echo_and_eval "wget -nv --show-progress --progress=bar:force:noscroll -P \"$TMP_DIR/\" https://github.com/ryanoasis/nerd-fonts/releases/latest/download/DejaVuSansMono.zip"
+echo_and_eval "wget -nv --show-progress --progress=bar:force:noscroll -P \"$TMP_DIR/\" https://raw.githubusercontent.com/XuehaiPan/OS-Setup/master/Menlo.zip"
+echo_and_eval "wget -nv --show-progress --progress=bar:force:noscroll -P \"$TMP_DIR/Cascadia/\" https://github.com/microsoft/cascadia-code/releases/latest/download/Cascadia{,Mono}{,PL}.ttf"
 for font_dir in "${FONT_DIR_LIST[@]}"; do
 	echo_and_eval "unzip -o \"$TMP_DIR/DejaVuSansMono.zip\" -d \"$font_dir\""
 	echo_and_eval "unzip -o \"$TMP_DIR/Menlo.zip\" -d \"$font_dir\""

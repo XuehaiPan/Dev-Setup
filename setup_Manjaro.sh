@@ -271,7 +271,7 @@ echo_and_eval 'cpan -i local::lib'
 echo_and_eval 'eval "$(perl -I$HOME/.perl/lib/perl5 -Mlocal::lib=$HOME/.perl)"'
 echo_and_eval 'cpan -i CPAN'
 echo_and_eval 'cpan -i Log::Log4perl'
-echo_and_eval 'yes exit | cpan -i Term::ReadLine::Perl Term::ReadKey'
+echo_and_eval 'printf "\n%s\n\n" "exit" | cpan -i Term::ReadLine::Perl Term::ReadKey'
 
 # Configurations for Zsh
 backup_dotfiles .dotfiles/.zshrc-common

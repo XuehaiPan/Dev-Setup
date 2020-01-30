@@ -99,8 +99,8 @@ function echo_and_eval() {
 
 function backup_dotfiles() {
 	for file in "$@"; do
-		if [[ -f "$file" || -d "$file" ]]; then
-			if [[ -L "$file" ]]; then
+		if [[ -f $file || -d $file ]]; then
+			if [[ -L $file ]]; then
 				local original_file="$(readlink "$file")"
 				rm -f "$file"
 				cp -rf "$original_file" "$file"
@@ -207,13 +207,13 @@ else
 		-c fsck.zeroPaddedFilemode=ignore \
 		-c fetch.fsck.zeroPaddedFilemode=ignore \
 		-c receive.fsck.zeroPaddedFilemode=ignore \
-		--depth=1 git://github.com/robbyrussell/oh-my-zsh.git "${ZSH:-"$HOME/.oh-my-zsh"}" 2>&1'
+		--depth=1 https://github.com/robbyrussell/oh-my-zsh.git "${ZSH:-"$HOME/.oh-my-zsh"}" 2>&1'
 	rm -f "$HOME"/.zcompdump* 2>/dev/null
 fi
 
 # Install Powerlevel10k Theme
 if [[ ! -d "$ZSH_CUSTOM/themes/powerlevel10k/.git" ]]; then
-	echo_and_eval 'git clone --depth=1 git://github.com/romkatv/powerlevel10k.git "$ZSH_CUSTOM/themes/powerlevel10k" 2>&1'
+	echo_and_eval 'git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "$ZSH_CUSTOM/themes/powerlevel10k" 2>&1'
 else
 	echo_and_eval 'git -C "$ZSH_CUSTOM/themes/powerlevel10k" pull 2>&1'
 fi
@@ -221,7 +221,7 @@ fi
 # Install Zsh Plugins
 for plugin in zsh-{syntax-highlighting,autosuggestions,completions}; do
 	if [[ ! -d "$ZSH_CUSTOM/plugins/$plugin/.git" ]]; then
-		echo_and_eval "git clone --depth=1 git://github.com/zsh-users/$plugin \"\$ZSH_CUSTOM/plugins/$plugin\" 2>&1"
+		echo_and_eval "git clone --depth=1 https://github.com/zsh-users/$plugin \"\$ZSH_CUSTOM/plugins/$plugin\" 2>&1"
 	else
 		echo_and_eval "git -C \"\$ZSH_CUSTOM/plugins/$plugin\" pull 2>&1"
 	fi

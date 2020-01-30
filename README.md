@@ -40,7 +40,7 @@ bash -c "$(wget -O - https://raw.githubusercontent.com/XuehaiPan/OS-Setup/master
 bash -c "$(curl -fL https://raw.githubusercontent.com/XuehaiPan/OS-Setup/master/setup.sh)"
 
 # Download via git
-git clone --depth=1 git://github.com/XuehaiPan/OS-Setup.git
+git clone --depth=1 https://github.com/XuehaiPan/OS-Setup.git
 
 # Run the script file
 cd OS-Setup

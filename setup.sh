@@ -9,7 +9,7 @@ RESET="\033[0m"
 
 # Start logging
 LOG_FILE="$PWD/os-setup.log"
-if [[ -f "$LOG_FILE" ]]; then
+if [[ -f $LOG_FILE ]]; then
 	mv -f "$LOG_FILE" "${LOG_FILE}.old"
 fi
 exec 2> >(tee -a "$LOG_FILE" >&2)
@@ -27,7 +27,7 @@ elif [[ "$(uname -s)" == "Linux" ]]; then
 	fi
 fi
 
-if [[ -z "$OS_NAME" ]]; then
+if [[ -z $OS_NAME ]]; then
 	echo -e "${BOLDRED}The operating system is not supported yet. ${BOLDYELLOW}Only macOS, Ubuntu Linux, and Manjaro Linux are supported.${RESET}" >&2
 	exit 1
 fi
@@ -53,7 +53,7 @@ elif [[ -x "$(command -v curl)" ]]; then
 	bash -c "$(curl -fL# https://raw.githubusercontent.com/XuehaiPan/OS-Setup/master/setup_${OS_NAME}.sh)"
 elif [[ -x "$(command -v git)" ]]; then
 	echo -e "${BOLDWHITE}Download and run script via ${BOLDGREEN}git${BOLDWHITE}.${RESET}" >&2
-	git clone --depth=1 git://github.com/XuehaiPan/OS-Setup.git 2>&1
+	git clone --depth=1 https://github.com/XuehaiPan/OS-Setup.git 2>&1
 	bash "OS-Setup/setup_${OS_NAME}.sh"
 else
 	echo -e "${BOLDWHITE}Please download the script from ${BOLDYELLOW}https://github.com/XuehaiPan/OS-Setup${BOLDWHITE} manually.${RESET}" >&2

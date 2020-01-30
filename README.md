@@ -52,8 +52,13 @@ bash setup.sh
 - After running the script, all the old configuration files involved will be backed up to the folder `$HOME/.dotfiles/backups/$DATETIME`, and a symbolic link `$HOME/.dotfiles/backups/latest` links to the latest one. You can compare the differences using:
 
   ```shell
+  # Compare the differences
   colordiff -uEB ~/.dotfiles/backups/latest ~/.dotfiles
   colordiff -uEB ~/.dotfiles/backups/latest/.dotfiles ~/.dotfiles
+
+  # Ignore miscellaneous directories
+  colordiff -uEB -x 'backups' -x '.dotfiles' ~/.dotfiles/backups/latest ~/.dotfiles
+  colordiff -uEB -x 'backups' ~/.dotfiles/backups/latest/.dotfiles ~/.dotfiles
   ```
 
   There is a nice way to inspect and move changes from one version to another version of the same file using [`vimdiff`](https://www.vim.org) or [`meld`](http://meldmerge.org). Run:

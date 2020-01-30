@@ -21,7 +21,6 @@ DOTFILES=(
 	.tmux.conf			.dotfiles/.tmux.conf
 	.tmux.conf.local	.dotfiles/.tmux.conf.local
 						.dotfiles/.tmux.conf.user
-						.dotfiles/.tmux
 	.gitconfig			.dotfiles/.gitconfig
 	.gitignore_global	.dotfiles/.gitignore_global
 	.condarc			.dotfiles/.condarc

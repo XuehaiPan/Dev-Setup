@@ -1280,12 +1280,8 @@ bind-key r source-file ~/.tmux.conf \\; display-message "tmux.conf reloaded"
 # set-option -gs status-right ' #[fg=colour120][#{?#{==:#{=-60:pane_title},#{pane_title}},#{pane_title},…#{=-59:pane_title}}]#[default] #[none]%a %b-%d %H:%M:%S#[default] '
 EOF
 
-backup_dotfiles .dotfiles/.tmux
-rm -rf .dotfiles/.tmux
-echo_and_eval 'git clone --depth=1 git://github.com/gpakosz/.tmux.git "$HOME/.dotfiles/.tmux" 2>&1'
-
-cp -f .dotfiles/.tmux/.tmux.conf.local .dotfiles/
-ln -sf .dotfiles/.tmux/.tmux.conf .
+echo_and_eval 'wget -nv --show-progress --progress=bar:force:noscroll -P "$HOME/.dotfiles/" https://raw.githubusercontent.com/gpakosz/.tmux/master/.tmux.conf{,.local}'
+ln -sf .dotfiles/.tmux.conf .
 ln -sf .dotfiles/.tmux.conf.local .
 
 sed -i "" -e 's/tmux_conf_copy_to_os_clipboard=false/tmux_conf_copy_to_os_clipboard=true/g' .dotfiles/.tmux.conf.local

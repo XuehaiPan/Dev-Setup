@@ -1829,4 +1829,3 @@ echo_and_eval 'brew cleanup'
 # Miscellaneous Settings
 echo_and_eval 'defaults write com.apple.screencapture disable-shadow -boolean true'
 echo_and_eval 'killall SystemUIServer'
-echo_and_eval 'rm -rf "$HOME"/.bash_sessions/'

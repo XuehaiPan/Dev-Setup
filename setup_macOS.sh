@@ -45,7 +45,7 @@ function echo_and_eval() {
 						Style = BoldYellow;
 					} else if ($i == "sudo") {
 						Style = UnderlineBoldGreen;
-					} else if ($i ~ /^>>?$/) {
+					} else if ($i ~ /^[12]?>>?/) {
 						Style = BoldRed;
 					} else {
 						++idx;
@@ -1680,7 +1680,7 @@ function echo_and_eval() {
 						Style = BoldYellow;
 					} else if (\$i == "sudo") {
 						Style = UnderlineBoldGreen;
-					} else if (\$i ~ /^>>?\$/) {
+					} else if (\$i ~ /^[12]?>>?/) {
 						Style = BoldRed;
 					} else {
 						++idx;

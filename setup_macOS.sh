@@ -355,20 +355,11 @@ export PATH="\$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:\$PATH"
 # Perl
 eval "\$(perl -I/usr/local/opt/perl/lib/perl5 -Mlocal::lib=/usr/local/opt/perl)"
 
-# Qt
-export PATH="/usr/local/opt/qt/bin:\$PATH"
-
-# Texinfo
-export PATH="/usr/local/opt/texinfo/bin:\$PATH"
-
 # Curl
 export PATH="/usr/local/opt/curl/bin:\$PATH"
 
 # OpenSSL
 export PATH="/usr/local/opt/openssl/bin:\$PATH"
-
-# APR-util
-export PATH="/usr/local/opt/apr-util/bin:\$PATH"
 
 # gettext
 export PATH="/usr/local/opt/gettext/bin:\$PATH"
@@ -761,20 +752,11 @@ export PATH="\$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:\$PATH"
 # Perl
 eval "\$(perl -I/usr/local/opt/perl/lib/perl5 -Mlocal::lib=/usr/local/opt/perl)"
 
-# Qt
-export PATH="/usr/local/opt/qt/bin:\$PATH"
-
-# Texinfo
-export PATH="/usr/local/opt/texinfo/bin:\$PATH"
-
 # Curl
 export PATH="/usr/local/opt/curl/bin:\$PATH"
 
 # OpenSSL
 export PATH="/usr/local/opt/openssl/bin:\$PATH"
-
-# APR-util
-export PATH="/usr/local/opt/apr-util/bin:\$PATH"
 
 # gettext
 export PATH="/usr/local/opt/gettext/bin:\$PATH"

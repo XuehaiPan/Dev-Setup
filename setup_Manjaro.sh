@@ -200,29 +200,29 @@ export ZSH=${ZSH:-"$HOME/.oh-my-zsh"}
 export ZSH_CUSTOM=${ZSH_CUSTOM:-"$ZSH/custom"}
 
 if [[ -d "$ZSH/.git" && -f "$ZSH/tools/upgrade.sh" ]]; then
-	echo_and_eval 'zsh "$ZSH/tools/upgrade.sh"'
+	echo_and_eval 'zsh "$ZSH/tools/upgrade.sh" 2>&1'
 else
 	echo_and_eval 'git clone -c core.eol=lf -c core.autocrlf=false \
 		-c fsck.zeroPaddedFilemode=ignore \
 		-c fetch.fsck.zeroPaddedFilemode=ignore \
 		-c receive.fsck.zeroPaddedFilemode=ignore \
-		--depth=1 git://github.com/robbyrussell/oh-my-zsh.git "${ZSH:-"$HOME/.oh-my-zsh"}"'
+		--depth=1 git://github.com/robbyrussell/oh-my-zsh.git "${ZSH:-"$HOME/.oh-my-zsh"}" 2>&1'
 	rm -f "$HOME"/.zcompdump* 2>/dev/null
 fi
 
 # Install Powerlevel10k Theme
 if [[ ! -d "$ZSH_CUSTOM/themes/powerlevel10k/.git" ]]; then
-	echo_and_eval 'git clone --depth=1 git://github.com/romkatv/powerlevel10k.git "$ZSH_CUSTOM/themes/powerlevel10k"'
+	echo_and_eval 'git clone --depth=1 git://github.com/romkatv/powerlevel10k.git "$ZSH_CUSTOM/themes/powerlevel10k" 2>&1'
 else
-	echo_and_eval 'git -C "$ZSH_CUSTOM/themes/powerlevel10k" pull'
+	echo_and_eval 'git -C "$ZSH_CUSTOM/themes/powerlevel10k" pull 2>&1'
 fi
 
 # Install Zsh Plugins
 for plugin in zsh-{syntax-highlighting,autosuggestions,completions}; do
 	if [[ ! -d "$ZSH_CUSTOM/plugins/$plugin/.git" ]]; then
-		echo_and_eval "git clone --depth=1 git://github.com/zsh-users/$plugin \"\$ZSH_CUSTOM/plugins/$plugin\""
+		echo_and_eval "git clone --depth=1 git://github.com/zsh-users/$plugin \"\$ZSH_CUSTOM/plugins/$plugin\" 2>&1"
 	else
-		echo_and_eval "git -C \"\$ZSH_CUSTOM/plugins/$plugin\" pull"
+		echo_and_eval "git -C \"\$ZSH_CUSTOM/plugins/$plugin\" pull 2>&1"
 	fi
 done
 
@@ -1232,7 +1232,7 @@ EOF
 
 backup_dotfiles .dotfiles/.tmux
 rm -rf .dotfiles/.tmux
-echo_and_eval 'git clone --depth=1 git://github.com/gpakosz/.tmux.git "$HOME/.dotfiles/.tmux"'
+echo_and_eval 'git clone --depth=1 git://github.com/gpakosz/.tmux.git "$HOME/.dotfiles/.tmux" 2>&1'
 
 cp -f .dotfiles/.tmux/.tmux.conf.local .dotfiles/
 ln -sf .dotfiles/.tmux/.tmux.conf .

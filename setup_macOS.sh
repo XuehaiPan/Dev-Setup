@@ -78,7 +78,7 @@ function echo_and_eval() {
 		}
 		END {
 			printf("\n");
-		}'
+		}' >&2
 	eval "$CMD"
 }
 

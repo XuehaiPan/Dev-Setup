@@ -157,6 +157,9 @@
     "[cpp]": {
         "editor.insertSpaces": false
     },
+    "[go]": {
+        "editor.insertSpaces": false
+    },
     "[java]": {},
     "[julia]": {},
     "[latex]": {
@@ -337,6 +340,35 @@
     //* Git History */
     "gitHistory.hideCommitViewExplorer": false,
     "gitHistory.showEditorTitleMenuBarIcons": true,
+
+    //* Go */
+    "go.gopath": "/usr/local/opt/go",
+    "go.goroot": "/usr/local/opt/go/libexec",
+    "go.gotoSymbol.includeGoroot": true,
+    "go.useCodeSnippetsOnFunctionSuggest": true,
+    "go.useCodeSnippetsOnFunctionSuggestWithoutType": true,
+    "go.autocompleteUnimportedPackages": true,
+    "go.buildOnSave": "package",
+    "go.gocodePackageLookupMode": "go",
+    "go.docsTool": "godoc",
+    "go.formatTool": "goreturns",
+    "go.lintTool": "golint",
+    "go.lintOnSave": "package",
+    "go.installDependenciesWhenBuilding": true,
+    "go.useLanguageServer": true,
+    "go.languageServerExperimentalFeatures": {
+        "format": true,
+        "autoComplete": true,
+        "rename": true,
+        "goToDefinition": true,
+        "hover": true,
+        "signatureHelp": true,
+        "goToTypeDefinition": true,
+        "goToImplementation": true,
+        "documentSymbols": true,
+        "workspaceSymbols": true,
+        "findReferences": true
+    },
 
     //* Java Extension Pack */
     "java.home": "/Library/Java/JavaVirtualMachines/Home/",
@@ -570,7 +602,14 @@
     "sync.syncExtensions": true,
     "sync.removeExtensions": false,
 
+    //* Shellcheck */
+    "shellcheck.executablePath": "shellcheck",
+    "shellcheck.enable": true,
+    "shellcheck.enableQuickFix": true,
+    "shellcheck.run": "onSave",
+
     //* Shell-format */
+    "shellformat.path": "/usr/local/bin/shfmt",
     "shellformat.flag": "-s -i 0 -bn",
 
     //* SQL Server (mssql) */

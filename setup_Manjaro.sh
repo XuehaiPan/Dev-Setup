@@ -197,8 +197,8 @@ mv -f .gitconfig .dotfiles/
 ln -sf .dotfiles/.gitconfig .
 
 # Install Oh-My-Zsh
-export ZSH=${ZSH:-"$HOME/.oh-my-zsh"}
-export ZSH_CUSTOM=${ZSH_CUSTOM:-"$ZSH/custom"}
+export ZSH="${ZSH:-"$HOME/.oh-my-zsh"}"
+export ZSH_CUSTOM="${ZSH_CUSTOM:-"$ZSH/custom"}"
 
 if [[ -d "$ZSH/.git" && -f "$ZSH/tools/upgrade.sh" ]]; then
 	echo_and_eval 'zsh "$ZSH/tools/upgrade.sh" 2>&1'
@@ -649,25 +649,21 @@ function upgrade_manjaro() {
 }
 
 function upgrade_ohmyzsh() {
-	# Config
-	export ZSH=\${ZSH:-"\$HOME/.oh-my-zsh"}
-	export ZSH_CUSTOM=\${ZSH_CUSTOM:-"\$ZSH/custom"}
+	# Set oh-my-zsh installation path
+	export ZSH="\${ZSH:-"\$HOME/.oh-my-zsh"}"
+	export ZSH_CUSTOM="\${ZSH_CUSTOM:-"\$ZSH/custom"}"
 
 	# Upgrade oh my zsh
 	echo_and_eval 'zsh "\$ZSH/tools/upgrade.sh"'
 
-	# Upgrade themes
-	for theme in \$(basename -a \$(/bin/ls -Ad "\$ZSH_CUSTOM/themes"/*/)); do
-		if [[ -d "\$ZSH_CUSTOM/themes/\$theme/.git" ]]; then
-			echo_and_eval "git -C \\"\\\$ZSH_CUSTOM/themes/\$theme\\" pull"
-		fi
-	done
-
-	# Upgrade plugins
-	for plugin in \$(basename -a \$(/bin/ls -Ad "\$ZSH_CUSTOM/plugins"/*/)); do
-		if [[ -d "\$ZSH_CUSTOM/plugins/\$plugin/.git" ]]; then
-			echo_and_eval "git -C \\"\\\$ZSH_CUSTOM/plugins/\$plugin\\" pull"
-		fi
+	# Upgrade themes and plugins
+	for type in "themes" "plugins"; do
+		local REPOS=(\$(cd "\$ZSH_CUSTOM/\$type" && /bin/ls -d * 2>/dev/null))
+		for repo in "\${REPOS[@]}"; do
+			if [[ -d "\$ZSH_CUSTOM/\$type/\$repo/.git" ]]; then
+				echo_and_eval "git -C \\"\\\$ZSH_CUSTOM/\$type/\$repo\\" pull"
+			fi
+		done
 	done
 }
 
@@ -691,12 +687,10 @@ function upgrade_conda() {
 
 	# Upgrade Conda Packages
 	echo_and_eval 'conda update --all --name base --yes'
-	if conda list --name base | grep -q '^anaconda[^-]'; then
-		echo_and_eval 'conda update anaconda --name base --yes'
-	fi
 
 	# Upgrade Conda Packages in Each Environment
-	for env in \$(basename -a \$(/bin/ls -Ad \$(conda info --base)/envs/*/)); do
+	local ENVS=(base \$(cd "\$(conda info --base)/envs" && /bin/ls -d * 2>/dev/null))
+	for env in "\${ENVS[@]}"; do
 		echo_and_eval "conda update --all --name \$env --yes"
 		if conda list --name \$env | grep -q '^anaconda[^-]'; then
 			echo_and_eval "conda update anaconda --name \$env --yes"
@@ -1673,25 +1667,21 @@ function upgrade_manjaro() {
 }
 
 function upgrade_ohmyzsh() {
-	# Config
-	export ZSH=\${ZSH:-"\$HOME/.oh-my-zsh"}
-	export ZSH_CUSTOM=\${ZSH_CUSTOM:-"\$ZSH/custom"}
+	# Set oh-my-zsh installation path
+	export ZSH="\${ZSH:-"\$HOME/.oh-my-zsh"}"
+	export ZSH_CUSTOM="\${ZSH_CUSTOM:-"\$ZSH/custom"}"
 
 	# Upgrade oh my zsh
 	echo_and_eval 'zsh "\$ZSH/tools/upgrade.sh"'
 
-	# Upgrade themes
-	for theme in \$(basename -a \$(/bin/ls -Ad "\$ZSH_CUSTOM/themes"/*/)); do
-		if [[ -d "\$ZSH_CUSTOM/themes/\$theme/.git" ]]; then
-			echo_and_eval "git -C \\"\\\$ZSH_CUSTOM/themes/\$theme\\" pull"
-		fi
-	done
-
-	# Upgrade plugins
-	for plugin in \$(basename -a \$(/bin/ls -Ad "\$ZSH_CUSTOM/plugins"/*/)); do
-		if [[ -d "\$ZSH_CUSTOM/plugins/\$plugin/.git" ]]; then
-			echo_and_eval "git -C \\"\\\$ZSH_CUSTOM/plugins/\$plugin\\" pull"
-		fi
+	# Upgrade themes and plugins
+	for type in "themes" "plugins"; do
+		local REPOS=(\$(cd "\$ZSH_CUSTOM/\$type" && /bin/ls -d * 2>/dev/null))
+		for repo in "\${REPOS[@]}"; do
+			if [[ -d "\$ZSH_CUSTOM/\$type/\$repo/.git" ]]; then
+				echo_and_eval "git -C \\"\\\$ZSH_CUSTOM/\$type/\$repo\\" pull"
+			fi
+		done
 	done
 }
 
@@ -1715,12 +1705,10 @@ function upgrade_conda() {
 
 	# Upgrade Conda Packages
 	echo_and_eval 'conda update --all --name base --yes'
-	if conda list --name base | grep -q '^anaconda[^-]'; then
-		echo_and_eval 'conda update anaconda --name base --yes'
-	fi
 
 	# Upgrade Conda Packages in Each Environment
-	for env in \$(basename -a \$(/bin/ls -Ad \$(conda info --base)/envs/*/)); do
+	local ENVS=(base \$(cd "\$(conda info --base)/envs" && /bin/ls -d * 2>/dev/null))
+	for env in "\${ENVS[@]}"; do
 		echo_and_eval "conda update --all --name \$env --yes"
 		if conda list --name \$env | grep -q '^anaconda[^-]'; then
 			echo_and_eval "conda update anaconda --name \$env --yes"

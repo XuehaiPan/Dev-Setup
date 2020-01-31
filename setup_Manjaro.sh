@@ -15,13 +15,13 @@ TMP_DIR="$(mktemp -d)"
 
 # Check if has sudo privileges
 IS_SUDOER=false
-if $(groups "$USER" | grep -qE '(wheel|root)'); then
+if groups "$USER" | grep -qE '(wheel|root)'; then
 	IS_SUDOER=true
 fi
 
 # Check if in WSL
 IN_WSL=false
-if $(uname -r | grep -qF 'Microsoft'); then
+if uname -r | grep -qF 'Microsoft'; then
 	IN_WSL=true
 fi
 
@@ -691,14 +691,14 @@ function upgrade_conda() {
 
 	# Upgrade Conda Packages
 	echo_and_eval 'conda update --all --name base --yes'
-	if \$(conda list --name base | grep -q '^anaconda[^-]'); then
+	if conda list --name base | grep -q '^anaconda[^-]'; then
 		echo_and_eval 'conda update anaconda --name base --yes'
 	fi
 
 	# Upgrade Conda Packages in Each Environment
 	for env in \$(basename -a \$(/bin/ls -Ad \$(conda info --base)/envs/*/)); do
 		echo_and_eval "conda update --all --name \$env --yes"
-		if \$(conda list --name \$env | grep -q '^anaconda[^-]'); then
+		if conda list --name \$env | grep -q '^anaconda[^-]'; then
 			echo_and_eval "conda update anaconda --name \$env --yes"
 		fi
 	done
@@ -1715,14 +1715,14 @@ function upgrade_conda() {
 
 	# Upgrade Conda Packages
 	echo_and_eval 'conda update --all --name base --yes'
-	if \$(conda list --name base | grep -q '^anaconda[^-]'); then
+	if conda list --name base | grep -q '^anaconda[^-]'; then
 		echo_and_eval 'conda update anaconda --name base --yes'
 	fi
 
 	# Upgrade Conda Packages in Each Environment
 	for env in \$(basename -a \$(/bin/ls -Ad \$(conda info --base)/envs/*/)); do
 		echo_and_eval "conda update --all --name \$env --yes"
-		if \$(conda list --name \$env | grep -q '^anaconda[^-]'); then
+		if conda list --name \$env | grep -q '^anaconda[^-]'; then
 			echo_and_eval "conda update anaconda --name \$env --yes"
 		fi
 	done
@@ -1731,7 +1731,7 @@ function upgrade_conda() {
 	echo_and_eval 'conda clean --all --yes'
 }
 
-if \$(groups "\$USER" | grep -qE '(wheel|root)'); then
+if groups "\$USER" | grep -qE '(wheel|root)'; then
 	upgrade_manjaro
 fi
 upgrade_ohmyzsh

@@ -1741,7 +1741,7 @@ fi
 if [[ -x "\$(command -v ruby)" && -x "\$(command -v gem)" ]]; then
 	upgrade_gems
 fi
-upgrade_cpan
+# upgrade_cpan
 # upgrade_conda
 
 if [[ -n "\$ZSH_VERSION" ]]; then

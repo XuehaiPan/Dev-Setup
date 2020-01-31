@@ -1785,7 +1785,7 @@ upgrade_homebrew
 upgrade_ohmyzsh
 upgrade_vim
 upgrade_gems
-upgrade_cpan
+# upgrade_cpan
 # upgrade_conda
 
 if [[ -n "\$ZSH_VERSION" ]]; then

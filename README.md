@@ -3,7 +3,7 @@
 Bash scripts for setting up a freshly new installed OS automatically.
 
 - [OS-Setup](#os-setup)
-  - [Screen Shots](#screen-shots)
+  - [Screenshots](#screenshots)
   - [Usage](#usage)
     - [Installation](#installation)
     - [Restoration](#restoration)
@@ -12,7 +12,7 @@ Bash scripts for setting up a freshly new installed OS automatically.
   - [Customization](#customization)
   - [Packages](#packages)
 
-## Screen Shots
+## Screenshots
 
 Shell:
 ![shell](screenshots/shell.png)

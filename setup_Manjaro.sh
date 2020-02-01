@@ -249,9 +249,9 @@ if [[ -x "$(command -v ruby)" && -x "$(command -v gem)" ]]; then
 	export PATH="$(ruby -r rubygems -e 'puts Gem.dir')/bin:$PATH"
 	export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
 	if $IS_SUDOER; then
-		echo_and_eval 'sudo gem update --system'
-		echo_and_eval 'sudo gem update'
-		echo_and_eval 'sudo gem cleanup'
+		echo_and_eval 'sudo gem update --system --config-file "$HOME/.gemrc"'
+		echo_and_eval 'sudo gem update --config-file "$HOME/.gemrc"'
+		echo_and_eval 'sudo gem cleanup --config-file "$HOME/.gemrc"'
 	fi
 	echo_and_eval 'gem update --system'
 	echo_and_eval 'gem update'

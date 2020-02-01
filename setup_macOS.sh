@@ -250,7 +250,7 @@ EOF
 ln -sf .dotfiles/.gemrc .
 
 # Update RubyGems and Install Colorls
-echo_and_eval 'gem update --system'
+echo_and_eval 'gem update'
 echo_and_eval 'gem update'
 echo_and_eval 'gem install colorls'
 echo_and_eval 'gem cleanup'

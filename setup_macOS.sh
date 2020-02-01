@@ -817,7 +817,7 @@ EOF
 ln -sf .dotfiles/.bash_profile .
 
 # Color Theme for iTerm
-echo_and_eval 'wget --show-progress --progress=bar:force:noscroll -N -O "$HOME/Desktop/SpaceGray Eighties.itermcolors" \
+echo_and_eval 'wget --show-progress --progress=bar:force:noscroll -O "$HOME/Desktop/SpaceGray Eighties.itermcolors" \
 	https://raw.githubusercontent.com/mbadolato/iTerm2-Color-Schemes/master/schemes/SpaceGray%20Eighties.itermcolors'
 open -R "$HOME/Desktop/SpaceGray Eighties.itermcolors"
 
@@ -848,7 +848,7 @@ ITERM_UTILITIES_ARRAY="$(join_by ',' "${ITERM_UTILITIES[@]}")"
 echo_and_eval "wget -nv --show-progress --progress=bar:force:noscroll -N -P \"\$HOME/.iterm2/bin/\" https://iterm2.com/utilities/{$ITERM_UTILITIES_ARRAY}"
 echo_and_eval "chmod +x \"\$HOME/.iterm2/bin\"/{$ITERM_UTILITIES_ARRAY}"
 for shell in "bash" "zsh"; do
-	echo_and_eval "wget -nv --show-progress --progress=bar:force:noscroll -N -O \"\$HOME/.iterm2/.iterm2_shell_integration.$shell\" \"https://iterm2.com/shell_integration/$shell\" && chmod +x \"\$HOME/.iterm2/.iterm2_shell_integration.$shell\""
+	echo_and_eval "wget -nv --show-progress --progress=bar:force:noscroll -O \"\$HOME/.iterm2/.iterm2_shell_integration.$shell\" \"https://iterm2.com/shell_integration/$shell\" && chmod +x \"\$HOME/.iterm2/.iterm2_shell_integration.$shell\""
 	printf "\n# Utilities\n" >>"$HOME/.iterm2/.iterm2_shell_integration.$shell"
 	echo_and_eval "echo \"$ALIASES\" >> \"\$HOME/.iterm2/.iterm2_shell_integration.$shell\""
 done

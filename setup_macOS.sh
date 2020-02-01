@@ -221,7 +221,7 @@ fi
 if [[ ! -d "$ZSH_CUSTOM/themes/powerlevel10k/.git" ]]; then
 	echo_and_eval 'git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "$ZSH_CUSTOM/themes/powerlevel10k" 2>&1'
 else
-	echo_and_eval 'git -C "$ZSH_CUSTOM/themes/powerlevel10k" pull --rebase 2>&1'
+	echo_and_eval 'git -C "$ZSH_CUSTOM/themes/powerlevel10k" pull 2>&1'
 fi
 
 # Install Zsh Plugins
@@ -229,7 +229,7 @@ for plugin in zsh-{syntax-highlighting,autosuggestions,completions}; do
 	if [[ ! -d "$ZSH_CUSTOM/plugins/$plugin/.git" ]]; then
 		echo_and_eval "git clone --depth=1 https://github.com/zsh-users/$plugin \"\$ZSH_CUSTOM/plugins/$plugin\" 2>&1"
 	else
-		echo_and_eval "git -C \"\$ZSH_CUSTOM/plugins/$plugin\" pull --rebase 2>&1"
+		echo_and_eval "git -C \"\$ZSH_CUSTOM/plugins/$plugin\" pull 2>&1"
 	fi
 done
 
@@ -1735,7 +1735,7 @@ function upgrade_ohmyzsh() {
 		local REPOS=(\$(cd "\$ZSH_CUSTOM/\$type" && /bin/ls -d * 2>/dev/null))
 		for repo in "\${REPOS[@]}"; do
 			if [[ -d "\$ZSH_CUSTOM/\$type/\$repo/.git" ]]; then
-				echo_and_eval "git -C \\"\\\$ZSH_CUSTOM/\$type/\$repo\\" pull --rebase"
+				echo_and_eval "git -C \\"\\\$ZSH_CUSTOM/\$type/\$repo\\" pull"
 			fi
 		done
 	done

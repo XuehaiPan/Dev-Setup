@@ -540,6 +540,10 @@ source "\$ZSH/oh-my-zsh.sh"
 # Set personal aliases
 alias bubo='brew update --verbose && brew outdated && brew cask outdated'
 alias bubc='brew upgrade && brew cask upgrade && brew cleanup'
+alias lsa='ls -A'
+alias l='ls -alh'
+alias ll='ls -lh'
+alias la='ls -Alh'
 EOF
 
 backup_dotfiles .zshrc .dotfiles/.zshrc
@@ -551,10 +555,6 @@ source "\$HOME/.dotfiles/.zshrc-common"
 # Setup colorls
 source "\$(dirname "\$(gem which colorls)")"/tab_complete.sh
 alias ls='colorls --sd --gs'
-alias lsa='ls -A'
-alias l='ls -alh'
-alias ll='ls -lh'
-alias la='ls -Alh'
 EOF
 
 ln -sf .dotfiles/.zshrc .

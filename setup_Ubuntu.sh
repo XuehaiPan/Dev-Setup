@@ -493,6 +493,12 @@ source "\$ZSH/oh-my-zsh.sh"
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+
+# Set personal aliases
+alias lsa='ls -A'
+alias l='ls -alh'
+alias ll='ls -lh'
+alias la='ls -Alh'
 EOF
 
 backup_dotfiles .zshrc .dotfiles/.zshrc
@@ -506,10 +512,6 @@ if [[ -x "\$(command -v ruby)" && -x "\$(command -v gem)" ]]; then
 	if gem query --silent --installed colorls; then
 		source "\$(dirname "\$(gem which colorls)")"/tab_complete.sh
 		alias ls='colorls --sd --gs'
-		alias lsa='ls -A'
-		alias l='ls -alh'
-		alias ll='ls -lh'
-		alias la='ls -Alh'
 	fi
 fi
 EOF

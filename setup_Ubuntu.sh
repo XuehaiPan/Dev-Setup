@@ -694,8 +694,6 @@ function auto_reannounce_trackers() {
 	local INTERVAL=\${2:-60}
 	local TORRENT="active"
 	local CMD=""
-	local RESULT=""
-	local INFO=""
 
 	echo -ne "\\033[?25l"
 
@@ -706,7 +704,7 @@ function auto_reannounce_trackers() {
 			TORRENT="all"
 		fi
 		CMD="transmission-remote --torrent \$TORRENT --reannounce"
-		eval \$CMD 1>/dev/null
+		eval "\$CMD" 1>/dev/null
 		for ((r = INTERVAL - 1; r >= 0; --r)); do
 			echo -ne "\$CMD (\$t/\$TIMES, next reannounce in \${r}s)\\033[K\\r"
 			sleep 1

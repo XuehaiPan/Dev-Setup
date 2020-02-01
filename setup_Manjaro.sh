@@ -466,15 +466,15 @@ POWERLEVEL9K_VCS_SHORTEN_STRATEGY="truncate_middle"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
-    archlinux
-    zsh-syntax-highlighting
-    zsh-autosuggestions
-    zsh-completions
-    colored-man-pages
-    git
-    git-auto-fetch
-    python
-    vscode
+	archlinux
+	zsh-syntax-highlighting
+	zsh-autosuggestions
+	zsh-completions
+	colored-man-pages
+	git
+	git-auto-fetch
+	python
+	vscode
 )
 
 ZSH_DISABLE_COMPFIX=true

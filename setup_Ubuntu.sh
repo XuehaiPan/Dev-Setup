@@ -58,7 +58,7 @@ function echo_and_eval() {
 						Style = BoldYellow;
 					} else if ($i == "sudo") {
 						Style = UnderlineBoldGreen;
-					} else if ($i ~ /^[12]?>>?/) {
+					} else if ($i ~ /^[12&]?>>?/) {
 						Style = BoldRed;
 					} else {
 						++idx;
@@ -583,7 +583,7 @@ function echo_and_eval() {
 						Style = BoldYellow;
 					} else if (\$i == "sudo") {
 						Style = UnderlineBoldGreen;
-					} else if (\$i ~ /^[12]?>>?/) {
+					} else if (\$i ~ /^[12&]?>>?/) {
 						Style = BoldRed;
 					} else {
 						++idx;
@@ -1571,7 +1571,7 @@ echo_and_eval 'conda install pip jupyter ipython notebook jupyterlab ipdb \
 echo_and_eval 'conda update --all --yes'
 echo_and_eval 'conda clean --all --yes'
 echo_and_eval "\$HOME/$CONDA_DIR/bin/jt --theme monokai"
-echo_and_eval "\$HOME/$CONDA_DIR/bin/jupyter contrib nbextension install --user"
+echo_and_eval "\$HOME/$CONDA_DIR/bin/jupyter contrib nbextension install --user &>/dev/null"
 rm -r .cph_tmp* 2>/dev/null
 rm -r "$CONDA_DIR"/.cph_tmp* 2>/dev/null
 
@@ -1603,7 +1603,7 @@ function echo_and_eval() {
 						Style = BoldYellow;
 					} else if (\$i == "sudo") {
 						Style = UnderlineBoldGreen;
-					} else if (\$i ~ /^[12]?>>?/) {
+					} else if (\$i ~ /^[12&]?>>?/) {
 						Style = BoldRed;
 					} else {
 						++idx;

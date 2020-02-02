@@ -424,7 +424,7 @@ DEFAULT_USER="$USER"
 ZSH_THEME="powerlevel10k/powerlevel10k"
 
 # Powerlevel9k configrations
-POWERLEVEL9K_MODE='nerdfont-complete'
+POWERLEVEL9K_MODE="nerdfont-complete"
 POWERLEVEL9K_PROMPT_ON_NEWLINE=true
 POWERLEVEL9K_RPROMPT_ON_NEWLINE=false
 POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX=""
@@ -569,6 +569,7 @@ source "\$HOME/.dotfiles/.zshrc-common"
 
 # Use powerlevel10k purepower theme
 source "\$ZSH_CUSTOM/themes/powerlevel10k/config/p10k-lean.zsh"
+POWERLEVEL9K_MODE="compatible"
 POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(dir vcs newline prompt_char)
 POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status command_execution_time background_jobs virtualenv anaconda pyenv time)
 POWERLEVEL9K_TRANSIENT_PROMPT="same-dir"

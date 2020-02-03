@@ -1,6 +1,6 @@
 # OS-Setup
 
-Bash scripts for setting up a freshly new installed OS automatically.
+Bash scripts for setting up a newly installed OS automatically.
 
 - [OS-Setup](#os-setup)
   - [Screenshots](#screenshots)

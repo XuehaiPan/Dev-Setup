@@ -79,6 +79,12 @@ export JAVA_HOME=$(/usr/libexec/java_home)
 export CLASSPATH=".:$JAVA_HOME/lib/tools.jar:$JAVA_HOME/lib/dt.jar"
 export PATH="$JAVA_HOME/bin:$PATH"
 
+# Go
+export GOPATH="/usr/local/opt/go"
+export GOBIN="$GOPATH/bin"
+export GOROOT="$GOPATH/libexec"
+export PATH="$GOBIN:$PATH"
+
 # Ruby
 export RUBYOPT="-W0"
 export PATH="/usr/local/opt/ruby/bin:$PATH"
@@ -167,6 +173,11 @@ export DYLD_LIBRARY_PATH="$(remove_duplicate "$DYLD_LIBRARY_PATH")"
 export DYLD_FALLBACK_LIBRARY_PATH="$(remove_duplicate "$DYLD_FALLBACK_LIBRARY_PATH")"
 export CLASSPATH="$(remove_duplicate "$CLASSPATH")"
 unset -f remove_duplicate
+
+# Utilities
+if [[ -f "$HOME/.dotfiles/utilities.sh" ]]; then
+	. "$HOME/.dotfiles/utilities.sh"
+fi
 
 # X11
 export DISPLAY=":0.0"

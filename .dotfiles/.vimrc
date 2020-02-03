@@ -35,10 +35,11 @@ set wildmode=longest:list,full
 set background=dark
 set t_Co=256
 set guifont=DejaVuSansMonoNerdFontComplete-Book:h14
+set linespace=2
 colorscheme monokai
 
 
-autocmd GUIEnter * set lines=50 columns=160
+autocmd GUIEnter * set lines=42 columns=160
 
 autocmd BufWritePre,FileWritePre * let pos = getpos('.') |
                                  \ %s/\r\+$//ge |
@@ -97,6 +98,7 @@ call plug#begin('~/.vim/plugged')
     Plug 'airblade/vim-gitgutter'
     Plug 'tpope/vim-fugitive'
     Plug 'luochen1990/rainbow'
+    Plug 'Chiel92/vim-autoformat'
     Plug 'vim-syntastic/syntastic'
     Plug 'godlygeek/tabular'
     Plug 'plasticboy/vim-markdown'

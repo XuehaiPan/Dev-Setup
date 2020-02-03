@@ -40,7 +40,7 @@ alias la='ls -AlhF'
 # Alias definitions.
 # You may want to put all your additions into a separate file like
 # ~/.bash_aliases, instead of adding them here directly.
-if [ -f "$HOME/.bash_aliases" ]; then
+if [[ -f "$HOME/.bash_aliases" ]]; then
 	. "$HOME/.bash_aliases"
 fi
 

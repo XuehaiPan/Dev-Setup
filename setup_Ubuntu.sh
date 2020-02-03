@@ -346,6 +346,7 @@ function remove_duplicate() {
 			'BEGIN {
 				idx = 0;
 				delete flag;
+				flag[""] = 1;
 			}
 			{
 				if (!(flag[\$0]++)) {
@@ -828,6 +829,7 @@ function remove_duplicate() {
 			'BEGIN {
 				idx = 0;
 				delete flag;
+				flag[""] = 1;
 			}
 			{
 				if (!(flag[\$0]++)) {

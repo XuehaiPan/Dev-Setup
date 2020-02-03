@@ -646,13 +646,13 @@ function upgrade_ohmyzsh() {
 	echo_and_eval 'zsh "\$ZSH/tools/upgrade.sh"'
 
 	# Upgrade themes and plugins
-	for type in "themes" "plugins"; do
-		local REPOS=(\$(cd "\$ZSH_CUSTOM/\$type" && /bin/ls -d * 2>/dev/null))
-		for repo in "\${REPOS[@]}"; do
-			if [[ -d "\$ZSH_CUSTOM/\$type/\$repo/.git" ]]; then
-				echo_and_eval "git -C \\"\\\$ZSH_CUSTOM/\$type/\$repo\\" pull"
-			fi
-		done
+	local REPOS=(\$(
+		cd "\$ZSH_CUSTOM"
+		find . -mindepth 3 -maxdepth 3 -not -empty -type d -name '*.git' \\
+			| sed -e 's#^\\.\\/\\(.*\\)\\/\\.git\$#\\1#'
+	))
+	for repo in "\${REPOS[@]}"; do
+		echo_and_eval "git -C \\"\\\$ZSH_CUSTOM/\$repo\\" pull"
 	done
 }
 
@@ -674,14 +674,15 @@ function upgrade_conda() {
 	# Upgrade Conda
 	echo_and_eval 'conda update conda --name base --yes'
 
-	# Upgrade Conda Packages
-	echo_and_eval 'conda update --all --name base --yes'
-
 	# Upgrade Conda Packages in Each Environment
-	local ENVS=(base \$(cd "\$(conda info --base)/envs" && /bin/ls -d * 2>/dev/null))
+	local ENVS=(base \$(
+		cd "\$(conda info --base)/envs"
+		find . -mindepth 1 -maxdepth 1 -not -empty \\( -type d -or -type l \\) \\
+			| sed -e 's#^\\.\\/\\(.*\\)\$#\\1#'
+	))
 	for env in "\${ENVS[@]}"; do
 		echo_and_eval "conda update --all --name \$env --yes"
-		if conda list --name \$env | grep -q '^anaconda[^-]'; then
+		if conda list --name "\$env" | grep -q '^anaconda[^-]'; then
 			echo_and_eval "conda update anaconda --name \$env --yes"
 		fi
 	done
@@ -1664,13 +1665,13 @@ function upgrade_ohmyzsh() {
 	echo_and_eval 'zsh "\$ZSH/tools/upgrade.sh"'
 
 	# Upgrade themes and plugins
-	for type in "themes" "plugins"; do
-		local REPOS=(\$(cd "\$ZSH_CUSTOM/\$type" && /bin/ls -d * 2>/dev/null))
-		for repo in "\${REPOS[@]}"; do
-			if [[ -d "\$ZSH_CUSTOM/\$type/\$repo/.git" ]]; then
-				echo_and_eval "git -C \\"\\\$ZSH_CUSTOM/\$type/\$repo\\" pull"
-			fi
-		done
+	local REPOS=(\$(
+		cd "\$ZSH_CUSTOM"
+		find . -mindepth 3 -maxdepth 3 -not -empty -type d -name '*.git' \\
+			| sed -e 's#^\\.\\/\\(.*\\)\\/\\.git\$#\\1#'
+	))
+	for repo in "\${REPOS[@]}"; do
+		echo_and_eval "git -C \\"\\\$ZSH_CUSTOM/\$repo\\" pull"
 	done
 }
 
@@ -1692,14 +1693,15 @@ function upgrade_conda() {
 	# Upgrade Conda
 	echo_and_eval 'conda update conda --name base --yes'
 
-	# Upgrade Conda Packages
-	echo_and_eval 'conda update --all --name base --yes'
-
 	# Upgrade Conda Packages in Each Environment
-	local ENVS=(base \$(cd "\$(conda info --base)/envs" && /bin/ls -d * 2>/dev/null))
+	local ENVS=(base \$(
+		cd "\$(conda info --base)/envs"
+		find . -mindepth 1 -maxdepth 1 -not -empty \\( -type d -or -type l \\) \\
+			| sed -e 's#^\\.\\/\\(.*\\)\$#\\1#'
+	))
 	for env in "\${ENVS[@]}"; do
 		echo_and_eval "conda update --all --name \$env --yes"
-		if conda list --name \$env | grep -q '^anaconda[^-]'; then
+		if conda list --name "\$env" | grep -q '^anaconda[^-]'; then
 			echo_and_eval "conda update anaconda --name \$env --yes"
 		fi
 	done

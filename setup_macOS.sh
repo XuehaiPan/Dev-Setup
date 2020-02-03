@@ -1734,7 +1734,7 @@ function upgrade_ohmyzsh() {
 	# Upgrade themes and plugins
 	local REPOS=(\$(
 		cd "\$ZSH_CUSTOM"
-		find . -mindepth 3 -maxdepth 3 -not -empty -type d -name '*.git' \\
+		find . -mindepth 3 -maxdepth 3 -not -empty -type d -name '.git' \\
 			| sed -e 's#^\\.\\/\\(.*\\)\\/\\.git\$#\\1#'
 	))
 	for repo in "\${REPOS[@]}"; do

@@ -970,13 +970,9 @@ colorscheme monokai
 
 autocmd GUIEnter * set lines=50 columns=160
 
-autocmd BufWritePre,FileWritePre * let pos = getpos('.') |
-                                 \\ %s/\\r\\+\$//ge |
-                                 \\ %s/\\s\\+\$//ge |
-                                 \\ call setpos('.', pos) |
-                                 \\ unlet pos
-
+autocmd BufWritePre,FileWritePre * RemoveTrailingSpaces
 autocmd Filetype python set expandtab
+autocmd FileType vim,tex let b:autoformat_autoindent = 0
 
 let g:NERDChristmasTree = 1
 let g:NERDTreeMouseMode = 2
@@ -1027,6 +1023,7 @@ call plug#begin('~/.vim/plugged')
     Plug 'airblade/vim-gitgutter'
     Plug 'tpope/vim-fugitive'
     Plug 'luochen1990/rainbow'
+    Plug 'Chiel92/vim-autoformat'
     Plug 'vim-syntastic/syntastic'
     Plug 'godlygeek/tabular'
     Plug 'plasticboy/vim-markdown'

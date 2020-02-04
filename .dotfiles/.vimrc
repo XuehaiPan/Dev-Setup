@@ -41,13 +41,9 @@ colorscheme monokai
 
 autocmd GUIEnter * set lines=42 columns=160
 
-autocmd BufWritePre,FileWritePre * let pos = getpos('.') |
-                                 \ %s/\r\+$//ge |
-                                 \ %s/\s\+$//ge |
-                                 \ call setpos('.', pos) |
-                                 \ unlet pos
-
+autocmd BufWritePre,FileWritePre * RemoveTrailingSpaces
 autocmd Filetype python set expandtab
+autocmd FileType vim,tex let b:autoformat_autoindent = 0
 
 let g:NERDChristmasTree = 1
 let g:NERDTreeMouseMode = 2

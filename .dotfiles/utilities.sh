@@ -88,8 +88,8 @@ function upgrade_ohmyzsh() {
 	# Upgrade themes and plugins
 	local REPOS=($(
 		cd "$ZSH_CUSTOM"
-		find . -depth 3 -not -empty -type d -name '.git' \
-			| sed -e 's#^\.\/\(.*\)\/\.git$#\1#'
+		find . -depth 3 -not -empty -type d -name '.git' |
+			sed -e 's#^\.\/\(.*\)\/\.git$#\1#'
 	))
 	for repo in "${REPOS[@]}"; do
 		echo_and_eval "git -C \"\$ZSH_CUSTOM/$repo\" pull"
@@ -124,8 +124,8 @@ function upgrade_conda() {
 	# Upgrade Conda Packages in Each Environment
 	local ENVS=(base $(
 		cd "$(conda info --base)/envs"
-		find . -depth 1 -not -empty \( -type d -or -type l \) \
-			| sed -e 's#^\.\/\(.*\)$#\1#'
+		find . -depth 1 -not -empty \( -type d -or -type l \) |
+			sed -e 's#^\.\/\(.*\)$#\1#'
 	))
 	for env in "${ENVS[@]}"; do
 		echo_and_eval "conda update --all --name $env --yes"
@@ -167,8 +167,8 @@ function pull_projects() {
 	# Fetch and Pull Git
 	for BASE_DIR in "${BASE_DIRS[@]}"; do
 		local PROJ_DIRS=($(
-			find "$BASE_DIR" -not -empty -type d -name '.git' \
-				| sed -e 's#^\(.*\)\/\.git$#\1#'
+			find "$BASE_DIR" -not -empty -type d -name '.git' |
+				sed -e 's#^\(.*\)\/\.git$#\1#'
 		))
 		for PROJ_DIR in "${PROJ_DIRS[@]}"; do
 			if [[ -n "$(git -C "$PROJ_DIR" remote)" ]]; then

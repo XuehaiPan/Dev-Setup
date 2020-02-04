@@ -610,7 +610,7 @@
 
     //* Shell-format */
     "shellformat.path": "/usr/local/bin/shfmt",
-    "shellformat.flag": "-i 0 -bn",
+    "shellformat.flag": "-i 0",
 
     //* SQL Server (mssql) */
     "mssql.format.datatypeCasing": "lowercase",

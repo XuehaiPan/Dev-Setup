@@ -115,7 +115,7 @@ if $IS_SUDOER; then
 	for repo in "arch4edu" "archlinuxcn"; do
 		if ! grep -qF "[$repo]" /etc/pacman.conf; then
 			echo_and_eval 'printf "\n%s\n%s\n" "[$repo]" "Server = https://mirrors.tuna.tsinghua.edu.cn/$repo/\$arch" \
-						| sudo tee -a /etc/pacman.conf'
+								  | sudo tee -a /etc/pacman.conf'
 		fi
 	done
 
@@ -663,8 +663,8 @@ function upgrade_ohmyzsh() {
 	# Upgrade themes and plugins
 	local REPOS=(\$(
 		cd "\$ZSH_CUSTOM"
-		find . -mindepth 3 -maxdepth 3 -not -empty -type d -name '.git' \\
-			| sed -e 's#^\\.\\/\\(.*\\)\\/\\.git\$#\\1#'
+		find . -mindepth 3 -maxdepth 3 -not -empty -type d -name '.git' |
+			sed -e 's#^\\.\\/\\(.*\\)\\/\\.git\$#\\1#'
 	))
 	for repo in "\${REPOS[@]}"; do
 		echo_and_eval "git -C \\"\\\$ZSH_CUSTOM/\$repo\\" pull"
@@ -692,8 +692,8 @@ function upgrade_conda() {
 	# Upgrade Conda Packages in Each Environment
 	local ENVS=(base \$(
 		cd "\$(conda info --base)/envs"
-		find . -mindepth 1 -maxdepth 1 -not -empty \\( -type d -or -type l \\) \\
-			| sed -e 's#^\\.\\/\\(.*\\)\$#\\1#'
+		find . -mindepth 1 -maxdepth 1 -not -empty \\( -type d -or -type l \\) |
+			sed -e 's#^\\.\\/\\(.*\\)\$#\\1#'
 	))
 	for env in "\${ENVS[@]}"; do
 		echo_and_eval "conda update --all --name \$env --yes"
@@ -1678,8 +1678,8 @@ function upgrade_ohmyzsh() {
 	# Upgrade themes and plugins
 	local REPOS=(\$(
 		cd "\$ZSH_CUSTOM"
-		find . -mindepth 3 -maxdepth 3 -not -empty -type d -name '.git' \\
-			| sed -e 's#^\\.\\/\\(.*\\)\\/\\.git\$#\\1#'
+		find . -mindepth 3 -maxdepth 3 -not -empty -type d -name '.git' |
+			sed -e 's#^\\.\\/\\(.*\\)\\/\\.git\$#\\1#'
 	))
 	for repo in "\${REPOS[@]}"; do
 		echo_and_eval "git -C \\"\\\$ZSH_CUSTOM/\$repo\\" pull"
@@ -1707,8 +1707,8 @@ function upgrade_conda() {
 	# Upgrade Conda Packages in Each Environment
 	local ENVS=(base \$(
 		cd "\$(conda info --base)/envs"
-		find . -mindepth 1 -maxdepth 1 -not -empty \\( -type d -or -type l \\) \\
-			| sed -e 's#^\\.\\/\\(.*\\)\$#\\1#'
+		find . -mindepth 1 -maxdepth 1 -not -empty \\( -type d -or -type l \\) |
+			sed -e 's#^\\.\\/\\(.*\\)\$#\\1#'
 	))
 	for env in "\${ENVS[@]}"; do
 		echo_and_eval "conda update --all --name \$env --yes"

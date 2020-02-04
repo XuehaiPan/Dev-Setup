@@ -9,7 +9,7 @@ RESET="\033[0m"
 
 # Start logging
 LOG_FILE="$PWD/os-setup.log"
-if [[ -f $LOG_FILE ]]; then
+if [[ -f "$LOG_FILE" ]]; then
 	mv -f "$LOG_FILE" "${LOG_FILE}.old"
 fi
 exec 2> >(tee -a "$LOG_FILE" >&2)
@@ -27,7 +27,7 @@ elif [[ "$(uname -s)" == "Linux" ]]; then
 	fi
 fi
 
-if [[ -z $OS_NAME ]]; then
+if [[ -z "$OS_NAME" ]]; then
 	echo -e "${BOLDRED}The operating system is not supported yet. ${BOLDYELLOW}Only macOS, Ubuntu Linux, and Manjaro Linux are supported.${RESET}" >&2
 	exit 1
 fi

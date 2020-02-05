@@ -201,7 +201,7 @@ git config --global filter.lfs.process 'git-lfs filter-process'
 git config --global filter.lfs.required true
 git config --global color.ui true
 
-mv -f .gitconfig .dotfiles/
+mv -f .gitconfig .dotfiles/.gitconfig
 ln -sf .dotfiles/.gitconfig .
 
 # Install Oh-My-Zsh

@@ -395,9 +395,11 @@ if [[ -f "\$HOME/.fzf.zsh" ]]; then
 fi
 if [[ -x "\$(command -v fdfind)" ]]; then
 	alias fd='fdfind'
-fi
-if command -v fd &>/dev/null; then
+	export FZF_DEFAULT_COMMAND="fdfind --type file --follow --hidden --exclude '.git' --color=always"
+elif [[ -x "\$(command -v fd)" ]]; then
 	export FZF_DEFAULT_COMMAND="fd --type file --follow --hidden --exclude '.git' --color=always"
+fi
+if [[ -n "\$FZF_DEFAULT_COMMAND" ]]; then
 	export FZF_CTRL_T_COMMAND="\$FZF_DEFAULT_COMMAND"
 fi
 FZF_PREVIEW_COMMAND="(bat --color=always {} || highlight -O ansi {} || cat {}) 2>/dev/null | head -100"
@@ -904,9 +906,11 @@ if [[ -f "\$HOME/.fzf.bash" ]]; then
 fi
 if [[ -x "\$(command -v fdfind)" ]]; then
 	alias fd='fdfind'
-fi
-if command -v fd &>/dev/null; then
+	export FZF_DEFAULT_COMMAND="fdfind --type file --follow --hidden --exclude '.git' --color=always"
+elif [[ -x "\$(command -v fd)" ]]; then
 	export FZF_DEFAULT_COMMAND="fd --type file --follow --hidden --exclude '.git' --color=always"
+fi
+if [[ -n "\$FZF_DEFAULT_COMMAND" ]]; then
 	export FZF_CTRL_T_COMMAND="\$FZF_DEFAULT_COMMAND"
 fi
 FZF_PREVIEW_COMMAND="(bat --color=always {} || highlight -O ansi {} || cat {}) 2>/dev/null | head -100"

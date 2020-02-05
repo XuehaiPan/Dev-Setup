@@ -1836,8 +1836,8 @@ upgrade_gems
 # upgrade_conda
 
 if [[ -n "\$ZSH_VERSION" ]]; then
-	if [[ -f "\$HOME/.zshrc" ]]; then
-		source "\$HOME/.zshrc"
+	if [[ -f "\${ZDOTDIR:-"\$HOME"}/.zshrc" ]]; then
+		source "\${ZDOTDIR:-"\$HOME"}/.zshrc"
 	fi
 elif [[ -n "\$BASH_VERSION" ]]; then
 	if [[ -f "\$HOME/.bash_profile" ]]; then

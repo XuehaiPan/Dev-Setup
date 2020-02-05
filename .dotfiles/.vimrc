@@ -20,7 +20,8 @@ set foldenable
 set foldmethod=indent
 set foldlevel=3
 set scrolloff=3
-set sidescroll=5
+set sidescroll=10
+set linebreak
 set wrap
 set showmatch
 set hlsearch
@@ -69,6 +70,11 @@ autocmd BufEnter * if (winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isT
                  \ q |
                  \ endif
 
+let g:fzf_buffers_jump = 1
+let g:fzf_commits_log_options = '--graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr"'
+let g:fzf_tags_command = 'ctags -R'
+let g:fzf_commands_expect = 'alt-enter,ctrl-x'
+
 let g:rainbow_active = 1
 
 set statusline+=%#warningmsg#
@@ -93,6 +99,8 @@ call plug#begin('~/.vim/plugged')
     Plug 'jiangmiao/auto-pairs'
     Plug 'airblade/vim-gitgutter'
     Plug 'tpope/vim-fugitive'
+    Plug 'junegunn/fzf', { 'dir': '~/.fzf' }
+    Plug 'junegunn/fzf.vim'
     Plug 'luochen1990/rainbow'
     Plug 'Chiel92/vim-autoformat'
     Plug 'vim-syntastic/syntastic'

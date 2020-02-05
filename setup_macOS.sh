@@ -53,7 +53,7 @@ function echo_and_eval() {
 						if ($i ~ /^"/) {
 							in_string = 1;
 						}
-						else if (idx == 1) {
+						if (idx == 1) {
 							Style = BoldGreen;
 						}
 					}
@@ -146,6 +146,7 @@ fi
 
 # Install Packages
 echo_and_eval 'brew install bash-completion wget curl git git-lfs macvim tmux'
+echo_and_eval 'brew install fd bat highlight shfmt shellcheck'
 echo_and_eval 'brew install htop openssh tree diffutils colordiff reattach-to-user-namespace'
 
 echo_and_eval 'brew install ruby perl'
@@ -233,6 +234,14 @@ for plugin in zsh-{syntax-highlighting,autosuggestions,completions}; do
 		echo_and_eval "git -C \"\$ZSH_CUSTOM/plugins/$plugin\" pull 2>&1"
 	fi
 done
+
+# Install Fzf
+if [[ ! -d "$HOME/.fzf" ]]; then
+	echo_and_eval 'git clone --depth=1 https://github.com/junegunn/fzf.git "$HOME/.fzf" 2>&1'
+else
+	echo_and_eval 'git -C "$HOME/.fzf" pull 2>&1'
+fi
+echo_and_eval '"$HOME/.fzf/install" --key-bindings --completion --no-update-rc'
 
 # Configurations for RubyGems
 backup_dotfiles .gemrc .dotfiles/.gemrc
@@ -378,6 +387,18 @@ export PATH="/usr/local/opt/sqlite/bin:\$PATH"
 # LLVM
 export PATH="/usr/local/opt/llvm/bin:\$PATH"
 
+# Fzf
+if [[ -f "\$HOME/.fzf.zsh" ]]; then
+	source "\$HOME/.fzf.zsh"
+fi
+export FZF_DEFAULT_COMMAND="fd --type file --follow --hidden --exclude '.git' --color=always"
+export FZF_CTRL_T_COMMAND="\$FZF_DEFAULT_COMMAND"
+FZF_PREVIEW_COMMAND="(bat --color=always {} || highlight -O ansi {} || cat {}) 2>/dev/null | head -100"
+export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --ansi --preview='\${FZF_PREVIEW_COMMAND}'"
+
+# Bat
+export BAT_THEME="Monokai Extended Bright"
+
 # iTerm
 if [[ -f "\$HOME/.iterm2/.iterm2_shell_integration.zsh" ]]; then
 	source "\$HOME/.iterm2/.iterm2_shell_integration.zsh"
@@ -498,7 +519,10 @@ plugins=(
 	zsh-syntax-highlighting
 	zsh-autosuggestions
 	zsh-completions
+	colorize
 	colored-man-pages
+	fd
+	fzf
 	git
 	git-auto-fetch
 	python
@@ -506,6 +530,7 @@ plugins=(
 	vscode
 )
 
+ZSH_COLORIZE_STYLE="monokai"
 ZSH_DISABLE_COMPFIX=true
 
 source "\$ZSH/oh-my-zsh.sh"
@@ -777,6 +802,18 @@ export PATH="/usr/local/opt/sqlite/bin:\$PATH"
 # LLVM
 export PATH="/usr/local/opt/llvm/bin:\$PATH"
 
+# Fzf
+if [[ -f "\$HOME/.fzf.bash" ]]; then
+	source "\$HOME/.fzf.bash"
+fi
+export FZF_DEFAULT_COMMAND="fd --type file --follow --hidden --exclude '.git' --color=always"
+export FZF_CTRL_T_COMMAND="\$FZF_DEFAULT_COMMAND"
+FZF_PREVIEW_COMMAND="(bat --color=always {} || highlight -O ansi {} || cat {}) 2>/dev/null | head -100"
+export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --ansi --preview='\${FZF_PREVIEW_COMMAND}'"
+
+# Bat
+export BAT_THEME="Monokai Extended Bright"
+
 # iTerm
 if [[ -f "\$HOME/.iterm2/.iterm2_shell_integration.bash" ]]; then
 	source "\$HOME/.iterm2/.iterm2_shell_integration.bash"
@@ -950,7 +987,8 @@ set foldenable
 set foldmethod=indent
 set foldlevel=3
 set scrolloff=3
-set sidescroll=5
+set sidescroll=10
+set linebreak
 set wrap
 set showmatch
 set hlsearch
@@ -998,6 +1036,11 @@ autocmd BufEnter * if (winnr('\$') == 1 && exists('b:NERDTree') && b:NERDTree.is
                  \\ q |
                  \\ endif
 
+let g:fzf_buffers_jump = 1
+let g:fzf_commits_log_options = '--graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr"'
+let g:fzf_tags_command = 'ctags -R'
+let g:fzf_commands_expect = 'alt-enter,ctrl-x'
+
 let g:rainbow_active = 1
 
 set statusline+=%#warningmsg#
@@ -1022,6 +1065,8 @@ call plug#begin('~/.vim/plugged')
     Plug 'jiangmiao/auto-pairs'
     Plug 'airblade/vim-gitgutter'
     Plug 'tpope/vim-fugitive'
+    Plug 'junegunn/fzf', { 'dir': '~/.fzf' }
+    Plug 'junegunn/fzf.vim'
     Plug 'luochen1990/rainbow'
     Plug 'Chiel92/vim-autoformat'
     Plug 'vim-syntastic/syntastic'
@@ -1675,7 +1720,7 @@ function echo_and_eval() {
 						if (\$i ~ /^"/) {
 							in_string = 1;
 						}
-						else if (idx == 1) {
+						if (idx == 1) {
 							Style = BoldGreen;
 						}
 					}
@@ -1742,6 +1787,11 @@ function upgrade_ohmyzsh() {
 	done
 }
 
+function upgrade_fzf() {
+	echo_and_eval 'git -C "\$HOME/.fzf" pull'
+	echo_and_eval '"\$HOME/.fzf/install" --key-bindings --completion --no-update-rc'
+}
+
 function upgrade_vim() {
 	echo_and_eval 'vim -c "PlugUpgrade | PlugUpdate | qa"'
 }
@@ -1779,6 +1829,7 @@ function upgrade_conda() {
 
 upgrade_homebrew
 upgrade_ohmyzsh
+upgrade_fzf
 upgrade_vim
 upgrade_gems
 # upgrade_cpan

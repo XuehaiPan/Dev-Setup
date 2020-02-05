@@ -170,6 +170,11 @@ The following packages will be setup:
 | [tmux](https://github.com/tmux/tmux/wiki) & [oh-my-tmux](https://github.com/gpakosz/.tmux)                                       |   ✔   |      ✔       |       ✔       |
 | [reattach-to-user-namespace](https://github.com/ChrisJohnsen/tmux-MacOSX-pasteboard) / [xclip](https://github.com/astrand/xclip) |   ✔   |      ✔       |       ✔       |
 |                                                                                                                                  |       |              |               |
+| [fzf](https://github.com/junegunn/fzf)                                                                                           |   ✔   |      ✔       |       ✔       |
+| [fd](https://github.com/sharkdp/fd)                                                                                              |   ✔   |      ✔       |       ✔       |
+| [bat](https://github.com/sharkdp/bat)                                                                                            |   ✔   |      ✔       |       ✔       |
+| [highlight](http://www.andre-simon.de/doku/highlight/en/highlight.php)                                                           |   ✔   |      ✔       |       ✔       |
+|                                                                                                                                  |       |              |               |
 | [wget](https://www.gnu.org/software/wget/)                                                                                       |   ✔   |      ✔       |       ✔       |
 | [curl](https://curl.haxx.se)                                                                                                     |   ✔   |      ✔       |       ✔       |
 | [openssh](https://www.ssh.com/ssh/openssh/)                                                                                      |   ✔   |      ✔       |       ✔       |
@@ -181,6 +186,8 @@ The following packages will be setup:
 | [tree](http://mama.indstate.edu/users/ice/tree/)                                                                                 |   ✔   |      ✔       |       ✔       |
 | [diffutils](https://www.gnu.org/software/diffutils/)                                                                             |   ✔   |      ✔       |       ✔       |
 | [colordiff](https://www.colordiff.org)                                                                                           |   ✔   |      ✔       |       ✔       |
+| [shfmt](https://github.com/mvdan/sh)                                                                                             |   ✔   |      ✔       |       ✔       |
+| [shellcheck](https://www.shellcheck.net)                                                                                         |   ✔   |      ✔       |       ✔       |
 |                                                                                                                                  |       |              |               |
 | [Miniconda3](https://docs.conda.io/en/latest/miniconda.html)                                                                     |   ✔   |      ✔       |       ✔       |
 | [gcc](https://gcc.gnu.org)                                                                                                       |   ✔   |      ✔       |       ✔       |

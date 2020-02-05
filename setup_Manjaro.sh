@@ -65,7 +65,7 @@ function echo_and_eval() {
 						if ($i ~ /^"/) {
 							in_string = 1;
 						}
-						else if (idx == 1) {
+						if (idx == 1) {
 							Style = BoldGreen;
 						}
 					}
@@ -147,6 +147,7 @@ if $IS_SUDOER; then
 
 	# Install Packages
 	echo_and_eval 'yes | sudo pacman -S bash-completion wget curl git git-lfs gvim tmux --needed'
+	echo_and_eval 'yes | sudo pacman -S fd bat highlight shfmt shellcheck --needed'
 	echo_and_eval 'yes | sudo pacman -S htop openssh net-tools exfat-utils tree colordiff xclip --needed'
 	echo_and_eval 'yes | sudo pacman -S gcc gdb clang llvm lldb make cmake automake autoconf ruby --needed'
 	echo_and_eval 'yes | sudo pacman -Scc'
@@ -226,6 +227,14 @@ for plugin in zsh-{syntax-highlighting,autosuggestions,completions}; do
 		echo_and_eval "git -C \"\$ZSH_CUSTOM/plugins/$plugin\" pull 2>&1"
 	fi
 done
+
+# Install Fzf
+if [[ ! -d "$HOME/.fzf" ]]; then
+	echo_and_eval 'git clone --depth=1 https://github.com/junegunn/fzf.git "$HOME/.fzf" 2>&1'
+else
+	echo_and_eval 'git -C "$HOME/.fzf" pull 2>&1'
+fi
+echo_and_eval '"$HOME/.fzf/install" --key-bindings --completion --no-update-rc'
 
 # Configurations for RubyGems
 backup_dotfiles .gemrc .dotfiles/.gemrc
@@ -355,6 +364,20 @@ fi
 # Perl
 eval "\$(perl -I\$HOME/.perl/lib/perl5 -Mlocal::lib=\$HOME/.perl)"
 
+# Fzf
+if [[ -f "\$HOME/.fzf.zsh" ]]; then
+	source "\$HOME/.fzf.zsh"
+fi
+if [[ -x "\$(command -v fd)" ]]; then
+	export FZF_DEFAULT_COMMAND="fd --type file --follow --hidden --exclude '.git' --color=always"
+	export FZF_CTRL_T_COMMAND="\$FZF_DEFAULT_COMMAND"
+fi
+FZF_PREVIEW_COMMAND="(bat --color=always {} || highlight -O ansi {} || cat {}) 2>/dev/null | head -100"
+export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --ansi --preview='\${FZF_PREVIEW_COMMAND}'"
+
+# Bat
+export BAT_THEME="Monokai Extended Bright"
+
 # Remove duplicate entries
 function remove_duplicate() {
 	for item in "\$@"; do
@@ -471,13 +494,17 @@ plugins=(
 	zsh-syntax-highlighting
 	zsh-autosuggestions
 	zsh-completions
+	colorize
 	colored-man-pages
+	fd
+	fzf
 	git
 	git-auto-fetch
 	python
 	vscode
 )
 
+ZSH_COLORIZE_STYLE="monokai"
 ZSH_DISABLE_COMPFIX=true
 
 source "\$ZSH/oh-my-zsh.sh"
@@ -608,7 +635,7 @@ function echo_and_eval() {
 						if (\$i ~ /^"/) {
 							in_string = 1;
 						}
-						else if (idx == 1) {
+						if (idx == 1) {
 							Style = BoldGreen;
 						}
 					}
@@ -669,6 +696,11 @@ function upgrade_ohmyzsh() {
 	for repo in "\${REPOS[@]}"; do
 		echo_and_eval "git -C \\"\\\$ZSH_CUSTOM/\$repo\\" pull"
 	done
+}
+
+function upgrade_fzf() {
+	echo_and_eval 'git -C "\$HOME/.fzf" pull'
+	echo_and_eval '"\$HOME/.fzf/install" --key-bindings --completion --no-update-rc'
 }
 
 function upgrade_vim() {
@@ -836,6 +868,20 @@ fi
 # Perl
 eval "\$(perl -I\$HOME/.perl/lib/perl5 -Mlocal::lib=\$HOME/.perl)"
 
+# Fzf
+if [[ -f "\$HOME/.fzf.bash" ]]; then
+	source "\$HOME/.fzf.bash"
+fi
+if [[ -x "\$(command -v fd)" ]]; then
+	export FZF_DEFAULT_COMMAND="fd --type file --follow --hidden --exclude '.git' --color=always"
+	export FZF_CTRL_T_COMMAND="\$FZF_DEFAULT_COMMAND"
+fi
+FZF_PREVIEW_COMMAND="(bat --color=always {} || highlight -O ansi {} || cat {}) 2>/dev/null | head -100"
+export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --ansi --preview='\${FZF_PREVIEW_COMMAND}'"
+
+# Bat
+export BAT_THEME="Monokai Extended Bright"
+
 # Remove duplicate entries
 function remove_duplicate() {
 	for item in "\$@"; do
@@ -905,7 +951,8 @@ set foldenable
 set foldmethod=indent
 set foldlevel=3
 set scrolloff=3
-set sidescroll=5
+set sidescroll=10
+set linebreak
 set wrap
 set showmatch
 set hlsearch
@@ -953,6 +1000,11 @@ autocmd BufEnter * if (winnr('\$') == 1 && exists('b:NERDTree') && b:NERDTree.is
                  \\ q |
                  \\ endif
 
+let g:fzf_buffers_jump = 1
+let g:fzf_commits_log_options = '--graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr"'
+let g:fzf_tags_command = 'ctags -R'
+let g:fzf_commands_expect = 'alt-enter,ctrl-x'
+
 let g:rainbow_active = 1
 
 set statusline+=%#warningmsg#
@@ -977,6 +1029,8 @@ call plug#begin('~/.vim/plugged')
     Plug 'jiangmiao/auto-pairs'
     Plug 'airblade/vim-gitgutter'
     Plug 'tpope/vim-fugitive'
+    Plug 'junegunn/fzf', { 'dir': '~/.fzf' }
+    Plug 'junegunn/fzf.vim'
     Plug 'luochen1990/rainbow'
     Plug 'Chiel92/vim-autoformat'
     Plug 'vim-syntastic/syntastic'
@@ -1112,9 +1166,9 @@ fi
 # Install Vim Plugins
 if [[ -x "$(command -v vim)" ]]; then
 	echo_and_eval 'vim -c "PlugUpgrade | PlugInstall | PlugUpdate | qa"'
-fi
-if [[ ! -f "$HOME/.vim/plugged/markdown-preview.nvim/app/bin/markdown-preview-linux" ]]; then
-	echo_and_eval 'cd "$HOME/.vim/plugged/markdown-preview.nvim/app"; ./install.sh; cd "$HOME"'
+	if [[ ! -f "$HOME/.vim/plugged/markdown-preview.nvim/app/bin/markdown-preview-linux" ]]; then
+		echo_and_eval 'cd "$HOME/.vim/plugged/markdown-preview.nvim/app"; ./install.sh; cd "$HOME"'
+	fi
 fi
 
 # Configurations for Tmux
@@ -1623,7 +1677,7 @@ function echo_and_eval() {
 						if (\$i ~ /^"/) {
 							in_string = 1;
 						}
-						else if (idx == 1) {
+						if (idx == 1) {
 							Style = BoldGreen;
 						}
 					}
@@ -1686,6 +1740,11 @@ function upgrade_ohmyzsh() {
 	done
 }
 
+function upgrade_fzf() {
+	echo_and_eval 'git -C "\$HOME/.fzf" pull'
+	echo_and_eval '"\$HOME/.fzf/install" --key-bindings --completion --no-update-rc'
+}
+
 function upgrade_vim() {
 	echo_and_eval 'vim -c "PlugUpgrade | PlugUpdate | qa"'
 }
@@ -1725,6 +1784,7 @@ if groups "\$USER" | grep -qE '(wheel|root)'; then
 	upgrade_manjaro
 fi
 upgrade_ohmyzsh
+upgrade_fzf
 if [[ -x "\$(command -v vim)" ]]; then
 	upgrade_vim
 fi

@@ -65,7 +65,7 @@ function echo_and_eval() {
 						if ($i ~ /^"/) {
 							in_string = 1;
 						}
-						else if (idx == 1) {
+						if (idx == 1) {
 							Style = BoldGreen;
 						}
 					}
@@ -110,6 +110,22 @@ function backup_dotfiles() {
 	done
 }
 
+function get_latest_version() {
+	curl --silent "https://api.github.com/repos/$1/releases/latest" |
+		grep '"tag_name":' |
+		sed -E 's/.*"([^"]+)".*/\1/'
+}
+
+function check_binary() {
+	local CMD="$1"
+	local REQUIRED="${2#v}"
+	local VERSION="$("$CMD" --version 2>&1)"
+	if [[ $? -eq 0 && "$VERSION" == *"$REQUIRED"* ]]; then
+		return 0
+	fi
+	return 1
+}
+
 if $IS_SUDOER; then
 	# Setup Apt Sources
 	URL_LIST=(
@@ -133,6 +149,32 @@ if $IS_SUDOER; then
 
 	# Install Packages
 	echo_and_eval 'sudo apt install bash-completion wget curl git git-lfs vim tmux --yes'
+	echo_and_eval 'sudo apt install highlight shellcheck --yes'
+	if [[ -n "$(apt-cache search '^fd-find$' --names-only)" ]]; then
+		echo_and_eval 'sudo apt install fd-find --yes'
+	else
+		LATEST_FD_VERSION="$(get_latest_version "sharkdp/fd")"
+		if ! check_binary fd "$LATEST_FD_VERSION"; then
+			echo_and_eval "wget -nv --show-progress --progress=bar:force:noscroll -N -P \"$TMP_DIR/\" https://github.com/sharkdp/fd/releases/download/${LATEST_FD_VERSION}/fd_${LATEST_FD_VERSION#v}_amd64.deb"
+			echo_and_eval "sudo dpkg -i \"$TMP_DIR/fd_${LATEST_FD_VERSION#v}_amd64.deb\""
+		fi
+	fi
+	if [[ -n "$(apt-cache search '^bat$' --names-only)" ]]; then
+		echo_and_eval 'sudo apt install bat --yes'
+	else
+		LATEST_BAT_VERSION="$(get_latest_version "sharkdp/bat")"
+		if ! check_binary bat "$LATEST_BAT_VERSION"; then
+			echo_and_eval "wget -nv --show-progress --progress=bar:force:noscroll -N -P \"$TMP_DIR/\" https://github.com/sharkdp/bat/releases/download/${LATEST_BAT_VERSION}/bat_${LATEST_BAT_VERSION#v}_amd64.deb"
+			echo_and_eval "sudo dpkg -i \"$TMP_DIR/bat_${LATEST_BAT_VERSION#v}_amd64.deb\""
+		fi
+	fi
+	LATEST_SHFMT_VERSION="$(get_latest_version "mvdan/sh")"
+	if ! check_binary shfmt "$LATEST_SHFMT_VERSION"; then
+		echo_and_eval "wget -nv --show-progress --progress=bar:force:noscroll -N -P \"$TMP_DIR/\" https://github.com/mvdan/sh/releases/download/${LATEST_SHFMT_VERSION}/shfmt_${LATEST_SHFMT_VERSION}_linux_amd64"
+		echo_and_eval "sudo mv -f \"$TMP_DIR/shfmt_${LATEST_SHFMT_VERSION}_linux_amd64\" /usr/local/bin/shfmt"
+		echo_and_eval 'sudo chmod a+x /usr/local/bin/shfmt'
+		echo_and_eval 'sudo chown root:root /usr/local/bin/shfmt'
+	fi
 	echo_and_eval 'sudo apt install htop ssh net-tools exfat-utils tree colordiff xclip --yes'
 	echo_and_eval 'sudo apt install make cmake automake autoconf build-essential gcc g++ gdb --yes'
 	echo_and_eval 'sudo apt install clang clang-format llvm lldb ruby-full --yes'
@@ -210,6 +252,14 @@ for plugin in zsh-{syntax-highlighting,autosuggestions,completions}; do
 		echo_and_eval "git -C \"\$ZSH_CUSTOM/plugins/$plugin\" pull 2>&1"
 	fi
 done
+
+# Install Fzf
+if [[ ! -d "$HOME/.fzf" ]]; then
+	echo_and_eval 'git clone --depth=1 https://github.com/junegunn/fzf.git "$HOME/.fzf" 2>&1'
+else
+	echo_and_eval 'git -C "$HOME/.fzf" pull 2>&1'
+fi
+echo_and_eval '"$HOME/.fzf/install" --key-bindings --completion --no-update-rc'
 
 # Configurations for RubyGems
 backup_dotfiles .gemrc .dotfiles/.gemrc
@@ -339,6 +389,23 @@ fi
 # Perl
 eval "\$(perl -I\$HOME/.perl/lib/perl5 -Mlocal::lib=\$HOME/.perl)"
 
+# Fzf
+if [[ -f "\$HOME/.fzf.zsh" ]]; then
+	source "\$HOME/.fzf.zsh"
+fi
+if [[ -x "\$(command -v fdfind)" ]]; then
+	alias fd='fdfind'
+fi
+if command -v fd &>/dev/null; then
+	export FZF_DEFAULT_COMMAND="fd --type file --follow --hidden --exclude '.git' --color=always"
+	export FZF_CTRL_T_COMMAND="\$FZF_DEFAULT_COMMAND"
+fi
+FZF_PREVIEW_COMMAND="(bat --color=always {} || highlight -O ansi {} || cat {}) 2>/dev/null | head -100"
+export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --ansi --preview='\${FZF_PREVIEW_COMMAND}'"
+
+# Bat
+export BAT_THEME="Monokai Extended Bright"
+
 # Remove duplicate entries
 function remove_duplicate() {
 	for item in "\$@"; do
@@ -455,13 +522,17 @@ plugins=(
 	zsh-syntax-highlighting
 	zsh-autosuggestions
 	zsh-completions
+	colorize
 	colored-man-pages
+	fd
+	fzf
 	git
 	git-auto-fetch
 	python
 	vscode
 )
 
+ZSH_COLORIZE_STYLE="monokai"
 ZSH_DISABLE_COMPFIX=true
 
 source "\$ZSH/oh-my-zsh.sh"
@@ -592,7 +663,7 @@ function echo_and_eval() {
 						if (\$i ~ /^"/) {
 							in_string = 1;
 						}
-						else if (idx == 1) {
+						if (idx == 1) {
 							Style = BoldGreen;
 						}
 					}
@@ -655,6 +726,11 @@ function upgrade_ohmyzsh() {
 	for repo in "\${REPOS[@]}"; do
 		echo_and_eval "git -C \\"\\\$ZSH_CUSTOM/\$repo\\" pull"
 	done
+}
+
+function upgrade_fzf() {
+	echo_and_eval 'git -C "\$HOME/.fzf" pull'
+	echo_and_eval '"\$HOME/.fzf/install" --key-bindings --completion --no-update-rc'
 }
 
 function upgrade_vim() {
@@ -822,6 +898,23 @@ fi
 # Perl
 eval "\$(perl -I\$HOME/.perl/lib/perl5 -Mlocal::lib=\$HOME/.perl)"
 
+# Fzf
+if [[ -f "\$HOME/.fzf.bash" ]]; then
+	source "\$HOME/.fzf.bash"
+fi
+if [[ -x "\$(command -v fdfind)" ]]; then
+	alias fd='fdfind'
+fi
+if command -v fd &>/dev/null; then
+	export FZF_DEFAULT_COMMAND="fd --type file --follow --hidden --exclude '.git' --color=always"
+	export FZF_CTRL_T_COMMAND="\$FZF_DEFAULT_COMMAND"
+fi
+FZF_PREVIEW_COMMAND="(bat --color=always {} || highlight -O ansi {} || cat {}) 2>/dev/null | head -100"
+export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --ansi --preview='\${FZF_PREVIEW_COMMAND}'"
+
+# Bat
+export BAT_THEME="Monokai Extended Bright"
+
 # Remove duplicate entries
 function remove_duplicate() {
 	for item in "\$@"; do
@@ -891,7 +984,8 @@ set foldenable
 set foldmethod=indent
 set foldlevel=3
 set scrolloff=3
-set sidescroll=5
+set sidescroll=10
+set linebreak
 set wrap
 set showmatch
 set hlsearch
@@ -939,6 +1033,11 @@ autocmd BufEnter * if (winnr('\$') == 1 && exists('b:NERDTree') && b:NERDTree.is
                  \\ q |
                  \\ endif
 
+let g:fzf_buffers_jump = 1
+let g:fzf_commits_log_options = '--graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr"'
+let g:fzf_tags_command = 'ctags -R'
+let g:fzf_commands_expect = 'alt-enter,ctrl-x'
+
 let g:rainbow_active = 1
 
 set statusline+=%#warningmsg#
@@ -963,6 +1062,8 @@ call plug#begin('~/.vim/plugged')
     Plug 'jiangmiao/auto-pairs'
     Plug 'airblade/vim-gitgutter'
     Plug 'tpope/vim-fugitive'
+    Plug 'junegunn/fzf', { 'dir': '~/.fzf' }
+    Plug 'junegunn/fzf.vim'
     Plug 'luochen1990/rainbow'
     Plug 'Chiel92/vim-autoformat'
     Plug 'vim-syntastic/syntastic'
@@ -1098,9 +1199,9 @@ fi
 # Install Vim Plugins
 if [[ -x "$(command -v vim)" ]]; then
 	echo_and_eval 'vim -c "PlugUpgrade | PlugInstall | PlugUpdate | qa"'
-fi
-if [[ ! -f "$HOME/.vim/plugged/markdown-preview.nvim/app/bin/markdown-preview-linux" ]]; then
-	echo_and_eval 'cd "$HOME/.vim/plugged/markdown-preview.nvim/app"; ./install.sh; cd "$HOME"'
+	if [[ ! -f "$HOME/.vim/plugged/markdown-preview.nvim/app/bin/markdown-preview-linux" ]]; then
+		echo_and_eval 'cd "$HOME/.vim/plugged/markdown-preview.nvim/app"; ./install.sh; cd "$HOME"'
+	fi
 fi
 
 # Configurations for Tmux
@@ -1609,7 +1710,7 @@ function echo_and_eval() {
 						if (\$i ~ /^"/) {
 							in_string = 1;
 						}
-						else if (idx == 1) {
+						if (idx == 1) {
 							Style = BoldGreen;
 						}
 					}
@@ -1674,6 +1775,11 @@ function upgrade_ohmyzsh() {
 	done
 }
 
+function upgrade_fzf() {
+	echo_and_eval 'git -C "\$HOME/.fzf" pull'
+	echo_and_eval '"\$HOME/.fzf/install" --key-bindings --completion --no-update-rc'
+}
+
 function upgrade_vim() {
 	echo_and_eval 'vim -c "PlugUpgrade | PlugUpdate | qa"'
 }
@@ -1713,6 +1819,7 @@ if groups "\$USER" | grep -qE '(sudo|root)'; then
 	upgrade_ubuntu
 fi
 upgrade_ohmyzsh
+upgrade_fzf
 if [[ -x "\$(command -v vim)" ]]; then
 	upgrade_vim
 fi

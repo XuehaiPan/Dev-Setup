@@ -29,7 +29,7 @@ function echo_and_eval() {
 						if ($i ~ /^"/) {
 							in_string = 1;
 						}
-						else if (idx == 1) {
+						if (idx == 1) {
 							Style = BoldGreen;
 						}
 					}
@@ -94,6 +94,11 @@ function upgrade_ohmyzsh() {
 	for repo in "${REPOS[@]}"; do
 		echo_and_eval "git -C \"\$ZSH_CUSTOM/$repo\" pull"
 	done
+}
+
+function upgrade_fzf() {
+	echo_and_eval 'git -C "$HOME/.fzf" pull'
+	echo_and_eval '"$HOME/.fzf/install" --key-bindings --completion --no-update-rc'
 }
 
 function upgrade_vim() {

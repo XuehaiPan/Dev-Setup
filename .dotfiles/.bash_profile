@@ -144,6 +144,18 @@ export WINEDEBUG="-all"
 export DYLD_FALLBACK_LIBRARY_PATH="$DYLD_FALLBACK_LIBRARY_PATH:/usr/X11/lib:/usr/local/lib"
 export DYLD_FALLBACK_LIBRARY_PATH="$DYLD_FALLBACK_LIBRARY_PATH:/usr/local/opt/ncurses/lib"
 
+# Fzf
+if [[ -f "$HOME/.fzf.bash" ]]; then
+	source "$HOME/.fzf.bash"
+fi
+export FZF_DEFAULT_COMMAND="fd --type file --follow --hidden --exclude '.git' --color=always"
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+FZF_PREVIEW_COMMAND="(bat --color=always {} || highlight -O ansi {} || cat {}) 2>/dev/null | head -100"
+export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --ansi --preview='${FZF_PREVIEW_COMMAND}'"
+
+# Bat
+export BAT_THEME="Monokai Extended Bright"
+
 # iTerm
 if [[ -f "$HOME/.iterm2/.iterm2_shell_integration.bash" ]]; then
 	source "$HOME/.iterm2/.iterm2_shell_integration.bash"

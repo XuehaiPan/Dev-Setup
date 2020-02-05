@@ -144,6 +144,18 @@ function upgrade_conda() {
 }
 
 function set_proxy() {
+	if [[ -x "$(command -v gsettings)" ]]; then
+		gsettings set org.gnome.system.proxy mode 'manual'
+		gsettings set org.gnome.system.proxy.http host '127.0.0.1'
+		gsettings set org.gnome.system.proxy.http port 7890
+		gsettings set org.gnome.system.proxy.https host '127.0.0.1'
+		gsettings set org.gnome.system.proxy.https port 7890
+		gsettings set org.gnome.system.proxy.ftp host '127.0.0.1'
+		gsettings set org.gnome.system.proxy.ftp port 7890
+		gsettings set org.gnome.system.proxy.socks host '127.0.0.1'
+		gsettings set org.gnome.system.proxy.socks port 7891
+	fi
+
 	export https_proxy="http://127.0.0.1:7890"
 	export http_proxy="http://127.0.0.1:7890"
 	export ftp_proxy="http://127.0.0.1:7890"
@@ -155,6 +167,18 @@ function set_proxy() {
 }
 
 function reset_proxy() {
+	if [[ -x "$(command -v gsettings)" ]]; then
+		gsettings set org.gnome.system.proxy mode 'none'
+		gsettings set org.gnome.system.proxy.http host '127.0.0.1'
+		gsettings set org.gnome.system.proxy.http port 7890
+		gsettings set org.gnome.system.proxy.https host '127.0.0.1'
+		gsettings set org.gnome.system.proxy.https port 7890
+		gsettings set org.gnome.system.proxy.ftp host '127.0.0.1'
+		gsettings set org.gnome.system.proxy.ftp port 7890
+		gsettings set org.gnome.system.proxy.socks host '127.0.0.1'
+		gsettings set org.gnome.system.proxy.socks port 7891
+	fi
+
 	export https_proxy=""
 	export http_proxy=""
 	export ftp_proxy=""

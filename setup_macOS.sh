@@ -785,14 +785,14 @@ function set_proxy() {
 		gsettings set org.gnome.system.proxy.socks port "\$SORCKS_PORT"
 	fi
 
-	export http_proxy="http://\${PROXY_HOST}:\${HTTP_PROT}"
-	export https_proxy="http://\${PROXY_HOST}:\${HTTPS_PROT}"
-	export ftp_proxy="http://\${PROXY_HOST}:\${FTP_PROT}"
-	export all_proxy="socks5://\${PROXY_HOST}:\${SORCKS_PROT}"
-	export HTTP_PROXY="http://\${PROXY_HOST}:\${HTTP_PROT}"
-	export HTTPS_PROXY="http://\${PROXY_HOST}:\${HTTPS_PROT}"
-	export FTP_PROXY="http://\${PROXY_HOST}:\${FTP_PROT}"
-	export ALL_PROXY="socks5://\${PROXY_HOST}:\${SORCKS_PROT}"
+	export http_proxy="http://\${PROXY_HOST}:\${HTTP_PORT}"
+	export https_proxy="http://\${PROXY_HOST}:\${HTTPS_PORT}"
+	export ftp_proxy="http://\${PROXY_HOST}:\${FTP_PORT}"
+	export all_proxy="socks5://\${PROXY_HOST}:\${SOCKS_PORT}"
+	export HTTP_PROXY="http://\${PROXY_HOST}:\${HTTP_PORT}"
+	export HTTPS_PROXY="http://\${PROXY_HOST}:\${HTTPS_PORT}"
+	export FTP_PROXY="http://\${PROXY_HOST}:\${FTP_PORT}"
+	export ALL_PROXY="socks5://\${PROXY_HOST}:\${SOCKS_PORT}"
 }
 
 function reset_proxy() {

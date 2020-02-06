@@ -98,7 +98,7 @@ By default, `upgrade_packages.sh` will not upgrade your conda environments. If y
 source ~/upgrade_packages.sh; upgrade_conda
 ```
 
-If you are using Linux, each function in `upgrade_packages.sh` has a copy in `$HOME/.dotfiles/utilities.sh` which will be sourced automatically when the shell starts up.
+Each function in `upgrade_packages.sh` has a copy in `$HOME/.dotfiles/utilities.sh` which will be sourced automatically when the shell starts up.
 
 ### Font Settings
 

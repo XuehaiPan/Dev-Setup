@@ -1609,9 +1609,12 @@ ln -sf .dotfiles/.gitignore_global .
 # Configurations for GDB
 backup_dotfiles .gdbinit .dotfiles/.gdbinit
 
-cat >.dotfiles/.gdbinit <<EOF
+touch .dotfiles/.gdbinit
+if ! grep -qF 'set startup-with-shell off' .dotfiles/.gdbinit; then
+	cat >>.dotfiles/.gdbinit <<EOF
 set startup-with-shell off
 EOF
+fi
 
 ln -sf .dotfiles/.gdbinit .
 

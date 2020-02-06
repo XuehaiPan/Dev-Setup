@@ -754,7 +754,7 @@ function set_proxy() {
 		gsettings set org.gnome.system.proxy.ftp host "\$PROXY_HOST"
 		gsettings set org.gnome.system.proxy.ftp port "\$FTP_PORT"
 		gsettings set org.gnome.system.proxy.socks host "\$PROXY_HOST"
-		gsettings set org.gnome.system.proxy.socks port "\$SORCKS_PORT"
+		gsettings set org.gnome.system.proxy.socks port "\$SOCKS_PORT"
 	fi
 
 	export http_proxy="http://\${PROXY_HOST}:\${HTTP_PORT}"

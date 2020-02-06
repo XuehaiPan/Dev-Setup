@@ -192,6 +192,31 @@ function reset_proxy() {
 	unset ALL_PROXY
 }
 
+function auto_reannounce_trackers() {
+	local TIMES=${1:-60}
+	local INTERVAL=${2:-60}
+	local TORRENT="active"
+	local CMD=""
+
+	echo -ne "\033[?25l"
+
+	for ((t = 0; t <= TIMES; ++t)); do
+		if [[ $((t % 5)) != 0 ]]; then
+			TORRENT="active"
+		else
+			TORRENT="all"
+		fi
+		CMD="transmission-remote --torrent $TORRENT --reannounce"
+		eval "$CMD" 1>/dev/null
+		for ((r = INTERVAL - 1; r >= 0; --r)); do
+			echo -ne "$CMD ($t/$TIMES, next reannounce in ${r}s)\033[K\r"
+			sleep 1
+		done
+	done
+
+	echo -ne "\033[K\033[?25h"
+}
+
 function pull_projects() {
 	# Project Directories
 	local BASE_DIRS=("$HOME/VSCodeProjects" "$HOME/PycharmProjects" "$HOME/ClionProjects" "$HOME/IdeaProjects")

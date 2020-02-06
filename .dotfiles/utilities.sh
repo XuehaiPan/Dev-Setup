@@ -144,49 +144,55 @@ function upgrade_conda() {
 }
 
 function set_proxy() {
+	local PORXY_HOST="${1:-"127.0.0.1"}"
+	local HTTP_PORT="${2:-"7890"}"
+	local HTTPS_PORT="${3:-"7890"}"
+	local FTP_PORT="${4:-"7890"}"
+	local SOCKS_PORT="${5:-"7891"}"
+
 	if [[ -x "$(command -v gsettings)" ]]; then
 		gsettings set org.gnome.system.proxy mode 'manual'
-		gsettings set org.gnome.system.proxy.http host '127.0.0.1'
-		gsettings set org.gnome.system.proxy.http port 7890
-		gsettings set org.gnome.system.proxy.https host '127.0.0.1'
-		gsettings set org.gnome.system.proxy.https port 7890
-		gsettings set org.gnome.system.proxy.ftp host '127.0.0.1'
-		gsettings set org.gnome.system.proxy.ftp port 7890
-		gsettings set org.gnome.system.proxy.socks host '127.0.0.1'
-		gsettings set org.gnome.system.proxy.socks port 7891
+		gsettings set org.gnome.system.proxy.http host "$PORXY_HOST"
+		gsettings set org.gnome.system.proxy.http port "$HTTP_PORT"
+		gsettings set org.gnome.system.proxy.https host "$PORXY_HOST"
+		gsettings set org.gnome.system.proxy.https port "$HTTPS_PORT"
+		gsettings set org.gnome.system.proxy.ftp host "$PORXY_HOST"
+		gsettings set org.gnome.system.proxy.ftp port "$FTP_PORT"
+		gsettings set org.gnome.system.proxy.socks host "$PORXY_HOST"
+		gsettings set org.gnome.system.proxy.socks port "$SORCKS_PORT"
 	fi
 
-	export https_proxy="http://127.0.0.1:7890"
-	export http_proxy="http://127.0.0.1:7890"
-	export ftp_proxy="http://127.0.0.1:7890"
-	export all_proxy="socks5://127.0.0.1:7891"
-	export HTTPS_PROXY="http://127.0.0.1:7890"
-	export HTTP_PROXY="http://127.0.0.1:7890"
-	export FTP_PROXY="http://127.0.0.1:7890"
-	export ALL_PROXY="socks5://127.0.0.1:7891"
+	export http_proxy="http://${PORXY_HOST}:${HTTP_PROT}"
+	export https_proxy="http://${PORXY_HOST}:${HTTPS_PROT}"
+	export ftp_proxy="http://${PORXY_HOST}:${FTP_PROT}"
+	export all_proxy="socks5://${PORXY_HOST}:${SORCKS_PROT}"
+	export HTTP_PROXY="http://${PORXY_HOST}:${HTTP_PROT}"
+	export HTTPS_PROXY="http://${PORXY_HOST}:${HTTPS_PROT}"
+	export FTP_PROXY="http://${PORXY_HOST}:${FTP_PROT}"
+	export ALL_PROXY="socks5://${PORXY_HOST}:${SORCKS_PROT}"
 }
 
 function reset_proxy() {
 	if [[ -x "$(command -v gsettings)" ]]; then
 		gsettings set org.gnome.system.proxy mode 'none'
 		gsettings set org.gnome.system.proxy.http host '127.0.0.1'
-		gsettings set org.gnome.system.proxy.http port 7890
+		gsettings set org.gnome.system.proxy.http port 8080
 		gsettings set org.gnome.system.proxy.https host '127.0.0.1'
-		gsettings set org.gnome.system.proxy.https port 7890
+		gsettings set org.gnome.system.proxy.https port 0
 		gsettings set org.gnome.system.proxy.ftp host '127.0.0.1'
-		gsettings set org.gnome.system.proxy.ftp port 7890
+		gsettings set org.gnome.system.proxy.ftp port 0
 		gsettings set org.gnome.system.proxy.socks host '127.0.0.1'
-		gsettings set org.gnome.system.proxy.socks port 7891
+		gsettings set org.gnome.system.proxy.socks port 0
 	fi
 
-	export https_proxy=""
-	export http_proxy=""
-	export ftp_proxy=""
-	export all_proxy=""
-	export HTTPS_PROXY=""
-	export HTTP_PROXY=""
-	export FTP_PROXY=""
-	export ALL_PROXY=""
+	unset https_proxy
+	unset http_proxy
+	unset ftp_proxy
+	unset all_proxy
+	unset HTTPS_PROXY
+	unset HTTP_PROXY
+	unset FTP_PROXY
+	unset ALL_PROXY
 }
 
 function pull_projects() {

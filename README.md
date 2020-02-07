@@ -3,7 +3,6 @@
 Bash scripts for setting up a newly installed OS automatically.
 
 - [OS-Setup](#os-setup)
-  - [Screenshots](#screenshots)
   - [Usage](#usage)
     - [Installation](#installation)
     - [Restoration](#restoration)
@@ -11,23 +10,7 @@ Bash scripts for setting up a newly installed OS automatically.
     - [Font Settings](#font-settings)
   - [Customization](#customization)
   - [Packages](#packages)
-
-## Screenshots
-
-Shell:
-![shell](screenshots/shell.png)
-
-Tmux:
-![tmux](screenshots/tmux.png)
-
-Fzf:
-![fzf](screenshots/fzf.gif)
-
-Vim:
-![vim](screenshots/vim.png)
-
-Live markdown preview support for vim:
-![markdown](screenshots/vim-markdown.png)
+  - [Screenshots](#screenshots)
 
 ## Usage
 
@@ -220,3 +203,25 @@ Currently macOS only casks installed by HomeBrew:
 | [TeamViewer](https://www.teamviewer.com/)                 | The world’s most-loved remote desktop tool                                                 |   ✔   |           ✘            |
 | [Visual Studio Code](https://code.visualstudio.com)       | A lightweight but powerful source code editor                                              |   ✔   |           ✘            |
 | [XQuartz](https://www.xquartz.org)                        | An open-source effort to develop a version of the X.Org X Window System that runs on macOS |   ✔   |           ✘            |
+
+## Screenshots
+
+Shell:
+
+![shell](https://raw.githubusercontent.com/XuehaiPan/OS-Setup/2c0039813cd1fe82f7dd3127ec0d40056f2cfc65/screenshots/shell.png)
+
+Tmux:
+
+![tmux](https://raw.githubusercontent.com/XuehaiPan/OS-Setup/2c0039813cd1fe82f7dd3127ec0d40056f2cfc65/screenshots/tmux.png)
+
+Fzf:
+
+![fzf](https://raw.githubusercontent.com/XuehaiPan/OS-Setup/2c0039813cd1fe82f7dd3127ec0d40056f2cfc65/screenshots/fzf.gif)
+
+Vim:
+
+![vim](https://raw.githubusercontent.com/XuehaiPan/OS-Setup/2c0039813cd1fe82f7dd3127ec0d40056f2cfc65/screenshots/vim.png)
+
+Live markdown preview support for vim:
+
+![markdown](https://raw.githubusercontent.com/XuehaiPan/OS-Setup/2c0039813cd1fe82f7dd3127ec0d40056f2cfc65/screenshots/vim-markdown.png)

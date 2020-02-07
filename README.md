@@ -20,11 +20,14 @@ Shell:
 Tmux:
 ![tmux](screenshots/tmux.png)
 
+Fzf:
+![fzf](screenshots/fzf.gif)
+
 Vim:
 ![vim](screenshots/vim.png)
 
 Live markdown preview support for vim:
-![markdown](screenshots/markdown.png)
+![markdown](screenshots/vim-markdown.png)
 
 ## Usage
 

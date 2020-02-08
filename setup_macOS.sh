@@ -1331,6 +1331,8 @@ call plug#begin('~/.vim/plugged')
     Plug 'luochen1990/rainbow'
     Plug 'Chiel92/vim-autoformat'
     Plug 'vim-syntastic/syntastic'
+    Plug 'SirVer/ultisnips'
+    Plug 'honza/vim-snippets'
     Plug 'godlygeek/tabular'
     Plug 'plasticboy/vim-markdown'
     Plug 'iamcco/markdown-preview.nvim'

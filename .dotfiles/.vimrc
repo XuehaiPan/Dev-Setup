@@ -33,6 +33,7 @@ set autoread
 set showcmd
 set wildmenu
 set wildmode=longest:list,full
+set completeopt=longest,menu
 set background=dark
 set t_Co=256
 set guifont=DejaVuSansMonoNerdFontComplete-Book:h14
@@ -85,6 +86,17 @@ let g:syntastic_auto_loc_list = 1
 let g:syntastic_loc_list_height = 5
 let g:syntastic_check_on_wq = 0
 autocmd GUIEnter * let g:syntastic_check_on_open = 1
+
+let g:ycm_python_interpreter_path = trim(system("realpath $(which python3)"))
+let g:ycm_python_binary_path = trim(system("realpath $(which python3)"))
+let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
+let g:ycm_confirm_extra_conf = 0
+let g:ycm_seed_identifiers_with_syntaxi = 1
+let g:ycm_complete_in_comments = 1
+let g:ycm_complete_in_strings = 1
+let g:ycm_key_list_select_completion = []
+let g:ycm_key_list_previous_completion = []
+autocmd InsertLeave * if pumvisible() == 0 | pclose | endif
 
 let g:mkdp_auto_start = 1
 

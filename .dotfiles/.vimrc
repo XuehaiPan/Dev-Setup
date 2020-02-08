@@ -91,12 +91,21 @@ let g:ycm_python_interpreter_path = trim(system("realpath $(which python3)"))
 let g:ycm_python_binary_path = trim(system("realpath $(which python3)"))
 let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
 let g:ycm_confirm_extra_conf = 0
-let g:ycm_seed_identifiers_with_syntaxi = 1
+let g:ycm_min_num_of_chars_for_completion = 2
+let g:ycm_cache_omnifunc = 0
+let g:ycm_seed_identifiers_with_syntax = 1
 let g:ycm_complete_in_comments = 1
 let g:ycm_complete_in_strings = 1
-let g:ycm_key_list_select_completion = []
-let g:ycm_key_list_previous_completion = []
+let g:ycm_collect_identifiers_from_tags_files = 1
+let g:ycm_collect_identifiers_from_comments_and_strings = 0
 autocmd InsertLeave * if pumvisible() == 0 | pclose | endif
+inoremap <expr> <CR>       pumvisible() ? "\<C-y>" : "\<CR>"
+inoremap <expr> <Down>     pumvisible() ? "\<C-n>" : "\<Down>"
+inoremap <expr> <Up>       pumvisible() ? "\<C-p>" : "\<Up>"
+inoremap <expr> <PageDown> pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<PageDown>"
+inoremap <expr> <PageUp>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<PageUp>"
+let g:ycm_key_list_select_completion = ['<Down>']
+let g:ycm_key_list_previous_completion = ['<Up>']
 
 let g:mkdp_auto_start = 1
 

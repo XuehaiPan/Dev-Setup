@@ -528,6 +528,8 @@
         "*.snm",
         "*.vrb",
         "*.fdb_latexmk",
+        "*.synctex(busy)",
+        "*.synctex.gz(busy)",
         "*.run.xml"
     ],
 

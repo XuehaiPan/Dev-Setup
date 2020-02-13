@@ -1256,7 +1256,7 @@ set wrap
 set showmatch
 set hlsearch
 set incsearch
-" set spell spelllang=en_us
+set smartcase
 set autochdir
 set visualbell
 set autoread
@@ -1271,6 +1271,8 @@ colorscheme monokai
 
 
 autocmd GUIEnter * set lines=50 columns=160
+
+autocmd GUIEnter * set spell spelllang=en_us
 
 autocmd BufWritePre,FileWritePre * RemoveTrailingSpaces
 autocmd Filetype sh,zsh,gitconfig,c,cpp,make,go set noexpandtab

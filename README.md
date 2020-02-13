@@ -54,7 +54,7 @@ bash setup.sh
   vimdiff ~/.dotfiles/$FILE ~/.dotfiles/backups/latest/.dotfiles/$FILE
   ```
 
-  You can get vimdiff reference manual from [https://vimhelp.org/diff.txt.html](https://vimhelp.org/diff.txt.html), especially section 4 [Diff copying](https://vimhelp.org/diff.txt.html#copy-diffs).
+  You can get vimdiff reference manual from [https://vimhelp.org/diff.txt.html](https://vimhelp.org/diff.txt.html), or type command `:help diff` inside vim.
 
 ### Restoration
 

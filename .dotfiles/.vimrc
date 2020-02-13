@@ -46,7 +46,7 @@ colorscheme monokai
 autocmd GUIEnter * set lines=42 columns=160
 
 autocmd BufWritePre,FileWritePre * RemoveTrailingSpaces
-autocmd Filetype sh,c,cpp,make,go set noexpandtab
+autocmd Filetype sh,zsh,gitconfig,c,cpp,make,go set noexpandtab
 autocmd FileType vim,tex let b:autoformat_autoindent = 0
 
 let g:NERDChristmasTree = 1

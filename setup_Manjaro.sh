@@ -1028,8 +1028,10 @@ filetype plugin indent on
 set completeopt=menu,preview,longest
 set autoindent
 set smartindent
+set smarttab
 set tabstop=4
 set shiftwidth=4
+set expandtab
 set list
 set listchars=tab:▸\\ ,trail:·
 set number
@@ -1063,7 +1065,7 @@ colorscheme monokai
 autocmd GUIEnter * set lines=50 columns=160
 
 autocmd BufWritePre,FileWritePre * RemoveTrailingSpaces
-autocmd Filetype python set expandtab
+autocmd Filetype sh,c,cpp,make,go set noexpandtab
 autocmd FileType vim,tex let b:autoformat_autoindent = 0
 
 let g:NERDChristmasTree = 1

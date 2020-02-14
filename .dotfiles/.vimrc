@@ -20,14 +20,16 @@ set colorcolumn=80,100,120,140
 set cursorline
 set foldenable
 set foldmethod=indent
-set foldlevel=3
+set foldlevel=10
 set scrolloff=3
 set sidescroll=10
 set linebreak
 set wrap
 set showmatch
 set hlsearch
+execute "nohlsearch"
 set incsearch
+set ignorecase
 set smartcase
 set autochdir
 set visualbell
@@ -42,11 +44,17 @@ set guifont=DejaVuSansMonoNerdFontComplete-Book:h14
 set linespace=2
 colorscheme monokai
 
+if &term =~ "xterm"
+    let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+    let &t_SR = "\<Esc>]50;CursorShape=2\x7"
+    let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+endif
 
 autocmd GUIEnter * set lines=42 columns=160
 
 autocmd GUIEnter * set spell spelllang=en_us
 
+autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | execute "normal! g'\"" | endif
 autocmd BufWritePre,FileWritePre * RemoveTrailingSpaces
 autocmd Filetype sh,zsh,gitconfig,c,cpp,make,go set noexpandtab
 autocmd FileType vim,tex let b:autoformat_autoindent = 0
@@ -74,6 +82,8 @@ autocmd VimEnter * if str2nr(system("ls -l $PWD | wc -l")) <= 1000 |
 autocmd BufEnter * if (winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree()) |
                  \ q |
                  \ endif
+
+let g:indentLine_char_list = ['|', '¦', '┆', '┊']
 
 let g:fzf_buffers_jump = 1
 let g:fzf_commits_log_options = '--graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr"'
@@ -114,6 +124,7 @@ let g:ycm_key_list_previous_completion = ['<Up>']
 let g:mkdp_auto_start = 1
 
 call plug#begin('~/.vim/plugged')
+    Plug 'mhinz/vim-startify'
     Plug 'scrooloose/nerdtree'
     Plug 'scrooloose/nerdcommenter'
     Plug 'Xuyuanp/nerdtree-git-plugin'
@@ -121,12 +132,18 @@ call plug#begin('~/.vim/plugged')
     Plug 'vim-airline/vim-airline-themes'
     Plug 'ryanoasis/vim-devicons'
     Plug 'yggdroot/indentline'
+    Plug 'luochen1990/rainbow'
+    Plug 'jaxbot/semantic-highlight.vim'
+    Plug 'chrisbra/Colorizer'
     Plug 'jiangmiao/auto-pairs'
+    Plug 'tpope/vim-surround'
+    Plug 'terryma/vim-multiple-cursors'
+    Plug 'mbbill/undotree'
     Plug 'airblade/vim-gitgutter'
     Plug 'tpope/vim-fugitive'
+    Plug 'liuchengxu/vista.vim'
     Plug 'junegunn/fzf', { 'dir': '~/.fzf' }
     Plug 'junegunn/fzf.vim'
-    Plug 'luochen1990/rainbow'
     Plug 'Chiel92/vim-autoformat'
     Plug 'vim-syntastic/syntastic'
     Plug 'ycm-core/YouCompleteMe'
@@ -135,4 +152,6 @@ call plug#begin('~/.vim/plugged')
     Plug 'godlygeek/tabular'
     Plug 'plasticboy/vim-markdown'
     Plug 'iamcco/markdown-preview.nvim'
+    Plug 'lervag/vimtex'
+    Plug 'vim/killersheep'
 call plug#end()

@@ -149,7 +149,7 @@ if $IS_SUDOER; then
 
 	# Install Packages
 	echo_and_eval 'sudo apt install bash-completion wget curl git git-lfs vim tmux --yes'
-	echo_and_eval 'sudo apt install highlight shellcheck --yes'
+	echo_and_eval 'sudo apt install highlight shellcheck exuberant-ctags --yes'
 	if [[ -n "$(apt-cache search '^fd-find$' --names-only)" ]]; then
 		echo_and_eval 'sudo apt install fd-find --yes'
 	else

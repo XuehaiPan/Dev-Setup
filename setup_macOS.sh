@@ -146,7 +146,7 @@ fi
 
 # Install Packages
 echo_and_eval 'brew install bash-completion wget curl git git-lfs macvim tmux'
-echo_and_eval 'brew install fd bat highlight shfmt shellcheck'
+echo_and_eval 'brew install fd bat highlight shfmt shellcheck ctags'
 echo_and_eval 'brew install htop openssh tree diffutils colordiff reattach-to-user-namespace'
 
 echo_and_eval 'brew install ruby perl'

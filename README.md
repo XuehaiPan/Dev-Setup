@@ -174,6 +174,7 @@ The following packages will be setup:
 | [colordiff](https://www.colordiff.org)                                                                                           |   ✔   |      ✔       |       ✔       |
 | [shfmt](https://github.com/mvdan/sh)                                                                                             |   ✔   |      ✔       |       ✔       |
 | [shellcheck](https://www.shellcheck.net)                                                                                         |   ✔   |      ✔       |       ✔       |
+| [ctags](https://ctags.sourceforge.io)                                                                                            |   ✔   |      ✔       |       ✔       |
 |                                                                                                                                  |       |              |               |
 | [Miniconda3](https://docs.conda.io/en/latest/miniconda.html)                                                                     |   ✔   |      ✔       |       ✔       |
 | [gcc](https://gcc.gnu.org)                                                                                                       |   ✔   |      ✔       |       ✔       |

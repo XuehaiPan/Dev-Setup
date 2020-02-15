@@ -71,9 +71,6 @@ unset __conda_setup
 # <<< conda initialize <<<
 export CONDA_JL_HOME="$HOME/Anaconda3/envs/python37"
 
-# Intel
-source "/opt/intel/bin/compilervars.sh" -arch intel64 -platform mac
-
 # Java
 export JAVA_HOME=$(/usr/libexec/java_home)
 export CLASSPATH=".:$JAVA_HOME/lib/tools.jar:$JAVA_HOME/lib/dt.jar"
@@ -130,9 +127,6 @@ export PATH="/usr/local/opt/sqlite/bin:$PATH"
 
 # LLVM
 export PATH="/usr/local/opt/llvm/bin:$PATH"
-
-# MySQL
-export PATH="/usr/local/mysql/bin:$PATH"
 
 # Wine
 export WINEARCH="win64"

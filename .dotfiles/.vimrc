@@ -102,7 +102,6 @@ let g:syntastic_check_on_wq = 0
 autocmd GUIEnter * let g:syntastic_check_on_open = 1
 
 let g:ycm_python_interpreter_path = trim(system("realpath $(which python3)"))
-let g:ycm_python_binary_path = trim(system("realpath $(which python3)"))
 let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
 let g:ycm_confirm_extra_conf = 0
 let g:ycm_min_num_of_chars_for_completion = 2
@@ -117,7 +116,7 @@ inoremap <expr> <Down>     pumvisible() ? "\<C-n>" : "\<Down>"
 inoremap <expr> <Up>       pumvisible() ? "\<C-p>" : "\<Up>"
 inoremap <expr> <PageDown> pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<PageDown>"
 inoremap <expr> <PageUp>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<PageUp>"
-let g:ycm_key_list_stop_completion = ['<C-y>', '<CR>']
+let g:ycm_key_list_stop_completion = ['<C-y>']
 let g:ycm_key_list_select_completion = ['<Down>']
 let g:ycm_key_list_previous_completion = ['<Up>']
 

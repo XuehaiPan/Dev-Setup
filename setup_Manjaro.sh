@@ -141,7 +141,7 @@ if $IS_SUDOER; then
 
 	# Install Packages
 	echo_and_eval 'yes | sudo pacman -S bash-completion wget curl git git-lfs gvim tmux --needed'
-	echo_and_eval 'yes | sudo pacman -S fd bat highlight shfmt shellcheck ctags --needed'
+	echo_and_eval 'yes | sudo pacman -S fd bat highlight shfmt shellcheck --needed'
 	echo_and_eval 'yes | sudo pacman -S htop openssh net-tools exfat-utils tree colordiff xclip --needed'
 	echo_and_eval 'yes | sudo pacman -S gcc gdb clang llvm lldb make cmake automake autoconf ruby --needed'
 	echo_and_eval 'yes | sudo pacman -Scc'
@@ -1136,7 +1136,6 @@ call plug#begin('~/.vim/plugged')
     Plug 'mbbill/undotree'
     Plug 'airblade/vim-gitgutter'
     Plug 'tpope/vim-fugitive'
-    Plug 'liuchengxu/vista.vim'
     Plug 'junegunn/fzf', { 'dir': '~/.fzf' }
     Plug 'junegunn/fzf.vim'
     Plug 'Chiel92/vim-autoformat'

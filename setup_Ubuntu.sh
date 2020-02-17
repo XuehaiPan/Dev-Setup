@@ -149,7 +149,7 @@ if $IS_SUDOER; then
 
 	# Install Packages
 	echo_and_eval 'sudo apt install bash-completion wget curl git git-lfs vim tmux --yes'
-	echo_and_eval 'sudo apt install highlight shellcheck exuberant-ctags --yes'
+	echo_and_eval 'sudo apt install highlight shellcheck --yes'
 	if [[ -n "$(apt-cache search '^fd-find$' --names-only)" ]]; then
 		echo_and_eval 'sudo apt install fd-find --yes'
 	else
@@ -1179,7 +1179,6 @@ call plug#begin('~/.vim/plugged')
     Plug 'mbbill/undotree'
     Plug 'airblade/vim-gitgutter'
     Plug 'tpope/vim-fugitive'
-    Plug 'liuchengxu/vista.vim'
     Plug 'junegunn/fzf', { 'dir': '~/.fzf' }
     Plug 'junegunn/fzf.vim'
     Plug 'Chiel92/vim-autoformat'

@@ -172,7 +172,7 @@ git config --global core.excludesfile '~/.gitignore_global'
 git config --global core.editor vim
 git config --global diff.tool vimdiff
 git config --global diff.guitool gvimdiff
-git config --global diff.algorithm minimal
+git config --global diff.algorithm histogram
 git config --global difftool.prompt false
 git config --global merge.tool vimdiff
 git config --global merge.guitool gvimdiff

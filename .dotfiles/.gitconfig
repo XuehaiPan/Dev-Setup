@@ -10,7 +10,7 @@
 [diff]
 	tool = vimdiff
 	guitool = gvimdiff
-	algorithm = minimal
+	algorithm = histogram
 
 [difftool]
 	prompt = false

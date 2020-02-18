@@ -1116,7 +1116,6 @@ autocmd BufWritePre,FileWritePre * RemoveTrailingSpaces
 autocmd Filetype sh,zsh,gitconfig,c,cpp,make,go set noexpandtab
 autocmd FileType vim,tex let b:autoformat_autoindent = 0
 
-let g:NERDChristmasTree = 1
 let g:NERDTreeMouseMode = 2
 let g:NERDTreeShowBookmarks = 1
 let g:NERDTreeShowFiles = 1
@@ -1136,9 +1135,17 @@ autocmd VimEnter * if str2nr(system("ls -l \$PWD | wc -l")) <= 1000 |
                  \\     endif |
                  \\     unlet width numberwidth signwidth foldwidth bufwidth |
                  \\ endif
-autocmd BufEnter * if (winnr('\$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree()) |
+autocmd BufEnter * if winnr('\$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() |
                  \\ q |
                  \\ endif
+
+let g:airline#extensions#tabline#enabled = 1
+
+let g:bufferline_echo = 0
+
+if &diff
+    let &diffexpr = 'EnhancedDiff#Diff("git diff", "--diff-algorithm=histogram")'
+endif
 
 let g:indentLine_char_list = ['|', '¦', '┆', '┊']
 
@@ -1170,7 +1177,9 @@ call plug#begin('~/.vim/plugged')
     Plug 'Xuyuanp/nerdtree-git-plugin'
     Plug 'vim-airline/vim-airline'
     Plug 'vim-airline/vim-airline-themes'
+    Plug 'bling/vim-bufferline'
     Plug 'ryanoasis/vim-devicons'
+    Plug 'chrisbra/vim-diff-enhanced'
     Plug 'yggdroot/indentline'
     Plug 'luochen1990/rainbow'
     Plug 'jaxbot/semantic-highlight.vim'

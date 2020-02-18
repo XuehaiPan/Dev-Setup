@@ -34,6 +34,7 @@ set smartcase
 set autochdir
 set visualbell
 set autoread
+set updatetime=200
 set showcmd
 set wildmenu
 set wildmode=longest:list,full
@@ -126,6 +127,7 @@ if ! exists('$SSH_CONNECTION')
 endif
 
 call plug#begin('~/.vim/plugged')
+    Plug 'flazz/vim-colorschemes'
     Plug 'mhinz/vim-startify'
     Plug 'scrooloose/nerdtree'
     Plug 'scrooloose/nerdcommenter'

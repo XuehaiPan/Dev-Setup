@@ -15,7 +15,7 @@ fi
 exec 2> >(tee -a "$LOG_FILE" >&2)
 echo -e "${BOLDWHITE}All of the script output will be logged to file ${BOLDYELLOW}\"$LOG_FILE\"${BOLDWHITE}.${RESET}" >&2
 
-# Get system infomation
+# Get system information
 OS_NAME=""
 if [[ "$(uname -s)" == "Darwin" ]]; then
 	OS_NAME="macOS"

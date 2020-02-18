@@ -4,7 +4,7 @@
 export LC_ALL="en_US.UTF-8"
 
 # Set Configuration Backup Directory
-DATETIME=$(date +"%Y-%m-%d-%T")
+DATETIME="$(date +"%Y-%m-%d-%T")"
 BACKUP_DIR="$HOME/.dotfiles/backups/$DATETIME"
 mkdir -p "$BACKUP_DIR/.dotfiles"
 rm -f "$HOME/.dotfiles/backups/latest"
@@ -1132,11 +1132,11 @@ ITERM_UTILITIES=(
 )
 
 function join_by() {
-	local sep=$1
+	local sep="$1"
 	shift
 	echo -n "$1"
 	shift
-	printf "%s" "${@/#/$sep}"
+	printf "%s" "${@/#/"$sep"}"
 }
 
 ALIASES_ARRAY=()

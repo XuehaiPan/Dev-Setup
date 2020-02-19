@@ -492,9 +492,19 @@ plugins=(
 	colored-man-pages
 	fd
 	fzf
+	zsh-interactive-cd
+	copyfile
+	copydir
+	cp
+	rsync
+	alias-finder
 	git
 	git-auto-fetch
 	python
+	pip
+	pylint
+	docker
+	tmux
 	vscode
 )
 

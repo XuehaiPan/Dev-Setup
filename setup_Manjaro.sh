@@ -15,7 +15,7 @@ TMP_DIR="$(mktemp -d)"
 
 # Check if has sudo privileges
 IS_SUDOER=false
-if groups "$USER" | grep -qE '(wheel|root)'; then
+if groups | grep -qE '(wheel|root)'; then
 	IS_SUDOER=true
 fi
 
@@ -829,7 +829,7 @@ cat >upgrade_packages.sh <<EOF
 if [[ -f "\$HOME/.dotfiles/utilities.sh" ]]; then
 	source "\$HOME/.dotfiles/utilities.sh"
 
-	if groups "\$USER" | grep -qE '(wheel|root)'; then
+	if groups | grep -qE '(wheel|root)'; then
 		upgrade_manjaro
 	fi
 	upgrade_ohmyzsh

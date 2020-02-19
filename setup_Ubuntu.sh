@@ -15,7 +15,7 @@ TMP_DIR="$(mktemp -d)"
 
 # Check if has sudo privileges
 IS_SUDOER=false
-if groups "$USER" | grep -qE '(sudo|root)'; then
+if groups | grep -qE '(sudo|root)'; then
 	IS_SUDOER=true
 fi
 
@@ -867,7 +867,7 @@ cat >upgrade_packages.sh <<EOF
 if [[ -f "\$HOME/.dotfiles/utilities.sh" ]]; then
 	source "\$HOME/.dotfiles/utilities.sh"
 
-	if groups "\$USER" | grep -qE '(sudo|root)'; then
+	if groups | grep -qE '(sudo|root)'; then
 		upgrade_ubuntu
 	fi
 	upgrade_ohmyzsh

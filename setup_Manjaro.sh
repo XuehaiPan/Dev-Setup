@@ -492,7 +492,6 @@ plugins=(
 	colored-man-pages
 	fd
 	fzf
-	zsh-interactive-cd
 	copyfile
 	copydir
 	cp

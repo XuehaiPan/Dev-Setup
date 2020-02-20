@@ -11,7 +11,7 @@ rm -f "$HOME/.dotfiles/backups/latest"
 ln -sf "$DATETIME" "$HOME/.dotfiles/backups/latest"
 
 # Set Temporary Directory
-TMP_DIR="$(mktemp -d)"
+TMP_DIR="$(mktemp -d -t os-setup.XXXXXX)"
 
 # Check if has sudo privileges
 IS_SUDOER=false

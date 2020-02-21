@@ -7,8 +7,7 @@ export LC_ALL="en_US.UTF-8"
 DATETIME="$(date +"%Y-%m-%d-%T")"
 BACKUP_DIR="$HOME/.dotfiles/backups/$DATETIME"
 mkdir -p "$BACKUP_DIR/.dotfiles"
-rm -f "$HOME/.dotfiles/backups/latest"
-ln -sf "$DATETIME" "$HOME/.dotfiles/backups/latest"
+ln -sfn "$DATETIME" "$HOME/.dotfiles/backups/latest"
 
 # Set Temporary Directory
 TMP_DIR="$(mktemp -d -t os-setup)"
@@ -628,7 +627,7 @@ exit
 EOF
 
 chmod +x .dotfiles/zsh-purepower/zsh
-echo_and_eval 'sudo ln -sf "$HOME/.dotfiles/zsh-purepower/zsh" /usr/local/bin/zsh-purepower'
+echo_and_eval 'sudo ln -sfn "$HOME/.dotfiles/zsh-purepower/zsh" /usr/local/bin/zsh-purepower'
 if ! grep -qF '/usr/local/bin/zsh-purepower' /etc/shells; then
 	echo_and_eval 'echo "/usr/local/bin/zsh-purepower" | sudo tee -a /etc/shells'
 fi

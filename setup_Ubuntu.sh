@@ -7,8 +7,7 @@ export LC_ALL="en_US.utf8"
 DATETIME="$(date +"%Y-%m-%d-%T")"
 BACKUP_DIR="$HOME/.dotfiles/backups/$DATETIME"
 mkdir -p "$BACKUP_DIR/.dotfiles"
-rm -f "$HOME/.dotfiles/backups/latest"
-ln -sf "$DATETIME" "$HOME/.dotfiles/backups/latest"
+ln -sfn "$DATETIME" "$HOME/.dotfiles/backups/latest"
 
 # Set Temporary Directory
 TMP_DIR="$(mktemp -d -t os-setup.XXXXXX)"
@@ -630,13 +629,13 @@ EOF
 
 chmod +x .dotfiles/zsh-purepower/zsh
 if $IS_SUDOER; then
-	echo_and_eval 'sudo ln -sf "$HOME/.dotfiles/zsh-purepower/zsh" /usr/local/bin/zsh-purepower'
+	echo_and_eval 'sudo ln -sfn "$HOME/.dotfiles/zsh-purepower/zsh" /usr/local/bin/zsh-purepower'
 	if ! grep -qF '/usr/local/bin/zsh-purepower' /etc/shells; then
 		echo_and_eval 'echo "/usr/local/bin/zsh-purepower" | sudo tee -a /etc/shells'
 	fi
 else
 	mkdir -p "$HOME/.local/bin"
-	echo_and_eval 'ln -sf "$HOME/.dotfiles/zsh-purepower/zsh" "$HOME/.local/bin/zsh-purepower"'
+	echo_and_eval 'ln -sfn "$HOME/.dotfiles/zsh-purepower/zsh" "$HOME/.local/bin/zsh-purepower"'
 fi
 
 # Add Utility Script File

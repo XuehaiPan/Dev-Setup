@@ -1036,6 +1036,8 @@ set shiftwidth=4
 set expandtab
 set list
 set listchars=tab:▸\\ ,trail:·
+set conceallevel=2
+set concealcursor=""
 set number
 set ruler
 set colorcolumn=80,100,120,140
@@ -1119,6 +1121,8 @@ let g:fzf_commits_log_options = '--graph --color=always --format="%C(auto)%h%d %
 let g:fzf_tags_command = 'ctags -R'
 let g:fzf_commands_expect = 'alt-enter,ctrl-x'
 
+let g:indentLine_setConceal = 0
+
 let g:rainbow_active = 1
 
 set statusline+=%#warningmsg#
@@ -1161,6 +1165,7 @@ call plug#begin('~/.vim/plugged')
     Plug 'vim-syntastic/syntastic'
     Plug 'SirVer/ultisnips'
     Plug 'honza/vim-snippets'
+    Plug 'elzr/vim-json'
     Plug 'godlygeek/tabular'
     Plug 'plasticboy/vim-markdown'
     Plug 'iamcco/markdown-preview.nvim'

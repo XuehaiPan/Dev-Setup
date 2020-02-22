@@ -157,6 +157,10 @@
     "[cpp]": {
         "editor.insertSpaces": false
     },
+    "[dockerfile]": {
+        "editor.tabSize": 2,
+        "editor.defaultFormatter": "ms-azuretools.vscode-docker"
+    },
     "[go]": {
         "editor.insertSpaces": false
     },
@@ -580,7 +584,8 @@
 
     //* Remote */
     "remote.extensionKind": {
-        "coenraads.bracket-pair-colorizer-2": "ui"
+        "coenraads.bracket-pair-colorizer-2": "ui",
+        "ms-azuretools.vscode-docker": "workspace"
     },
     "remote.SSH.defaultExtensions": [
         "ms-python.anaconda-extension-pack",

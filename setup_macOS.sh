@@ -396,7 +396,7 @@ FZF_PREVIEW_COMMAND="(bat --color=always {} || highlight -O ansi {} || cat {}) 2
 export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --ansi --preview='\${FZF_PREVIEW_COMMAND}'"
 
 # Bat
-export BAT_THEME="Monokai Extended Bright"
+export BAT_THEME="Monokai Extended"
 
 # iTerm
 if [[ -f "\$HOME/.iterm2/.iterm2_shell_integration.zsh" ]]; then
@@ -1076,7 +1076,7 @@ FZF_PREVIEW_COMMAND="(bat --color=always {} || highlight -O ansi {} || cat {}) 2
 export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --ansi --preview='\${FZF_PREVIEW_COMMAND}'"
 
 # Bat
-export BAT_THEME="Monokai Extended Bright"
+export BAT_THEME="Monokai Extended"
 
 # iTerm
 if [[ -f "\$HOME/.iterm2/.iterm2_shell_integration.bash" ]]; then

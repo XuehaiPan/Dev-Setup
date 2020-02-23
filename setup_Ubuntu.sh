@@ -769,7 +769,7 @@ function upgrade_conda() {
 	))
 	for env in "\${ENVS[@]}"; do
 		echo_and_eval "conda update --all --name \$env --yes"
-		if conda list --name "\$env" | grep -q '^anaconda[^-]'; then
+		if conda list --full-name anaconda --name "\$env" | grep -q '^anaconda[^-]'; then
 			echo_and_eval "conda update anaconda --name \$env --yes"
 		fi
 	done

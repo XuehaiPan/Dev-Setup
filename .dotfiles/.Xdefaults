@@ -10,44 +10,44 @@
 *saveLines: 10000
 
 ! SpaceGray Eighties color theme...
-*.foreground:  #bdbaae
+*.foreground:  #BDBAAE
 *.background:  #222222
-*.cursorColor: #bbbbbb
+*.cursorColor: #BBBBBB
 !
 ! Black
-*.color0:      #15171c
+*.color0:      #15171C
 *.color8:      #555555
 !
 ! Red
-*.color1:      #ec5f67
-*.color9:      #ff6973
+*.color1:      #EC5F67
+*.color9:      #FF6973
 !
 ! Green
-*.color2:      #81a764
-*.color10:     #93d493
+*.color2:      #81A764
+*.color10:     #93D493
 !
 ! Yellow
-*.color3:      #fec254
-*.color11:     #ffd256
+*.color3:      #FEC254
+*.color11:     #FFD256
 !
 ! Blue
-*.color4:      #5486c0
-*.color12:     #4d84d1
+*.color4:      #5486C0
+*.color12:     #4D84D1
 !
 ! Magenta
-*.color5:      #bf83c1
-*.color13:     #ff55ff
+*.color5:      #BF83C1
+*.color13:     #FF55FF
 !
 ! Cyan
-*.color6:      #57c2c1
-*.color14:     #83e9e4
+*.color6:      #57C2C1
+*.color14:     #83E9E4
 !
 ! White
-*.color7:      #efece7
-*.color15:     #ffffff
+*.color7:      #EFECE7
+*.color15:     #FFFFFF
 !
 ! Bold, Italic, Underline
-*.colorBD:     #ffffff
+*.colorBD:     #FFFFFF
 !*.colorIT:
 !*.colorUL:
 

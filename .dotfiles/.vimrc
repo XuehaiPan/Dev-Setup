@@ -13,7 +13,7 @@ set tabstop=4
 set shiftwidth=4
 set expandtab
 set list
-set listchars=tab:▸\ ,trail:·
+set listchars=tab:»\ ,trail:·
 set conceallevel=2
 set concealcursor=""
 set number

@@ -13,7 +13,7 @@ if [[ -f "$LOG_FILE" ]]; then
 	mv -f "$LOG_FILE" "${LOG_FILE}.old"
 fi
 exec 2> >(tee -a "$LOG_FILE" >&2)
-echo -e "${BOLDWHITE}All of the script output will be logged to file ${BOLDYELLOW}\"$LOG_FILE\"${BOLDWHITE}.${RESET}" >&2
+echo -e "${BOLDWHITE}The script output will be logged to file ${BOLDYELLOW}\"$LOG_FILE\"${BOLDWHITE}.${RESET}" >&2
 
 # Get system information
 OS_NAME=""

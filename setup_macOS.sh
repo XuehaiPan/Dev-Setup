@@ -27,8 +27,7 @@ fi
 
 # Common Functions
 function echo_and_eval() {
-	local CMD="$*"
-	printf "%s" "$CMD" | awk \
+	printf "%s" "$@" | awk \
 		'BEGIN {
 			UnderlineBoldGreen = "\033[4;1;32m";
 			BoldRed = "\033[1;31m";
@@ -84,7 +83,7 @@ function echo_and_eval() {
 		END {
 			printf("\n");
 		}' >&2
-	eval "$CMD"
+	eval "$@"
 }
 
 function backup_dotfiles() {
@@ -618,8 +617,7 @@ cat >.dotfiles/utilities.sh <<EOF
 #!/usr/bin/env bash
 
 function echo_and_eval() {
-	local CMD="\$*"
-	printf "%s" "\$CMD" | awk \\
+	printf "%s" "\$@" | awk \\
 		'BEGIN {
 			UnderlineBoldGreen = "\\033[4;1;32m";
 			BoldRed = "\\033[1;31m";
@@ -675,7 +673,7 @@ function echo_and_eval() {
 		END {
 			printf("\\n");
 		}'
-	eval "\$CMD"
+	eval "\$@"
 }
 
 function upgrade_homebrew() {
@@ -760,18 +758,6 @@ function set_proxy() {
 	local FTP_PORT="\${4:-"7890"}"
 	local SOCKS_PORT="\${5:-"7891"}"
 
-	if [[ -x "\$(command -v gsettings)" ]]; then
-		gsettings set org.gnome.system.proxy mode 'manual'
-		gsettings set org.gnome.system.proxy.http host "\$PROXY_HOST"
-		gsettings set org.gnome.system.proxy.http port "\$HTTP_PORT"
-		gsettings set org.gnome.system.proxy.https host "\$PROXY_HOST"
-		gsettings set org.gnome.system.proxy.https port "\$HTTPS_PORT"
-		gsettings set org.gnome.system.proxy.ftp host "\$PROXY_HOST"
-		gsettings set org.gnome.system.proxy.ftp port "\$FTP_PORT"
-		gsettings set org.gnome.system.proxy.socks host "\$PROXY_HOST"
-		gsettings set org.gnome.system.proxy.socks port "\$SOCKS_PORT"
-	fi
-
 	export http_proxy="http://\${PROXY_HOST}:\${HTTP_PORT}"
 	export https_proxy="http://\${PROXY_HOST}:\${HTTPS_PORT}"
 	export ftp_proxy="http://\${PROXY_HOST}:\${FTP_PORT}"
@@ -783,18 +769,6 @@ function set_proxy() {
 }
 
 function reset_proxy() {
-	if [[ -x "\$(command -v gsettings)" ]]; then
-		gsettings set org.gnome.system.proxy mode 'none'
-		gsettings set org.gnome.system.proxy.http host '127.0.0.1'
-		gsettings set org.gnome.system.proxy.http port 8080
-		gsettings set org.gnome.system.proxy.https host '127.0.0.1'
-		gsettings set org.gnome.system.proxy.https port 0
-		gsettings set org.gnome.system.proxy.ftp host '127.0.0.1'
-		gsettings set org.gnome.system.proxy.ftp port 0
-		gsettings set org.gnome.system.proxy.socks host '127.0.0.1'
-		gsettings set org.gnome.system.proxy.socks port 0
-	fi
-
 	unset https_proxy
 	unset http_proxy
 	unset ftp_proxy

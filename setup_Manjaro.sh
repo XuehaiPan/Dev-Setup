@@ -36,8 +36,7 @@ fi
 
 # Common Functions
 function echo_and_eval() {
-	local CMD="$*"
-	printf "%s" "$CMD" | awk \
+	printf "%s" "$@" | awk \
 		'BEGIN {
 			UnderlineBoldGreen = "\033[4;1;32m";
 			BoldRed = "\033[1;31m";
@@ -93,7 +92,7 @@ function echo_and_eval() {
 		END {
 			printf("\n");
 		}' >&2
-	eval "$CMD"
+	eval "$@"
 }
 
 function backup_dotfiles() {
@@ -606,8 +605,7 @@ cat >.dotfiles/utilities.sh <<EOF
 #!/usr/bin/env bash
 
 function echo_and_eval() {
-	local CMD="\$*"
-	printf "%s" "\$CMD" | awk \\
+	printf "%s" "\$@" | awk \\
 		'BEGIN {
 			UnderlineBoldGreen = "\\033[4;1;32m";
 			BoldRed = "\\033[1;31m";
@@ -663,7 +661,7 @@ function echo_and_eval() {
 		END {
 			printf("\\n");
 		}'
-	eval "\$CMD"
+	eval "\$@"
 }
 
 function upgrade_manjaro() {

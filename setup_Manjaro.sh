@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-# Set locale
-export LC_ALL="en_US.utf8"
-
 # Set USER
 export USER="${USER:-"$(whoami)"}"
 

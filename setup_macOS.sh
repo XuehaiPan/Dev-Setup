@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-# Set locale
-export LC_ALL="en_US.UTF-8"
-
 # Set PATH
 export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin:/Library/Apple/bin${PATH:+:"$PATH"}"
 

@@ -3,6 +3,9 @@
 # Set locale
 export LC_ALL="en_US.UTF-8"
 
+# Set PATH
+export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin:/Library/Apple/bin${PATH:+:"$PATH"}"
+
 # Set Configuration Backup Directory
 DATETIME="$(date +"%Y-%m-%d-%T")"
 BACKUP_DIR="$HOME/.dotfiles/backups/$DATETIME"
@@ -96,27 +99,6 @@ function backup_dotfiles() {
 		fi
 	done
 }
-
-function remove_duplicate() {
-	for item in "$@"; do
-		printf "%s" "$item" | awk -v RS=':' \
-			'BEGIN {
-				idx = 0;
-				delete flag;
-				flag[""] = 1;
-			}
-			{
-				if (!(flag[$0]++)) {
-					printf("%s%s", (!idx++ ? "" : ":"), $0);
-				}
-			}
-			END {
-				printf("\n");
-			}'
-	done
-}
-PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin:/Library/Apple/bin:$PATH"
-export PATH="$(remove_duplicate "$PATH")"
 
 # Install and Setup Homebrew
 if [[ ! -x "$(command -v brew)" ]]; then
@@ -405,28 +387,25 @@ fi
 
 # Remove duplicate entries
 function remove_duplicate() {
-	for item in "\$@"; do
-		printf "%s" "\$item" | awk -v RS=':' \\
-			'BEGIN {
-				idx = 0;
-				delete flag;
-				flag[""] = 1;
+	local RS="\$1"
+	shift
+	printf "%s" "\$@" | awk -v RS="\$RS" \\
+		'BEGIN {
+			idx = 0;
+			delete flag;
+			flag[""] = 1;
+		}
+		{
+			if (!(flag[\$0]++)) {
+				printf("%s%s", (!idx++ ? "" : RS), \$0);
 			}
-			{
-				if (!(flag[\$0]++)) {
-					printf("%s%s", (!idx++ ? "" : ":"), \$0);
-				}
-			}
-			END {
-				printf("\\n");
-			}'
-	done
+		}'
 }
-export PATH="\$(remove_duplicate "\$PATH")"
-export C_INCLUDE_PATH="\$(remove_duplicate "\$C_INCLUDE_PATH")"
-export CPLUS_INCLUDE_PATH="\$(remove_duplicate "\$CPLUS_INCLUDE_PATH")"
-export LIBRARY_PATH="\$(remove_duplicate "\$LIBRARY_PATH")"
-export DYLD_LIBRARY_PATH="\$(remove_duplicate "\$DYLD_LIBRARY_PATH")"
+export PATH="\$(remove_duplicate ':' "\$PATH")"
+export C_INCLUDE_PATH="\$(remove_duplicate ':' "\$C_INCLUDE_PATH")"
+export CPLUS_INCLUDE_PATH="\$(remove_duplicate ':' "\$CPLUS_INCLUDE_PATH")"
+export LIBRARY_PATH="\$(remove_duplicate ':' "\$LIBRARY_PATH")"
+export DYLD_LIBRARY_PATH="\$(remove_duplicate ':' "\$DYLD_LIBRARY_PATH")"
 unset -f remove_duplicate
 
 # Utilities
@@ -1085,28 +1064,25 @@ fi
 
 # Remove duplicate entries
 function remove_duplicate() {
-	for item in "\$@"; do
-		printf "%s" "\$item" | awk -v RS=':' \\
-			'BEGIN {
-				idx = 0;
-				delete flag;
-				flag[""] = 1;
+	local RS="\$1"
+	shift
+	printf "%s" "\$@" | awk -v RS="\$RS" \\
+		'BEGIN {
+			idx = 0;
+			delete flag;
+			flag[""] = 1;
+		}
+		{
+			if (!(flag[\$0]++)) {
+				printf("%s%s", (!idx++ ? "" : RS), \$0);
 			}
-			{
-				if (!(flag[\$0]++)) {
-					printf("%s%s", (!idx++ ? "" : ":"), \$0);
-				}
-			}
-			END {
-				printf("\\n");
-			}'
-	done
+		}'
 }
-export PATH="\$(remove_duplicate "\$PATH")"
-export C_INCLUDE_PATH="\$(remove_duplicate "\$C_INCLUDE_PATH")"
-export CPLUS_INCLUDE_PATH="\$(remove_duplicate "\$CPLUS_INCLUDE_PATH")"
-export LIBRARY_PATH="\$(remove_duplicate "\$LIBRARY_PATH")"
-export DYLD_LIBRARY_PATH="\$(remove_duplicate "\$DYLD_LIBRARY_PATH")"
+export PATH="\$(remove_duplicate ':' "\$PATH")"
+export C_INCLUDE_PATH="\$(remove_duplicate ':' "\$C_INCLUDE_PATH")"
+export CPLUS_INCLUDE_PATH="\$(remove_duplicate ':' "\$CPLUS_INCLUDE_PATH")"
+export LIBRARY_PATH="\$(remove_duplicate ':' "\$LIBRARY_PATH")"
+export DYLD_LIBRARY_PATH="\$(remove_duplicate ':' "\$DYLD_LIBRARY_PATH")"
 unset -f remove_duplicate
 
 # Utilities

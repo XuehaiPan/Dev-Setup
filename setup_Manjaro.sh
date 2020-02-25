@@ -373,28 +373,25 @@ export BAT_THEME="Monokai Extended"
 
 # Remove duplicate entries
 function remove_duplicate() {
-	for item in "\$@"; do
-		printf "%s" "\$item" | awk -v RS=':' \\
-			'BEGIN {
-				idx = 0;
-				delete flag;
-				flag[""] = 1;
+	local RS="\$1"
+	shift
+	printf "%s" "\$@" | awk -v RS="\$RS" \\
+		'BEGIN {
+			idx = 0;
+			delete flag;
+			flag[""] = 1;
+		}
+		{
+			if (!(flag[\$0]++)) {
+				printf("%s%s", (!idx++ ? "" : RS), \$0);
 			}
-			{
-				if (!(flag[\$0]++)) {
-					printf("%s%s", (!idx++ ? "" : ":"), \$0);
-				}
-			}
-			END {
-				printf("\\n");
-			}'
-	done
+		}'
 }
-export PATH="\$(remove_duplicate "\$PATH")"
-export C_INCLUDE_PATH="\$(remove_duplicate "\$C_INCLUDE_PATH")"
-export CPLUS_INCLUDE_PATH="\$(remove_duplicate "\$CPLUS_INCLUDE_PATH")"
-export LIBRARY_PATH="\$(remove_duplicate "\$LIBRARY_PATH")"
-export LD_LIBRARY_PATH="\$(remove_duplicate "\$LD_LIBRARY_PATH")"
+export PATH="\$(remove_duplicate ':' "\$PATH")"
+export C_INCLUDE_PATH="\$(remove_duplicate ':' "\$C_INCLUDE_PATH")"
+export CPLUS_INCLUDE_PATH="\$(remove_duplicate ':' "\$CPLUS_INCLUDE_PATH")"
+export LIBRARY_PATH="\$(remove_duplicate ':' "\$LIBRARY_PATH")"
+export LD_LIBRARY_PATH="\$(remove_duplicate ':' "\$LD_LIBRARY_PATH")"
 unset -f remove_duplicate
 
 # Utilities
@@ -975,28 +972,25 @@ export BAT_THEME="Monokai Extended"
 
 # Remove duplicate entries
 function remove_duplicate() {
-	for item in "\$@"; do
-		printf "%s" "\$item" | awk -v RS=':' \\
-			'BEGIN {
-				idx = 0;
-				delete flag;
-				flag[""] = 1;
+	local RS="\$1"
+	shift
+	printf "%s" "\$@" | awk -v RS="\$RS" \\
+		'BEGIN {
+			idx = 0;
+			delete flag;
+			flag[""] = 1;
+		}
+		{
+			if (!(flag[\$0]++)) {
+				printf("%s%s", (!idx++ ? "" : RS), \$0);
 			}
-			{
-				if (!(flag[\$0]++)) {
-					printf("%s%s", (!idx++ ? "" : ":"), \$0);
-				}
-			}
-			END {
-				printf("\\n");
-			}'
-	done
+		}'
 }
-export PATH="\$(remove_duplicate "\$PATH")"
-export C_INCLUDE_PATH="\$(remove_duplicate "\$C_INCLUDE_PATH")"
-export CPLUS_INCLUDE_PATH="\$(remove_duplicate "\$CPLUS_INCLUDE_PATH")"
-export LIBRARY_PATH="\$(remove_duplicate "\$LIBRARY_PATH")"
-export LD_LIBRARY_PATH="\$(remove_duplicate "\$LD_LIBRARY_PATH")"
+export PATH="\$(remove_duplicate ':' "\$PATH")"
+export C_INCLUDE_PATH="\$(remove_duplicate ':' "\$C_INCLUDE_PATH")"
+export CPLUS_INCLUDE_PATH="\$(remove_duplicate ':' "\$CPLUS_INCLUDE_PATH")"
+export LIBRARY_PATH="\$(remove_duplicate ':' "\$LIBRARY_PATH")"
+export LD_LIBRARY_PATH="\$(remove_duplicate ':' "\$LD_LIBRARY_PATH")"
 unset -f remove_duplicate
 
 # Utilities

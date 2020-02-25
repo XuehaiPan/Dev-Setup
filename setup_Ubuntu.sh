@@ -1507,7 +1507,6 @@ Temporary Items
 .apdisk
 
 
-
 ##### Linux.gitignore #####
 *~
 
@@ -1524,10 +1523,10 @@ Temporary Items
 .nfs*
 
 
-
 ##### Windows.gitignore #####
 # Windows thumbnail cache files
 Thumbs.db
+Thumbs.db:encryptable
 ehthumbs.db
 ehthumbs_vista.db
 
@@ -1551,7 +1550,6 @@ ehthumbs_vista.db
 *.lnk
 
 
-
 ##### Archives.gitignore #####
 # It's better to unpack these files and commit the raw source because
 # git has its own built in compression methods.
@@ -1560,12 +1558,15 @@ ehthumbs_vista.db
 *.rar
 *.zip
 *.gz
+*.gzip
 *.tgz
 *.bzip
+*.bzip2
 *.bz2
 *.xz
 *.lzma
 *.cab
+*.xar
 
 # Packing-only formats
 *.iso
@@ -1581,7 +1582,7 @@ ehthumbs_vista.db
 *.msi
 *.msm
 *.msp
-
+*.txz
 
 
 ##### Xcode.gitignore #####
@@ -1589,11 +1590,17 @@ ehthumbs_vista.db
 #
 # gitignore contributors: remember to update Global/Xcode.gitignore, Objective-C.gitignore & Swift.gitignore
 
-## Build generated
+## User settings
+xcuserdata/
+
+## compatibility with Xcode 8 and earlier (ignoring not required starting Xcode 9)
+*.xcscmblueprint
+*.xccheckout
+
+## compatibility with Xcode 3 and earlier (ignoring not required starting Xcode 4)
 build/
 DerivedData/
-
-## Various settings
+*.moved-aside
 *.pbxuser
 !default.pbxuser
 *.mode1v3
@@ -1602,68 +1609,9 @@ DerivedData/
 !default.mode2v3
 *.perspectivev3
 !default.perspectivev3
-xcuserdata/
 
-## Other
-*.moved-aside
-*.xccheckout
-*.xcscmblueprint
-
-## Obj-C/Swift specific
-*.hmap
-*.ipa
-*.dSYM.zip
-*.dSYM
-
-## Playgrounds
-timeline.xctimeline
-playground.xcworkspace
-
-# Swift Package Manager
-#
-# Add this line if you want to avoid checking in source code from Swift Package Manager dependencies.
-# Packages/
-# Package.pins
-# Package.resolved
-.build/
-
-# CocoaPods
-#
-# We recommend against adding the Pods directory to your .gitignore. However
-# you should judge for yourself, the pros and cons are mentioned at:
-# https://guides.cocoapods.org/using/using-cocoapods.html#should-i-check-the-pods-directory-into-source-control
-#
-# Pods/
-#
-# Add this line if you want to avoid checking in source code from the Xcode workspace
-# *.xcworkspace
-
-# Carthage
-#
-# Add this line if you want to avoid checking in source code from Carthage dependencies.
-# Carthage/Checkouts
-
-Carthage/Build
-
-# fastlane
-#
-# It is recommended to not store the screenshots in the git repo. Instead, use fastlane to re-generate the
-# screenshots whenever they are needed.
-# For more information about the recommended setup visit:
-# https://docs.fastlane.tools/best-practices/source-control/#source-control
-
-fastlane/report.xml
-fastlane/Preview.html
-fastlane/screenshots/**/*.png
-fastlane/test_output
-
-# Code Injection
-#
-# After new code Injection tools there's a generated folder /iOSInjectionProject
-# https://github.com/johnno1962/injectionforxcode
-
-iOSInjectionProject/
-
+## Gcc Patch
+/*.gcno
 
 
 ##### JetBrains.gitignore #####
@@ -1700,9 +1648,14 @@ iOSInjectionProject/
 # When using Gradle or Maven with auto-import, you should exclude module files,
 # since they will be recreated, and may cause churn.  Uncomment if using
 # auto-import.
+# .idea/artifacts
+# .idea/compiler.xml
+# .idea/jarRepositories.xml
 # .idea/modules.xml
 # .idea/*.iml
 # .idea/modules
+# *.iml
+# *.ipr
 
 # CMake
 cmake-build-*/
@@ -1738,13 +1691,35 @@ fabric.properties
 .idea/caches/build_file_checksums.ser
 
 
-
 ##### VisualStudioCode.gitignore #####
 .vscode/*
 # !.vscode/settings.json
 # !.vscode/tasks.json
 # !.vscode/launch.json
-# !.vscode/extensions.json
+!.vscode/extensions.json
+*.code-workspace
+
+
+##### Vim.gitignore #####
+# Swap
+[._]*.s[a-v][a-z]
+!*.svg  # comment out if you don't need vector files
+[._]*.sw[a-p]
+[._]s[a-rt-v][a-z]
+[._]ss[a-gi-z]
+[._]sw[a-p]
+
+# Session
+Session.vim
+Sessionx.vim
+
+# Temporary
+.netrwhist
+*~
+# Auto-generated tag files
+tags
+# Persistent undo
+[._]*.un~
 EOF
 
 ln -sf .dotfiles/.gitignore_global .

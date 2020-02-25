@@ -3,6 +3,9 @@
 # Set locale
 export LC_ALL="en_US.utf8"
 
+# Set USER
+export USER="${USER:-"$(whoami)"}"
+
 # Set Configuration Backup Directory
 DATETIME="$(date +"%Y-%m-%d-%T")"
 BACKUP_DIR="$HOME/.dotfiles/backups/$DATETIME"

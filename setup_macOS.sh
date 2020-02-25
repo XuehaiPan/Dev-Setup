@@ -6,6 +6,9 @@ export LC_ALL="en_US.UTF-8"
 # Set PATH
 export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin:/Library/Apple/bin${PATH:+:"$PATH"}"
 
+# Set USER
+export USER="${USER:-"$(whoami)"}"
+
 # Set Configuration Backup Directory
 DATETIME="$(date +"%Y-%m-%d-%T")"
 BACKUP_DIR="$HOME/.dotfiles/backups/$DATETIME"

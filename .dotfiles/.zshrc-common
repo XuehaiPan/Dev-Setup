@@ -97,9 +97,6 @@ export MONO_GAC_PREFIX="/usr/local"
 # Qt
 export PATH="/usr/local/opt/qt/bin:$PATH"
 
-# Texinfo
-export PATH="/usr/local/opt/texinfo/bin:$PATH"
-
 # Curl
 export PATH="/usr/local/opt/curl/bin:$PATH"
 
@@ -145,7 +142,7 @@ FZF_PREVIEW_COMMAND="(bat --color=always {} || highlight -O ansi {} || cat {}) 2
 export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --ansi --preview='${FZF_PREVIEW_COMMAND}'"
 
 # Bat
-export BAT_THEME="Monokai Extended Bright"
+export BAT_THEME="Monokai Extended"
 
 # iTerm
 if [[ -f "$HOME/.iterm2/.iterm2_shell_integration.zsh" ]]; then

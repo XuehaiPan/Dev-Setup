@@ -87,10 +87,11 @@ function echo_and_eval() {
 }
 
 function backup_dotfiles() {
+	local file original_file
 	for file in "$@"; do
 		if [[ -f "$file" || -d "$file" ]]; then
 			if [[ -L "$file" ]]; then
-				local original_file="$(readlink "$file")"
+				original_file="$(readlink "$file")"
 				rm -f "$file"
 				cp -rf "$original_file" "$file"
 			fi
@@ -386,9 +387,10 @@ fi
 
 # Remove duplicate entries
 function remove_duplicate() {
-	local SEP="\$1"
-	local NAME="\$2"
-	local VALUE="\$(
+	local SEP NAME VALUE
+	SEP="\$1"
+	NAME="\$2"
+	VALUE="\$(
 		eval "printf \\"%s\\" \\"\\\$\$NAME\\"" | awk -v RS="\$SEP" \\
 			'BEGIN {
 				idx = 0;
@@ -700,6 +702,8 @@ function upgrade_homebrew() {
 }
 
 function upgrade_ohmyzsh() {
+	local REPOS reps
+
 	# Set oh-my-zsh installation path
 	export ZSH="\${ZSH:-"\$HOME/.oh-my-zsh"}"
 	export ZSH_CUSTOM="\${ZSH_CUSTOM:-"\$ZSH/custom"}"
@@ -708,7 +712,7 @@ function upgrade_ohmyzsh() {
 	echo_and_eval 'zsh "\$ZSH/tools/upgrade.sh"'
 
 	# Upgrade themes and plugins
-	local REPOS=(\$(
+	REPOS=(\$(
 		cd "\$ZSH_CUSTOM"
 		find . -mindepth 3 -maxdepth 3 -not -empty -type d -name '.git' |
 			sed -e 's#^\\.\\/\\(.*\\)\\/\\.git\$#\\1#'
@@ -738,11 +742,13 @@ function upgrade_cpan() {
 }
 
 function upgrade_conda() {
+	local ENVS env
+
 	# Upgrade Conda
 	echo_and_eval 'conda update conda --name base --yes'
 
 	# Upgrade Conda Packages in Each Environment
-	local ENVS=(base \$(
+	ENVS=(base \$(
 		cd "\$(conda info --base)/envs"
 		find . -mindepth 1 -maxdepth 1 -not -empty \\( -type d -or -type l \\) |
 			sed -e 's#^\\.\\/\\(.*\\)\$#\\1#'
@@ -1045,9 +1051,10 @@ fi
 
 # Remove duplicate entries
 function remove_duplicate() {
-	local SEP="\$1"
-	local NAME="\$2"
-	local VALUE="\$(
+	local SEP NAME VALUE
+	SEP="\$1"
+	NAME="\$2"
+	VALUE="\$(
 		eval "printf \\"%s\\" \\"\\\$\$NAME\\"" | awk -v RS="\$SEP" \\
 			'BEGIN {
 				idx = 0;

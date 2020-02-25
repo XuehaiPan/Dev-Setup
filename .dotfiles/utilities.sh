@@ -77,6 +77,8 @@ function upgrade_homebrew() {
 }
 
 function upgrade_ohmyzsh() {
+	local REPOS repo
+
 	# Set oh-my-zsh installation path
 	export ZSH="${ZSH:-"$HOME/.oh-my-zsh"}"
 	export ZSH_CUSTOM="${ZSH_CUSTOM:-"$ZSH/custom"}"
@@ -85,7 +87,7 @@ function upgrade_ohmyzsh() {
 	echo_and_eval 'zsh "$ZSH/tools/upgrade.sh"'
 
 	# Upgrade themes and plugins
-	local REPOS=($(
+	REPOS=($(
 		cd "$ZSH_CUSTOM"
 		find . -mindepth 3 -maxdepth 3 -not -empty -type d -name '.git' |
 			sed -e 's#^\.\/\(.*\)\/\.git$#\1#'
@@ -119,11 +121,13 @@ function upgrade_texlive() {
 }
 
 function upgrade_conda() {
+	local ENVS env
+
 	# Upgrade Conda
 	echo_and_eval 'conda update conda --name base --yes'
 
 	# Upgrade Conda Packages in Each Environment
-	local ENVS=(base $(
+	ENVS=(base $(
 		cd "$(conda info --base)/envs"
 		find . -mindepth 1 -maxdepth 1 -not -empty \( -type d -or -type l \) |
 			sed -e 's#^\.\/\(.*\)$#\1#'
@@ -193,12 +197,14 @@ function auto_reannounce_trackers() {
 }
 
 function pull_projects() {
+	local BASE_DIRS BASE_DIR PROJ_DIRS PROJ_DIR
+
 	# Project Directories
-	local BASE_DIRS=("$HOME/VSCodeProjects" "$HOME/PycharmProjects" "$HOME/ClionProjects" "$HOME/IdeaProjects")
+	BASE_DIRS=("$HOME/VSCodeProjects" "$HOME/PycharmProjects" "$HOME/ClionProjects" "$HOME/IdeaProjects")
 
 	# Fetch and Pull Git
 	for BASE_DIR in "${BASE_DIRS[@]}"; do
-		local PROJ_DIRS=($(
+		PROJ_DIRS=($(
 			find "$BASE_DIR" -not -empty -type d -name '.git' |
 				sed -e 's#^\(.*\)\/\.git$#\1#'
 		))

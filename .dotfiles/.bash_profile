@@ -154,9 +154,10 @@ fi
 
 # Remove duplicate entries
 function remove_duplicate() {
-	local SEP="$1"
-	local NAME="$2"
-	local VALUE="$(
+	local SEP NAME VALUE
+	SEP="$1"
+	NAME="$2"
+	VALUE="$(
 		eval "printf \"%s\" \"\$$NAME\"" | awk -v RS="$SEP" \
 			'BEGIN {
 				idx = 0;

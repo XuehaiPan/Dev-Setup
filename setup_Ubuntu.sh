@@ -111,9 +111,19 @@ function backup_dotfiles() {
 
 function get_latest_version() {
 	local REPO="$1"
-	curl --silent "https://api.github.com/repos/$REPO/releases/latest" |
-		grep '"tag_name":' |
-		sed -E 's/.*"([^"]+)".*/\1/'
+	local VERSION=""
+	local i
+	for ((i = 0; i < 5; ++i)); do
+		VERSION="$(
+			curl --silent "https://api.github.com/repos/$REPO/releases/latest" |
+				grep '"tag_name":' |
+				sed -E 's/.*"([^"]+)".*/\1/'
+		)"
+		if [[ -n "$VERSION" ]]; then
+			break
+		fi
+	done
+	echo "$VERSION"
 }
 
 function check_binary() {

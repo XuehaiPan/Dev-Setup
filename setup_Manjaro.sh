@@ -100,7 +100,7 @@ function backup_dotfiles() {
 	for file in "$@"; do
 		if [[ -f "$file" || -d "$file" ]]; then
 			if [[ -L "$file" ]]; then
-				original_file="$(readlink "$file")"
+				original_file="$(realpath "$file")"
 				rm -f "$file"
 				cp -rf "$original_file" "$file"
 			fi

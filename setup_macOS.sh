@@ -702,7 +702,7 @@ function upgrade_homebrew() {
 }
 
 function upgrade_ohmyzsh() {
-	local REPOS reps
+	local REPOS repo
 
 	# Set oh-my-zsh installation path
 	export ZSH="\${ZSH:-"\$HOME/.oh-my-zsh"}"

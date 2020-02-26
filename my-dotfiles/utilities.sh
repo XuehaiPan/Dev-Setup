@@ -175,7 +175,7 @@ function auto_reannounce_trackers() {
 	local TIMES=${1:-60}
 	local INTERVAL=${2:-60}
 	local TORRENT="active"
-	local CMD=""
+	local CMD t r
 
 	echo -ne "\033[?25l"
 

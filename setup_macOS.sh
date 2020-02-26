@@ -210,7 +210,7 @@ fi
 # Install Zsh Plugins
 for plugin in zsh-{syntax-highlighting,autosuggestions,completions}; do
 	if [[ ! -d "$ZSH_CUSTOM/plugins/$plugin/.git" ]]; then
-		echo_and_eval "git clone --depth=1 https://github.com/zsh-users/$plugin \"\$ZSH_CUSTOM/plugins/$plugin\" 2>&1"
+		echo_and_eval "git clone --depth=1 https://github.com/zsh-users/${plugin}.git \"\$ZSH_CUSTOM/plugins/$plugin\" 2>&1"
 	else
 		echo_and_eval "git -C \"\$ZSH_CUSTOM/plugins/$plugin\" pull 2>&1"
 	fi
@@ -796,7 +796,7 @@ function auto_reannounce_trackers() {
 	local TIMES=\${1:-60}
 	local INTERVAL=\${2:-60}
 	local TORRENT="active"
-	local CMD=""
+	local CMD t r
 
 	echo -ne "\\033[?25l"
 

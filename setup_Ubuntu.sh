@@ -149,20 +149,20 @@ if $IS_SUDOER; then
 		fi
 	done
 
-	echo_and_eval 'sudo apt update'
+	echo_and_eval 'sudo apt-get update'
 
 	# Install and Setup Shells
-	echo_and_eval 'sudo apt install zsh --yes'
+	echo_and_eval 'sudo apt-get install zsh --yes'
 
 	if ! grep -qF '/usr/bin/zsh' /etc/shells; then
 		echo_and_eval 'echo "/usr/bin/zsh" | sudo tee -a /etc/shells'
 	fi
 
 	# Install Packages
-	echo_and_eval 'sudo apt install bash-completion wget curl git git-lfs vim tmux --yes'
-	echo_and_eval 'sudo apt install highlight shellcheck --yes'
+	echo_and_eval 'sudo apt-get install bash-completion wget curl git git-lfs vim tmux --yes'
+	echo_and_eval 'sudo apt-get install highlight shellcheck --yes'
 	if [[ -n "$(apt-cache search '^fd-find$' --names-only)" ]]; then
-		echo_and_eval 'sudo apt install fd-find --yes'
+		echo_and_eval 'sudo apt-get install fd-find --yes'
 	else
 		LATEST_FD_VERSION="$(get_latest_version "sharkdp/fd")"
 		if ! check_binary fd "$LATEST_FD_VERSION"; then
@@ -171,7 +171,7 @@ if $IS_SUDOER; then
 		fi
 	fi
 	if [[ -n "$(apt-cache search '^bat$' --names-only)" ]]; then
-		echo_and_eval 'sudo apt install bat --yes'
+		echo_and_eval 'sudo apt-get install bat --yes'
 	else
 		LATEST_BAT_VERSION="$(get_latest_version "sharkdp/bat")"
 		if ! check_binary bat "$LATEST_BAT_VERSION"; then
@@ -186,10 +186,10 @@ if $IS_SUDOER; then
 		echo_and_eval 'sudo chmod a+x /usr/local/bin/shfmt'
 		echo_and_eval 'sudo chown root:root /usr/local/bin/shfmt'
 	fi
-	echo_and_eval 'sudo apt install htop ssh net-tools exfat-utils tree colordiff xclip --yes'
-	echo_and_eval 'sudo apt install make cmake automake autoconf build-essential gcc g++ gdb --yes'
-	echo_and_eval 'sudo apt install clang clang-format llvm lldb ruby-full --yes'
-	echo_and_eval 'sudo apt autoclean --yes'
+	echo_and_eval 'sudo apt-get install htop ssh net-tools exfat-utils tree colordiff xclip --yes'
+	echo_and_eval 'sudo apt-get install make cmake automake autoconf build-essential gcc g++ gdb --yes'
+	echo_and_eval 'sudo apt-get install clang clang-format llvm lldb ruby-full --yes'
+	echo_and_eval 'sudo apt-get autoclean --yes'
 fi
 
 # Change Default Shell to Zsh
@@ -723,16 +723,16 @@ function echo_and_eval() {
 
 function upgrade_ubuntu() {
 	# Upgrade Packages
-	echo_and_eval 'sudo apt update'
-	echo_and_eval 'sudo apt dist-upgrade --yes'
-	echo_and_eval 'sudo apt full-upgrade --yes'
-	echo_and_eval 'sudo apt upgrade --yes'
+	echo_and_eval 'sudo apt-get update'
+	echo_and_eval 'sudo apt-get dist-upgrade --yes'
+	echo_and_eval 'sudo apt-get full-upgrade --yes'
+	echo_and_eval 'sudo apt-get upgrade --yes'
 
 	# Remove Unused Packages
-	echo_and_eval 'sudo apt autoremove --yes'
+	echo_and_eval 'sudo apt-get autoremove --yes'
 
 	# Clean Cache
-	echo_and_eval 'sudo apt autoclean'
+	echo_and_eval 'sudo apt-get autoclean'
 }
 
 function upgrade_ohmyzsh() {

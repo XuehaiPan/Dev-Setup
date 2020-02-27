@@ -372,7 +372,7 @@ export PATH="/usr/local/opt/llvm/bin:\$PATH"
 if [[ -f "\$HOME/.fzf.zsh" ]]; then
 	source "\$HOME/.fzf.zsh"
 fi
-export FZF_DEFAULT_COMMAND="fd --type file --follow --hidden --exclude '.git' --color=always"
+export FZF_DEFAULT_COMMAND="fd --type file --follow --hidden --no-ignore-vcs --exclude '.git' --color=always"
 export FZF_CTRL_T_COMMAND="\$FZF_DEFAULT_COMMAND"
 FZF_PREVIEW_COMMAND="(bat --color=always {} || highlight -O ansi {} || cat {}) 2>/dev/null | head -100"
 export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --ansi --preview='\${FZF_PREVIEW_COMMAND}'"
@@ -1036,7 +1036,7 @@ export PATH="/usr/local/opt/llvm/bin:\$PATH"
 if [[ -f "\$HOME/.fzf.bash" ]]; then
 	source "\$HOME/.fzf.bash"
 fi
-export FZF_DEFAULT_COMMAND="fd --type file --follow --hidden --exclude '.git' --color=always"
+export FZF_DEFAULT_COMMAND="fd --type file --follow --hidden --no-ignore-vcs --exclude '.git' --color=always"
 export FZF_CTRL_T_COMMAND="\$FZF_DEFAULT_COMMAND"
 FZF_PREVIEW_COMMAND="(bat --color=always {} || highlight -O ansi {} || cat {}) 2>/dev/null | head -100"
 export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --ansi --preview='\${FZF_PREVIEW_COMMAND}'"

@@ -406,9 +406,9 @@ if [[ -f "\$HOME/.fzf.zsh" ]]; then
 fi
 if [[ -x "\$(command -v fdfind)" ]]; then
 	alias fd='fdfind'
-	export FZF_DEFAULT_COMMAND="fdfind --type file --follow --hidden --exclude '.git' --color=always"
+	export FZF_DEFAULT_COMMAND="fdfind --type file --follow --hidden --no-ignore-vcs --exclude '.git' --color=always"
 elif [[ -x "\$(command -v fd)" ]]; then
-	export FZF_DEFAULT_COMMAND="fd --type file --follow --hidden --exclude '.git' --color=always"
+	export FZF_DEFAULT_COMMAND="fd --type file --follow --hidden --no-ignore-vcs --exclude '.git' --color=always"
 fi
 if [[ -n "\$FZF_DEFAULT_COMMAND" ]]; then
 	export FZF_CTRL_T_COMMAND="\$FZF_DEFAULT_COMMAND"
@@ -1023,9 +1023,9 @@ if [[ -f "\$HOME/.fzf.bash" ]]; then
 fi
 if [[ -x "\$(command -v fdfind)" ]]; then
 	alias fd='fdfind'
-	export FZF_DEFAULT_COMMAND="fdfind --type file --follow --hidden --exclude '.git' --color=always"
+	export FZF_DEFAULT_COMMAND="fdfind --type file --follow --hidden --no-ignore-vcs --exclude '.git' --color=always"
 elif [[ -x "\$(command -v fd)" ]]; then
-	export FZF_DEFAULT_COMMAND="fd --type file --follow --hidden --exclude '.git' --color=always"
+	export FZF_DEFAULT_COMMAND="fd --type file --follow --hidden --no-ignore-vcs --exclude '.git' --color=always"
 fi
 if [[ -n "\$FZF_DEFAULT_COMMAND" ]]; then
 	export FZF_CTRL_T_COMMAND="\$FZF_DEFAULT_COMMAND"

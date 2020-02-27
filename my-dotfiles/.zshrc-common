@@ -72,7 +72,7 @@ unset __conda_setup
 export CONDA_JL_HOME="$HOME/Anaconda3/envs/python37"
 
 # Java
-export JAVA_HOME=$(/usr/libexec/java_home)
+export JAVA_HOME="$(/usr/libexec/java_home)"
 export CLASSPATH=".:$JAVA_HOME/lib/tools.jar:$JAVA_HOME/lib/dt.jar"
 export PATH="$JAVA_HOME/bin:$PATH"
 
@@ -103,9 +103,6 @@ export PATH="/usr/local/opt/curl/bin:$PATH"
 # OpenSSL
 export PATH="/usr/local/opt/openssl/bin:$PATH"
 
-# APR-util
-export PATH="/usr/local/opt/apr-util/bin:$PATH"
-
 # gettext
 export PATH="/usr/local/opt/gettext/bin:$PATH"
 
@@ -115,9 +112,6 @@ export C_INCLUDE_PATH="/usr/local/opt/ncurses/include:$C_INCLUDE_PATH"
 export CPLUS_INCLUDE_PATH="/usr/local/opt/ncurses/include:$CPLUS_INCLUDE_PATH"
 export LIBRARY_PATH="/usr/local/opt/ncurses/lib:$LIBRARY_PATH"
 export DYLD_LIBRARY_PATH="/usr/local/opt/ncurses/lib:$DYLD_LIBRARY_PATH"
-
-# Bison
-export PATH="/usr/local/opt/bison/bin:$PATH"
 
 # SQLite
 export PATH="/usr/local/opt/sqlite/bin:$PATH"

@@ -1704,8 +1704,6 @@ auto_update_conda: true
 channels:
   - defaults
 
-channel_alias: https://mirrors.tuna.tsinghua.edu.cn/anaconda
-
 default_channels:
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free

@@ -57,19 +57,19 @@ export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bot
 # Anaconda
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$("$HOME/Anaconda3/bin/conda" 'shell.zsh' 'hook' 2>/dev/null)"
+__conda_setup="$("$HOME/Miniconda3/bin/conda" 'shell.zsh' 'hook' 2>/dev/null)"
 if [[ $? -eq 0 ]]; then
 	eval "$__conda_setup"
 else
-	if [[ -f "$HOME/Anaconda3/etc/profile.d/conda.sh" ]]; then
-		. "$HOME/Anaconda3/etc/profile.d/conda.sh"
+	if [[ -f "$HOME/Miniconda3/etc/profile.d/conda.sh" ]]; then
+		. "$HOME/Miniconda3/etc/profile.d/conda.sh"
 	else
-		export PATH="$HOME/Anaconda3/bin:$PATH"
+		export PATH="$HOME/Miniconda3/bin:$PATH"
 	fi
 fi
 unset __conda_setup
 # <<< conda initialize <<<
-export CONDA_JL_HOME="$HOME/Anaconda3/envs/python37"
+export CONDA_JL_HOME="$HOME/Miniconda3/envs/python37"
 
 # Java
 export JAVA_HOME="$(/usr/libexec/java_home)"

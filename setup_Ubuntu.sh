@@ -1797,7 +1797,6 @@ create_default_packages:
   - matplotlib
   - pandas
   - seaborn
-  - pygraphviz
   - yapf
   - autopep8
   - pycodestyle

@@ -324,7 +324,7 @@ export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bot
 # Anaconda
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-__conda_setup="\$("\$HOME/$CONDA_DIR/bin/conda" 'shell.zsh' 'hook' 2>/dev/null)"
+__conda_setup="\$(CONDA_REPORT_ERRORS=false "\$HOME/$CONDA_DIR/bin/conda" shell.zsh hook 2>/dev/null)"
 if [[ \$? -eq 0 ]]; then
 	eval "\$__conda_setup"
 else
@@ -988,7 +988,7 @@ export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bot
 # Anaconda
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-__conda_setup="\$("\$HOME/$CONDA_DIR/bin/conda" 'shell.bash' 'hook' 2>/dev/null)"
+__conda_setup="\$(CONDA_REPORT_ERRORS=false "\$HOME/$CONDA_DIR/bin/conda" shell.bash hook 2>/dev/null)"
 if [[ \$? -eq 0 ]]; then
 	eval "\$__conda_setup"
 else

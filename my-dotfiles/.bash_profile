@@ -60,7 +60,7 @@ export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bot
 # Anaconda
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$("$HOME/Miniconda3/bin/conda" 'shell.bash' 'hook' 2>/dev/null)"
+__conda_setup="$(CONDA_REPORT_ERRORS=false "$HOME/Miniconda3/bin/conda" shell.bash hook 2>/dev/null)"
 if [[ $? -eq 0 ]]; then
 	eval "$__conda_setup"
 else

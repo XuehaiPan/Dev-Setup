@@ -20,9 +20,9 @@ OS_NAME=""
 if [[ "$(uname -s)" == "Darwin" ]]; then
 	OS_NAME="macOS"
 elif [[ "$(uname -s)" == "Linux" ]]; then
-	if grep -qF 'Ubuntu' /etc/*-release; then
+	if grep -qiE 'ID.*ubuntu' /etc/*-release; then
 		OS_NAME="Ubuntu"
-	elif grep -qF 'Manjaro' /etc/*-release; then
+	elif grep -qiE 'ID.*manjaro' /etc/*-release; then
 		OS_NAME="Manjaro"
 	fi
 fi

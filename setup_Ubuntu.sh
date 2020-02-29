@@ -139,14 +139,17 @@ function check_binary() {
 
 if $IS_SUDOER; then
 	# Setup Apt Sources
+	SOURCES_LIST=($(find /etc/apt -type f -name '*.list'))
 	URL_LIST=(
 		"http://archive.ubuntu.com" "http://cn.archive.ubuntu.com"
 		"http://security.ubuntu.com" "http://mirrors.tuna.tsinghua.edu.cn"
 	)
-	for url in "${URL_LIST[@]}"; do
-		if grep -qF "$url" /etc/apt/sources.list; then
-			echo_and_eval "sudo sed -i 's|$url|https://mirrors.tuna.tsinghua.edu.cn|g' /etc/apt/sources.list"
-		fi
+	for sources_list in "${SOURCES_LIST[@]}"; do
+		for url in "${URL_LIST[@]}"; do
+			if grep -qF "$url" "${sources_list}"; then
+				echo_and_eval "sudo sed -i 's|$url|https://mirrors.tuna.tsinghua.edu.cn|g' ${sources_list}"
+			fi
+		done
 	done
 
 	echo_and_eval 'sudo apt-get update'
@@ -165,7 +168,7 @@ if $IS_SUDOER; then
 		echo_and_eval 'sudo apt-get install fd-find --yes'
 	else
 		LATEST_FD_VERSION="$(get_latest_version "sharkdp/fd")"
-		if ! check_binary fd "$LATEST_FD_VERSION"; then
+		if [[ -n "$LATEST_FD_VERSION" ]] && ! check_binary fd "$LATEST_FD_VERSION"; then
 			echo_and_eval "wget -nv --show-progress --progress=bar:force:noscroll -N -P \"$TMP_DIR/\" https://github.com/sharkdp/fd/releases/download/${LATEST_FD_VERSION}/fd_${LATEST_FD_VERSION#v}_amd64.deb"
 			echo_and_eval "sudo dpkg -i \"$TMP_DIR/fd_${LATEST_FD_VERSION#v}_amd64.deb\""
 		fi
@@ -174,13 +177,13 @@ if $IS_SUDOER; then
 		echo_and_eval 'sudo apt-get install bat --yes'
 	else
 		LATEST_BAT_VERSION="$(get_latest_version "sharkdp/bat")"
-		if ! check_binary bat "$LATEST_BAT_VERSION"; then
+		if [[ -n "$LATEST_BAT_VERSION" ]] && ! check_binary bat "$LATEST_BAT_VERSION"; then
 			echo_and_eval "wget -nv --show-progress --progress=bar:force:noscroll -N -P \"$TMP_DIR/\" https://github.com/sharkdp/bat/releases/download/${LATEST_BAT_VERSION}/bat_${LATEST_BAT_VERSION#v}_amd64.deb"
 			echo_and_eval "sudo dpkg -i \"$TMP_DIR/bat_${LATEST_BAT_VERSION#v}_amd64.deb\""
 		fi
 	fi
 	LATEST_SHFMT_VERSION="$(get_latest_version "mvdan/sh")"
-	if ! check_binary shfmt "$LATEST_SHFMT_VERSION"; then
+	if [[ -n "$LATEST_SHFMT_VERSION" ]] && ! check_binary shfmt "$LATEST_SHFMT_VERSION"; then
 		echo_and_eval "wget -nv --show-progress --progress=bar:force:noscroll -N -P \"$TMP_DIR/\" https://github.com/mvdan/sh/releases/download/${LATEST_SHFMT_VERSION}/shfmt_${LATEST_SHFMT_VERSION}_linux_amd64"
 		echo_and_eval "sudo mv -f \"$TMP_DIR/shfmt_${LATEST_SHFMT_VERSION}_linux_amd64\" /usr/local/bin/shfmt"
 		echo_and_eval 'sudo chmod a+x /usr/local/bin/shfmt'

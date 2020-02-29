@@ -91,7 +91,11 @@ function backup_dotfiles() {
 	for file in "$@"; do
 		if [[ -f "$file" || -d "$file" ]]; then
 			if [[ -L "$file" ]]; then
-				original_file="$(realpath "$file")"
+				if [[ -x "$(command -v realpath)" ]]; then
+					original_file="$(realpath "$file")"
+				else
+					original_file="$(readlink "$file")"
+				fi
 				rm -f "$file"
 				cp -rf "$original_file" "$file"
 			fi
@@ -106,11 +110,15 @@ if [[ ! -x "$(command -v brew)" ]]; then
 	echo_and_eval '/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"'
 fi
 
-echo_and_eval 'brew tap homebrew/cask --force-auto-update'
-echo_and_eval 'brew tap homebrew/cask-fonts --force-auto-update'
 echo_and_eval 'git -C "$(brew --repo)" remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git'
-echo_and_eval 'git -C "$(brew --repo homebrew/core)" remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git'
-echo_and_eval 'git -C "$(brew --repo homebrew/cask)" remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-cask.git'
+BREW_TAPS="$(brew tap)"
+for tap in core cask{,-fonts,-drivers}; do
+	if echo "$BREW_TAPS" | grep -qE "^homebrew/${tap}\$"; then
+		echo_and_eval "git -C \"\$(brew --repo homebrew/${tap})\" remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-${tap}.git"
+	else
+		echo_and_eval "brew tap --force-auto-update homebrew/${tap} https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-${tap}.git"
+	fi
+done
 export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles"
 echo_and_eval 'brew update --verbose'
 
@@ -1964,7 +1972,7 @@ echo_and_eval 'brew install gcc gdb llvm make cmake automake autoconf'
 echo_and_eval 'brew cleanup'
 
 # Miscellaneous Settings
-echo_and_eval 'defaults write com.apple.screencapture disable-shadow -boolean true'
 echo_and_eval 'defaults write -globalDomain KeyRepeat -int 2'
-echo_and_eval 'defaults write -globalDomain InitialKeyRepeat -int 35'
+echo_and_eval 'defaults write -globalDomain InitialKeyRepeat -int 45'
+echo_and_eval 'defaults write com.apple.screencapture disable-shadow -boolean true'
 echo_and_eval 'killall SystemUIServer'

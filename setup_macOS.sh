@@ -1965,4 +1965,6 @@ echo_and_eval 'brew cleanup'
 
 # Miscellaneous Settings
 echo_and_eval 'defaults write com.apple.screencapture disable-shadow -boolean true'
+echo_and_eval 'defaults write -globalDomain KeyRepeat -int 2'
+echo_and_eval 'defaults write -globalDomain InitialKeyRepeat -int 35'
 echo_and_eval 'killall SystemUIServer'

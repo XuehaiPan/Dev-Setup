@@ -1952,7 +1952,7 @@ export PATH="$PATH:$HOME/$CONDA_DIR/condabin"
 echo_and_eval 'conda update conda --yes'
 echo_and_eval 'conda install pip jupyter ipython notebook jupyterlab ipdb \
 							 jupyterthemes jupyter_contrib_nbextensions \
-							 cython numpy numba matplotlib pandas seaborn pygraphviz \
+							 cython numpy numba matplotlib pandas seaborn \
 							 tqdm yapf autopep8 pycodestyle pylint --yes'
 echo_and_eval 'conda update --all --yes'
 echo_and_eval 'conda clean --all --yes'

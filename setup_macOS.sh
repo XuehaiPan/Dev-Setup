@@ -865,8 +865,8 @@ cat >.dotfiles/.bashrc <<EOF
 
 # If not running interactively, don't do anything
 case \$- in
-    *i*) ;;
-      *) return ;;
+	*i*) ;;
+	*) return ;;
 esac
 
 # Source global definitions

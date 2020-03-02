@@ -73,7 +73,7 @@ function upgrade_homebrew() {
 	echo_and_eval 'brew cask upgrade'
 
 	# Clean Homebrew Cache
-	echo_and_eval 'brew cleanup'
+	echo_and_eval 'brew cleanup -s --prune 7'
 }
 
 function upgrade_ohmyzsh() {

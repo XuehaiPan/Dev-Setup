@@ -574,7 +574,7 @@ source "\$ZSH/oh-my-zsh.sh"
 
 # Set personal aliases
 alias bubo='brew update --verbose && brew outdated && brew cask outdated'
-alias bubc='brew upgrade && brew cask upgrade && brew cleanup'
+alias bubc='brew upgrade && brew cask upgrade && brew cleanup -s --prune 7'
 alias lsa='ls -A'
 alias l='ls -alh'
 alias ll='ls -lh'
@@ -706,7 +706,7 @@ function upgrade_homebrew() {
 	echo_and_eval 'brew cask upgrade'
 
 	# Clean Homebrew Cache
-	echo_and_eval 'brew cleanup'
+	echo_and_eval 'brew cleanup -s --prune 7'
 }
 
 function upgrade_ohmyzsh() {
@@ -1969,7 +1969,7 @@ echo_and_eval 'brew cask install neteasemusic iina'
 
 # Install Develop Casks and Packages
 echo_and_eval 'brew install gcc gdb llvm make cmake automake autoconf'
-echo_and_eval 'brew cleanup'
+echo_and_eval 'brew cleanup -s --prune 7'
 
 # Miscellaneous Settings
 echo_and_eval 'defaults write -globalDomain KeyRepeat -int 2'

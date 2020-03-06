@@ -736,7 +736,7 @@ function upgrade_fzf() {
 }
 
 function upgrade_vim() {
-	echo_and_eval 'vim -c "PlugUpgrade | PlugUpdate | qa"'
+	echo_and_eval 'vim -c "PlugUpgrade | PlugUpdate | quitall"'
 }
 
 function upgrade_gems() {
@@ -1490,7 +1490,7 @@ if [[ ! -f "$HOME/.vim/autoload/plug.vim" ]]; then
 fi
 
 # Install Vim Plugins
-echo_and_eval 'vim -c "PlugUpgrade | PlugInstall | PlugUpdate | qa"'
+echo_and_eval 'vim -c "PlugUpgrade | PlugInstall | PlugUpdate | quitall"'
 if [[ ! -f "$HOME/.vim/plugged/markdown-preview.nvim/app/bin/markdown-preview-macos" ]]; then
 	echo_and_eval 'cd "$HOME/.vim/plugged/markdown-preview.nvim/app"; ./install.sh; cd "$HOME"'
 fi

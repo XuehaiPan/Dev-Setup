@@ -103,7 +103,7 @@ function upgrade_fzf() {
 }
 
 function upgrade_vim() {
-	echo_and_eval 'vim -c "PlugUpgrade | PlugUpdate | qa"'
+	echo_and_eval 'vim -c "PlugUpgrade | PlugUpdate | quitall"'
 }
 
 function upgrade_gems() {

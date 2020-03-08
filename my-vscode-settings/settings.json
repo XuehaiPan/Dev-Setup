@@ -396,7 +396,6 @@
     "julia.executablePath": "julia",
     "julia.enableCrashReporter": false,
     "julia.enableTelemetry": false,
-    "julia.runLinter": true,
     "julia.usePlotPane": true,
 
     //* LaTeX Workshop */
@@ -536,6 +535,13 @@
         "*.synctex.gz(busy)",
         "*.run.xml"
     ],
+
+    //* Local History *//
+    "local-history.enabled": 2,
+    "local-history.absolute": false,
+    "local-history.path": "${workspaceFolder}/.vscode",
+    "local-history.saveDelay": 120,
+    "local-history.daysLimit": 14,
 
     //* Markdown All in One */
     "markdown.extension.list.indentationSize": "inherit",

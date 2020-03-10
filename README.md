@@ -157,6 +157,7 @@ The following packages will be setup:
 | [reattach-to-user-namespace](https://github.com/ChrisJohnsen/tmux-MacOSX-pasteboard) / [xclip](https://github.com/astrand/xclip) |   ✔   |      ✔       |       ✔       |
 |                                                                                                                                  |       |              |               |
 | [fzf](https://github.com/junegunn/fzf)                                                                                           |   ✔   |      ✔       |       ✔       |
+| [ranger](https://ranger.github.io)                                                                                               |   ✔   |      ✔       |       ✔       |
 | [fd](https://github.com/sharkdp/fd)                                                                                              |   ✔   |      ✔       |       ✔       |
 | [bat](https://github.com/sharkdp/bat)                                                                                            |   ✔   |      ✔       |       ✔       |
 | [highlight](http://www.andre-simon.de/doku/highlight/en/highlight.php)                                                           |   ✔   |      ✔       |       ✔       |

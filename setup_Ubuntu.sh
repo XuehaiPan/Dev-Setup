@@ -1766,8 +1766,8 @@ default_channels:
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/pro
-  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/
-  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/pytorch/
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/pytorch
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/msys2
 
@@ -1827,7 +1827,7 @@ echo_and_eval 'conda clean --all --yes'
 echo_and_eval "\"\$HOME/$CONDA_DIR/bin/jt\" --theme monokai"
 echo_and_eval "\"\$HOME/$CONDA_DIR/bin/jupyter\" contrib nbextension install --user &>/dev/null"
 echo_and_eval "\"\$HOME/$CONDA_DIR/bin/pip\" config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple"
-rm -r .cph_tmp* 2>/dev/null
+rm -r .empty .cph_tmp* 2>/dev/null
 rm -r "$CONDA_DIR"/.cph_tmp* 2>/dev/null
 
 # Install Fonts

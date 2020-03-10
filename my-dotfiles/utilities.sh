@@ -154,10 +154,10 @@ function set_proxy() {
 	export https_proxy="http://${PROXY_HOST}:${HTTPS_PORT}"
 	export ftp_proxy="http://${PROXY_HOST}:${FTP_PORT}"
 	export all_proxy="socks5://${PROXY_HOST}:${SOCKS_PORT}"
-	export HTTP_PROXY="http://${PROXY_HOST}:${HTTP_PORT}"
-	export HTTPS_PROXY="http://${PROXY_HOST}:${HTTPS_PORT}"
-	export FTP_PROXY="http://${PROXY_HOST}:${FTP_PORT}"
-	export ALL_PROXY="socks5://${PROXY_HOST}:${SOCKS_PORT}"
+	export HTTP_PROXY="$http_proxy"
+	export HTTPS_PROXY="$https_proxy"
+	export FTP_PROXY="$ftp_proxy"
+	export ALL_PROXY="$all_proxy"
 }
 
 function reset_proxy() {

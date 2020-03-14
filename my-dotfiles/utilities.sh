@@ -89,7 +89,7 @@ function upgrade_ohmyzsh() {
 	# Upgrade themes and plugins
 	REPOS=($(
 		cd "$ZSH_CUSTOM"
-		find . -mindepth 3 -maxdepth 3 -not -empty -type d -name '.git' |
+		find -L . -mindepth 3 -maxdepth 3 -not -empty -type d -name '.git' |
 			sed -e 's#^\.\/\(.*\)\/\.git$#\1#'
 	))
 	for repo in "${REPOS[@]}"; do
@@ -129,7 +129,7 @@ function upgrade_conda() {
 	# Upgrade Conda Packages in Each Environment
 	ENVS=(base $(
 		cd "$(conda info --base)/envs"
-		find . -mindepth 1 -maxdepth 1 -not -empty \( -type d -or -type l \) |
+		find -L . -mindepth 1 -maxdepth 1 -not -empty \( -type d -or -type l \) |
 			sed -e 's#^\.\/\(.*\)$#\1#'
 	))
 	for env in "${ENVS[@]}"; do
@@ -205,7 +205,7 @@ function pull_projects() {
 	# Fetch and Pull Git
 	for BASE_DIR in "${BASE_DIRS[@]}"; do
 		PROJ_DIRS=($(
-			find "$BASE_DIR" -not -empty -type d -name '.git' |
+			find -L "$BASE_DIR" -not -empty -type d -name '.git' |
 				sed -e 's#^\(.*\)\/\.git$#\1#'
 		))
 		for PROJ_DIR in "${PROJ_DIRS[@]}"; do

@@ -139,7 +139,7 @@ function check_binary() {
 
 if $IS_SUDOER; then
 	# Setup Apt Sources
-	SOURCES_LIST=($(find /etc/apt -type f -name '*.list'))
+	SOURCES_LIST=($(find -L /etc/apt -type f -name '*.list'))
 	URL_LIST=(
 		"http://archive.ubuntu.com" "http://cn.archive.ubuntu.com"
 		"http://security.ubuntu.com" "http://mirrors.tuna.tsinghua.edu.cn"
@@ -409,9 +409,9 @@ if [[ -f "\$HOME/.fzf.zsh" ]]; then
 fi
 if [[ -x "\$(command -v fdfind)" ]]; then
 	alias fd='fdfind'
-	export FZF_DEFAULT_COMMAND="fdfind --type file --follow --hidden --no-ignore-vcs --exclude '.git' --color=always"
+	export FZF_DEFAULT_COMMAND="fdfind -L --type file --follow --hidden --no-ignore-vcs --exclude '.git' --color=always"
 elif [[ -x "\$(command -v fd)" ]]; then
-	export FZF_DEFAULT_COMMAND="fd --type file --follow --hidden --no-ignore-vcs --exclude '.git' --color=always"
+	export FZF_DEFAULT_COMMAND="fd -L --type file --follow --hidden --no-ignore-vcs --exclude '.git' --color=always"
 fi
 if [[ -n "\$FZF_DEFAULT_COMMAND" ]]; then
 	export FZF_CTRL_T_COMMAND="\$FZF_DEFAULT_COMMAND"
@@ -751,7 +751,7 @@ function upgrade_ohmyzsh() {
 	# Upgrade themes and plugins
 	REPOS=(\$(
 		cd "\$ZSH_CUSTOM"
-		find . -mindepth 3 -maxdepth 3 -not -empty -type d -name '.git' |
+		find -L . -mindepth 3 -maxdepth 3 -not -empty -type d -name '.git' |
 			sed -e 's#^\\.\\/\\(.*\\)\\/\\.git\$#\\1#'
 	))
 	for repo in "\${REPOS[@]}"; do
@@ -787,7 +787,7 @@ function upgrade_conda() {
 	# Upgrade Conda Packages in Each Environment
 	ENVS=(base \$(
 		cd "\$(conda info --base)/envs"
-		find . -mindepth 1 -maxdepth 1 -not -empty \\( -type d -or -type l \\) |
+		find -L . -mindepth 1 -maxdepth 1 -not -empty \\( -type d -or -type l \\) |
 			sed -e 's#^\\.\\/\\(.*\\)\$#\\1#'
 	))
 	for env in "\${ENVS[@]}"; do
@@ -1026,9 +1026,9 @@ if [[ -f "\$HOME/.fzf.bash" ]]; then
 fi
 if [[ -x "\$(command -v fdfind)" ]]; then
 	alias fd='fdfind'
-	export FZF_DEFAULT_COMMAND="fdfind --type file --follow --hidden --no-ignore-vcs --exclude '.git' --color=always"
+	export FZF_DEFAULT_COMMAND="fdfind -L --type file --follow --hidden --no-ignore-vcs --exclude '.git' --color=always"
 elif [[ -x "\$(command -v fd)" ]]; then
-	export FZF_DEFAULT_COMMAND="fd --type file --follow --hidden --no-ignore-vcs --exclude '.git' --color=always"
+	export FZF_DEFAULT_COMMAND="fd -L --type file --follow --hidden --no-ignore-vcs --exclude '.git' --color=always"
 fi
 if [[ -n "\$FZF_DEFAULT_COMMAND" ]]; then
 	export FZF_CTRL_T_COMMAND="\$FZF_DEFAULT_COMMAND"

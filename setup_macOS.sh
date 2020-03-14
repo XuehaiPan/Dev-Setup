@@ -380,7 +380,7 @@ export PATH="/usr/local/opt/llvm/bin:\$PATH"
 if [[ -f "\$HOME/.fzf.zsh" ]]; then
 	source "\$HOME/.fzf.zsh"
 fi
-export FZF_DEFAULT_COMMAND="fd --type file --follow --hidden --no-ignore-vcs --exclude '.git' --color=always"
+export FZF_DEFAULT_COMMAND="fd -L --type file --follow --hidden --no-ignore-vcs --exclude '.git' --color=always"
 export FZF_CTRL_T_COMMAND="\$FZF_DEFAULT_COMMAND"
 FZF_PREVIEW_COMMAND="(bat --color=always {} || highlight -O ansi {} || cat {}) 2>/dev/null | head -100"
 export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --ansi --preview='\${FZF_PREVIEW_COMMAND}'"
@@ -722,7 +722,7 @@ function upgrade_ohmyzsh() {
 	# Upgrade themes and plugins
 	REPOS=(\$(
 		cd "\$ZSH_CUSTOM"
-		find . -mindepth 3 -maxdepth 3 -not -empty -type d -name '.git' |
+		find -L . -mindepth 3 -maxdepth 3 -not -empty -type d -name '.git' |
 			sed -e 's#^\\.\\/\\(.*\\)\\/\\.git\$#\\1#'
 	))
 	for repo in "\${REPOS[@]}"; do
@@ -758,7 +758,7 @@ function upgrade_conda() {
 	# Upgrade Conda Packages in Each Environment
 	ENVS=(base \$(
 		cd "\$(conda info --base)/envs"
-		find . -mindepth 1 -maxdepth 1 -not -empty \\( -type d -or -type l \\) |
+		find -L . -mindepth 1 -maxdepth 1 -not -empty \\( -type d -or -type l \\) |
 			sed -e 's#^\\.\\/\\(.*\\)\$#\\1#'
 	))
 	for env in "\${ENVS[@]}"; do
@@ -1044,7 +1044,7 @@ export PATH="/usr/local/opt/llvm/bin:\$PATH"
 if [[ -f "\$HOME/.fzf.bash" ]]; then
 	source "\$HOME/.fzf.bash"
 fi
-export FZF_DEFAULT_COMMAND="fd --type file --follow --hidden --no-ignore-vcs --exclude '.git' --color=always"
+export FZF_DEFAULT_COMMAND="fd -L --type file --follow --hidden --no-ignore-vcs --exclude '.git' --color=always"
 export FZF_CTRL_T_COMMAND="\$FZF_DEFAULT_COMMAND"
 FZF_PREVIEW_COMMAND="(bat --color=always {} || highlight -O ansi {} || cat {}) 2>/dev/null | head -100"
 export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --ansi --preview='\${FZF_PREVIEW_COMMAND}'"

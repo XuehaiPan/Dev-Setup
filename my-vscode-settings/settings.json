@@ -136,13 +136,13 @@
     "terminal.integrated.detectLocale": "auto",
     "terminal.integrated.shell.linux": "/usr/bin/zsh",
     "terminal.integrated.shell.osx": "/usr/local/bin/zsh",
-    "terminal.integrated.shell.windows": "C:\\Program Files\\PowerShell\\6\\pwsh.exe",
+    "terminal.integrated.shell.windows": "C:\\Program Files\\PowerShell\\7\\pwsh.exe",
 
     //* External Terminal */
     "terminal.explorerKind": "integrated",
     "terminal.external.linuxExec": "xterm",
     "terminal.external.osxExec": "iTerm.app",
-    "terminal.external.windowsExec": "C:\\Program Files\\PowerShell\\6\\pwsh.exe",
+    "terminal.external.windowsExec": "C:\\Program Files\\PowerShell\\7\\pwsh.exe",
 
     //* Extensions */
     "extensions.autoCheckUpdates": true,

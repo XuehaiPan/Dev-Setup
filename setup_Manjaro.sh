@@ -362,7 +362,7 @@ if [[ -f "\$HOME/.fzf.zsh" ]]; then
 	source "\$HOME/.fzf.zsh"
 fi
 if [[ -x "\$(command -v fd)" ]]; then
-	export FZF_DEFAULT_COMMAND="fd -L --type file --follow --hidden --no-ignore-vcs --exclude '.git' --color=always"
+	export FZF_DEFAULT_COMMAND="fd --type file --follow --hidden --no-ignore-vcs --exclude '.git' --color=always"
 	export FZF_CTRL_T_COMMAND="\$FZF_DEFAULT_COMMAND"
 fi
 FZF_PREVIEW_COMMAND="(bat --color=always {} || highlight -O ansi {} || cat {}) 2>/dev/null | head -100"
@@ -972,7 +972,7 @@ if [[ -f "\$HOME/.fzf.bash" ]]; then
 	source "\$HOME/.fzf.bash"
 fi
 if [[ -x "\$(command -v fd)" ]]; then
-	export FZF_DEFAULT_COMMAND="fd -L --type file --follow --hidden --no-ignore-vcs --exclude '.git' --color=always"
+	export FZF_DEFAULT_COMMAND="fd --type file --follow --hidden --no-ignore-vcs --exclude '.git' --color=always"
 	export FZF_CTRL_T_COMMAND="\$FZF_DEFAULT_COMMAND"
 fi
 FZF_PREVIEW_COMMAND="(bat --color=always {} || highlight -O ansi {} || cat {}) 2>/dev/null | head -100"

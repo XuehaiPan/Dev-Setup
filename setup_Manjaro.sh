@@ -801,10 +801,9 @@ function reset_proxy() {
 }
 
 function auto_reannounce_trackers() {
-	local TIMES=\${1:-60}
-	local INTERVAL=\${2:-60}
-	local TORRENT="active"
-	local CMD t r
+	local TIMES="\${1:-60}"
+	local INTERVAL="\${2:-60}"
+	local TORRENT CMD t r
 
 	echo -ne "\\033[?25l"
 
@@ -1445,7 +1444,7 @@ fi
 # Configurations for Gitignore
 backup_dotfiles .gitignore_global .dotfiles/.gitignore_global
 
-TWO_CR=$(printf "\r\r")
+TWO_CR="$(printf "\r\r")"
 cat >.dotfiles/.gitignore_global <<EOF
 ##### macOS.gitignore #####
 # General

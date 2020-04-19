@@ -146,7 +146,7 @@ export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
 # Install Casks and Fonts
 echo_and_eval 'brew cask install iterm2 keka'
 echo_and_eval 'brew cask install font-cascadia'
-echo_and_eval 'brew cask install font-dejavusansmono-nerd-font font-dejavusansmono-nerd-font-mono'
+echo_and_eval 'brew cask install font-dejavusansmono-nerd-font'
 
 # Upgrade Packages
 echo_and_eval 'brew upgrade'

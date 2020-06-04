@@ -550,7 +550,6 @@
     "markdown.extension.preview.autoShowPreviewToSide": false,
     "markdown.extension.orderedList.autoRenumber": true,
     "markdown.extension.tableFormatter.enabled": true,
-    "markdown.extension.toc.githubCompatibility": true,
     "markdown.extension.toc.updateOnSave": true,
 
     //* Matlab */

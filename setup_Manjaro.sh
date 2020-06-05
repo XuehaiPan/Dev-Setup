@@ -115,7 +115,7 @@ function get_latest_version() {
 	local i
 	for ((i = 0; i < 5; ++i)); do
 		VERSION="$(
-			curl --silent "https://api.github.com/repos/$REPO/releases/latest" |
+			curl --silent --connect-timeout 10 "https://api.github.com/repos/$REPO/releases/latest" |
 				grep '"tag_name":' |
 				/bin/sed -E 's/.*"([^"]+)".*/\1/'
 		)"

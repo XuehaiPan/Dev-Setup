@@ -93,12 +93,12 @@ function upgrade_ohmyzsh() {
 			sed -e 's#^\.\/\(.*\)\/\.git$#\1#'
 	))
 	for repo in "${REPOS[@]}"; do
-		echo_and_eval "git -C \"\$ZSH_CUSTOM/$repo\" pull"
+		echo_and_eval "git -C \"\$ZSH_CUSTOM/$repo\" pull --ff-only"
 	done
 }
 
 function upgrade_fzf() {
-	echo_and_eval 'git -C "$HOME/.fzf" pull'
+	echo_and_eval 'git -C "$HOME/.fzf" pull --ff-only'
 	echo_and_eval '"$HOME/.fzf/install" --key-bindings --completion --no-update-rc'
 }
 
@@ -210,7 +210,7 @@ function pull_projects() {
 		for PROJ_DIR in "${PROJ_DIRS[@]}"; do
 			if [[ -n "$(git -C "$PROJ_DIR" remote)" ]]; then
 				echo_and_eval "git -C \"${PROJ_DIR/#$HOME/\$HOME}\" fetch --all --prune"
-				echo_and_eval "git -C \"${PROJ_DIR/#$HOME/\$HOME}\" pull"
+				echo_and_eval "git -C \"${PROJ_DIR/#$HOME/\$HOME}\" pull --ff-only"
 			fi
 		done
 	done

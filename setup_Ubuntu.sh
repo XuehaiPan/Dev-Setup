@@ -255,7 +255,7 @@ fi
 if [[ ! -d "$ZSH_CUSTOM/themes/powerlevel10k/.git" ]]; then
 	echo_and_eval 'git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "$ZSH_CUSTOM/themes/powerlevel10k" 2>&1'
 else
-	echo_and_eval 'git -C "$ZSH_CUSTOM/themes/powerlevel10k" pull 2>&1'
+	echo_and_eval 'git -C "$ZSH_CUSTOM/themes/powerlevel10k" pull --ff-only 2>&1'
 fi
 
 # Install Zsh Plugins
@@ -263,7 +263,7 @@ for plugin in zsh-{syntax-highlighting,autosuggestions,completions}; do
 	if [[ ! -d "$ZSH_CUSTOM/plugins/$plugin/.git" ]]; then
 		echo_and_eval "git clone --depth=1 https://github.com/zsh-users/${plugin}.git \"\$ZSH_CUSTOM/plugins/$plugin\" 2>&1"
 	else
-		echo_and_eval "git -C \"\$ZSH_CUSTOM/plugins/$plugin\" pull 2>&1"
+		echo_and_eval "git -C \"\$ZSH_CUSTOM/plugins/$plugin\" pull --ff-only 2>&1"
 	fi
 done
 
@@ -271,7 +271,7 @@ done
 if [[ ! -d "$HOME/.fzf" ]]; then
 	echo_and_eval 'git clone --depth=1 https://github.com/junegunn/fzf.git "$HOME/.fzf" 2>&1'
 else
-	echo_and_eval 'git -C "$HOME/.fzf" pull 2>&1'
+	echo_and_eval 'git -C "$HOME/.fzf" pull --ff-only 2>&1'
 fi
 echo_and_eval '"$HOME/.fzf/install" --key-bindings --completion --no-update-rc'
 
@@ -755,12 +755,12 @@ function upgrade_ohmyzsh() {
 			sed -e 's#^\\.\\/\\(.*\\)\\/\\.git\$#\\1#'
 	))
 	for repo in "\${REPOS[@]}"; do
-		echo_and_eval "git -C \\"\\\$ZSH_CUSTOM/\$repo\\" pull"
+		echo_and_eval "git -C \\"\\\$ZSH_CUSTOM/\$repo\\" pull --ff-only"
 	done
 }
 
 function upgrade_fzf() {
-	echo_and_eval 'git -C "\$HOME/.fzf" pull'
+	echo_and_eval 'git -C "\$HOME/.fzf" pull --ff-only'
 	echo_and_eval '"\$HOME/.fzf/install" --key-bindings --completion --no-update-rc'
 }
 

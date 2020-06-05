@@ -104,6 +104,10 @@ function backup_dotfiles() {
 	done
 }
 
+function download() {
+	wget --no-verbose --show-progress --progress=bar:force:noscroll "$@"
+}
+
 # Install and Setup Homebrew
 if [[ ! -x "$(command -v brew)" ]]; then
 	echo_and_eval 'xcode-select --install'
@@ -1105,7 +1109,7 @@ EOF
 ln -sf .dotfiles/.bash_profile .
 
 # Color Theme for iTerm
-echo_and_eval 'wget --show-progress --progress=bar:force:noscroll -O "$HOME/Desktop/SpaceGray Eighties.itermcolors" \
+echo_and_eval 'download -O "$HOME/Desktop/SpaceGray Eighties.itermcolors" \
 	https://raw.githubusercontent.com/mbadolato/iTerm2-Color-Schemes/master/schemes/SpaceGray%20Eighties.itermcolors'
 open -R "$HOME/Desktop/SpaceGray Eighties.itermcolors"
 
@@ -1133,10 +1137,10 @@ done
 ALIASES="$(join_by '; ' "${ALIASES_ARRAY[@]}")"
 ITERM_UTILITIES_ARRAY="$(join_by ',' "${ITERM_UTILITIES[@]}")"
 
-echo_and_eval "wget -nv --show-progress --progress=bar:force:noscroll -N -P \"\$HOME/.iterm2/bin/\" https://iterm2.com/utilities/{$ITERM_UTILITIES_ARRAY}"
+echo_and_eval "download -N -P \"\$HOME/.iterm2/bin/\" https://iterm2.com/utilities/{$ITERM_UTILITIES_ARRAY}"
 echo_and_eval "chmod +x \"\$HOME/.iterm2/bin\"/{$ITERM_UTILITIES_ARRAY}"
 for shell in "bash" "zsh"; do
-	echo_and_eval "wget -nv --show-progress --progress=bar:force:noscroll -O \"\$HOME/.iterm2/.iterm2_shell_integration.$shell\" \"https://iterm2.com/shell_integration/$shell\" && chmod +x \"\$HOME/.iterm2/.iterm2_shell_integration.$shell\""
+	echo_and_eval "download -O \"\$HOME/.iterm2/.iterm2_shell_integration.$shell\" \"https://iterm2.com/shell_integration/$shell\" && chmod +x \"\$HOME/.iterm2/.iterm2_shell_integration.$shell\""
 	printf "\n# Utilities\n" >>"$HOME/.iterm2/.iterm2_shell_integration.$shell"
 	echo_and_eval "echo \"$ALIASES\" >> \"\$HOME/.iterm2/.iterm2_shell_integration.$shell\""
 done
@@ -1603,7 +1607,7 @@ bind-key r source-file ~/.tmux.conf \\; display-message "tmux.conf reloaded"
 # set-option -gs status-right ' #[fg=colour120][#{?#{==:#{=-60:pane_title},#{pane_title}},#{pane_title},…#{=-59:pane_title}}]#[default] #[none]%a %b-%d %H:%M:%S#[default] '
 EOF
 
-echo_and_eval 'wget -nv --show-progress --progress=bar:force:noscroll -N -P "$HOME/.dotfiles/" https://raw.githubusercontent.com/gpakosz/.tmux/master/.tmux.conf{,.local}'
+echo_and_eval 'download -N -P "$HOME/.dotfiles/" https://raw.githubusercontent.com/gpakosz/.tmux/master/.tmux.conf{,.local}'
 ln -sf .dotfiles/.tmux.conf .
 ln -sf .dotfiles/.tmux.conf.local .
 
@@ -1941,7 +1945,7 @@ ln -sf .dotfiles/.condarc .
 
 # Install Miniconda
 if [[ ! -d "$HOME/$CONDA_DIR" ]]; then
-	echo_and_eval "wget -nv --show-progress --progress=bar:force:noscroll -N -P \"$TMP_DIR/\" https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-latest-MacOSX-x86_64.sh"
+	echo_and_eval "download -N -P \"$TMP_DIR/\" https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-latest-MacOSX-x86_64.sh"
 	echo_and_eval "bash \"$TMP_DIR/Miniconda3-latest-MacOSX-x86_64.sh\" -b -p \"\$HOME/$CONDA_DIR\""
 	echo_and_eval "rm -f \"$TMP_DIR/Miniconda3-latest-MacOSX-x86_64.sh\""
 fi

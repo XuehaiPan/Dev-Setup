@@ -109,6 +109,10 @@ function backup_dotfiles() {
 	done
 }
 
+function download() {
+	wget --no-verbose --show-progress --progress=bar:force:noscroll "$@"
+}
+
 function get_latest_version() {
 	local REPO="$1"
 	local VERSION=""
@@ -169,7 +173,7 @@ if $IS_SUDOER; then
 	else
 		LATEST_FD_VERSION="$(get_latest_version "sharkdp/fd")"
 		if [[ -n "$LATEST_FD_VERSION" ]] && ! check_binary fd "$LATEST_FD_VERSION"; then
-			echo_and_eval "wget -nv --show-progress --progress=bar:force:noscroll -N -P \"$TMP_DIR/\" https://github.com/sharkdp/fd/releases/download/${LATEST_FD_VERSION}/fd_${LATEST_FD_VERSION#v}_amd64.deb"
+			echo_and_eval "download -N -P \"$TMP_DIR/\" https://github.com/sharkdp/fd/releases/download/${LATEST_FD_VERSION}/fd_${LATEST_FD_VERSION#v}_amd64.deb"
 			echo_and_eval "sudo dpkg -i \"$TMP_DIR/fd_${LATEST_FD_VERSION#v}_amd64.deb\""
 		fi
 	fi
@@ -178,13 +182,13 @@ if $IS_SUDOER; then
 	else
 		LATEST_BAT_VERSION="$(get_latest_version "sharkdp/bat")"
 		if [[ -n "$LATEST_BAT_VERSION" ]] && ! check_binary bat "$LATEST_BAT_VERSION"; then
-			echo_and_eval "wget -nv --show-progress --progress=bar:force:noscroll -N -P \"$TMP_DIR/\" https://github.com/sharkdp/bat/releases/download/${LATEST_BAT_VERSION}/bat_${LATEST_BAT_VERSION#v}_amd64.deb"
+			echo_and_eval "download -N -P \"$TMP_DIR/\" https://github.com/sharkdp/bat/releases/download/${LATEST_BAT_VERSION}/bat_${LATEST_BAT_VERSION#v}_amd64.deb"
 			echo_and_eval "sudo dpkg -i \"$TMP_DIR/bat_${LATEST_BAT_VERSION#v}_amd64.deb\""
 		fi
 	fi
 	LATEST_SHFMT_VERSION="$(get_latest_version "mvdan/sh")"
 	if [[ -n "$LATEST_SHFMT_VERSION" ]] && ! check_binary shfmt "$LATEST_SHFMT_VERSION"; then
-		echo_and_eval "wget -nv --show-progress --progress=bar:force:noscroll -N -P \"$TMP_DIR/\" https://github.com/mvdan/sh/releases/download/${LATEST_SHFMT_VERSION}/shfmt_${LATEST_SHFMT_VERSION}_linux_amd64"
+		echo_and_eval "download -N -P \"$TMP_DIR/\" https://github.com/mvdan/sh/releases/download/${LATEST_SHFMT_VERSION}/shfmt_${LATEST_SHFMT_VERSION}_linux_amd64"
 		echo_and_eval "sudo mv -f \"$TMP_DIR/shfmt_${LATEST_SHFMT_VERSION}_linux_amd64\" /usr/local/bin/shfmt"
 		echo_and_eval 'sudo chmod a+x /usr/local/bin/shfmt'
 		echo_and_eval 'sudo chown root:root /usr/local/bin/shfmt'
@@ -1483,7 +1487,7 @@ bind-key r source-file ~/.tmux.conf \\; display-message "tmux.conf reloaded"
 # set-option -gs status-right ' #[fg=colour120][#{?#{==:#{=-60:pane_title},#{pane_title}},#{pane_title},…#{=-59:pane_title}}]#[default] #[none]%a %b-%d %H:%M:%S#[default] '
 EOF
 
-echo_and_eval 'wget -nv --show-progress --progress=bar:force:noscroll -N -P "$HOME/.dotfiles/" https://raw.githubusercontent.com/gpakosz/.tmux/master/.tmux.conf{,.local}'
+echo_and_eval 'download -N -P "$HOME/.dotfiles/" https://raw.githubusercontent.com/gpakosz/.tmux/master/.tmux.conf{,.local}'
 ln -sf .dotfiles/.tmux.conf .
 ln -sf .dotfiles/.tmux.conf.local .
 
@@ -1809,7 +1813,7 @@ ln -sf .dotfiles/.condarc .
 
 # Install Miniconda
 if [[ ! -d "$HOME/$CONDA_DIR" ]]; then
-	echo_and_eval "wget -nv --show-progress --progress=bar:force:noscroll -N -P \"$TMP_DIR/\" https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-latest-Linux-x86_64.sh"
+	echo_and_eval "download -N -P \"$TMP_DIR/\" https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-latest-Linux-x86_64.sh"
 	echo_and_eval "bash \"$TMP_DIR/Miniconda3-latest-Linux-x86_64.sh\" -b -p \"\$HOME/$CONDA_DIR\""
 	echo_and_eval "rm -f \"$TMP_DIR/Miniconda3-latest-Linux-x86_64.sh\""
 fi
@@ -1842,7 +1846,7 @@ URL_LIST=(
 	"https://github.com/microsoft/cascadia-code/releases/latest/download/CascadiaCode_${LATEST_CASCADIA_VERSION#v}.zip"
 )
 for url in "${URL_LIST[@]}"; do
-	echo_and_eval "wget -nv --show-progress --progress=bar:force:noscroll -N -P \"$TMP_DIR/\" $url"
+	echo_and_eval "download -N -P \"$TMP_DIR/\" $url"
 	echo_and_eval "unzip -o \"$TMP_DIR/$(basename "$url")\" -d \"$TMP_DIR/fonts\""
 done
 for font_dir in "${FONT_DIR_LIST[@]}"; do

@@ -117,7 +117,7 @@ function get_latest_version() {
 		VERSION="$(
 			curl --silent "https://api.github.com/repos/$REPO/releases/latest" |
 				grep '"tag_name":' |
-				sed -E 's/.*"([^"]+)".*/\1/'
+				/bin/sed -E 's/.*"([^"]+)".*/\1/'
 		)"
 		if [[ -n "$VERSION" ]]; then
 			break
@@ -752,7 +752,7 @@ function upgrade_ohmyzsh() {
 	REPOS=(\$(
 		cd "\$ZSH_CUSTOM"
 		find -L . -mindepth 3 -maxdepth 3 -not -empty -type d -name '.git' |
-			sed -e 's#^\\.\\/\\(.*\\)\\/\\.git\$#\\1#'
+			/bin/sed -e 's#^\\.\\/\\(.*\\)\\/\\.git\$#\\1#'
 	))
 	for repo in "\${REPOS[@]}"; do
 		echo_and_eval "git -C \\"\\\$ZSH_CUSTOM/\$repo\\" pull --ff-only"
@@ -788,7 +788,7 @@ function upgrade_conda() {
 	ENVS=(base \$(
 		cd "\$(conda info --base)/envs"
 		find -L . -mindepth 1 -maxdepth 1 -not -empty \\( -type d -or -type l \\) |
-			sed -e 's#^\\.\\/\\(.*\\)\$#\\1#'
+			/bin/sed -e 's#^\\.\\/\\(.*\\)\$#\\1#'
 	))
 	for env in "\${ENVS[@]}"; do
 		echo_and_eval "conda update --all --name \$env --yes"
@@ -1487,9 +1487,9 @@ echo_and_eval 'wget -nv --show-progress --progress=bar:force:noscroll -N -P "$HO
 ln -sf .dotfiles/.tmux.conf .
 ln -sf .dotfiles/.tmux.conf.local .
 
-sed -i -e 's/tmux_conf_copy_to_os_clipboard=false/tmux_conf_copy_to_os_clipboard=true/g' .dotfiles/.tmux.conf.local
-sed -i -e 's/#set -g history-limit 10000/set -g history-limit 10000/g' .dotfiles/.tmux.conf.local
-sed -i -e 's/#set -g mouse on/set -g mouse on/g' .dotfiles/.tmux.conf.local
+/bin/sed -i -e 's/tmux_conf_copy_to_os_clipboard=false/tmux_conf_copy_to_os_clipboard=true/g' .dotfiles/.tmux.conf.local
+/bin/sed -i -e 's/#set -g history-limit 10000/set -g history-limit 10000/g' .dotfiles/.tmux.conf.local
+/bin/sed -i -e 's/#set -g mouse on/set -g mouse on/g' .dotfiles/.tmux.conf.local
 if ! grep -qF 'source-file ~/.dotfiles/.tmux.conf.user' .dotfiles/.tmux.conf.local; then
 	cat >>.dotfiles/.tmux.conf.local <<EOF
 

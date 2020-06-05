@@ -1835,13 +1835,18 @@ FONT_DIR_LIST=('$HOME/.local/share/fonts')
 if $IN_WSL; then
 	FONT_DIR_LIST+=('/mnt/c/Windows/Fonts')
 fi
-echo_and_eval "wget -nv --show-progress --progress=bar:force:noscroll -N -P \"$TMP_DIR/\" https://github.com/ryanoasis/nerd-fonts/releases/latest/download/DejaVuSansMono.zip"
-echo_and_eval "wget -nv --show-progress --progress=bar:force:noscroll -N -P \"$TMP_DIR/\" https://raw.githubusercontent.com/XuehaiPan/OS-Setup/master/Menlo.zip"
-echo_and_eval "wget -nv --show-progress --progress=bar:force:noscroll -N -P \"$TMP_DIR/Cascadia/\" https://github.com/microsoft/cascadia-code/releases/latest/download/Cascadia{,Mono}{,PL}.ttf"
+LATEST_CASCADIA_VERSION="$(get_latest_version "microsoft/cascadia-code")"
+URL_LIST=(
+	"https://github.com/ryanoasis/nerd-fonts/releases/latest/download/DejaVuSansMono.zip"
+	"https://raw.githubusercontent.com/XuehaiPan/OS-Setup/master/Menlo.zip"
+	"https://github.com/microsoft/cascadia-code/releases/latest/download/CascadiaCode_${LATEST_CASCADIA_VERSION#v}.zip"
+)
+for url in "${URL_LIST[@]}"; do
+	echo_and_eval "wget -nv --show-progress --progress=bar:force:noscroll -N -P \"$TMP_DIR/\" $url"
+	echo_and_eval "unzip -o \"$TMP_DIR/$(basename "$url")\" -d \"$TMP_DIR/fonts\""
+done
 for font_dir in "${FONT_DIR_LIST[@]}"; do
-	echo_and_eval "unzip -o \"$TMP_DIR/DejaVuSansMono.zip\" -d \"$font_dir\""
-	echo_and_eval "unzip -o \"$TMP_DIR/Menlo.zip\" -d \"$font_dir\""
-	echo_and_eval "cp -f \"$TMP_DIR/Cascadia\"/*.ttf \"$font_dir/\""
+	echo_and_eval "find -L \"$TMP_DIR/fonts\" -not -empty -type f -name '*.[ot]tf' -exec cp -f '{}' \""$font_dir"\" \\;"
 done
 rm -rf "$TMP_DIR"
 echo_and_eval 'fc-cache --force'

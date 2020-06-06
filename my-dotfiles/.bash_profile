@@ -56,6 +56,8 @@ export OMPI_FC="$FC" MPICH_FC="$FC"
 
 # Homebrew
 export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles"
+export HOMEBREW_EDITOR="vim"
+export HOMEBREW_BAT=true
 
 # Anaconda
 # >>> conda initialize >>>
@@ -108,6 +110,9 @@ export PATH="/usr/local/opt/openssl/bin:$PATH"
 
 # gettext
 export PATH="/usr/local/opt/gettext/bin:$PATH"
+
+# Bison
+export PATH="/usr/local/opt/bison/bin:$PATH"
 
 # ncurses
 export PATH="/usr/local/opt/ncurses/bin:$PATH"

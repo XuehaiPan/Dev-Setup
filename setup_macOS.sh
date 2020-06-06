@@ -411,7 +411,7 @@ function remove_duplicate() {
 			}
 			{
 				if (!(flag[\$0]++)) {
-					printf("%s%s", (!idx++ ? "" : RS), \$0);
+					printf("%s%s", (!(idx++) ? "" : RS), \$0);
 				}
 			}'
 	)"
@@ -449,7 +449,7 @@ DEFAULT_USER="$USER"
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 ZSH_THEME="powerlevel10k/powerlevel10k"
 
-# Powerlevel9k configrations
+# Powerlevel10k configrations
 POWERLEVEL9K_MODE="nerdfont-complete"
 POWERLEVEL9K_PROMPT_ON_NEWLINE=true
 POWERLEVEL9K_RPROMPT_ON_NEWLINE=false
@@ -464,6 +464,7 @@ POWERLEVEL9K_CHANGESET_HASH_LENGTH=6
 POWERLEVEL9K_VCS_SHORTEN_LENGTH=4
 POWERLEVEL9K_VCS_SHORTEN_MIN_LENGTH=9
 POWERLEVEL9K_VCS_SHORTEN_STRATEGY="truncate_middle"
+GITSTATUS_NUM_THREADS=4
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -1074,7 +1075,7 @@ function remove_duplicate() {
 			}
 			{
 				if (!(flag[\$0]++)) {
-					printf("%s%s", (!idx++ ? "" : RS), \$0);
+					printf("%s%s", (!(idx++) ? "" : RS), \$0);
 				}
 			}'
 	)"

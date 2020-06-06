@@ -160,7 +160,7 @@ function remove_duplicate() {
 			}
 			{
 				if (!(flag[$0]++)) {
-					printf("%s%s", (!idx++ ? "" : RS), $0);
+					printf("%s%s", (!(idx++) ? "" : RS), $0);
 				}
 			}'
 	)"

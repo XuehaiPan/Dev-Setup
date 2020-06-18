@@ -82,7 +82,7 @@ autocmd VimEnter * if str2nr(system("ls -l $PWD | wc -l")) <= 1000 |
                  \     unlet width numberwidth signwidth foldwidth bufwidth |
                  \ endif
 autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() |
-                 \ q |
+                 \ quit |
                  \ endif
 
 let g:airline#extensions#tabline#enabled = 1

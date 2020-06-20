@@ -131,13 +131,15 @@ function get_latest_version() {
 }
 
 function check_binary() {
-	local CMD REQUIRED VERSION
+	local CMD OPT REQUIRED VERSION
 	CMD="$1"
 	REQUIRED="${2#v}"
-	VERSION="$("$CMD" --version 2>&1)"
-	if [[ $? -eq 0 && "$VERSION" == *"$REQUIRED"* ]]; then
-		return 0
-	fi
+	for OPT in "--version" "-v" "-V"; do
+		VERSION="$("$CMD" "$OPT" 2>&1)"
+		if [[ $? -eq 0 && "$VERSION" == *"$REQUIRED"* ]]; then
+			return 0
+		fi
+	done
 	return 1
 }
 

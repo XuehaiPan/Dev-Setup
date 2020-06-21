@@ -5,6 +5,8 @@
 [core]
 	compression = -1
 	excludesfile = ~/.gitignore_global
+	eol = lf
+	autocrlf = false
 	editor = vim
 
 [diff]

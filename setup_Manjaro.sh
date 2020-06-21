@@ -189,6 +189,8 @@ backup_dotfiles .gitconfig .dotfiles/.gitconfig
 
 git config --global core.compression -1
 git config --global core.excludesfile '~/.gitignore_global'
+git config --global core.eol lf
+git config --global core.autocrlf false
 git config --global core.editor vim
 git config --global diff.tool vimdiff
 git config --global diff.guitool gvimdiff

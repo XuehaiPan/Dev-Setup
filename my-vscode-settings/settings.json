@@ -574,7 +574,8 @@
     "python.condaPath": "~/Miniconda3/condabin/conda",
     "python.pythonPath": "~/Miniconda3/envs/python37/bin/python",
     "python.terminal.activateEnvironment": true,
-    "python.jediEnabled": true,
+    "python.terminal.activateEnvInCurrentTerminal": true,
+    "python.languageServer": "Microsoft",
     "python.formatting.provider": "autopep8",
     "python.formatting.autopep8Path": "autopep8",
     "python.formatting.autopep8Args": [
@@ -638,8 +639,9 @@
     "mssql.showBatchTime": true,
 
     //* Visual Studio IntelliCode */
+    "vsintellicode.features.python.deepLearning": "default",
+    "vsintellicode.python.completionsEnabled": true,
     "vsintellicode.java.completionsEnabled": true,
-    "vsintellicode.python.completionsEnabled": false,
     "vsintellicode.typescript.completionsEnabled": true,
     "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue"
 }

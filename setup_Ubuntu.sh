@@ -753,8 +753,10 @@ function upgrade_ohmyzsh() {
 	# Set oh-my-zsh installation path
 	export ZSH="\${ZSH:-"\$HOME/.oh-my-zsh"}"
 	export ZSH_CUSTOM="\${ZSH_CUSTOM:-"\$ZSH/custom"}"
+	export ZSH_CACHE_DIR="\${ZSH_CACHE_DIR:-"\$ZSH/cache"}"
 
 	# Upgrade oh my zsh
+	rm -f "\$ZSH_CACHE_DIR/.zsh-update"
 	echo_and_eval 'zsh "\$ZSH/tools/upgrade.sh"'
 
 	# Upgrade themes and plugins

@@ -726,6 +726,7 @@ function upgrade_ohmyzsh() {
 
 	# Upgrade oh my zsh
 	rm -f "\$ZSH_CACHE_DIR/.zsh-update"
+	zsh "\$ZSH/tools/check_for_upgrade.sh"
 	echo_and_eval 'zsh "\$ZSH/tools/upgrade.sh"'
 
 	# Upgrade themes and plugins

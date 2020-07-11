@@ -1835,7 +1835,7 @@ echo_and_eval 'conda install pip jupyter ipython notebook jupyterlab ipdb \
 							 tqdm yapf autopep8 pycodestyle pylint --yes'
 echo_and_eval 'conda update --all --yes'
 echo_and_eval 'conda clean --all --yes'
-echo_and_eval "\"\$HOME/$CONDA_DIR/bin/jt\" --theme monokai"
+echo_and_eval "\"\$HOME/$CONDA_DIR/bin/jt\" --theme monokai --toolbar --nbname --kernellogo"
 echo_and_eval "\"\$HOME/$CONDA_DIR/bin/jupyter\" contrib nbextension install --user &>/dev/null"
 echo_and_eval "\"\$HOME/$CONDA_DIR/bin/pip\" config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple"
 

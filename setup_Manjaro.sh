@@ -278,10 +278,9 @@ if [[ -x "$(command -v ruby)" && -x "$(command -v gem)" ]]; then
 		echo_and_eval 'sudo gem update --config-file "$HOME/.gemrc"'
 		echo_and_eval 'sudo gem cleanup --config-file "$HOME/.gemrc"'
 	fi
-	echo_and_eval 'gem update --system'
-	echo_and_eval 'gem update'
+	echo_and_eval 'gem update --user-install'
 	echo_and_eval 'gem install colorls --user-install'
-	echo_and_eval 'gem cleanup'
+	echo_and_eval 'gem cleanup --user-install'
 fi
 
 # Configurations for CPAN
@@ -743,9 +742,13 @@ function upgrade_vim() {
 }
 
 function upgrade_gems() {
-	echo_and_eval 'gem update --system'
-	echo_and_eval 'gem update'
-	echo_and_eval 'gem cleanup'
+	if groups | grep -qE '(wheel|root)'; then
+		echo_and_eval 'sudo gem update --system --config-file "$HOME/.gemrc"'
+		echo_and_eval 'sudo gem update --config-file "$HOME/.gemrc"'
+		echo_and_eval 'sudo gem cleanup --config-file "$HOME/.gemrc"'
+	fi
+	echo_and_eval 'gem update --user-install'
+	echo_and_eval 'gem cleanup --user-install'
 }
 
 function upgrade_cpan() {

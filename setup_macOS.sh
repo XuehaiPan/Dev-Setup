@@ -139,7 +139,7 @@ fi
 
 # Install Packages
 echo_and_eval 'brew install bash-completion wget curl git git-lfs macvim tmux'
-echo_and_eval 'brew install coreutils ranger fd bat highlight git-extras'
+echo_and_eval 'brew install coreutils ranger fd bat highlight ripgrep git-extras'
 echo_and_eval 'brew install shfmt shellcheck diffutils colordiff'
 echo_and_eval 'brew install htop openssh tree reattach-to-user-namespace'
 

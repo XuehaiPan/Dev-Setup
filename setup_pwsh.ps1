@@ -57,7 +57,7 @@ Set-Alias ll Get-ChildItemColor -Option AllScope
 
 # Install Chocolatey Packages
 choco install vim fzf vscode conemu mobaxterm vcxsrv --yes
-choco install python3 shellcheck bat wget mingw cmake --yes
+choco install python3 shellcheck bat wget ripgrep mingw cmake --yes
 choco install windows-adk adobereader openjdk googlechrome --yes
 
 # Setup Vim

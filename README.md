@@ -161,6 +161,7 @@ The following packages will be setup:
 | [fd](https://github.com/sharkdp/fd)                                                                                              |   ✔   |      ✔       |       ✔       |
 | [bat](https://github.com/sharkdp/bat)                                                                                            |   ✔   |      ✔       |       ✔       |
 | [highlight](http://www.andre-simon.de/doku/highlight/en/highlight.php)                                                           |   ✔   |      ✔       |       ✔       |
+| [ripgrep](https://github.com/BurntSushi/ripgrep)                                                                                 |   ✔   |      ✔       |       ✔       |
 |                                                                                                                                  |       |              |               |
 | [wget](https://www.gnu.org/software/wget/)                                                                                       |   ✔   |      ✔       |       ✔       |
 | [curl](https://curl.haxx.se)                                                                                                     |   ✔   |      ✔       |       ✔       |

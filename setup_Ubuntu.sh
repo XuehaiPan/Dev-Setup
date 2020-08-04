@@ -169,7 +169,7 @@ if $IS_SUDOER; then
 
 	# Install Packages
 	echo_and_eval 'sudo apt-get install bash-completion wget curl git git-lfs vim tmux --yes'
-	echo_and_eval 'sudo apt-get install ranger highlight shellcheck ripgrep git-extras --yes'
+	echo_and_eval 'sudo apt-get install ranger highlight shellcheck git-extras --yes'
 	if [[ -n "$(apt-cache search '^fd-find$' --names-only)" ]]; then
 		echo_and_eval 'sudo apt-get install fd-find --yes'
 	else
@@ -186,6 +186,15 @@ if $IS_SUDOER; then
 		if [[ -n "$LATEST_BAT_VERSION" ]] && ! check_binary bat "$LATEST_BAT_VERSION"; then
 			echo_and_eval "download -N -P \"$TMP_DIR/\" https://github.com/sharkdp/bat/releases/download/${LATEST_BAT_VERSION}/bat_${LATEST_BAT_VERSION#v}_amd64.deb"
 			echo_and_eval "sudo dpkg -i \"$TMP_DIR/bat_${LATEST_BAT_VERSION#v}_amd64.deb\""
+		fi
+	fi
+	if [[ -n "$(apt-cache search '^ripgrep$' --names-only)" ]]; then
+		echo_and_eval 'sudo apt-get install ripgrep --yes'
+	else
+		LATEST_RIPGREP_VERSION="$(get_latest_version "BurntSushi/ripgrep")"
+		if [[ -n "$LATEST_RIPGREP_VERSION" ]] && ! check_binary ripgrep "$LATEST_RIPGREP_VERSION"; then
+			echo_and_eval "download -N -P \"$TMP_DIR/\" https://github.com/BurntSushi/ripgrep/releases/download/${LATEST_RIPGREP_VERSION}/ripgrep_${LATEST_RIPGREP_VERSION}_amd64.deb"
+			echo_and_eval "sudo dpkg -i \"$TMP_DIR/ripgrep_${LATEST_RIPGREP_VERSION}_amd64.deb\""
 		fi
 	fi
 	LATEST_SHFMT_VERSION="$(get_latest_version "mvdan/sh")"

@@ -746,9 +746,9 @@ function upgrade_vim() {
 
 function upgrade_gems() {
 	if groups | grep -qE '(wheel|root)'; then
-		echo_and_eval 'sudo gem update --system --config-file "$HOME/.gemrc"'
-		echo_and_eval 'sudo gem update --config-file "$HOME/.gemrc"'
-		echo_and_eval 'sudo gem cleanup --config-file "$HOME/.gemrc"'
+		echo_and_eval 'sudo gem update --system --config-file "\$HOME/.gemrc"'
+		echo_and_eval 'sudo gem update --config-file "\$HOME/.gemrc"'
+		echo_and_eval 'sudo gem cleanup --config-file "\$HOME/.gemrc"'
 	fi
 	echo_and_eval 'gem update --user-install'
 	echo_and_eval 'gem cleanup --user-install'
@@ -1064,6 +1064,10 @@ ln -sf .dotfiles/.bash_profile .
 # Configurations for Vim
 backup_dotfiles .vimrc .dotfiles/.vimrc
 
+GUI_FONT='DejaVuSansMono\ Nerd\ Font\ Mono\ 10'
+if $IN_WSL; then
+	GUI_FONT='DejaVuSansMono\ NF\ 10'
+fi
 cat >.dotfiles/.vimrc <<EOF
 set nocompatible
 set backspace=indent,eol,start
@@ -1110,7 +1114,7 @@ set wildmode=longest:list,full
 set completeopt=longest,menu
 set background=dark
 set t_Co=256
-set guifont=DejaVuSansMono\\ Nerd\\ Font\\ Mono\\ 10
+set guifont=${GUI_FONT}
 colorscheme monokai
 
 if &term =~ "xterm"

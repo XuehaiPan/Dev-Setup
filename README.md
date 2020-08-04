@@ -171,6 +171,7 @@ The following packages will be setup:
 | [net-tools](https://sourceforge.net/projects/net-tools/)                                                                         |   ✔   |      ✔       |       ✔       |
 | [exfat-utils](https://pkgs.org/download/exfat-utils)                                                                             |   ✔   |      ✔       |       ✔       |
 | [tree](http://mama.indstate.edu/users/ice/tree/)                                                                                 |   ✔   |      ✔       |       ✔       |
+| [git-extras](https://github.com/tj/git-extras)                                                                                   |   ✔   |      ✔       |       ✔       |
 | [diffutils](https://www.gnu.org/software/diffutils/)                                                                             |   ✔   |      ✔       |       ✔       |
 | [colordiff](https://www.colordiff.org)                                                                                           |   ✔   |      ✔       |       ✔       |
 | [shfmt](https://github.com/mvdan/sh)                                                                                             |   ✔   |      ✔       |       ✔       |

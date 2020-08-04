@@ -175,6 +175,7 @@ The following packages will be setup:
 | [git-extras](https://github.com/tj/git-extras)                                                                                   |   ✔   |      ✔       |       ✔       |
 | [diffutils](https://www.gnu.org/software/diffutils/)                                                                             |   ✔   |      ✔       |       ✔       |
 | [colordiff](https://www.colordiff.org)                                                                                           |   ✔   |      ✔       |       ✔       |
+| [diff-so-fancy](https://github.com/so-fancy/diff-so-fancy)                                                                       |   ✔   |      ✔       |       ✔       |
 | [shfmt](https://github.com/mvdan/sh)                                                                                             |   ✔   |      ✔       |       ✔       |
 | [shellcheck](https://www.shellcheck.net)                                                                                         |   ✔   |      ✔       |       ✔       |
 |                                                                                                                                  |       |              |               |

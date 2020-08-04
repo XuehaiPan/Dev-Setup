@@ -162,7 +162,7 @@ if $IS_SUDOER; then
 	# Install Packages
 	echo_and_eval 'yes | sudo pacman -S bash-completion wget curl git git-lfs gvim tmux --needed'
 	echo_and_eval 'yes | sudo pacman -S ranger fd bat highlight ripgrep git-extras shfmt shellcheck --needed'
-	echo_and_eval 'yes | sudo pacman -S htop openssh net-tools exfat-utils tree colordiff xclip --needed'
+	echo_and_eval 'yes | sudo pacman -S htop openssh net-tools exfat-utils tree colordiff diff-so-fancy xclip --needed'
 	echo_and_eval 'yes | sudo pacman -S gcc gdb clang llvm lldb make cmake automake autoconf ruby --needed'
 	echo_and_eval 'yes | sudo pacman -Scc'
 
@@ -209,6 +209,9 @@ git config --global filter.lfs.smudge 'git-lfs smudge -- %f'
 git config --global filter.lfs.process 'git-lfs filter-process'
 git config --global filter.lfs.required true
 git config --global color.ui true
+if [[ -x "$(command -v diff-so-fancy)" ]]; then
+	diff-so-fancy --set-defaults
+fi
 
 mv -f .gitconfig .dotfiles/.gitconfig
 ln -sf .dotfiles/.gitconfig .

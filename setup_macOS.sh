@@ -140,7 +140,7 @@ fi
 # Install Packages
 echo_and_eval 'brew install bash-completion wget curl git git-lfs macvim tmux'
 echo_and_eval 'brew install coreutils ranger fd bat highlight ripgrep git-extras'
-echo_and_eval 'brew install shfmt shellcheck diffutils colordiff'
+echo_and_eval 'brew install shfmt shellcheck diffutils colordiff diff-so-fancy'
 echo_and_eval 'brew install htop openssh tree reattach-to-user-namespace'
 
 echo_and_eval 'brew install ruby perl'
@@ -196,6 +196,9 @@ git config --global filter.lfs.smudge 'git-lfs smudge -- %f'
 git config --global filter.lfs.process 'git-lfs filter-process'
 git config --global filter.lfs.required true
 git config --global color.ui true
+if [[ -x "$(command -v diff-so-fancy)" ]]; then
+	diff-so-fancy --set-defaults
+fi
 
 mv -f .gitconfig .dotfiles/.gitconfig
 ln -sf .dotfiles/.gitconfig .

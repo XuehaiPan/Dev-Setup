@@ -204,6 +204,9 @@ if $IS_SUDOER; then
 		echo_and_eval 'sudo chmod a+x /usr/local/bin/shfmt'
 		echo_and_eval 'sudo chown root:root /usr/local/bin/shfmt'
 	fi
+	echo_and_eval "download -N -P \"$TMP_DIR/\" https://raw.githubusercontent.com/so-fancy/diff-so-fancy/master/third_party/build_fatpack/diff-so-fancy"
+	echo_and_eval "sudo mv -f \"$TMP_DIR/diff-so-fancy\" /usr/local/bin/diff-so-fancy"
+	echo_and_eval "sudo chmod a+x /usr/local/bin/diff-so-fancy"
 	echo_and_eval 'sudo apt-get install htop ssh net-tools exfat-utils tree colordiff xclip --yes'
 	echo_and_eval 'sudo apt-get install make cmake automake autoconf build-essential gcc g++ gdb --yes'
 	echo_and_eval 'sudo apt-get install clang clang-format llvm lldb ruby-full --yes'
@@ -249,6 +252,9 @@ git config --global filter.lfs.smudge 'git-lfs smudge -- %f'
 git config --global filter.lfs.process 'git-lfs filter-process'
 git config --global filter.lfs.required true
 git config --global color.ui true
+if [[ -x "$(command -v diff-so-fancy)" ]]; then
+	diff-so-fancy --set-defaults
+fi
 
 mv -f .gitconfig .dotfiles/.gitconfig
 ln -sf .dotfiles/.gitconfig .

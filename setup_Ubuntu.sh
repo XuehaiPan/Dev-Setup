@@ -1310,8 +1310,8 @@ highlight StatusLine                   ctermfg=231   ctermbg=241  cterm=bold    
 highlight StatusLineNC                 ctermfg=231   ctermbg=241  cterm=NONE         guifg=#F8F8F2 guibg=#64645E gui=NONE
 highlight Pmenu                        ctermfg=NONE  ctermbg=NONE cterm=NONE         guifg=NONE    guibg=NONE    gui=NONE
 highlight PmenuSel                     ctermfg=NONE  ctermbg=59   cterm=NONE         guifg=NONE    guibg=#49483E gui=NONE
-highlight IncSearch       term=reverse cterm=reverse ctermfg=193  ctermbg=16         gui=reverse   guifg=#C4BE89 guibg=#000000
-highlight Search          term=reverse cterm=NONE    ctermfg=231  ctermbg=24         gui=NONE      guifg=#F8F8F2 guibg=#204A87
+highlight IncSearch       term=reverse ctermfg=193   ctermbg=16   cterm=reverse      guifg=#C4BE89 guibg=#000000 gui=reverse
+highlight Search          term=reverse ctermfg=231   ctermbg=24   cterm=NONE         guifg=#F8F8F2 guibg=#204A87 gui=NONE
 highlight Directory                    ctermfg=141   ctermbg=NONE cterm=NONE         guifg=#AE81FF guibg=NONE    gui=NONE
 highlight Folded                       ctermfg=242   ctermbg=235  cterm=NONE         guifg=#75715E guibg=#272822 gui=NONE
 highlight SignColumn                   ctermfg=NONE  ctermbg=237  cterm=NONE         guifg=NONE    guibg=#3C3D37 gui=NONE

@@ -1873,7 +1873,7 @@ LATEST_CASCADIA_VERSION="$(get_latest_version "microsoft/cascadia-code")"
 URL_LIST=(
 	"https://github.com/ryanoasis/nerd-fonts/releases/latest/download/DejaVuSansMono.zip"
 	"https://raw.githubusercontent.com/XuehaiPan/OS-Setup/master/Menlo.zip"
-	"https://github.com/microsoft/cascadia-code/releases/latest/download/CascadiaCode_${LATEST_CASCADIA_VERSION#v}.zip"
+	"https://github.com/microsoft/cascadia-code/releases/latest/download/CascadiaCode-${LATEST_CASCADIA_VERSION#v}.zip"
 )
 for url in "${URL_LIST[@]}"; do
 	echo_and_eval "download -N -P \"$TMP_DIR/\" $url"

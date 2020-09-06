@@ -140,7 +140,7 @@ if $IS_SUDOER; then
 	done
 
 	if grep -q '^\s*#\s*Color$' /etc/pacman.conf; then
-		echo_and_eval "sudo sed -i -e 's/^\\s*#\\s*Color$/Color/g' /etc/pacman.conf"
+		echo_and_eval "sudo sed -i  's/^\\s*#\\s*Color$/Color/g' /etc/pacman.conf"
 	fi
 
 	echo_and_eval 'sudo pacman-mirrors --country China --method rank'
@@ -728,7 +728,7 @@ function upgrade_ohmyzsh() {
 	REPOS=(\$(
 		cd "\$ZSH_CUSTOM"
 		find -L . -mindepth 3 -maxdepth 3 -not -empty -type d -name '.git' |
-			/usr/bin/sed -e 's#^\\.\\/\\(.*\\)\\/\\.git\$#\\1#'
+			/usr/bin/sed  's#^\\.\\/\\(.*\\)\\/\\.git\$#\\1#'
 	))
 	for repo in "\${REPOS[@]}"; do
 		echo_and_eval "git -C \\"\\\$ZSH_CUSTOM/\$repo\\" pull --ff-only"
@@ -768,7 +768,7 @@ function upgrade_conda() {
 	ENVS=(base \$(
 		cd "\$(conda info --base)/envs"
 		find -L . -mindepth 1 -maxdepth 1 -not -empty \\( -type d -or -type l \\) |
-			/usr/bin/sed -e 's#^\\.\\/\\(.*\\)\$#\\1#'
+			/usr/bin/sed  's#^\\.\\/\\(.*\\)\$#\\1#'
 	))
 	for env in "\${ENVS[@]}"; do
 		echo_and_eval "conda update --all --name \$env --yes"
@@ -1468,9 +1468,9 @@ echo_and_eval 'download -N -P "$HOME/.dotfiles/" https://raw.githubusercontent.c
 ln -sf .dotfiles/.tmux.conf .
 ln -sf .dotfiles/.tmux.conf.local .
 
-/usr/bin/sed -i -e 's/tmux_conf_copy_to_os_clipboard=false/tmux_conf_copy_to_os_clipboard=true/g' .dotfiles/.tmux.conf.local
-/usr/bin/sed -i -e 's/#set -g history-limit 10000/set -g history-limit 10000/g' .dotfiles/.tmux.conf.local
-/usr/bin/sed -i -e 's/#set -g mouse on/set -g mouse on/g' .dotfiles/.tmux.conf.local
+/usr/bin/sed -i 's/tmux_conf_copy_to_os_clipboard=false/tmux_conf_copy_to_os_clipboard=true/g' .dotfiles/.tmux.conf.local
+/usr/bin/sed -i 's/#set -g history-limit 10000/set -g history-limit 10000/g' .dotfiles/.tmux.conf.local
+/usr/bin/sed -i 's/#set -g mouse on/set -g mouse on/g' .dotfiles/.tmux.conf.local
 if ! grep -qF 'source-file ~/.dotfiles/.tmux.conf.user' .dotfiles/.tmux.conf.local; then
 	cat >>.dotfiles/.tmux.conf.local <<EOF
 

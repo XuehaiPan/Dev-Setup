@@ -584,7 +584,7 @@ source "\$ZSH/oh-my-zsh.sh"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 # Set personal aliases
-alias bubo='brew update --verbose && brew outdated && brew cask outdated'
+alias bubo='brew update --verbose && brew outdated'
 alias bubc='brew upgrade && brew cask upgrade && brew cleanup -s --prune 7'
 alias lsa='ls -A'
 alias l='ls -alh'
@@ -707,13 +707,12 @@ function echo_and_eval() {
 function upgrade_homebrew() {
 	# Upgrade Homebrew
 	echo_and_eval 'brew update --verbose'
+	echo_and_eval 'brew outdated'
 
 	# Upgrade Homebrew Formulas
-	echo_and_eval 'brew outdated'
 	echo_and_eval 'brew upgrade'
 
 	# Upgrade Homebrew Casks
-	echo_and_eval 'brew cask outdated'
 	echo_and_eval 'brew cask upgrade'
 
 	# Clean Homebrew Cache

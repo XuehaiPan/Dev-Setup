@@ -18,13 +18,20 @@ Bash scripts for setting up a newly installed OS automatically.
 
 Download the script file using [wget](https://www.gnu.org/software/wget/) / [curl](https://curl.haxx.se) / [git](https://git-scm.com) or any browser ([click to download zip](https://codeload.github.com/XuehaiPan/OS-Setup/zip/master)). And then open `Terminal` and run:
 
+**via wget**
 ```shell
 # Download and run via wget
 bash -c "$(wget -O - https://raw.githubusercontent.com/XuehaiPan/OS-Setup/master/setup.sh)"
+```
 
+**via curl**
+```shell
 # Download and run via curl
 bash -c "$(curl -fL https://raw.githubusercontent.com/XuehaiPan/OS-Setup/master/setup.sh)"
+```
 
+**via git**
+```shell
 # Download via git
 git clone --depth=1 https://github.com/XuehaiPan/OS-Setup.git
 

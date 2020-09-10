@@ -68,7 +68,7 @@ bash restore_dotfiles.sh
 bash restore_dotfiles.sh "$HOME/.dotfiles/backups/$DATETIME"
 ```
 
-**Note**: the packages installed by [`setup.sh`](setup.sh) (see section [Packages](#packages)) will remain on your system.
+**Note**: the packages installed by [`setup.sh`](setup.sh) (see section [Packages](#packages)) will remain in your system.
 
 ### Upgrade Packages
 
@@ -84,7 +84,7 @@ By default, `upgrade_packages.sh` will not upgrade your conda environments. If y
 source ~/upgrade_packages.sh; upgrade_conda
 ```
 
-The function definitions in `upgrade_packages.sh` is in `$HOME/.dotfiles/utilities.sh`, which will be sourced automatically when the shell starts up.
+The function definitions in `upgrade_packages.sh` are in `$HOME/.dotfiles/utilities.sh`, which will be sourced automatically when the shell starts up.
 
 ### Font Settings
 

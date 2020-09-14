@@ -553,8 +553,8 @@
     "markdown.extension.toc.updateOnSave": true,
 
     //* Matlab */
-    "matlab.matlabpath": "/Applications/MATLAB_R2019b.app/bin/matlab",
-    "matlab.mlintpath": "/Applications/MATLAB_R2019b.app/bin/maci64/mlint",
+    "matlab.matlabpath": "/Applications/MATLAB_R2020a.app/bin/matlab",
+    "matlab.mlintpath": "/Applications/MATLAB_R2020a.app/bin/maci64/mlint",
     "matlab.lintOnSave": true,
     "matlab.linterEncoding": "utf8",
 

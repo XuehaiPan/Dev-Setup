@@ -3,7 +3,7 @@
     //* Editor */
     "editor.fontSize": 13,
     "editor.fontFamily": "Menlo, Monaco, Consolas, 'Courier New', monospace",
-    "editor.fontWeight": "600",
+    "editor.fontWeight": 600,
     "editor.tabSize": 4,
     "editor.insertSpaces": true,
     "editor.lineNumbers": "on",
@@ -38,9 +38,10 @@
     "editor.minimap.maxColumn": 120,
     "editor.minimap.renderCharacters": true,
     "editor.minimap.size": "proportional",
+    "editor.formatOnType": true,
     "editor.formatOnPaste": true,
     "editor.formatOnSave": true,
-    "editor.formatOnType": true,
+    "editor.formatOnSaveMode": "modifications",
     "editor.suggestSelection": "first",
     "editor.snippetSuggestions": "inline",
     "editor.suggest.filterGraceful": true,
@@ -113,6 +114,7 @@
     "explorer.enableDragAndDrop": true,
 
     //* Search */
+    "search.searchOnType": true,
     "search.showLineNumbers": true,
     "search.smartCase": true,
     "search.useIgnoreFiles": true,

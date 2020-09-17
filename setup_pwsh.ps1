@@ -8,6 +8,7 @@ Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://cho
 
 choco config set commandExecutionTimeoutSeconds 0
 $Env:ChocolateyToolsLocation='C:\Tools'
+[Environment]::SetEnvironmentVariable('ChocolateyToolsLocation', 'C:\Tools', 'Machine')
 
 # Install PowerShell Core
 choco install powershell-core git --yes

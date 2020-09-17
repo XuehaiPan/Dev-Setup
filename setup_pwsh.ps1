@@ -231,6 +231,6 @@ call plug#begin('~/vimfiles/plugged')
     Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() } }
     Plug 'lervag/vimtex'
 call plug#end()
-"@ > ~\_vimrc
+"@ | Set-Content -Path ~\_vimrc -Encoding utf8
 
 vim -c "PlugInstall | PlugUpgrade | PlugUpdate | quitall"

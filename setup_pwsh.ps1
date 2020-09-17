@@ -9,16 +9,16 @@ $Env:ChocolateyToolsLocation='C:\Tools'
 choco install powershell-core git --yes
 
 # Setup PowerShell
-Install-Module posh-git -Confirm
-Install-Module oh-my-posh -Confirm
-Install-Module PSReadLine -Force -SkipPublisherCheck -Confirm
-Install-Module Get-ChildItemColor -AllowClobber -Confirm
-Install-Module WindowsConsoleFonts -Confirm
+Install-Module posh-git -AcceptLicense -Confirm
+Install-Module oh-my-posh -AcceptLicense -Confirm
+Install-Module PSReadLine -Force -SkipPublisherCheck -AcceptLicense -Confirm
+Install-Module Get-ChildItemColor -AllowClobber -AcceptLicense -Confirm
+Install-Module WindowsConsoleFonts -AcceptLicense -Confirm
 
 if (!(Test-Path -Path $PROFILE)) { New-Item -Type File -Path $PROFILE -Force }
 @"
 chcp 65001
-Set-Culture en-US
+Set-Culture zh-CN
 
 Import-Module posh-git
 Import-Module oh-my-posh
@@ -51,8 +51,9 @@ Function resetproxy() {
 }
 Set-Alias ls Get-ChildItemColorFormatWide -Option AllScope
 Set-Alias ll Get-ChildItemColor -Option AllScope
-"@ > $PROFILE
+"@ | Set-Content -Path $PROFILE -Encoding utf8
 
+Update-SessionEnvironment
 & $PROFILE
 
 # Install Chocolatey Packages
@@ -116,7 +117,7 @@ set completeopt=longest,menu
 set background=dark
 set t_Co=256
 set guifont=DejaVuSansMono\ NF:h10
-colorscheme monokai
+colorscheme desert
 source `$VIMRUNTIME/delmenu.vim
 source `$VIMRUNTIME/menu.vim
 
@@ -183,6 +184,8 @@ let g:syntastic_auto_loc_list = 1
 let g:syntastic_loc_list_height = 5
 let g:syntastic_check_on_wq = 0
 autocmd GUIEnter * let g:syntastic_check_on_open = 1
+
+let g:tex_flavor = 'latex'
 
 if ! exists('`$SSH_CONNECTION')
     let g:mkdp_auto_start = 1

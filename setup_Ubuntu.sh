@@ -206,7 +206,8 @@ if $IS_SUDOER; then
 	fi
 	echo_and_eval "download -N -P \"$TMP_DIR/\" https://raw.githubusercontent.com/so-fancy/diff-so-fancy/master/third_party/build_fatpack/diff-so-fancy"
 	echo_and_eval "sudo mv -f \"$TMP_DIR/diff-so-fancy\" /usr/local/bin/diff-so-fancy"
-	echo_and_eval "sudo chmod a+x /usr/local/bin/diff-so-fancy"
+	echo_and_eval 'sudo chmod a+x /usr/local/bin/diff-so-fancy'
+	echo_and_eval 'sudo chown root:root /usr/local/bin/diff-so-fancy'
 	echo_and_eval 'sudo apt-get install htop ssh net-tools exfat-utils tree colordiff xclip --yes'
 	echo_and_eval 'sudo apt-get install make cmake automake autoconf build-essential gcc g++ gdb --yes'
 	echo_and_eval 'sudo apt-get install clang clang-format llvm lldb ruby-full --yes'

@@ -20,7 +20,9 @@ Install-Module PSReadLine -Force -SkipPublisherCheck -AcceptLicense -Confirm
 Install-Module Get-ChildItemColor -AllowClobber -AcceptLicense -Confirm
 Install-Module WindowsConsoleFonts -AcceptLicense -Confirm
 
-if (!(Test-Path -Path $PROFILE)) { New-Item -Type File -Path $PROFILE -Force }
+if (!(Test-Path -Path $PROFILE.CurrentUserAllHosts)) {
+    New-Item -Type File -Path $PROFILE.CurrentUserAllHosts -Force
+}
 @"
 chcp 65001
 Set-Culture zh-CN
@@ -56,10 +58,10 @@ Function resetproxy() {
 }
 Set-Alias ls Get-ChildItemColorFormatWide -Option AllScope
 Set-Alias ll Get-ChildItemColor -Option AllScope
-"@ | Set-Content -Path $PROFILE -Encoding utf8
+"@ | Set-Content -Path $PROFILE.CurrentUserAllHosts -Encoding utf8
 
 Update-SessionEnvironment
-& $PROFILE
+& $PROFILE.CurrentUserAllHosts
 
 # Install Chocolatey Packages
 choco install vim fzf vscode conemu mobaxterm vcxsrv --yes

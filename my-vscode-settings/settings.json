@@ -546,6 +546,7 @@
     "local-history.path": "${workspaceFolder}/.vscode",
     "local-history.saveDelay": 120,
     "local-history.daysLimit": 14,
+    "local-history.treeLocation": "localHistory",
 
     //* Markdown All in One */
     "markdown.extension.list.indentationSize": "inherit",

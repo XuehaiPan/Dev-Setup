@@ -782,7 +782,7 @@ function upgrade_ohmyzsh() {
 	REPOS=(\$(
 		cd "\$ZSH_CUSTOM"
 		find -L . -mindepth 3 -maxdepth 3 -not -empty -type d -name '.git' |
-			sed 's#^\\.\\/\\(.*\\)\\/\\.git\$#\\1#'
+			sed -E 's#^\\./(.*)/\\.git\$#\\1#'
 	))
 	for repo in "\${REPOS[@]}"; do
 		echo_and_eval "git -C \\"\\\$ZSH_CUSTOM/\$repo\\" pull --ff-only"
@@ -822,7 +822,7 @@ function upgrade_conda() {
 	ENVS=(base \$(
 		cd "\$(conda info --base)/envs"
 		find -L . -mindepth 1 -maxdepth 1 -not -empty \\( -type d -or -type l \\) |
-			sed 's#^\\.\\/\\(.*\\)\$#\\1#'
+			sed -E 's#^\\./(.*)\$#\\1#'
 	))
 	for env in "\${ENVS[@]}"; do
 		echo_and_eval "conda update --all --name \$env --yes"

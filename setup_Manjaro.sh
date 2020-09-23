@@ -121,7 +121,7 @@ function get_latest_version() {
 		VERSION="$(
 			curl --silent --connect-timeout 10 "https://api.github.com/repos/$REPO/releases/latest" |
 				grep '"tag_name":' |
-				sed -E 's/.*"([^"]+)".*/\1/'
+				sed -E 's/^.*:\s*"([^"]+)",?$/\1/'
 		)"
 		if [[ -n "$VERSION" ]]; then
 			break

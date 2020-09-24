@@ -1209,7 +1209,7 @@ call plug#begin('~/.vim/plugged')
     Plug 'chrisbra/Colorizer'
     Plug 'jiangmiao/auto-pairs'
     Plug 'tpope/vim-surround'
-    Plug 'terryma/vim-multiple-cursors'
+    Plug 'mg979/vim-visual-multi'
     Plug 'mbbill/undotree'
     Plug 'airblade/vim-gitgutter'
     Plug 'tpope/vim-fugitive'

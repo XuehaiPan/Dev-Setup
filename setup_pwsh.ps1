@@ -25,7 +25,6 @@ if (!(Test-Path -Path $PROFILE.CurrentUserAllHosts)) {
 }
 @"
 chcp 65001
-Set-Culture zh-CN
 
 Import-Module posh-git
 Import-Module oh-my-posh

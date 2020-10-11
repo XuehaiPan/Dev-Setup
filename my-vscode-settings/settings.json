@@ -424,7 +424,25 @@
     "latex-workshop.view.pdf.viewer": "tab",
     "latex-workshop.view.pdf.zoom": "page-width",
     "latex-workshop.view.pdf.trim": 0,
+    "latex-workshop.view.pdf.external.viewer.command": "okular",
+    "latex-workshop.view.pdf.external.viewer.args": [
+        "--unique",
+        "%PDF%"
+    ],
+    "latex-workshop.view.pdf.external.synctex.command": "okular",
+    "latex-workshop.view.pdf.external.synctex.args": [
+        "--unique",
+        "%PDF%#src:%LINE%%TEX%"
+    ],
     "latex-workshop.latex.outDir": "%DIR%",
+    "latex-workshop.latex.magic.args": [
+        "-synctex=1",
+        "-interaction=nonstopmode",
+        "-file-line-error",
+        "-shell-escape",
+        "-outdir=%OUTDIR%",
+        "%DOC%"
+    ],
     "latex-workshop.latex.tools": [
         {
             "name": "latexmk",

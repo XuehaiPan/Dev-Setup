@@ -69,7 +69,7 @@ function upgrade_homebrew() {
 	echo_and_eval 'brew upgrade'
 
 	# Upgrade Homebrew Casks
-	echo_and_eval 'brew cask upgrade'
+	echo_and_eval 'brew upgrade --cask'
 
 	# Clean Homebrew Cache
 	echo_and_eval 'brew cleanup -s --prune 7'

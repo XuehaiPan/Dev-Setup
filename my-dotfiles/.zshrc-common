@@ -332,7 +332,7 @@ source "$ZSH/oh-my-zsh.sh"
 
 # Set personal aliases
 alias bubo='brew update --verbose && brew outdated'
-alias bubc='brew upgrade && brew cask upgrade && brew cleanup -s --prune 7'
+alias bubc='brew upgrade && brew upgrade --cask && brew cleanup -s --prune 7'
 alias lsa='ls -A'
 alias l='ls -alh'
 alias ll='ls -lh'

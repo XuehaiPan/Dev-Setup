@@ -465,7 +465,7 @@
     ],
     "latex-workshop.latex.outDir": "%DIR%",
     "latex-workshop.latex.magic.args": [
-        "-synctex=1",
+        "-synctex=15",
         "-interaction=nonstopmode",
         "-file-line-error",
         "-shell-escape",
@@ -478,7 +478,7 @@
             "command": "latexmk",
             "args": [
                 "-xelatex",
-                "-synctex=1",
+                "-synctex=15",
                 "-interaction=nonstopmode",
                 "-file-line-error",
                 "-shell-escape",
@@ -491,7 +491,7 @@
             "name": "pdflatex",
             "command": "pdflatex",
             "args": [
-                "-synctex=1",
+                "-synctex=15",
                 "-interaction=nonstopmode",
                 "-file-line-error",
                 "-shell-escape",
@@ -503,7 +503,7 @@
             "name": "xelatex",
             "command": "xelatex",
             "args": [
-                "-synctex=1",
+                "-synctex=15",
                 "-interaction=nonstopmode",
                 "-file-line-error",
                 "-shell-escape",

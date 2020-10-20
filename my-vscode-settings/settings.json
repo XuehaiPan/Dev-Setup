@@ -620,10 +620,12 @@
         "*.nav",
         "*.snm",
         "*.vrb",
+        "*.run.xml",
         "*.fdb_latexmk",
         "*.synctex(busy)",
         "*.synctex.gz(busy)",
-        "*.run.xml"
+        "_minted-*/*",
+        "_minted-*"
     ],
 
     //* Local History *//

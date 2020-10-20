@@ -1765,6 +1765,9 @@ fabric.properties
 !.vscode/extensions.json
 *.code-workspace
 
+# Local History for Visual Studio Code
+.history/
+
 
 ##### Vim.gitignore #####
 # Swap

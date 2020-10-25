@@ -1834,4 +1834,6 @@ for font_dir in "${FONT_DIR_LIST[@]}"; do
 	echo_and_eval "find -L \"$TMP_DIR/fonts\" -not -empty -type f -name '*.[ot]tf' -exec cp -f '{}' \""$font_dir"\" \\;"
 done
 rm -rf "$TMP_DIR"
-echo_and_eval 'fc-cache --force'
+if [[ -x "$(command -v fc-cache)" ]]; then
+	echo_and_eval 'fc-cache --force'
+fi

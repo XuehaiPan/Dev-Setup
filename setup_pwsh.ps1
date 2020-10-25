@@ -43,17 +43,34 @@ Set-PSReadLineKeyHandler -Key Tab -Function Complete
 Function which(`$name) { Get-Command `$name | Select-Object Definition }
 Function rmrf(`$item) { Remove-Item `$item -Recurse -Force }
 Function mkfile(`$file) { "" | Out-File `$file -Encoding utf8 }
-Function setproxy(`$proxyhost) {
-    `$Env:http_proxy="http://`${proxyhost}:7890"
-    `$Env:https_proxy="http://`${proxyhost}:7890"
-    `$Env:ftp_proxy="http://`${proxyhost}:7890"
-    `$Env:all_proxy="socks5://`${proxyhost}:7891"
+Function Set-Proxy(`$proxyHost, `$httpPort=7890, `$httpsPort=7890,
+                   `$ftpPort=7890, `$socksPort=7891) {
+    `$Env:http_proxy="http://`${proxyHost}:`${httpPort}"
+    `$Env:https_proxy="http://`${proxyHost}:`${httpsPort}"
+    `$Env:ftp_proxy="http://`${proxyHost}:`${ftpPort}"
+    `$Env:all_proxy="socks5://`${proxyHost}:`${socksPort}"
+    `$Env:HTTP_PROXY="http://`${proxyHost}:`${httpPort}"
+    `$Env:HTTPS_PROXY="http://`${proxyHost}:`${httpsPort}"
+    `$Env:FTP_PROXY="http://`${proxyHost}:`${ftpPort}"
+    `$Env:ALL_PROXY="socks5://`${proxyHost}:`${socksPort}"
+
+    `$regKey="HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings"
+    Set-ItemProperty -Path "`$regKey" -Name ProxyEnable -Value 1
+    Set-ItemProperty -Path "`$regKey" -Name ProxyServer -Value "`${proxyHost}:`${httpPort}"
 }
-Function resetproxy() {
-    `$Env:http_proxy=""
-    `$Env:https_proxy=""
-    `$Env:ftp_proxy=""
-    `$Env:all_proxy=""
+Function Reset-Proxy() {
+    Remove-Item Env:\http_proxy
+    Remove-Item Env:\https_proxy
+    Remove-Item Env:\ftp_proxy
+    Remove-Item Env:\all_proxy
+    Remove-Item Env:\HTTP_PROXY
+    Remove-Item Env:\HTTPS_PROXY
+    Remove-Item Env:\FTP_PROXY
+    Remove-Item Env:\ALL_PROXY
+
+    `$regKey="HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings"
+    Set-ItemProperty -Path "`$regKey" -Name ProxyEnable -Value 0
+    Set-ItemProperty -Path "`$regKey" -Name ProxyServer -Value ""
 }
 Set-Alias ls Get-ChildItemColorFormatWide -Option AllScope
 Set-Alias ll Get-ChildItemColor -Option AllScope

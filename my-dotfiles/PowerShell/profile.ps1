@@ -41,22 +41,14 @@ Function Set-Proxy($proxyHost="127.0.0.1",
     Set-ItemProperty -Path "$regKey" -Name ProxyServer -Value "${proxyHost}:${httpPort}"
 }
 Function Reset-Proxy() {
-    $Env:http_proxy=""
-    $Env:https_proxy=""
-    $Env:ftp_proxy=""
-    $Env:all_proxy=""
-    $Env:HTTP_PROXY=""
-    $Env:HTTPS_PROXY=""
-    $Env:FTP_PROXY=""
-    $Env:ALL_PROXY=""
-    Remove-Item -Path Env:\http_proxy
-    Remove-Item -Path Env:\https_proxy
-    Remove-Item -Path Env:\ftp_proxy
-    Remove-Item -Path Env:\all_proxy
-    Remove-Item -Path Env:\HTTP_PROXY
-    Remove-Item -Path Env:\HTTPS_PROXY
-    Remove-Item -Path Env:\FTP_PROXY
-    Remove-Item -Path Env:\ALL_PROXY
+    Remove-Item -Path Env:\http_proxy -ErrorAction:Ignore
+    Remove-Item -Path Env:\https_proxy -ErrorAction:Ignore
+    Remove-Item -Path Env:\ftp_proxy -ErrorAction:Ignore
+    Remove-Item -Path Env:\all_proxy -ErrorAction:Ignore
+    Remove-Item -Path Env:\HTTP_PROXY -ErrorAction:Ignore
+    Remove-Item -Path Env:\HTTPS_PROXY -ErrorAction:Ignore
+    Remove-Item -Path Env:\FTP_PROXY -ErrorAction:Ignore
+    Remove-Item -Path Env:\ALL_PROXY -ErrorAction:Ignore
     [Environment]::SetEnvironmentVariable('http_proxy', $null, 'Machine')
     [Environment]::SetEnvironmentVariable('https_proxy', $null, 'Machine')
     [Environment]::SetEnvironmentVariable('ftp_proxy', $null, 'Machine')

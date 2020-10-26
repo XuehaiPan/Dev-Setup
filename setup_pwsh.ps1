@@ -40,9 +40,12 @@ Set-PSReadlineOption -EditMode Emacs
 Set-PSReadLineKeyHandler -Key UpArrow -Function HistorySearchBackward
 Set-PSReadLineKeyHandler -Key DownArrow -Function HistorySearchForward
 Set-PSReadLineKeyHandler -Key Tab -Function Complete
-Function which(`$name) { Get-Command `$name | Select-Object Definition }
-Function rmrf(`$item) { Remove-Item `$item -Recurse -Force }
-Function mkfile(`$file) { "" | Out-File `$file -Encoding utf8 }
+
+Set-Alias ls Get-ChildItemColorFormatWide -Option AllScope
+Set-Alias ll Get-ChildItemColor -Option AllScope
+Set-Alias which Get-Command -Option AllScope
+Function rmrf(`$item) { Remove-Item -Path "`$item" -Recurse -Force }
+Function mkfile(`$file) { "" | Out-File -Path "`$file" -Encoding utf8 }
 Function Set-Proxy(`$proxyHost="127.0.0.1",
                    `$httpPort=7890, `$httpsPort=7890,
                    `$ftpPort=7890, `$socksPort=7891) {
@@ -64,14 +67,14 @@ Function Set-Proxy(`$proxyHost="127.0.0.1",
     Set-ItemProperty -Path "`$regKey" -Name ProxyServer -Value "`${proxyHost}:`${httpPort}"
 }
 Function Reset-Proxy() {
-    Remove-Item Env:\http_proxy
-    Remove-Item Env:\https_proxy
-    Remove-Item Env:\ftp_proxy
-    Remove-Item Env:\all_proxy
-    Remove-Item Env:\HTTP_PROXY
-    Remove-Item Env:\HTTPS_PROXY
-    Remove-Item Env:\FTP_PROXY
-    Remove-Item Env:\ALL_PROXY
+    Remove-Item -Path Env:\http_proxy -Force
+    Remove-Item -Path Env:\https_proxy -Force
+    Remove-Item -Path Env:\ftp_proxy -Force
+    Remove-Item -Path Env:\all_proxy -Force
+    Remove-Item -Path Env:\HTTP_PROXY -Force
+    Remove-Item -Path Env:\HTTPS_PROXY -Force
+    Remove-Item -Path Env:\FTP_PROXY -Force
+    Remove-Item -Path Env:\ALL_PROXY -Force
     [Environment]::SetEnvironmentVariable('http_proxy', `$null, 'Machine')
     [Environment]::SetEnvironmentVariable('https_proxy', `$null, 'Machine')
     [Environment]::SetEnvironmentVariable('ftp_proxy', `$null, 'Machine')
@@ -81,8 +84,6 @@ Function Reset-Proxy() {
     Set-ItemProperty -Path "`$regKey" -Name ProxyEnable -Value 0
     Set-ItemProperty -Path "`$regKey" -Name ProxyServer -Value ""
 }
-Set-Alias ls Get-ChildItemColorFormatWide -Option AllScope
-Set-Alias ll Get-ChildItemColor -Option AllScope
 "@ | Set-Content -Path $PROFILE.CurrentUserAllHosts -Encoding utf8
 
 Update-SessionEnvironment

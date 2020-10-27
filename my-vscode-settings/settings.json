@@ -302,7 +302,7 @@
         "go": "go run",
         "lua": "lua",
         "groovy": "groovy",
-        "powershell": "powershell -ExecutionPolicy ByPass -File",
+        "powershell": "pwsh -ExecutionPolicy ByPass -File",
         "bat": "cmd /c",
         "shellscript": "bash",
         "fsharp": "fsi",

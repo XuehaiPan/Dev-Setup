@@ -33,6 +33,7 @@
         "ryu1kn.partial-diff",
         "christian-kohler.path-intellisense",
         "jebbs.plantuml",
+        "ms-vscode.powershell",
         "ms-python.python",
         "mechatroner.rainbow-csv",
         "ms-vscode-remote.remote-containers",

@@ -1275,6 +1275,7 @@ call plug#begin('~/.vim/plugged')
     Plug 'vim-syntastic/syntastic'
     Plug 'SirVer/ultisnips'
     Plug 'honza/vim-snippets'
+	Plug 'PProvost/vim-ps1'
     Plug 'elzr/vim-json'
     Plug 'godlygeek/tabular'
     Plug 'plasticboy/vim-markdown'

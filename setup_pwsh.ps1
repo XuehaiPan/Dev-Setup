@@ -44,8 +44,8 @@ Set-PSReadLineKeyHandler -Key Tab -Function Complete
 Set-Alias ls Get-ChildItemColorFormatWide -Option AllScope
 Set-Alias ll Get-ChildItemColor -Option AllScope
 Set-Alias which Get-Command -Option AllScope
-Function rmrf(`$item) { Remove-Item -Path "`$item" -Recurse -Force }
-Function mkfile(`$file) { "" | Out-File -Path "`$file" -Encoding utf8 }
+Function rmrf(`$items) { Remove-Item -Recurse -Force -Path `$item }
+Function mkfile(`$file) { "" | Out-File -Encoding utf8 -Path "`$file" }
 Function Set-Proxy(`$proxyHost="127.0.0.1",
                    `$httpPort=7890, `$httpsPort=7890,
                    `$ftpPort=7890, `$socksPort=7891) {

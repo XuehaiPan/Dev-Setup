@@ -20,8 +20,8 @@ Install-Module PSReadLine -SkipPublisherCheck -AcceptLicense -Force -Confirm:$fa
 Install-Module Get-ChildItemColor -AllowClobber -AcceptLicense -Force -Confirm:$false
 Install-Module WindowsConsoleFonts -AcceptLicense -Force -Confirm:$false
 
-if (!(Test-Path -Path $PROFILE.CurrentUserAllHosts)) {
-    New-Item -Type File -Path $PROFILE.CurrentUserAllHosts -Force
+if (!(Test-Path -Path "$PROFILE.CurrentUserAllHosts")) {
+    New-Item -Path "$PROFILE.CurrentUserAllHosts" -Type File -Force
 }
 @"
 chcp 65001
@@ -31,8 +31,8 @@ Import-Module oh-my-posh
 Import-Module PSReadLine
 Import-Module Get-ChildItemColor
 Import-Module WindowsConsoleFonts
-if (Test-Path -Path '~\Miniconda3\shell\condabin\conda-hook.ps1') {
-    & '~\Miniconda3\shell\condabin\conda-hook.ps1'
+if (Test-Path -Path "~\Miniconda3\shell\condabin\conda-hook.ps1") {
+    & "~\Miniconda3\shell\condabin\conda-hook.ps1"
 }
 
 Set-Theme AgnosterPlus
@@ -43,9 +43,6 @@ Set-PSReadLineKeyHandler -Key Tab -Function Complete
 
 Set-Alias ls Get-ChildItemColorFormatWide -Option AllScope
 Set-Alias ll Get-ChildItemColor -Option AllScope
-Set-Alias which Get-Command -Option AllScope
-Function rmrf(`$items) { Remove-Item -Recurse -Force -Path `$item }
-Function mkfile(`$file) { "" | Out-File -Encoding utf8 -Path "`$file" }
 Function Set-Proxy(`$proxyHost="127.0.0.1",
                    `$httpPort=7890, `$httpsPort=7890,
                    `$ftpPort=7890, `$socksPort=7891) {
@@ -84,7 +81,7 @@ Function Reset-Proxy() {
     Set-ItemProperty -Path "`$regKey" -Name ProxyEnable -Value 0
     Set-ItemProperty -Path "`$regKey" -Name ProxyServer -Value ""
 }
-"@ | Set-Content -Path $PROFILE.CurrentUserAllHosts -Encoding utf8
+"@ | Set-Content -Path "$PROFILE.CurrentUserAllHosts" -Encoding utf8
 
 Update-SessionEnvironment
 & $PROFILE.CurrentUserAllHosts
@@ -95,9 +92,9 @@ choco install python3 shellcheck bat wget ripgrep mingw cmake --yes
 choco install windows-adk adobereader openjdk googlechrome --yes
 
 # Setup Vim
-New-Item -Type Directory -Path ~\vimfiles\autoload -Force
+New-Item -Path "~\vimfiles\autoload" -Type Directory -Force
 (New-Object Net.WebClient).DownloadFile(
-  "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim",
+  'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim',
   $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath(
     "~\vimfiles\autoload\plug.vim"
   )

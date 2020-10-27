@@ -5,8 +5,8 @@ Import-Module oh-my-posh
 Import-Module PSReadLine
 Import-Module Get-ChildItemColor
 Import-Module WindowsConsoleFonts
-if (Test-Path -Path '~\Miniconda3\shell\condabin\conda-hook.ps1') {
-    & '~\Miniconda3\shell\condabin\conda-hook.ps1'
+if (Test-Path -Path "~\Miniconda3\shell\condabin\conda-hook.ps1") {
+    & "~\Miniconda3\shell\condabin\conda-hook.ps1"
 }
 
 Set-Theme AgnosterPlus
@@ -17,9 +17,6 @@ Set-PSReadLineKeyHandler -Key Tab -Function Complete
 
 Set-Alias ls Get-ChildItemColorFormatWide -Option AllScope
 Set-Alias ll Get-ChildItemColor -Option AllScope
-Set-Alias which Get-Command -Option AllScope
-Function rmrf($items) { Remove-Item -Recurse -Force -Path $items }
-Function mkfile($file) { "" | Out-File -Encoding utf8 -Path "$file" }
 Function Set-Proxy($proxyHost="127.0.0.1",
                    $httpPort=7890, $httpsPort=7890,
                    $ftpPort=7890, $socksPort=7891) {

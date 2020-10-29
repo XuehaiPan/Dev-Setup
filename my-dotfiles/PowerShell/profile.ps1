@@ -28,10 +28,10 @@ Function Set-Proxy($proxyHost = "127.0.0.1",
     $Env:HTTPS_PROXY = "http://${proxyHost}:${httpsPort}"
     $Env:FTP_PROXY = "http://${proxyHost}:${ftpPort}"
     $Env:ALL_PROXY = "socks5://${proxyHost}:${socksPort}"
-    [Environment]::SetEnvironmentVariable('http_proxy', "http://${proxyHost}:${httpPort}", 'Machine')
-    [Environment]::SetEnvironmentVariable('https_proxy', "http://${proxyHost}:${httpsPort}", 'Machine')
-    [Environment]::SetEnvironmentVariable('ftp_proxy', "http://${proxyHost}:${ftpPort}", 'Machine')
-    [Environment]::SetEnvironmentVariable('all_proxy', "http://${proxyHost}:${socksPort}", 'Machine')
+    [Environment]::SetEnvironmentVariable('http_proxy', "http://${proxyHost}:${httpPort}", 'User')
+    [Environment]::SetEnvironmentVariable('https_proxy', "http://${proxyHost}:${httpsPort}", 'User')
+    [Environment]::SetEnvironmentVariable('ftp_proxy', "http://${proxyHost}:${ftpPort}", 'User')
+    [Environment]::SetEnvironmentVariable('all_proxy', "http://${proxyHost}:${socksPort}", 'User')
 
     $regKey = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings"
     Set-ItemProperty -Path $regKey -Name ProxyEnable -Value 1
@@ -46,10 +46,10 @@ Function Reset-Proxy() {
     Remove-Item -Path Env:\HTTPS_PROXY -ErrorAction:Ignore
     Remove-Item -Path Env:\FTP_PROXY -ErrorAction:Ignore
     Remove-Item -Path Env:\ALL_PROXY -ErrorAction:Ignore
-    [Environment]::SetEnvironmentVariable('http_proxy', $null, 'Machine')
-    [Environment]::SetEnvironmentVariable('https_proxy', $null, 'Machine')
-    [Environment]::SetEnvironmentVariable('ftp_proxy', $null, 'Machine')
-    [Environment]::SetEnvironmentVariable('all_proxy', $null, 'Machine')
+    [Environment]::SetEnvironmentVariable('http_proxy', $null, 'User')
+    [Environment]::SetEnvironmentVariable('https_proxy', $null, 'User')
+    [Environment]::SetEnvironmentVariable('ftp_proxy', $null, 'User')
+    [Environment]::SetEnvironmentVariable('all_proxy', $null, 'User')
 
     $regKey = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings"
     Set-ItemProperty -Path $regKey -Name ProxyEnable -Value 0

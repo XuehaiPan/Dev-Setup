@@ -128,8 +128,8 @@ export PATH="/usr/local/opt/sqlite/bin:$PATH"
 export PATH="/usr/local/opt/llvm/bin:$PATH"
 
 # Wine
-export WINEARCH="win64"
-export WINEPREFIX="$HOME/.wine64"
+export WINEARCH="win32"
+export WINEPREFIX="$HOME/.wine32"
 export WINEDEBUG="-all"
 export DYLD_FALLBACK_LIBRARY_PATH="$DYLD_FALLBACK_LIBRARY_PATH:/usr/X11/lib:/usr/local/lib"
 export DYLD_FALLBACK_LIBRARY_PATH="$DYLD_FALLBACK_LIBRARY_PATH:/usr/local/opt/ncurses/lib"
@@ -187,6 +187,9 @@ unset -f remove_duplicate
 # Utilities
 if [[ -f "$HOME/.dotfiles/utilities.sh" ]]; then
 	. "$HOME/.dotfiles/utilities.sh"
+	if pgrep ClashX &>/dev/null; then
+		set_proxy 127.0.0.1
+	fi
 fi
 
 # X11

@@ -784,6 +784,32 @@ function upgrade_conda() {
 	echo_and_eval 'conda clean --all --yes'
 }
 
+function upgrade_packages() {
+	if groups | grep -qE '(wheel|root)'; then
+		upgrade_manjaro
+	fi
+	upgrade_ohmyzsh
+	upgrade_fzf
+	if [[ -x "\$(command -v vim)" ]]; then
+		upgrade_vim
+	fi
+	if [[ -x "\$(command -v ruby)" && -x "\$(command -v gem)" ]]; then
+		upgrade_gems
+	fi
+	# upgrade_cpan
+	# upgrade_conda
+
+	if [[ -n "\$ZSH_VERSION" ]]; then
+		if [[ -f "\${ZDOTDIR:-"\$HOME"}/.zshrc" ]]; then
+			source "\${ZDOTDIR:-"\$HOME"}/.zshrc"
+		fi
+	elif [[ -n "\$BASH_VERSION" ]]; then
+		if [[ -f "\$HOME/.bash_profile" ]]; then
+			source "\$HOME/.bash_profile"
+		fi
+	fi
+}
+
 function set_proxy() {
 	local PROXY_HOST="\${1:-"127.0.0.1"}"
 	local HTTP_PORT="\${2:-"7890"}"
@@ -860,43 +886,6 @@ function auto_reannounce_trackers() {
 	echo -ne "\\033[K\\033[?25h"
 }
 EOF
-
-# Add Script file for Upgrading Packages
-backup_dotfiles upgrade_packages.sh
-
-cat >upgrade_packages.sh <<EOF
-#!/usr/bin/env bash
-
-if [[ -f "\$HOME/.dotfiles/utilities.sh" ]]; then
-	source "\$HOME/.dotfiles/utilities.sh"
-
-	if groups | grep -qE '(wheel|root)'; then
-		upgrade_manjaro
-	fi
-	upgrade_ohmyzsh
-	upgrade_fzf
-	if [[ -x "\$(command -v vim)" ]]; then
-		upgrade_vim
-	fi
-	if [[ -x "\$(command -v ruby)" && -x "\$(command -v gem)" ]]; then
-		upgrade_gems
-	fi
-	# upgrade_cpan
-	# upgrade_conda
-fi
-
-if [[ -n "\$ZSH_VERSION" ]]; then
-	if [[ -f "\${ZDOTDIR:-"\$HOME"}/.zshrc" ]]; then
-		source "\${ZDOTDIR:-"\$HOME"}/.zshrc"
-	fi
-elif [[ -n "\$BASH_VERSION" ]]; then
-	if [[ -f "\$HOME/.bash_profile" ]]; then
-		source "\$HOME/.bash_profile"
-	fi
-fi
-EOF
-
-chmod +x upgrade_packages.sh
 
 # Configurations for Bash
 backup_dotfiles .bashrc .dotfiles/.bashrc

@@ -27,7 +27,6 @@ DOTFILES=(
 	.gdbinit			.dotfiles/.gdbinit
 	.Xdefaults			.dotfiles/.Xdefaults
 						.dotfiles/utilities.sh
-	upgrade_packages.sh
 )
 
 cd "$HOME"

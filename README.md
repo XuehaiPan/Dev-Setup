@@ -79,19 +79,19 @@ bash restore_dotfiles.sh "$HOME/.dotfiles/backups/$DATETIME"
 
 ### Upgrade Packages
 
-The script will create a shell script named `upgrade_packages.sh` at your home directory. You can upgrade your packages just by running:
+You can upgrade your packages just by running:
 
 ```shell
-zsh ~/upgrade_packages.sh
+upgrade_packages
 ```
 
-By default, `upgrade_packages.sh` will not upgrade your conda environments. If you want to always keep your conda up-to-date, you can uncomment the corresponding line in the script. Or run the script as:
+By default, `upgrade_packages` will not upgrade your conda environments. If you want to always keep your conda up-to-date, you can uncomment the corresponding line in the script. Or run the script as:
 
 ```shell
-source ~/upgrade_packages.sh; upgrade_conda
+upgrade_packages; upgrade_conda
 ```
 
-The function definitions in `upgrade_packages.sh` are in `$HOME/.dotfiles/utilities.sh`, which will be sourced automatically when the shell starts up.
+The function definitions are in `$HOME/.dotfiles/utilities.sh`, which will be sourced automatically when the shell starts up.
 
 ### Font Settings
 

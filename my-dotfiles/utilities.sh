@@ -145,6 +145,27 @@ function upgrade_conda() {
 	echo_and_eval 'conda clean --all --yes'
 }
 
+function upgrade_packages() {
+	upgrade_homebrew
+	upgrade_ohmyzsh
+	upgrade_fzf
+	upgrade_vim
+	upgrade_gems
+	# upgrade_cpan
+	upgrade_texlive
+	# upgrade_conda
+
+	if [[ -n "$ZSH_VERSION" ]]; then
+		if [[ -f "${ZDOTDIR:-"$HOME"}/.zshrc" ]]; then
+			source "${ZDOTDIR:-"$HOME"}/.zshrc"
+		fi
+	elif [[ -n "$BASH_VERSION" ]]; then
+		if [[ -f "$HOME/.bash_profile" ]]; then
+			source "$HOME/.bash_profile"
+		fi
+	fi
+}
+
 function set_proxy() {
 	local PROXY_HOST="${1:-"127.0.0.1"}"
 	local HTTP_PORT="${2:-"7890"}"

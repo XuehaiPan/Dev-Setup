@@ -1246,7 +1246,7 @@ highlight VertSplit                    ctermfg=241   ctermbg=241  cterm=NONE    
 highlight MatchParen                   ctermfg=197   ctermbg=NONE cterm=underline    guifg=#F92672 guibg=NONE    gui=underline
 highlight StatusLine                   ctermfg=231   ctermbg=241  cterm=bold         guifg=#F8F8F2 guibg=#64645E gui=bold
 highlight StatusLineNC                 ctermfg=231   ctermbg=241  cterm=NONE         guifg=#F8F8F2 guibg=#64645E gui=NONE
-highlight Pmenu                        ctermfg=NONE  ctermbg=NONE cterm=NONE         guifg=NONE    guibg=NONE    gui=NONE
+highlight Pmenu                        ctermfg=NONE  ctermbg=238  cterm=NONE         guifg=NONE    guibg=#35342D gui=NONE
 highlight PmenuSel                     ctermfg=NONE  ctermbg=59   cterm=NONE         guifg=NONE    guibg=#49483E gui=NONE
 highlight IncSearch       term=reverse ctermfg=193   ctermbg=16   cterm=reverse      guifg=#C4BE89 guibg=#000000 gui=reverse
 highlight Search          term=reverse ctermfg=231   ctermbg=24   cterm=NONE         guifg=#F8F8F2 guibg=#204A87 gui=NONE

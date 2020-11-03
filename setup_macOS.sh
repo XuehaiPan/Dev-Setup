@@ -149,9 +149,9 @@ export PATH="$(ruby -r rubygems -e 'puts Gem.dir')/bin:$PATH"
 export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
 
 # Install Casks and Fonts
-echo_and_eval 'brew cask install iterm2 keka'
-echo_and_eval 'brew cask install font-cascadia{-code,-mono}{,-pl}'
-echo_and_eval 'brew cask install font-dejavu-sans-mono-nerd-font'
+echo_and_eval 'brew install iterm2 keka --cask'
+echo_and_eval 'brew install font-cascadia{-code,-mono}{,-pl} --cask'
+echo_and_eval 'brew install font-dejavu-sans-mono-nerd-font --cask'
 
 # Upgrade Packages
 echo_and_eval 'brew upgrade'
@@ -1971,9 +1971,9 @@ echo_and_eval "\"\$HOME/$CONDA_DIR/bin/jupyter\" contrib nbextension install --u
 echo_and_eval "\"\$HOME/$CONDA_DIR/bin/pip\" config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple"
 
 # Install Casks
-echo_and_eval 'brew cask install visual-studio-code xquartz'
-echo_and_eval 'brew cask install typora transmission teamviewer google-chrome'
-echo_and_eval 'brew cask install neteasemusic iina'
+echo_and_eval 'brew install visual-studio-code xquartz --cask'
+echo_and_eval 'brew install typora transmission teamviewer google-chrome --cask'
+echo_and_eval 'brew install neteasemusic iina --cask'
 
 # Install Develop Casks and Packages
 echo_and_eval 'brew install gcc gdb llvm make cmake automake autoconf'

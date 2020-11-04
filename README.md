@@ -1,6 +1,6 @@
 # OS-Setup
 
-Bash scripts for setting up a newly installed OS automatically.
+Bash scripts for setting up a newly installed OS automatically. ([screenshots](#screenshots))
 
 - [OS-Setup](#os-setup)
   - [Usage](#usage)
@@ -19,32 +19,42 @@ Bash scripts for setting up a newly installed OS automatically.
 Download the script file using [wget](https://www.gnu.org/software/wget/) / [curl](https://curl.haxx.se) / [git](https://git-scm.com) or any browser ([click to download zip](https://codeload.github.com/XuehaiPan/OS-Setup/zip/master)). And then open `Terminal` and run:
 
 **via wget**
-```shell
+```bash
 # Download and run via wget
+# Uncomment the following line to avoid modifying mirror settings
+# export SET_MIRRORS=false
 bash -c "$(wget -O - https://raw.githubusercontent.com/XuehaiPan/OS-Setup/master/setup.sh)"
 ```
 
 **via curl**
-```shell
+```bash
 # Download and run via curl
+# Uncomment the following line to avoid modifying mirror settings
+# export SET_MIRRORS=false
 bash -c "$(curl -fL https://raw.githubusercontent.com/XuehaiPan/OS-Setup/master/setup.sh)"
 ```
 
 **via git**
-```shell
+```bash
 # Download via git
 git clone --depth=1 https://github.com/XuehaiPan/OS-Setup.git
 
 # Run the script file
 cd OS-Setup
+# Uncomment the following line to avoid modifying mirror settings
+# export SET_MIRRORS=false
 bash setup.sh
 ```
 
+Options:
+
+- `SET_MIRRORS` (default `true`) : set source of package managers to the open source mirrors at [TUNA (China)](https://mirrors.tuna.tsinghua.edu.cn) to speed up downloading. (see [Packages](#packages) for more details).
+
 **Note**: If you are using **WSL on Windows**, you need to run [Windows Terminal](https://github.com/Microsoft/Terminal) as **administrator** to get the permissions to unpack fonts to `C:\Windows\Fonts`. Otherwise, the fonts will not be installed successfully on Windows. You can download them from [nerdfonts.com](https://www.nerdfonts.com) and install them manually.
 
-- After running the script, all the old configuration files involved will be backed up to the folder `$HOME/.dotfiles/backups/$DATETIME`, and a symbolic link `$HOME/.dotfiles/backups/latest` links to the latest one. You can compare the differences using:
+After running the script, all the old configuration files involved will be backed up to the folder `$HOME/.dotfiles/backups/$DATETIME`, and a symbolic link `$HOME/.dotfiles/backups/latest` links to the latest one. You can compare the differences using:
 
-  ```shell
+  ```bash
   # Compare the differences
   colordiff -uEB ~/.dotfiles/backups/latest ~/.dotfiles
   colordiff -uEB ~/.dotfiles/backups/latest/.dotfiles ~/.dotfiles
@@ -56,7 +66,7 @@ bash setup.sh
 
   There is a nice way to inspect and move changes from one version to another version of the same file using [`vimdiff`](https://www.vim.org) or [`meld`](http://meldmerge.org). Run:
 
-  ```shell
+  ```bash
   # Inspect and move changes using vimdiff
   vimdiff ~/.dotfiles/$FILE ~/.dotfiles/backups/latest/.dotfiles/$FILE
   ```
@@ -67,7 +77,7 @@ bash setup.sh
 
 You can restore your previous dotfiles using:
 
-```shell
+```bash
 # Restore the latest backup in "$HOME/.dotfiles/backups/latest"
 bash restore_dotfiles.sh
 
@@ -81,13 +91,13 @@ bash restore_dotfiles.sh "$HOME/.dotfiles/backups/$DATETIME"
 
 You can upgrade your packages just by running:
 
-```shell
+```bash
 upgrade_packages
 ```
 
 By default, `upgrade_packages` will not upgrade your conda environments. If you want to always keep your conda up-to-date, you can uncomment the corresponding line in the script. Or run the script as:
 
-```shell
+```bash
 upgrade_packages; upgrade_conda
 ```
 
@@ -106,7 +116,7 @@ See [Font configurations for Powerlevel10k](https://github.com/romkatv/powerleve
 
 Or use the Powerlevel10k lean theme:
 
-```shell
+```bash
 chsh --shell /usr/local/bin/zsh-purepower
 ```
 
@@ -123,7 +133,7 @@ Add a new config file to the script:
 5. replace all `$` with `\$` in `temp.txt`;
 6. add the following lines to the script:
 
-```shell
+```bash
 cd $HOME   # this line has already been added at the top of the script
 
 # replace ${cfg_file_name} with the config file's name
@@ -140,13 +150,13 @@ ln -sf .dotfiles/${cfg_file_name} .
 
 ## Packages
 
-The source of package managers (HomeBrew (macOS), APT (Ubuntu), Pacman (Manjaro), CPAN, Gem, Conda and Pip) will be set to the open source mirrors at [TUNA](https://mirrors.tuna.tsinghua.edu.cn).
+The source of package managers (HomeBrew (macOS), APT (Ubuntu), Pacman (Manjaro), CPAN, Gem, Conda and Pip) will be set to the open source mirrors at [TUNA (China)](https://mirrors.tuna.tsinghua.edu.cn).
 
 The following packages will be setup:
 
 | Package                                                                                                                          | macOS | Ubuntu Linux | Manjaro Linux |
 | :------------------------------------------------------------------------------------------------------------------------------- | :---: | :----------: | :-----------: |
-| [Mirrors at TUNA](https://mirrors.tuna.tsinghua.edu.cn)                                                                          |   ✔   |      ✔       |       ✔       |
+| [Mirrors at TUNA (China)](https://mirrors.tuna.tsinghua.edu.cn)                                                                  |   ✔   |      ✔       |       ✔       |
 | [HomeBrew (macOS)](https://brew.sh)                                                                                              |   ✔   |      ✘       |       ✘       |
 |                                                                                                                                  |       |              |               |
 | [bash](https://www.gnu.org/software/bash/)                                                                                       |   ✔   |      ✔       |       ✔       |

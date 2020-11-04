@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# Options
+export SET_MIRRORS="${SET_MIRRORS:-true}"
+
 # Set USER
 export USER="${USER:-"$(whoami)"}"
 
@@ -132,25 +135,30 @@ function get_latest_version() {
 
 if $IS_SUDOER; then
 	# Setup Pacman Configurations
-	for repo in "arch4edu" "archlinuxcn"; do
-		if ! grep -qF "[$repo]" /etc/pacman.conf; then
-			echo_and_eval 'printf "\n%s\n%s\n" "[$repo]" "Server = https://mirrors.tuna.tsinghua.edu.cn/$repo/\$arch" \
-								  | sudo tee -a /etc/pacman.conf'
-		fi
-	done
+	if $SET_MIRRORS; then
+		for repo in "arch4edu" "archlinuxcn"; do
+			if ! grep -qF "[$repo]" /etc/pacman.conf; then
+				echo_and_eval 'printf "\n%s\n%s\n" "[$repo]" "Server = https://mirrors.tuna.tsinghua.edu.cn/$repo/\$arch" \
+									| sudo tee -a /etc/pacman.conf'
+			fi
+		done
+	fi
 
 	if grep -q '^\s*#\s*Color$' /etc/pacman.conf; then
 		echo_and_eval "sudo sed -i -E 's/^(\\s*)#\\s*Color$/\\1Color/g' /etc/pacman.conf"
 	fi
 
-	echo_and_eval 'sudo pacman-mirrors --country China --method rank'
-
+	if $SET_MIRRORS; then
+		echo_and_eval 'sudo pacman-mirrors --country China --method rank'
+	fi
 	echo_and_eval 'sudo pacman -Syy'
 
-	echo_and_eval 'sudo pacman-key --recv-keys 7931B6D628C8D3BA'
-	echo_and_eval 'sudo pacman-key --finger 7931B6D628C8D3BA'
-	echo_and_eval 'sudo pacman-key --lsign-key 7931B6D628C8D3BA'
-	echo_and_eval 'yes | sudo pacman -S archlinuxcn-keyring --needed'
+	if $SET_MIRRORS; then
+		echo_and_eval 'sudo pacman-key --recv-keys 7931B6D628C8D3BA'
+		echo_and_eval 'sudo pacman-key --finger 7931B6D628C8D3BA'
+		echo_and_eval 'sudo pacman-key --lsign-key 7931B6D628C8D3BA'
+		echo_and_eval 'yes | sudo pacman -S archlinuxcn-keyring --needed'
+	fi
 
 	# Install and Setup Shells
 	echo_and_eval 'yes | sudo pacman -S zsh --needed'
@@ -265,12 +273,16 @@ cat >.dotfiles/.gemrc <<EOF
 ---
 :backtrace: false
 :bulk_threshold: 1000
-:sources:
-- https://mirrors.tuna.tsinghua.edu.cn/rubygems/
 :update_sources: true
 :verbose: true
 :concurrent_downloads: 8
 EOF
+if $SET_MIRRORS; then
+	cat >>.dotfiles/.gemrc <<EOF
+:sources:
+- https://mirrors.tuna.tsinghua.edu.cn/rubygems/
+EOF
+fi
 
 ln -sf .dotfiles/.gemrc .
 
@@ -293,11 +305,13 @@ fi
 export PERL_MB_OPT="--install_base \"$HOME/.perl\""
 export PERL_MM_OPT="INSTALL_BASE=\"$HOME/.perl\""
 echo_and_eval 'printf "\n\n\n%s\n" "quit" | cpan'
-echo_and_eval 'printf "%s\n%s\n%s\n" \
-					  "o conf urllist https://mirrors.tuna.tsinghua.edu.cn/CPAN/" \
-					  "o conf commit" \
-					  "quit" \
-					  | cpan'
+if $SET_MIRRORS; then
+	echo_and_eval 'printf "%s\n%s\n%s\n" \
+						"o conf urllist https://mirrors.tuna.tsinghua.edu.cn/CPAN/" \
+						"o conf commit" \
+						"quit" \
+						| cpan'
+fi
 echo_and_eval 'cpan -i local::lib'
 echo_and_eval 'eval "$(perl -I$HOME/.perl/lib/perl5 -Mlocal::lib=$HOME/.perl)"'
 echo_and_eval 'cpan -i CPAN'
@@ -1730,14 +1744,11 @@ ln -sf .dotfiles/.gitignore_global .
 # Configurations for Conda
 backup_dotfiles .condarc .dotfiles/.condarc
 
-cat >.dotfiles/.condarc <<EOF
-auto_activate_base: false
-
-auto_update_conda: true
-
+CONDA_MIRROR_SETTINGS=""
+if $SET_MIRRORS; then
+	CONDA_MIRROR_SETTINGS='
 channels:
   - defaults
-
 default_channels:
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free
@@ -1746,7 +1757,6 @@ default_channels:
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/pytorch
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/msys2
-
 custom_channels:
   conda-forge: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
   pytorch: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
@@ -1754,11 +1764,14 @@ custom_channels:
   bioconda: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
   menpo: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
   simpleitk: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
-
+'
+fi
+cat >.condarc <<EOF
+auto_activate_base: false
+auto_update_conda: true
+${CONDA_MIRROR_SETTINGS}
 ssl_verify: true
-
 show_channel_urls: false
-
 report_errors: false
 
 create_default_packages:
@@ -1786,7 +1799,11 @@ ln -sf .dotfiles/.condarc .
 
 # Install Miniconda
 if [[ ! -d "$HOME/$CONDA_DIR" ]]; then
-	echo_and_eval "download -N -P \"$TMP_DIR/\" https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-latest-Linux-x86_64.sh"
+	if SET_MIRRORS; then
+		echo_and_eval "download -N -P \"$TMP_DIR/\" https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-latest-Linux-x86_64.sh"
+	else
+		echo_and_eval "download -N -P \"$TMP_DIR/\" https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh"
+	fi
 	echo_and_eval "bash \"$TMP_DIR/Miniconda3-latest-Linux-x86_64.sh\" -b -p \"\$HOME/$CONDA_DIR\""
 	echo_and_eval "rm -f \"$TMP_DIR/Miniconda3-latest-Linux-x86_64.sh\""
 fi
@@ -1802,7 +1819,9 @@ echo_and_eval 'conda update --all --yes'
 echo_and_eval 'conda clean --all --yes'
 echo_and_eval "\"\$HOME/$CONDA_DIR/bin/jt\" --theme monokai --toolbar --nbname --kernellogo"
 echo_and_eval "\"\$HOME/$CONDA_DIR/bin/jupyter\" contrib nbextension install --user &>/dev/null"
-echo_and_eval "\"\$HOME/$CONDA_DIR/bin/pip\" config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple"
+if SET_MIRRORS; then
+	echo_and_eval "\"\$HOME/$CONDA_DIR/bin/pip\" config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple"
+fi
 
 # Install Fonts
 mkdir -p "$HOME/.local/share/fonts"

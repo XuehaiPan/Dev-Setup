@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# Options
+export SET_MIRRORS="${SET_MIRRORS:-true}"
+
 # Set PATH
 export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin:/Library/Apple/bin${PATH:+:"$PATH"}"
 
@@ -114,16 +117,25 @@ if [[ ! -x "$(command -v brew)" ]]; then
 	echo_and_eval '/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"'
 fi
 
-echo_and_eval 'git -C "$(brew --repo)" remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git'
-BREW_TAPS="$(brew tap)"
-for tap in core cask{,-fonts,-drivers}; do
-	if echo "$BREW_TAPS" | grep -qE "^homebrew/${tap}\$"; then
-		echo_and_eval "git -C \"\$(brew --repo homebrew/${tap})\" remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-${tap}.git"
-	else
-		echo_and_eval "brew tap --force-auto-update homebrew/${tap} https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-${tap}.git"
-	fi
-done
-export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles"
+if $SET_MIRRORS; then
+	echo_and_eval 'git -C "$(brew --repo)" remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git'
+	BREW_TAPS="$(brew tap)"
+	for tap in core cask{,-fonts,-drivers}; do
+		if echo "$BREW_TAPS" | grep -qE "^homebrew/${tap}\$"; then
+			echo_and_eval "git -C \"\$(brew --repo homebrew/${tap})\" remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-${tap}.git"
+		else
+			echo_and_eval "brew tap --force-auto-update homebrew/${tap} https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-${tap}.git"
+		fi
+	done
+	export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles"
+else
+	BREW_TAPS="$(brew tap)"
+	for tap in core cask{,-fonts,-drivers}; do
+		if ! (echo "$BREW_TAPS" | grep -qE "^homebrew/${tap}\$"); then
+			echo_and_eval "brew tap --force-auto-update homebrew/${tap}"
+		fi
+	done
+fi
 echo_and_eval 'brew update --verbose'
 
 # Install and Setup Shells
@@ -252,12 +264,16 @@ cat >.dotfiles/.gemrc <<EOF
 ---
 :backtrace: false
 :bulk_threshold: 1000
-:sources:
-- https://mirrors.tuna.tsinghua.edu.cn/rubygems/
 :update_sources: true
 :verbose: true
 :concurrent_downloads: 8
 EOF
+if $SET_MIRRORS; then
+	cat >>.dotfiles/.gemrc <<EOF
+:sources:
+- https://mirrors.tuna.tsinghua.edu.cn/rubygems/
+EOF
+fi
 
 ln -sf .dotfiles/.gemrc .
 
@@ -271,11 +287,13 @@ echo_and_eval 'gem cleanup'
 export PERL_MB_OPT='--install_base "/usr/local/opt/perl"'
 export PERL_MM_OPT='INSTALL_BASE="/usr/local/opt/perl"'
 echo_and_eval 'printf "\n\n\n%s\n" "quit" | cpan'
-echo_and_eval 'printf "%s\n%s\n%s\n" \
-					  "o conf urllist https://mirrors.tuna.tsinghua.edu.cn/CPAN/" \
-					  "o conf commit" \
-					  "quit" \
-					  | cpan'
+if $SET_MIRRORS; then
+	echo_and_eval 'printf "%s\n%s\n%s\n" \
+						"o conf urllist https://mirrors.tuna.tsinghua.edu.cn/CPAN/" \
+						"o conf commit" \
+						"quit" \
+						| cpan'
+fi
 echo_and_eval 'cpan -i local::lib'
 echo_and_eval 'eval "$(perl -I/usr/local/opt/perl/lib/perl5 -Mlocal::lib=/usr/local/opt/perl)"'
 echo_and_eval 'cpan -i CPAN'
@@ -285,6 +303,13 @@ echo_and_eval 'printf "\n%s\n\n" "exit" | cpan -i Term::ReadLine::Perl Term::Rea
 # Configurations for Zsh
 backup_dotfiles .dotfiles/.zshrc-common
 
+HOMEBREW_MIRROR_SETTINGS=""
+if $SET_MIRRORS; then
+	HOMEBREW_MIRROR_SETTINGS='
+# Homebrew
+export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles"
+'
+fi
 cat >.dotfiles/.zshrc-common <<EOF
 # Source global definitions
 # include /etc/zshrc if it exists
@@ -338,10 +363,7 @@ export FC="/usr/local/bin/gfortran"
 export OMPI_CC="\$CC" MPICH_CC="\$CC"
 export OMPI_CXX="\$CXX" MPICH_CXX="\$CXX"
 export OMPI_FC="\$FC" MPICH_FC="\$FC"
-
-# Homebrew
-export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles"
-
+${HOMEBREW_MIRROR_SETTINGS}
 # Anaconda
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
@@ -993,10 +1015,7 @@ export FC="/usr/local/bin/gfortran"
 export OMPI_CC="\$CC" MPICH_CC="\$CC"
 export OMPI_CXX="\$CXX" MPICH_CXX="\$CXX"
 export OMPI_FC="\$FC" MPICH_FC="\$FC"
-
-# Homebrew
-export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles"
-
+${HOMEBREW_MIRROR_SETTINGS}
 # Anaconda
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
@@ -1896,14 +1915,11 @@ ln -sf .dotfiles/.gdbinit .
 # Configurations for Conda
 backup_dotfiles .condarc .dotfiles/.condarc
 
-cat >.dotfiles/.condarc <<EOF
-auto_activate_base: false
-
-auto_update_conda: true
-
+CONDA_MIRROR_SETTINGS=""
+if $SET_MIRRORS; then
+	CONDA_MIRROR_SETTINGS='
 channels:
   - defaults
-
 default_channels:
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free
@@ -1912,7 +1928,6 @@ default_channels:
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/pytorch
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/msys2
-
 custom_channels:
   conda-forge: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
   pytorch: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
@@ -1920,11 +1935,14 @@ custom_channels:
   bioconda: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
   menpo: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
   simpleitk: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
-
+'
+fi
+cat >.condarc <<EOF
+auto_activate_base: false
+auto_update_conda: true
+${CONDA_MIRROR_SETTINGS}
 ssl_verify: true
-
 show_channel_urls: false
-
 report_errors: false
 
 create_default_packages:
@@ -1952,7 +1970,11 @@ ln -sf .dotfiles/.condarc .
 
 # Install Miniconda
 if [[ ! -d "$HOME/$CONDA_DIR" ]]; then
-	echo_and_eval "download -N -P \"$TMP_DIR/\" https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-latest-MacOSX-x86_64.sh"
+	if SET_MIRRORS; then
+		echo_and_eval "download -N -P \"$TMP_DIR/\" https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-latest-MacOSX-x86_64.sh"
+	else
+		echo_and_eval "download -N -P \"$TMP_DIR/\" https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh"
+	fi
 	echo_and_eval "bash \"$TMP_DIR/Miniconda3-latest-MacOSX-x86_64.sh\" -b -p \"\$HOME/$CONDA_DIR\""
 	echo_and_eval "rm -f \"$TMP_DIR/Miniconda3-latest-MacOSX-x86_64.sh\""
 fi
@@ -1968,7 +1990,9 @@ echo_and_eval 'conda update --all --yes'
 echo_and_eval 'conda clean --all --yes'
 echo_and_eval "\"\$HOME/$CONDA_DIR/bin/jt\" --theme monokai --toolbar --nbname --kernellogo"
 echo_and_eval "\"\$HOME/$CONDA_DIR/bin/jupyter\" contrib nbextension install --user &>/dev/null"
-echo_and_eval "\"\$HOME/$CONDA_DIR/bin/pip\" config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple"
+if SET_MIRRORS; then
+	echo_and_eval "\"\$HOME/$CONDA_DIR/bin/pip\" config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple"
+fi
 
 # Install Casks
 echo_and_eval 'brew install visual-studio-code xquartz --cask'

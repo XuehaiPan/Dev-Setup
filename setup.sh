@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# Options
+export SET_MIRRORS="${SET_MIRRORS:-true}"
+
 # Colors
 BOLDRED="\033[1;31m"
 BOLDGREEN="\033[1;32m"

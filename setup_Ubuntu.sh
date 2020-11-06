@@ -23,7 +23,7 @@ fi
 
 # Check if in WSL
 IN_WSL=false
-if [[ -n "$WSL_DISTRO_NAME" ]] || grep -qF 'Microsoft' <(uname -r); then
+if [[ -n "$WSL_DISTRO_NAME" ]] || (uname -r | grep -qF 'Microsoft'); then
 	IN_WSL=true
 fi
 

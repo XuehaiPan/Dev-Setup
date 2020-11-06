@@ -64,6 +64,9 @@
         "ms-vscode.vscode-typescript-tslint-plugin",
         "redhat.vscode-yaml",
         "VisualStudioExptTeam.vscodeintellicode",
+        "ms-vsliveshare.vsliveshare",
+        "ms-vsliveshare.vsliveshare-audio",
+        "ms-vsliveshare.vsliveshare-pack",
         "DotJoshJohnson.xml",
         "rogalmic.zsh-debug"
     ]

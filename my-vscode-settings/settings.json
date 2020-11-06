@@ -628,6 +628,25 @@
         "_minted-*"
     ],
 
+    //* Live Share *//
+    "liveshare.alwaysFollowHost": false,
+    "liveshare.connectionMode": "auto",
+    "liveshare.autoShareTerminals": true,
+    "liveshare.autoShareServers": true,
+    "liveshare.codeLens": true,
+    "liveshare.comments": true,
+    "liveshare.nameTagVisibility": "Activity",
+    "liveshare.showReadOnlyUsersInEditor": "whileFollowing",
+    "liveshare.allowGuestTaskControl": true,
+    "liveshare.allowGuestDebugControl": true,
+    "liveshare.languages.allowGuestCommandControl": true,
+    "liveshare.joinDebugSessionOption": "Automatic",
+    "liveshare.populateGitCoAuthors": "always",
+    "liveshare.showInStatusBar": "whileCollaborating",
+    "liveshare.showVerboseNotifications": true,
+    "liveshare.audio.joinCallBehavior": "prompt",
+    "liveshare.audio.startCallOnShare": false,
+
     //* Local History *//
     "local-history.enabled": 2,
     "local-history.absolute": false,

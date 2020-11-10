@@ -43,6 +43,7 @@ Set-PSReadLineKeyHandler -Key Tab -Function Complete
 
 Set-Alias -Name ls -Value Get-ChildItemColorFormatWide -Option AllScope
 Set-Alias -Name ll -Value Get-ChildItemColor -Option AllScope
+Set-Alias -Name which -Value Get-Command -Option AllScope
 Function Set-Proxy(`$proxyHost = "127.0.0.1",
                    `$httpPort = 7890, `$httpsPort = 7890,
                    `$ftpPort = 7890, `$socksPort = 7891) {

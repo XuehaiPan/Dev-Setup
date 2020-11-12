@@ -65,11 +65,8 @@ function upgrade_homebrew() {
 	echo_and_eval 'brew update --verbose'
 	echo_and_eval 'brew outdated'
 
-	# Upgrade Homebrew Formulas
+	# Upgrade Homebrew Formulas and Casks
 	echo_and_eval 'brew upgrade'
-
-	# Upgrade Homebrew Casks
-	echo_and_eval 'brew upgrade --cask'
 
 	# Clean Homebrew Cache
 	echo_and_eval 'brew cleanup -s --prune 7'

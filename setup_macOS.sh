@@ -167,7 +167,6 @@ echo_and_eval 'brew install font-dejavu-sans-mono-nerd-font --cask'
 
 # Upgrade Packages
 echo_and_eval 'brew upgrade'
-echo_and_eval 'brew upgrade --cask'
 
 # Change Default Shell to Zsh
 if [[ "$(basename "$SHELL")" != "zsh" ]]; then
@@ -610,7 +609,7 @@ source "\$ZSH/oh-my-zsh.sh"
 
 # Set personal aliases
 alias bubo='brew update --verbose && brew outdated'
-alias bubc='brew upgrade && brew upgrade --cask && brew cleanup -s --prune 7'
+alias bubc='brew upgrade && brew cleanup -s --prune 7'
 alias lsa='ls -A'
 alias l='ls -alh'
 alias ll='ls -lh'
@@ -734,11 +733,8 @@ function upgrade_homebrew() {
 	echo_and_eval 'brew update --verbose'
 	echo_and_eval 'brew outdated'
 
-	# Upgrade Homebrew Formulas
+	# Upgrade Homebrew Formulas and Casks
 	echo_and_eval 'brew upgrade'
-
-	# Upgrade Homebrew Casks
-	echo_and_eval 'brew upgrade --cask'
 
 	# Clean Homebrew Cache
 	echo_and_eval 'brew cleanup -s --prune 7'

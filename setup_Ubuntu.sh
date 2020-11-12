@@ -1200,8 +1200,8 @@ let g:NERDTreeWinPos = 'left'
 let g:NERDTreeWinSize = 31
 autocmd VimEnter * if str2nr(system("ls -l \$PWD | wc -l")) <= 1000 |
                  \\     let width = winwidth('%') |
-                 \\     let numberwidth = ((&number || &relativenumber)? max([&numberwidth, strlen(line('\$')) + 1]) : 0) |
-                 \\     let signwidth = ((&signcolumn == 'yes' || &signcolumn == 'auto')? 2 : 0) |
+                 \\     let numberwidth = ((&number || &relativenumber) ? max([&numberwidth, strlen(line('\$')) + 1]) : 0) |
+                 \\     let signwidth = ((&signcolumn == 'yes' || &signcolumn == 'auto') ? 2 : 0) |
                  \\     let foldwidth = &foldcolumn |
                  \\     let bufwidth = width - numberwidth - foldwidth - signwidth |
                  \\     if bufwidth > 80 + NERDTreeWinSize |

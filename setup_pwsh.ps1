@@ -175,8 +175,8 @@ let g:NERDTreeShowLineNumbers = 0
 let g:NERDTreeWinPos = 'left'
 let g:NERDTreeWinSize = 31
 autocmd VimEnter * let width = winwidth('%') |
-                 \ let numberwidth = ((&number || &relativenumber)? max([&numberwidth, strlen(line('$')) + 1]) : 0) |
-                 \ let signwidth = ((&signcolumn == 'yes' || &signcolumn == 'auto')? 2 : 0) |
+                 \ let numberwidth = ((&number || &relativenumber) ? max([&numberwidth, strlen(line('$')) + 1]) : 0) |
+                 \ let signwidth = ((&signcolumn == 'yes' || &signcolumn == 'auto') ? 2 : 0) |
                  \ let foldwidth = &foldcolumn |
                  \ let bufwidth = width - numberwidth - foldwidth - signwidth |
                  \ if bufwidth > 80 + NERDTreeWinSize |

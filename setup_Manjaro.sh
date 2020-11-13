@@ -641,7 +641,9 @@ EOF
 
 chmod +x .dotfiles/zsh-purepower/zsh
 if $IS_SUDOER; then
-	echo_and_eval 'sudo ln -sfn "$HOME/.dotfiles/zsh-purepower/zsh" /usr/local/bin/zsh-purepower'
+	if [[ ! -x "/usr/local/bin/zsh-purepower" ]]; then
+		echo_and_eval 'sudo ln -sfn "$HOME/.dotfiles/zsh-purepower/zsh" /usr/local/bin/zsh-purepower'
+	fi
 	if ! grep -qF '/usr/local/bin/zsh-purepower' /etc/shells; then
 		echo_and_eval 'echo "/usr/local/bin/zsh-purepower" | sudo tee -a /etc/shells'
 	fi

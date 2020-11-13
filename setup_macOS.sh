@@ -302,12 +302,14 @@ echo_and_eval 'printf "\n%s\n\n" "exit" | cpan -i Term::ReadLine::Perl Term::Rea
 # Configurations for Zsh
 backup_dotfiles .dotfiles/.zshrc-common
 
-HOMEBREW_MIRROR_SETTINGS=""
+HOMEBREW_SETTINGS='# Homebrew
+export HOMEBREW_EDITOR="vim"
+export HOMEBREW_BAT=true'
 if $SET_MIRRORS; then
-	HOMEBREW_MIRROR_SETTINGS='
-# Homebrew
+	HOMEBREW_SETTINGS='# Homebrew
 export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles"
-'
+export HOMEBREW_EDITOR="vim"
+export HOMEBREW_BAT=true'
 fi
 cat >.dotfiles/.zshrc-common <<EOF
 # Source global definitions
@@ -362,7 +364,9 @@ export FC="/usr/local/bin/gfortran"
 export OMPI_CC="\$CC" MPICH_CC="\$CC"
 export OMPI_CXX="\$CXX" MPICH_CXX="\$CXX"
 export OMPI_FC="\$FC" MPICH_FC="\$FC"
-${HOMEBREW_MIRROR_SETTINGS}
+
+${HOMEBREW_SETTINGS}
+
 # Anaconda
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
@@ -1011,7 +1015,9 @@ export FC="/usr/local/bin/gfortran"
 export OMPI_CC="\$CC" MPICH_CC="\$CC"
 export OMPI_CXX="\$CXX" MPICH_CXX="\$CXX"
 export OMPI_FC="\$FC" MPICH_FC="\$FC"
-${HOMEBREW_MIRROR_SETTINGS}
+
+${HOMEBREW_SETTINGS}
+
 # Anaconda
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!

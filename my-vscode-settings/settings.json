@@ -224,8 +224,8 @@
     "bracket-pair-colorizer-2.highlightActiveScope": true,
 
     //* C/C++ */
-    "C_Cpp.default.compilerPath": "clang",
-    "C_Cpp.clang_format_path": "clang-format",
+    "C_Cpp.default.compilerPath": "/usr/local/opt/llvm/bin/clang",
+    "C_Cpp.clang_format_path": "/usr/local/opt/llvm/bin/clang-format",
     "C_Cpp.default.cppStandard": "c++17",
     "C_Cpp.default.cStandard": "c11",
     "C_Cpp.default.intelliSenseMode": "clang-x64",

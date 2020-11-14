@@ -382,6 +382,15 @@
     "git.checkoutType": "all",
     "git.confirmSync": true,
 
+    //* Git Graph */
+    "git-graph.repository.commits.order": "date",
+    "git-graph.repository.showUncommittedChanges": true,
+    "git-graph.repository.showTags": true,
+    "git-graph.repository.showRemoteBranches": true,
+    "git-graph.referenceLabels.combineLocalAndRemoteBranchLabels": true,
+    "git-graph.commitDetailsView.fileView.type": "File Tree",
+    "git-graph.commitDetailsView.fileView.fileTree.compactFolders": true,
+
     //* Git History */
     "gitHistory.hideCommitViewExplorer": false,
     "gitHistory.showEditorTitleMenuBarIcons": true,

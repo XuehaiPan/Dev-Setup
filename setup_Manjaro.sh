@@ -1801,7 +1801,7 @@ ln -sf .dotfiles/.condarc .
 
 # Install Miniconda
 if [[ ! -d "$HOME/$CONDA_DIR" ]]; then
-	if SET_MIRRORS; then
+	if $SET_MIRRORS; then
 		echo_and_eval "download -N -P \"$TMP_DIR/\" https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-latest-Linux-x86_64.sh"
 	else
 		echo_and_eval "download -N -P \"$TMP_DIR/\" https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh"
@@ -1821,7 +1821,7 @@ echo_and_eval 'conda update --all --yes'
 echo_and_eval 'conda clean --all --yes'
 echo_and_eval "\"\$HOME/$CONDA_DIR/bin/jt\" --theme monokai --toolbar --nbname --kernellogo"
 echo_and_eval "\"\$HOME/$CONDA_DIR/bin/jupyter\" contrib nbextension install --user &>/dev/null"
-if SET_MIRRORS; then
+if $SET_MIRRORS; then
 	echo_and_eval "\"\$HOME/$CONDA_DIR/bin/pip\" config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple"
 fi
 

@@ -637,7 +637,7 @@
         "_minted-*"
     ],
 
-    //* Live Share *//
+    //* Live Share */
     "liveshare.alwaysFollowHost": false,
     "liveshare.connectionMode": "auto",
     "liveshare.autoShareTerminals": true,
@@ -656,7 +656,7 @@
     "liveshare.audio.joinCallBehavior": "prompt",
     "liveshare.audio.startCallOnShare": false,
 
-    //* Local History *//
+    //* Local History */
     "local-history.enabled": 2,
     "local-history.absolute": false,
     "local-history.path": "${workspaceFolder}/.vscode",

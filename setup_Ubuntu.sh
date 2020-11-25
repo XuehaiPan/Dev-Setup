@@ -453,7 +453,12 @@ fi
 if [[ -n "\$FZF_DEFAULT_COMMAND" ]]; then
 	export FZF_CTRL_T_COMMAND="\$FZF_DEFAULT_COMMAND"
 fi
-FZF_PREVIEW_COMMAND="(bat --color=always {} || highlight -O ansi {} || cat {}) 2>/dev/null | head -100"
+if [[ -x "\$(command -v batcat)" ]]; then
+	alias bat='batcat'
+	FZF_PREVIEW_COMMAND="(batcat --color=always {} || highlight -O ansi {} || cat {}) 2>/dev/null | head -100"
+else
+	FZF_PREVIEW_COMMAND="(bat --color=always {} || highlight -O ansi {} || cat {}) 2>/dev/null | head -100"
+fi
 export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --ansi --preview='\${FZF_PREVIEW_COMMAND}'"
 
 # Bat
@@ -1068,7 +1073,12 @@ fi
 if [[ -n "\$FZF_DEFAULT_COMMAND" ]]; then
 	export FZF_CTRL_T_COMMAND="\$FZF_DEFAULT_COMMAND"
 fi
-FZF_PREVIEW_COMMAND="(bat --color=always {} || highlight -O ansi {} || cat {}) 2>/dev/null | head -100"
+if [[ -x "\$(command -v batcat)" ]]; then
+	alias bat='batcat'
+	FZF_PREVIEW_COMMAND="(batcat --color=always {} || highlight -O ansi {} || cat {}) 2>/dev/null | head -100"
+else
+	FZF_PREVIEW_COMMAND="(bat --color=always {} || highlight -O ansi {} || cat {}) 2>/dev/null | head -100"
+fi
 export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --ansi --preview='\${FZF_PREVIEW_COMMAND}'"
 
 # Bat

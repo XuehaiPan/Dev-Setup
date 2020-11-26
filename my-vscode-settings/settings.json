@@ -410,22 +410,9 @@
     "go.lintOnSave": "package",
     "go.installDependenciesWhenBuilding": true,
     "go.useLanguageServer": true,
-    "go.languageServerExperimentalFeatures": {
-        "format": true,
-        "autoComplete": true,
-        "rename": true,
-        "goToDefinition": true,
-        "hover": true,
-        "signatureHelp": true,
-        "goToTypeDefinition": true,
-        "goToImplementation": true,
-        "documentSymbols": true,
-        "workspaceSymbols": true,
-        "findReferences": true
-    },
 
     //* Java Extension Pack */
-    "java.home": "/Library/Java/JavaVirtualMachines/Home/",
+    "java.home": "/Library/Java/JavaVirtualMachines/Home",
     "java.autobuild.enabled": true,
     "java.completion.enabled": true,
     "java.completion.guessMethodArguments": true,
@@ -767,7 +754,6 @@
     "shellcheck.run": "manual",
 
     //* Shell-format */
-    "shellformat.path": "/usr/local/bin/shfmt",
     "shellformat.flag": "-i 0",
 
     //* SQL Server (mssql) */

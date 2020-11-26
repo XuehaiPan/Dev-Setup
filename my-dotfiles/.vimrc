@@ -113,7 +113,8 @@ let g:syntastic_loc_list_height = 5
 let g:syntastic_check_on_wq = 0
 autocmd GUIEnter * let g:syntastic_check_on_open = 1
 
-let g:ycm_python_interpreter_path = trim(system("realpath $(which python3)"))
+let g:ycm_python_interpreter_path = trim(system('realpath $(which python3)'))
+let g:ycm_server_python_interpreter_path = '/usr/local/bin/python3'
 let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
 let g:ycm_confirm_extra_conf = 0
 let g:ycm_min_num_of_chars_for_completion = 2

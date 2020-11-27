@@ -1858,6 +1858,8 @@ create_default_packages:
   - autopep8
   - pycodestyle
   - pylint
+
+# vim: filetype=yaml tabstop=2 shiftwidth=2 expandtab
 EOF
 
 ln -sf .dotfiles/.condarc .

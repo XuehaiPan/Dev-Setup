@@ -674,7 +674,13 @@ cat >"$TMP_DIR/zsh-purepower" <<EOF
 #!/bin/sh
 ZSH_PUREPOWER=true exec /usr/bin/zsh "\$@"
 EOF
-echo_and_eval "cat \"$TMP_DIR/zsh-purepower\""
+CAT='cat'
+if [[ -x "$(command -v bat)" ]]; then
+	CAT='bat'
+elif [[ -x "$(command -v batcat)" ]]; then
+	CAT='batcat'
+fi
+echo_and_eval "$CAT \"$TMP_DIR/zsh-purepower\""
 if $IS_SUDOER; then
 	if [[ ! -d "/usr/local/bin" ]]; then
 		echo_and_eval 'sudo mkdir -p "/usr/local/bin"'

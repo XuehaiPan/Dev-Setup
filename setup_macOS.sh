@@ -641,7 +641,11 @@ cat >"$TMP_DIR/zsh-purepower" <<EOF
 #!/bin/sh
 ZSH_PUREPOWER=true exec /usr/local/bin/zsh "\$@"
 EOF
-echo_and_eval "cat \"$TMP_DIR/zsh-purepower\""
+CAT='cat'
+if [[ -x "$(command -v bat)" ]]; then
+	CAT='bat'
+fi
+echo_and_eval "$CAT \"$TMP_DIR/zsh-purepower\""
 if [[ ! -x "/usr/local/bin/zsh-purepower" || -L "/usr/local/bin/zsh-purepower" ]] ||
 	! diff -EB "/usr/local/bin/zsh-purepower" "$TMP_DIR/zsh-purepower" &>/dev/null; then
 	if [[ -f "/usr/local/bin/zsh-purepower" ]]; then

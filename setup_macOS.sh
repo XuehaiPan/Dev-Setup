@@ -642,7 +642,11 @@ cat >"$TMP_DIR/zsh-purepower" <<EOF
 ZSH_PUREPOWER=true exec /usr/local/bin/zsh "\$@"
 EOF
 echo_and_eval "cat \"$TMP_DIR/zsh-purepower\""
-if [[ ! -x "/usr/local/bin/zsh-purepower" ]]; then
+if [[ ! -x "/usr/local/bin/zsh-purepower" || -L "/usr/local/bin/zsh-purepower" ]] ||
+	! diff -EB "/usr/local/bin/zsh-purepower" "$TMP_DIR/zsh-purepower" &>/dev/null; then
+	if [[ -f "/usr/local/bin/zsh-purepower" ]]; then
+		echo_and_eval 'sudo rm -f /usr/local/bin/zsh-purepower'
+	fi
 	echo_and_eval "cat \"$TMP_DIR/zsh-purepower\" | sudo tee /usr/local/bin/zsh-purepower"
 	echo_and_eval 'sudo chmod a+x /usr/local/bin/zsh-purepower'
 fi

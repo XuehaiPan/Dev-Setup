@@ -203,6 +203,9 @@ if $IS_SUDOER; then
 		fi
 	fi
 	LATEST_SHFMT_VERSION="$(get_latest_version "mvdan/sh")"
+	if [[ ! -d "/usr/local/bin" ]]; then
+		echo_and_eval 'sudo mkdir -p "/usr/local/bin"'
+	fi
 	if [[ -n "$LATEST_SHFMT_VERSION" ]] && ! check_binary shfmt "$LATEST_SHFMT_VERSION"; then
 		echo_and_eval "download -N -P \"$TMP_DIR/\" https://github.com/mvdan/sh/releases/download/${LATEST_SHFMT_VERSION}/shfmt_${LATEST_SHFMT_VERSION}_linux_amd64"
 		echo_and_eval "sudo mv -f \"$TMP_DIR/shfmt_${LATEST_SHFMT_VERSION}_linux_amd64\" /usr/local/bin/shfmt"
@@ -271,8 +274,8 @@ export ZSH_CUSTOM="${ZSH_CUSTOM:-"$ZSH/custom"}"
 export ZSH_CACHE_DIR="${ZSH_CACHE_DIR:-"$ZSH/cahce"}"
 
 if [[ -d "$ZSH/.git" && -f "$ZSH/tools/upgrade.sh" ]]; then
-	rm -f "$ZSH_CACHE_DIR/.zsh-update"
-	zsh "$ZSH/tools/check_for_upgrade.sh"
+	rm -f "$ZSH_CACHE_DIR/.zsh-update" 2>/dev/null
+	zsh "$ZSH/tools/check_for_upgrade.sh" 2>/dev/null
 	echo_and_eval 'zsh "$ZSH/tools/upgrade.sh" 2>&1'
 else
 	echo_and_eval 'git clone -c core.eol=lf -c core.autocrlf=false \
@@ -775,8 +778,8 @@ function upgrade_ohmyzsh() {
 	export ZSH_CACHE_DIR="\${ZSH_CACHE_DIR:-"\$ZSH/cache"}"
 
 	# Upgrade oh my zsh
-	rm -f "\$ZSH_CACHE_DIR/.zsh-update"
-	zsh "\$ZSH/tools/check_for_upgrade.sh"
+	rm -f "\$ZSH_CACHE_DIR/.zsh-update" 2>/dev/null
+	zsh "\$ZSH/tools/check_for_upgrade.sh" 2>/dev/null
 	echo_and_eval 'zsh "\$ZSH/tools/upgrade.sh"'
 
 	# Upgrade themes and plugins

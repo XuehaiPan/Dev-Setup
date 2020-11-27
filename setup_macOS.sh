@@ -220,8 +220,8 @@ export ZSH_CUSTOM="${ZSH_CUSTOM:-"$ZSH/custom"}"
 export ZSH_CACHE_DIR="${ZSH_CACHE_DIR:-"$ZSH/cahce"}"
 
 if [[ -d "$ZSH/.git" && -f "$ZSH/tools/upgrade.sh" ]]; then
-	rm -f "$ZSH_CACHE_DIR/.zsh-update"
-	zsh "$ZSH/tools/check_for_upgrade.sh"
+	rm -f "$ZSH_CACHE_DIR/.zsh-update" 2>/dev/null
+	zsh "$ZSH/tools/check_for_upgrade.sh" 2>/dev/null
 	echo_and_eval 'zsh "$ZSH/tools/upgrade.sh" 2>&1'
 else
 	echo_and_eval 'git clone -c core.eol=lf -c core.autocrlf=false \
@@ -737,8 +737,8 @@ function upgrade_ohmyzsh() {
 	export ZSH_CACHE_DIR="\${ZSH_CACHE_DIR:-"\$ZSH/cache"}"
 
 	# Upgrade oh my zsh
-	rm -f "\$ZSH_CACHE_DIR/.zsh-update"
-	zsh "\$ZSH/tools/check_for_upgrade.sh"
+	rm -f "\$ZSH_CACHE_DIR/.zsh-update" 2>/dev/null
+	zsh "\$ZSH/tools/check_for_upgrade.sh" 2>/dev/null
 	echo_and_eval 'zsh "\$ZSH/tools/upgrade.sh"'
 
 	# Upgrade themes and plugins

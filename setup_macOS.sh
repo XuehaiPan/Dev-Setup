@@ -651,13 +651,9 @@ p10k reload
 EOF
 
 cat >.dotfiles/zsh-purepower/zsh <<EOF
-#!/usr/local/bin/zsh -df
+#!/bin/sh
 
-export ZDOTDIR="\$HOME/.dotfiles/zsh-purepower"
-
-/usr/local/bin/zsh "\$@"
-
-exit
+ZDOTDIR="\$HOME/.dotfiles/zsh-purepower" exec /usr/local/bin/zsh "\$@"
 EOF
 
 chmod +x .dotfiles/zsh-purepower/zsh

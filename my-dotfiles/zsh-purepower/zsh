@@ -1,7 +1,3 @@
-#!/usr/bin/env /usr/local/bin/zsh --no-globalrcs --no-rcs
+#!/bin/sh
 
-export ZDOTDIR="$HOME/.dotfiles/zsh-purepower"
-
-/usr/local/bin/zsh "$@"
-
-exit
+ZDOTDIR="$HOME/.dotfiles/zsh-purepower" exec /usr/local/bin/zsh "$@"

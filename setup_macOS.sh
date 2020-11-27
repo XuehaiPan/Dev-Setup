@@ -1932,7 +1932,7 @@ custom_channels:
 channel_priority: flexible
 '
 fi
-cat >.condarc <<EOF
+cat >.dotfiles/.condarc <<EOF
 auto_activate_base: false
 auto_update_conda: true
 ${CONDA_MIRROR_SETTINGS}

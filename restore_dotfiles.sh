@@ -12,8 +12,6 @@ echo "Restore dotfiles in backup directory \"$BACKUP_DIR\"."
 DOTFILES=(
 	.zshrc				.dotfiles/.zshrc
 	.gemrc				.dotfiles/.gemrc
-						.dotfiles/.zshrc-common
-						.dotfiles/zsh-purepower
 	.profile			.dotfiles/.profile
 	.bash_profile		.dotfiles/.bash_profile
 	.bashrc				.dotfiles/.bashrc

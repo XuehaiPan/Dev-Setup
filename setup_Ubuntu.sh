@@ -360,9 +360,9 @@ echo_and_eval 'cpan -i Log::Log4perl'
 echo_and_eval 'printf "\n%s\n\n" "exit" | cpan -i Term::ReadLine::Perl Term::ReadKey'
 
 # Configurations for Zsh
-backup_dotfiles .dotfiles/.zshrc-common
+backup_dotfiles .dotfiles/.zshrc
 
-cat >.dotfiles/.zshrc-common <<EOF
+cat >.dotfiles/.zshrc <<EOF
 # Source global definitions
 # include /etc/zshrc if it exists
 if [[ -f /etc/zshrc ]]; then
@@ -644,59 +644,46 @@ alias lsa='ls -A'
 alias l='ls -alh'
 alias ll='ls -lh'
 alias la='ls -Alh'
-EOF
 
-backup_dotfiles .zshrc .dotfiles/.zshrc
-
-cat >.dotfiles/.zshrc <<EOF
-# Source common configrations
-source "\$HOME/.dotfiles/.zshrc-common"
-
-# Setup colorls
-if [[ -x "\$(command -v ruby)" && -x "\$(command -v gem)" ]]; then
-	if gem query --silent --installed colorls; then
-		source "\$(dirname "\$(gem which colorls)")"/tab_complete.sh
-		alias ls='colorls --sd --gs'
+if [[ -z "\$ZSH_PUREPOWER" ]]; then
+	# Setup colorls
+	if [[ -x "\$(command -v ruby)" && -x "\$(command -v gem)" ]]; then
+		if gem query --silent --installed colorls; then
+			source "\$(dirname "\$(gem which colorls)")"/tab_complete.sh
+			alias ls='colorls --sd --gs'
+		fi
 	fi
+else
+	# Use Powerlevel10k purepower theme
+	source "\$ZSH_CUSTOM/themes/powerlevel10k/config/p10k-lean.zsh"
+	POWERLEVEL9K_MODE="compatible"
+	POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(dir vcs newline prompt_char)
+	POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status command_execution_time background_jobs virtualenv anaconda pyenv time)
+	POWERLEVEL9K_TRANSIENT_PROMPT="same-dir"
+	p10k reload
 fi
 EOF
 
 ln -sf .dotfiles/.zshrc .
 
 # Configurations for Zsh Purepower
-backup_dotfiles .dotfiles/zsh-purepower
-mkdir -p .dotfiles/zsh-purepower
-
-cat >.dotfiles/zsh-purepower/.zshrc <<EOF
-# Source common configrations
-source "\$HOME/.dotfiles/.zshrc-common"
-
-# Use powerlevel10k purepower theme
-source "\$ZSH_CUSTOM/themes/powerlevel10k/config/p10k-lean.zsh"
-POWERLEVEL9K_MODE="compatible"
-POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(dir vcs newline prompt_char)
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status command_execution_time background_jobs virtualenv anaconda pyenv time)
-POWERLEVEL9K_TRANSIENT_PROMPT="same-dir"
-p10k reload
-EOF
-
-cat >.dotfiles/zsh-purepower/zsh <<EOF
+cat >"$TMP_DIR/zsh-purepower" <<EOF
 #!/bin/sh
-
-ZDOTDIR="\$HOME/.dotfiles/zsh-purepower" exec /usr/bin/zsh "\$@"
+ZSH_PUREPOWER=true exec /usr/bin/zsh "\$@"
 EOF
-
-chmod +x .dotfiles/zsh-purepower/zsh
+echo_and_eval "cat \"$TMP_DIR/zsh-purepower\""
 if $IS_SUDOER; then
 	if [[ ! -x "/usr/local/bin/zsh-purepower" ]]; then
-		echo_and_eval 'sudo ln -sfn "$HOME/.dotfiles/zsh-purepower/zsh" /usr/local/bin/zsh-purepower'
+		echo_and_eval "cat \"$TMP_DIR/zsh-purepower\" | sudo tee /usr/local/bin/zsh-purepower"
+		echo_and_eval 'sudo chmod a+x /usr/local/bin/zsh-purepower'
 	fi
 	if ! grep -qF '/usr/local/bin/zsh-purepower' /etc/shells; then
 		echo_and_eval 'echo "/usr/local/bin/zsh-purepower" | sudo tee -a /etc/shells'
 	fi
 else
 	mkdir -p "$HOME/.local/bin"
-	echo_and_eval 'ln -sfn "$HOME/.dotfiles/zsh-purepower/zsh" "$HOME/.local/bin/zsh-purepower"'
+	echo_and_eval "cp -f \"$TMP_DIR/zsh-purepower\" \"\$HOME/.local/bin/zsh-purepower\""
+	chmod +x "$HOME/.local/bin/zsh-purepower"
 fi
 
 # Add Utility Script File

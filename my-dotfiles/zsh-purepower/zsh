@@ -1,3 +1,0 @@
-#!/bin/sh
-
-ZDOTDIR="$HOME/.dotfiles/zsh-purepower" exec /usr/local/bin/zsh "$@"

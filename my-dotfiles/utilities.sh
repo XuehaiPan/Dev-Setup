@@ -2,61 +2,69 @@
 
 function echo_and_eval() {
 	printf "%s" "$@" | awk \
-		'BEGIN {
-			UnderlineBoldGreen = "\033[4;1;32m";
-			BoldRed = "\033[1;31m";
-			BoldGreen = "\033[1;32m";
-			BoldYellow = "\033[1;33m";
-			BoldWhite = "\033[1;37m";
-			Reset = "\033[0m";
+		"BEGIN {
+			UnderlineBoldGreen = \"\\033[4;1;32m\";
+			BoldRed = \"\\033[1;31m\";
+			BoldGreen = \"\\033[1;32m\";
+			BoldYellow = \"\\033[1;33m\";
+			BoldWhite = \"\\033[1;37m\";
+			Reset = \"\\033[0m\";
 			idx = 0;
 			in_string = 0;
-			printf("%s$%s", BoldWhite, Reset);
+			double_quoted = 1;
+			printf(\"%s\$%s\", BoldWhite, Reset);
 		}
 		{
 			for (i = 1; i <= NF; ++i) {
 				Style = BoldWhite;
 				if (!in_string) {
-					if ($i ~ /^-/) {
+					if (\$i ~ /^-/) {
 						Style = BoldYellow;
-					} else if ($i == "sudo" && idx == 0) {
+					} else if (\$i == \"sudo\" && idx == 0) {
 						Style = UnderlineBoldGreen;
-					} else if ($i ~ /^[12&]?>>?/) {
+					} else if (\$i ~ /^[12&]?>>?/) {
 						Style = BoldRed;
 					} else {
 						++idx;
-						if ($i ~ /^"/) {
+						if (\$i ~ /^\"/) {
 							in_string = 1;
+							double_quoted = 1;
+						}
+						else if (\$i ~ /^'/) {
+							in_string = 1;
+							double_quoted = 0;
 						}
 						if (idx == 1) {
 							Style = BoldGreen;
 						}
 					}
 				}
-				if (in_string && $i ~ /";?$/) {
-					in_string = 0;
+				if (in_string) {
+					if ((double_quoted && \$i ~ /\";?\$/ && \$i !~ /\\\\\";?\$/) || (!double_quoted && \$i ~ /';?\$/)) {
+						in_string = 0;
+					}
 				}
-				if ($i ~ /;$/ || $i == "|" || $i == "||" || $i == "&&") {
+				if (\$i ~ /;\$/ || \$i == \"|\" || \$i == \"||\" || \$i == \"&&\") {
 					if (!in_string) {
 						idx = 0;
-						if ($i !~ /;$/) {
+						if (\$i !~ /;\$/) {
 							Style = BoldRed;
 						}
 					}
 				}
-				if ($i ~ /;$/) {
-					printf(" %s%s%s;%s", Style, substr($i, 1, length($i) - 1), (in_string ? BoldWhite : BoldRed), Reset);
+				if (\$i ~ /;\$/) {
+					printf(\" %s%s%s;%s\", Style, substr(\$i, 1, length(\$i) - 1), (in_string ? BoldWhite : BoldRed), Reset);
 				} else {
-					printf(" %s%s%s", Style, $i, Reset);
+					printf(\" %s%s%s\", Style, \$i, Reset);
 				}
-				if ($i == "\\") {
-					printf("\n\t");
+				if (\$i == \"\\\\\") {
+					printf(\"\\n\\t\");
 				}
 			}
 		}
 		END {
-			printf("\n");
-		}'
+			printf(\"\\n\");
+		}"
 	eval "$@"
 }
 

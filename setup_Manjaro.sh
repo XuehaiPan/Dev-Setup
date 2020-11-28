@@ -57,13 +57,13 @@ function echo_and_eval() {
 				for (i = 1; i <= NF; ++i) {
 					Style = BoldWhite;
 					if (!in_string) {
-						if (\$i ~ /^-/) {
+						if (\$i ~ /^-/)
 							Style = BoldYellow;
-						} else if (\$i == "sudo" && idx == 0) {
+						else if (\$i == "sudo" && idx == 0)
 							Style = UnderlineBoldGreen;
-						} else if (\$i ~ /^[12&]?>>?/) {
+						else if (\$i ~ /^[12&]?>>?/)
 							Style = BoldRed;
-						} else {
+						else {
 							++idx;
 							if (\$i ~ /^"/) {
 								in_string = 1;
@@ -73,32 +73,27 @@ function echo_and_eval() {
 								in_string = 1;
 								double_quoted = 0;
 							}
-							if (idx == 1) {
+							if (idx == 1)
 								Style = BoldGreen;
-							}
 						}
 					}
 					if (in_string) {
-						if ((double_quoted && \$i ~ /";?\$/ && \$i !~ /\\\\";?\$/) || (!double_quoted && \$i ~ /';?\$/)) {
+						if ((double_quoted && \$i ~ /";?\$/ && \$i !~ /\\\\";?\$/) || (!double_quoted && \$i ~ /';?\$/))
 							in_string = 0;
-						}
 					}
 					if (\$i ~ /;\$/ || \$i == "|" || \$i == "||" || \$i == "&&") {
 						if (!in_string) {
 							idx = 0;
-							if (\$i !~ /;\$/) {
+							if (\$i !~ /;\$/)
 								Style = BoldRed;
-							}
 						}
 					}
-					if (\$i ~ /;\$/) {
+					if (\$i ~ /;\$/)
 						printf(" %s%s%s;%s", Style, substr(\$i, 1, length(\$i) - 1), (in_string ? BoldWhite : BoldRed), Reset);
-					} else {
+					else
 						printf(" %s%s%s", Style, \$i, Reset);
-					}
-					if (\$i == "\\\\") {
+					if (\$i == "\\\\")
 						printf("\\n\\t");
-					}
 				}
 			}
 			END {
@@ -679,13 +674,13 @@ function echo_and_eval() {
 				for (i = 1; i <= NF; ++i) {
 					Style = BoldWhite;
 					if (!in_string) {
-						if (\\\$i ~ /^-/) {
+						if (\\\$i ~ /^-/)
 							Style = BoldYellow;
-						} else if (\\\$i == "sudo" && idx == 0) {
+						else if (\\\$i == "sudo" && idx == 0)
 							Style = UnderlineBoldGreen;
-						} else if (\\\$i ~ /^[12&]?>>?/) {
+						else if (\\\$i ~ /^[12&]?>>?/)
 							Style = BoldRed;
-						} else {
+						else {
 							++idx;
 							if (\\\$i ~ /^"/) {
 								in_string = 1;
@@ -695,32 +690,27 @@ function echo_and_eval() {
 								in_string = 1;
 								double_quoted = 0;
 							}
-							if (idx == 1) {
+							if (idx == 1)
 								Style = BoldGreen;
-							}
 						}
 					}
 					if (in_string) {
-						if ((double_quoted && \\\$i ~ /";?\\\$/ && \\\$i !~ /\\\\\\\\";?\\\$/) || (!double_quoted && \\\$i ~ /';?\\\$/)) {
+						if ((double_quoted && \\\$i ~ /";?\\\$/ && \\\$i !~ /\\\\\\\\";?\\\$/) || (!double_quoted && \\\$i ~ /';?\\\$/))
 							in_string = 0;
-						}
 					}
 					if (\\\$i ~ /;\\\$/ || \\\$i == "|" || \\\$i == "||" || \\\$i == "&&") {
 						if (!in_string) {
 							idx = 0;
-							if (\\\$i !~ /;\\\$/) {
+							if (\\\$i !~ /;\\\$/)
 								Style = BoldRed;
-							}
 						}
 					}
-					if (\\\$i ~ /;\\\$/) {
+					if (\\\$i ~ /;\\\$/)
 						printf(" %s%s%s;%s", Style, substr(\\\$i, 1, length(\\\$i) - 1), (in_string ? BoldWhite : BoldRed), Reset);
-					} else {
+					else
 						printf(" %s%s%s", Style, \\\$i, Reset);
-					}
-					if (\\\$i == "\\\\\\\\") {
+					if (\\\$i == "\\\\\\\\")
 						printf("\\\\n\\\\t");
-					}
 				}
 			}
 			END {

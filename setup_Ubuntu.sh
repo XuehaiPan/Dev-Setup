@@ -1906,15 +1906,15 @@ fi
 LATEST_CASCADIA_VERSION="$(get_latest_version "microsoft/cascadia-code")"
 URL_LIST=(
 	"https://github.com/ryanoasis/nerd-fonts/releases/latest/download/DejaVuSansMono.zip"
-	"https://raw.githubusercontent.com/XuehaiPan/OS-Setup/master/Menlo.zip"
 	"https://github.com/microsoft/cascadia-code/releases/latest/download/CascadiaCode-${LATEST_CASCADIA_VERSION#v}.zip"
 )
+echo_and_eval "wget -N -P \"$TMP_DIR/\" https://raw.githubusercontent.com/XuehaiPan/OS-Setup/master/Menlo.ttc"
 for url in "${URL_LIST[@]}"; do
 	echo_and_eval "wget -N -P \"$TMP_DIR/\" $url"
 	echo_and_eval "unzip -o \"$TMP_DIR/$(basename "$url")\" -d \"$TMP_DIR/fonts\""
 done
 for font_dir in "${FONT_DIR_LIST[@]}"; do
-	echo_and_eval "find -L \"$TMP_DIR/fonts\" -not -empty -type f -name '*.[ot]tf' -exec cp -f '{}' \"$font_dir\" \\;"
+	echo_and_eval "find -L \"$TMP_DIR/fonts\" -not -empty -type f -name '*.[ot]t[fc]' -exec cp -f '{}' \"$font_dir\" \\;"
 done
 rm -rf "$TMP_DIR"
 if [[ -x "$(command -v fc-cache)" ]]; then

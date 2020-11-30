@@ -1,4 +1,4 @@
 * text=auto
 *.sh text eol=lf
 *.ps1 text eol=crlf
-*.zip binary
+*.ttc binary

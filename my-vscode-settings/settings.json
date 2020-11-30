@@ -451,11 +451,13 @@
     "latex-workshop.view.pdf.trim": 0,
     "latex-workshop.view.pdf.external.viewer.command": "okular",
     "latex-workshop.view.pdf.external.viewer.args": [
+        "--noraise",
         "--unique",
         "%PDF%"
     ],
     "latex-workshop.view.pdf.external.synctex.command": "okular",
     "latex-workshop.view.pdf.external.synctex.args": [
+        "--noraise",
         "--unique",
         "%PDF%#src:%LINE%%TEX%"
     ],
@@ -470,10 +472,38 @@
     ],
     "latex-workshop.latex.tools": [
         {
-            "name": "latexmk",
+            "name": "pdflatexmk",
+            "command": "latexmk",
+            "args": [
+                "-pdflatex",
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "-shell-escape",
+                "-outdir=%OUTDIR%",
+                "%DOC%"
+            ],
+            "env": {}
+        },
+        {
+            "name": "xelatexmk",
             "command": "latexmk",
             "args": [
                 "-xelatex",
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "-shell-escape",
+                "-outdir=%OUTDIR%",
+                "%DOC%"
+            ],
+            "env": {}
+        },
+        {
+            "name": "lualatexmk",
+            "command": "latexmk",
+            "args": [
+                "-lualatex",
                 "-synctex=1",
                 "-interaction=nonstopmode",
                 "-file-line-error",
@@ -508,6 +538,18 @@
             "env": {}
         },
         {
+            "name": "lualatex",
+            "command": "lualatex",
+            "args": [
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "-shell-escape",
+                "%DOC%"
+            ],
+            "env": {}
+        },
+        {
             "name": "biber",
             "command": "biber",
             "args": [
@@ -526,15 +568,33 @@
     ],
     "latex-workshop.latex.recipes": [
         {
-            "name": "LaTeXmk",
+            "name": "Latexmk (XeLaTeX)",
             "tools": [
-                "latexmk"
+                "xelatexmk"
+            ]
+        },
+        {
+            "name": "Latexmk (LuaLaTeX)",
+            "tools": [
+                "lualatexmk"
+            ]
+        },
+        {
+            "name": "Latexmk (PDFLaTeX)",
+            "tools": [
+                "pdflatexmk"
             ]
         },
         {
             "name": "XeLaTeX",
             "tools": [
                 "xelatex"
+            ]
+        },
+        {
+            "name": "LuaLaTeX",
+            "tools": [
+                "lualatex"
             ]
         },
         {
@@ -565,6 +625,15 @@
             ]
         },
         {
+            "name": "LuaLaTeX ➞ Biber ➞ LuaLaTeX × 2",
+            "tools": [
+                "lualatex",
+                "biber",
+                "lualatex",
+                "lualatex"
+            ]
+        },
+        {
             "name": "PDFLaTeX ➞ Biber ➞ PDFLaTeX × 2",
             "tools": [
                 "pdflatex",
@@ -580,6 +649,15 @@
                 "bibtex",
                 "xelatex",
                 "xelatex"
+            ]
+        },
+        {
+            "name": "LuaLaTeX ➞ BibTeX ➞ LuaLaTeX × 2",
+            "tools": [
+                "lualatex",
+                "bibtex",
+                "lualatex",
+                "lualatex"
             ]
         },
         {

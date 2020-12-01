@@ -451,7 +451,6 @@
     "latex-workshop.view.pdf.trim": 0,
     "latex-workshop.view.pdf.external.viewer.command": "okular",
     "latex-workshop.view.pdf.external.viewer.args": [
-        "--noraise",
         "--unique",
         "%PDF%"
     ],

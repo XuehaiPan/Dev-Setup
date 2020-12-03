@@ -466,7 +466,7 @@
         "-interaction=nonstopmode",
         "-file-line-error",
         "-shell-escape",
-        "-outdir=%OUTDIR%",
+        "-output-directory=%OUTDIR%",
         "%DOC%"
     ],
     "latex-workshop.latex.tools": [
@@ -479,7 +479,7 @@
                 "-interaction=nonstopmode",
                 "-file-line-error",
                 "-shell-escape",
-                "-outdir=%OUTDIR%",
+                "-output-directory=%OUTDIR%",
                 "%DOC%"
             ],
             "env": {}
@@ -493,7 +493,7 @@
                 "-interaction=nonstopmode",
                 "-file-line-error",
                 "-shell-escape",
-                "-outdir=%OUTDIR%",
+                "-output-directory=%OUTDIR%",
                 "%DOC%"
             ],
             "env": {}
@@ -507,7 +507,7 @@
                 "-interaction=nonstopmode",
                 "-file-line-error",
                 "-shell-escape",
-                "-outdir=%OUTDIR%",
+                "-output-directory=%OUTDIR%",
                 "%DOC%"
             ],
             "env": {}
@@ -520,6 +520,7 @@
                 "-interaction=nonstopmode",
                 "-file-line-error",
                 "-shell-escape",
+                "-output-directory=%OUTDIR%",
                 "%DOC%"
             ],
             "env": {}
@@ -532,6 +533,7 @@
                 "-interaction=nonstopmode",
                 "-file-line-error",
                 "-shell-escape",
+                "-output-directory=%OUTDIR%",
                 "%DOC%"
             ],
             "env": {}
@@ -544,6 +546,7 @@
                 "-interaction=nonstopmode",
                 "-file-line-error",
                 "-shell-escape",
+                "-output-directory=%OUTDIR%",
                 "%DOC%"
             ],
             "env": {}

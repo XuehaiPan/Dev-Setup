@@ -150,14 +150,14 @@ ln -sf .dotfiles/${cfg_file_name} .
 
 ## Packages
 
-The source of package managers (HomeBrew (macOS), APT (Ubuntu), Pacman (Manjaro), CPAN, Gem, Conda and Pip) will be set to the open source mirrors at [TUNA (China)](https://mirrors.tuna.tsinghua.edu.cn).
+The source of package managers (Homebrew (macOS), APT (Ubuntu), Pacman (Manjaro), CPAN, Gem, Conda and Pip) will be set to the open source mirrors at [TUNA (China)](https://mirrors.tuna.tsinghua.edu.cn).
 
 The following packages will be setup:
 
 | Package                                                                                                                          | macOS | Ubuntu Linux | Manjaro Linux |
 | :------------------------------------------------------------------------------------------------------------------------------- | :---: | :----------: | :-----------: |
 | [Mirrors at TUNA (China)](https://mirrors.tuna.tsinghua.edu.cn)                                                                  |   ✔   |      ✔       |       ✔       |
-| [HomeBrew (macOS)](https://brew.sh)                                                                                              |   ✔   |      ✘       |       ✘       |
+| [Homebrew (macOS)](https://brew.sh)                                                                                              |   ✔   |      ✘       |       ✘       |
 |                                                                                                                                  |       |              |               |
 | [bash](https://www.gnu.org/software/bash/)                                                                                       |   ✔   |      ✔       |       ✔       |
 | [bash-completion](https://salsa.debian.org/debian/bash-completion)                                                               |   ✔   |      ✔       |       ✔       |
@@ -210,7 +210,7 @@ The following packages will be setup:
 | [Cascadia Code Font](https://github.com/microsoft/cascadia-code)                                                                 |   ✔   |      ✔       |       ✔       |
 | [Menlo Font](https://github.com/XuehaiPan/OS-Setup/blob/master/Menlo.zip)                                                        |   ✔   |      ✔       |       ✔       |
 
-Currently macOS only casks installed by HomeBrew:
+Currently macOS only casks installed by Homebrew:
 
 | Package                                                   | Description                                                                                | macOS | Ubuntu / Manjaro Linux |
 | :-------------------------------------------------------- | ------------------------------------------------------------------------------------------ | :---: | :--------------------: |

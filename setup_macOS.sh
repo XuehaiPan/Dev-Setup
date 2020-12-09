@@ -167,9 +167,9 @@ export PATH="$(ruby -r rubygems -e 'puts Gem.dir')/bin:$PATH"
 export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
 
 # Install casks and fonts
-echo_and_eval 'brew install iterm2 keka --cask'
-echo_and_eval 'brew install font-cascadia{-code,-mono}{,-pl} --cask'
-echo_and_eval 'brew install font-dejavu-sans-mono-nerd-font --cask'
+echo_and_eval 'brew install --cask iterm2 keka'
+echo_and_eval 'brew install --cask font-cascadia{-code,-mono}{,-pl}'
+echo_and_eval 'brew install --cask font-dejavu-sans-mono-nerd-font'
 
 # Upgrade packages
 echo_and_eval 'brew upgrade'
@@ -2004,9 +2004,8 @@ if $SET_MIRRORS; then
 fi
 
 # Install casks
-echo_and_eval 'brew install visual-studio-code xquartz --cask'
-echo_and_eval 'brew install typora transmission teamviewer google-chrome --cask'
-echo_and_eval 'brew install neteasemusic iina --cask'
+echo_and_eval 'brew install --cask visual-studio-code xquartz'
+echo_and_eval 'brew install --cask typora google-chrome iina'
 
 # Install casks and packages for development
 echo_and_eval 'brew install gcc gdb llvm make cmake automake autoconf'

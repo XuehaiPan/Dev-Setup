@@ -120,7 +120,7 @@ function wget() {
 # Install and setup Homebrew
 if [[ ! -x "$(command -v brew)" ]]; then
 	echo_and_eval 'xcode-select --install'
-	echo_and_eval '/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"'
+	echo_and_eval '/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"'
 fi
 
 if $SET_MIRRORS; then

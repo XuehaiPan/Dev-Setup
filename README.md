@@ -226,20 +226,20 @@ Currently macOS only casks installed by Homebrew:
 
 Shell:
 
-![shell](https://raw.githubusercontent.com/XuehaiPan/OS-Setup/2c0039813cd1fe82f7dd3127ec0d40056f2cfc65/screenshots/shell.png)
+![shell](https://user-images.githubusercontent.com/16078332/101635454-f6ff5000-3a64-11eb-9b4a-af674432dc69.png)
 
 tmux:
 
-![tmux](https://raw.githubusercontent.com/XuehaiPan/OS-Setup/2c0039813cd1fe82f7dd3127ec0d40056f2cfc65/screenshots/tmux.png)
+![tmux](https://user-images.githubusercontent.com/16078332/101630408-cbc53280-3a5d-11eb-9b13-86084fde89d8.png)
 
 fzf:
 
-![fzf](https://raw.githubusercontent.com/XuehaiPan/OS-Setup/2c0039813cd1fe82f7dd3127ec0d40056f2cfc65/screenshots/fzf.gif)
+![fzf](https://user-images.githubusercontent.com/16078332/101661628-7ac83500-3a83-11eb-80a1-77c772abe2a4.gif)
 
 Vim:
 
-![vim](https://raw.githubusercontent.com/XuehaiPan/OS-Setup/2c0039813cd1fe82f7dd3127ec0d40056f2cfc65/screenshots/vim.png)
+![vim](https://user-images.githubusercontent.com/16078332/101630446-d7b0f480-3a5d-11eb-9d2a-af9d09f0d2c0.png)
 
 Live markdown preview support for Vim:
 
-![markdown](https://raw.githubusercontent.com/XuehaiPan/OS-Setup/2c0039813cd1fe82f7dd3127ec0d40056f2cfc65/screenshots/vim-markdown.png)
+![markdown](https://user-images.githubusercontent.com/16078332/101661698-8ddb0500-3a83-11eb-92bb-203071c2163e.gif)

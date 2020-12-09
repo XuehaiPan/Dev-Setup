@@ -1,31 +1,31 @@
 # Source global definitions
-# include /etc/zshrc if it exists
+# Include /etc/zshrc if it exists
 if [[ -f /etc/zshrc ]]; then
 	. /etc/zshrc
 fi
 
-# include /etc/profile if it exists
+# Include /etc/profile if it exists
 if [[ -f /etc/profile ]]; then
 	. /etc/profile
 fi
 
-# include /etc/zprofile if it exists
+# Include /etc/zprofile if it exists
 if [[ -f /etc/zprofile ]]; then
 	. /etc/zprofile
 fi
 
-# set PATH so it includes user's private bin if it exists
+# Set PATH so it includes user's private bin if it exists
 if [[ -d "$HOME/.local/bin" ]]; then
 	export PATH="$HOME/.local/bin:$PATH"
 fi
 
-# set C_INCLUDE_PATH and CPLUS_INCLUDE_PATH so it includes user's private include if it exists
+# Set C_INCLUDE_PATH and CPLUS_INCLUDE_PATH so it includes user's private include if it exists
 if [[ -d "$HOME/.local/include" ]]; then
 	export C_INCLUDE_PATH="$HOME/.local/include:$C_INCLUDE_PATH"
 	export CPLUS_INCLUDE_PATH="$HOME/.local/include:$CPLUS_INCLUDE_PATH"
 fi
 
-# set LIBRARY_PATH and DYLD_LIBRARY_PATH so it includes user's private lib if it exists
+# Set LIBRARY_PATH and DYLD_LIBRARY_PATH so it includes user's private lib if it exists
 if [[ -d "$HOME/.local/lib" ]]; then
 	export LIBRARY_PATH="$HOME/.local/lib:$LIBRARY_PATH"
 	export DYLD_LIBRARY_PATH="$HOME/.local/lib:$DYLD_LIBRARY_PATH"
@@ -40,7 +40,7 @@ export TERM="xterm-256color"
 export CLICOLOR=1
 export LSCOLORS="GxFxCxDxBxegedabagaced"
 
-# locale
+# Locale
 export LC_ALL="en_US.UTF-8"
 
 # Compilers
@@ -111,7 +111,7 @@ export PATH="/usr/local/opt/gettext/bin:$PATH"
 # Bison
 export PATH="/usr/local/opt/bison/bin:$PATH"
 
-# ncurses
+# NCURSES
 export PATH="/usr/local/opt/ncurses/bin:$PATH"
 export C_INCLUDE_PATH="/usr/local/opt/ncurses/include:$C_INCLUDE_PATH"
 export CPLUS_INCLUDE_PATH="/usr/local/opt/ncurses/include:$CPLUS_INCLUDE_PATH"
@@ -131,7 +131,7 @@ export WINEDEBUG="-all"
 export DYLD_FALLBACK_LIBRARY_PATH="$DYLD_FALLBACK_LIBRARY_PATH:/usr/X11/lib:/usr/local/lib"
 export DYLD_FALLBACK_LIBRARY_PATH="$DYLD_FALLBACK_LIBRARY_PATH:/usr/local/opt/ncurses/lib"
 
-# Fzf
+# fzf
 if [[ -f "$HOME/.fzf.zsh" ]]; then
 	source "$HOME/.fzf.zsh"
 fi
@@ -140,7 +140,7 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 FZF_PREVIEW_COMMAND="(bat --color=always {} || highlight -O ansi {} || cat {}) 2>/dev/null | head -100"
 export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --ansi --preview='${FZF_PREVIEW_COMMAND}'"
 
-# Bat
+# bat
 export BAT_THEME="Monokai Extended"
 
 # iTerm
@@ -321,7 +321,7 @@ source "$ZSH/oh-my-zsh.sh"
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
 
-# ssh
+# SSH
 # export SSH_KEY_PATH="~/.ssh/rsa_id"
 
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
@@ -342,11 +342,11 @@ alias ll='ls -lh'
 alias la='ls -Alh'
 
 if [[ -z "$ZSH_PUREPOWER" ]]; then
-	# Setup colorls
+	# Setup Color LS
 	source "$(dirname "$(gem which colorls)")"/tab_complete.sh
 	alias ls='colorls --sd --gs'
 else
-	# Use powerlevel10k purepower theme
+	# Use Powerlevel10k purepower theme
 	source "$ZSH_CUSTOM/themes/powerlevel10k/config/p10k-lean.zsh"
 	POWERLEVEL9K_MODE="compatible"
 	POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(dir vcs newline prompt_char)

@@ -2,31 +2,31 @@
 
 # Get the aliases and functions
 # Source global definitions
-# include /etc/profile if it exists
+# Include /etc/profile if it exists
 if [[ -f /etc/profile ]]; then
 	. /etc/profile
 fi
 
-# if running bash as login shell
+# If running bash as login shell
 if [[ -n "$BASH_VERSION" ]] && shopt -q login_shell; then
-	# include ~/.bashrc if it exists
+	# Include ~/.bashrc if it exists
 	if [[ -f "$HOME/.bashrc" ]]; then
 		. "$HOME/.bashrc"
 	fi
 fi
 
-# set PATH so it includes user's private bin if it exists
+# Set PATH so it includes user's private bin if it exists
 if [[ -d "$HOME/.local/bin" ]]; then
 	export PATH="$HOME/.local/bin:$PATH"
 fi
 
-# set C_INCLUDE_PATH and CPLUS_INCLUDE_PATH so it includes user's private include if it exists
+# Set C_INCLUDE_PATH and CPLUS_INCLUDE_PATH so it includes user's private include if it exists
 if [[ -d "$HOME/.local/include" ]]; then
 	export C_INCLUDE_PATH="$HOME/.local/include:$C_INCLUDE_PATH"
 	export CPLUS_INCLUDE_PATH="$HOME/.local/include:$CPLUS_INCLUDE_PATH"
 fi
 
-# set LIBRARY_PATH and DYLD_LIBRARY_PATH so it includes user's private lib if it exists
+# Set LIBRARY_PATH and DYLD_LIBRARY_PATH so it includes user's private lib if it exists
 if [[ -d "$HOME/.local/lib" ]]; then
 	export LIBRARY_PATH="$HOME/.local/lib:$LIBRARY_PATH"
 	export DYLD_LIBRARY_PATH="$HOME/.local/lib:$DYLD_LIBRARY_PATH"
@@ -43,13 +43,13 @@ export CLICOLOR=1
 export LSCOLORS="GxFxCxDxBxegedabagaced"
 export PS1='[\[\e[1;33m\]\u\[\e[0m\]@\[\e[1;32m\]\h\[\e[0m\]:\[\e[1;35m\]\w\[\e[0m\]]\$ '
 
-# locale
+# Locale
 export LC_ALL="en_US.UTF-8"
 
 # Compilers
-export CC="/usr/bin/gcc"
-export CXX="/usr/bin/g++"
-export FC="/usr/local/bin/gfortran"
+export CC="/usr/local/bin/gcc-10"
+export CXX="/usr/local/bin/g++-10"
+export FC="/usr/local/bin/gfortran-10"
 export OMPI_CC="$CC" MPICH_CC="$CC"
 export OMPI_CXX="$CXX" MPICH_CXX="$CXX"
 export OMPI_FC="$FC" MPICH_FC="$FC"
@@ -114,7 +114,7 @@ export PATH="/usr/local/opt/gettext/bin:$PATH"
 # Bison
 export PATH="/usr/local/opt/bison/bin:$PATH"
 
-# ncurses
+# NCURSES
 export PATH="/usr/local/opt/ncurses/bin:$PATH"
 export C_INCLUDE_PATH="/usr/local/opt/ncurses/include:$C_INCLUDE_PATH"
 export CPLUS_INCLUDE_PATH="/usr/local/opt/ncurses/include:$CPLUS_INCLUDE_PATH"
@@ -134,7 +134,7 @@ export WINEDEBUG="-all"
 export DYLD_FALLBACK_LIBRARY_PATH="$DYLD_FALLBACK_LIBRARY_PATH:/usr/X11/lib:/usr/local/lib"
 export DYLD_FALLBACK_LIBRARY_PATH="$DYLD_FALLBACK_LIBRARY_PATH:/usr/local/opt/ncurses/lib"
 
-# Fzf
+# fzf
 if [[ -f "$HOME/.fzf.bash" ]]; then
 	source "$HOME/.fzf.bash"
 fi
@@ -143,7 +143,7 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 FZF_PREVIEW_COMMAND="(bat --color=always {} || highlight -O ansi {} || cat {}) 2>/dev/null | head -100"
 export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --ansi --preview='${FZF_PREVIEW_COMMAND}'"
 
-# Bat
+# bat
 export BAT_THEME="Monokai Extended"
 
 # iTerm
@@ -196,7 +196,7 @@ fi
 export DISPLAY=":0.0"
 xhost +local: &>/dev/null
 
-# Bash Completion
+# Bash completion
 if [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]]; then
 	. "/usr/local/etc/profile.d/bash_completion.sh"
 fi

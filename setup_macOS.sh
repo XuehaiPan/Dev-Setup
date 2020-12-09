@@ -9,16 +9,16 @@ export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin
 # Set USER
 export USER="${USER:-"$(whoami)"}"
 
-# Set Configuration Backup Directory
+# Set configuration backup directory
 DATETIME="$(date +"%Y-%m-%d-%T")"
 BACKUP_DIR="$HOME/.dotfiles/backups/$DATETIME"
 mkdir -p "$BACKUP_DIR/.dotfiles"
 ln -sfn "$DATETIME" "$HOME/.dotfiles/backups/latest"
 
-# Set Temporary Directory
+# Set temporary directory
 TMP_DIR="$(mktemp -d -t os-setup)"
 
-# Set Default Conda Installation Directory
+# Set default Conda installation directory
 CONDA_DIR="Miniconda3"
 if [[ -d "$HOME/miniconda3" && ! -d "$HOME/Miniconda3" ]]; then
 	CONDA_DIR="miniconda3"
@@ -28,7 +28,7 @@ elif [[ -d "$HOME/anaconda3" ]]; then
 	CONDA_DIR="anaconda3"
 fi
 
-# Common Functions
+# Common functions
 function echo_and_eval() {
 	printf "%s" "$@" | awk -f <(
 		cat - <<-EOD
@@ -117,7 +117,7 @@ function wget() {
 	command wget --no-verbose --show-progress --progress=bar:force:noscroll "$@"
 }
 
-# Install and Setup Homebrew
+# Install and setup Homebrew
 if [[ ! -x "$(command -v brew)" ]]; then
 	echo_and_eval 'xcode-select --install'
 	echo_and_eval '/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"'
@@ -144,7 +144,7 @@ else
 fi
 echo_and_eval 'brew update --verbose'
 
-# Install and Setup Shells
+# Install and setup shells
 echo_and_eval 'brew install zsh bash'
 
 if ! grep -qF '/usr/local/bin/bash' /etc/shells; then
@@ -155,7 +155,7 @@ if ! grep -qF '/usr/local/bin/zsh' /etc/shells; then
 	echo_and_eval 'echo "/usr/local/bin/zsh" | sudo tee -a /etc/shells'
 fi
 
-# Install Packages
+# Install packages
 echo_and_eval 'brew install bash-completion wget curl git git-lfs macvim tmux'
 echo_and_eval 'brew install coreutils ranger fd bat highlight ripgrep git-extras'
 echo_and_eval 'brew install shfmt shellcheck diffutils colordiff diff-so-fancy'
@@ -166,15 +166,15 @@ export PATH="/usr/local/opt/ruby/bin:$PATH"
 export PATH="$(ruby -r rubygems -e 'puts Gem.dir')/bin:$PATH"
 export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
 
-# Install Casks and Fonts
+# Install casks and fonts
 echo_and_eval 'brew install iterm2 keka --cask'
 echo_and_eval 'brew install font-cascadia{-code,-mono}{,-pl} --cask'
 echo_and_eval 'brew install font-dejavu-sans-mono-nerd-font --cask'
 
-# Upgrade Packages
+# Upgrade packages
 echo_and_eval 'brew upgrade'
 
-# Change Default Shell to Zsh
+# Change default shell to Zsh
 if [[ "$(basename "$SHELL")" != "zsh" ]]; then
 	if grep -qF '/usr/local/bin/zsh' /etc/shells; then
 		echo_and_eval 'chsh --shell /usr/local/bin/zsh'
@@ -238,14 +238,14 @@ else
 	rm -f "$HOME"/.zcompdump* 2>/dev/null
 fi
 
-# Install Powerlevel10k Theme
+# Install Powerlevel10k theme
 if [[ ! -d "$ZSH_CUSTOM/themes/powerlevel10k/.git" ]]; then
 	echo_and_eval 'git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "$ZSH_CUSTOM/themes/powerlevel10k" 2>&1'
 else
 	echo_and_eval 'git -C "$ZSH_CUSTOM/themes/powerlevel10k" pull --ff-only 2>&1'
 fi
 
-# Install Zsh Plugins
+# Install Zsh plugins
 for plugin in zsh-{syntax-highlighting,autosuggestions,completions}; do
 	if [[ ! -d "$ZSH_CUSTOM/plugins/$plugin/.git" ]]; then
 		echo_and_eval "git clone --depth=1 https://github.com/zsh-users/${plugin}.git \"\$ZSH_CUSTOM/plugins/$plugin\" 2>&1"
@@ -254,7 +254,7 @@ for plugin in zsh-{syntax-highlighting,autosuggestions,completions}; do
 	fi
 done
 
-# Install Fzf
+# Install fzf
 if [[ ! -d "$HOME/.fzf" ]]; then
 	echo_and_eval 'git clone --depth=1 https://github.com/junegunn/fzf.git "$HOME/.fzf" 2>&1'
 else
@@ -282,7 +282,7 @@ fi
 
 ln -sf .dotfiles/.gemrc .
 
-# Update RubyGems and Install Colorls
+# Update RubyGems and install Color LS
 echo_and_eval 'gem update'
 echo_and_eval 'gem update'
 echo_and_eval 'gem install colorls'
@@ -319,33 +319,33 @@ export HOMEBREW_BAT=true'
 fi
 cat >.dotfiles/.zshrc <<EOF
 # Source global definitions
-# include /etc/zshrc if it exists
+# Include /etc/zshrc if it exists
 if [[ -f /etc/zshrc ]]; then
 	. /etc/zshrc
 fi
 
-# include /etc/profile if it exists
+# Include /etc/profile if it exists
 if [[ -f /etc/profile ]]; then
 	. /etc/profile
 fi
 
-# include /etc/zprofile if it exists
+# Include /etc/zprofile if it exists
 if [[ -f /etc/zprofile ]]; then
 	. /etc/zprofile
 fi
 
-# set PATH so it includes user's private bin if it exists
+# Set PATH so it includes user's private bin if it exists
 if [[ -d "\$HOME/.local/bin" ]]; then
 	export PATH="\$HOME/.local/bin:\$PATH"
 fi
 
-# set C_INCLUDE_PATH and CPLUS_INCLUDE_PATH so it includes user's private include if it exists
+# Set C_INCLUDE_PATH and CPLUS_INCLUDE_PATH so it includes user's private include if it exists
 if [[ -d "\$HOME/.local/include" ]]; then
 	export C_INCLUDE_PATH="\$HOME/.local/include:\$C_INCLUDE_PATH"
 	export CPLUS_INCLUDE_PATH="\$HOME/.local/include:\$CPLUS_INCLUDE_PATH"
 fi
 
-# set LIBRARY_PATH and DYLD_LIBRARY_PATH so it includes user's private lib if it exists
+# Set LIBRARY_PATH and DYLD_LIBRARY_PATH so it includes user's private lib if it exists
 if [[ -d "\$HOME/.local/lib" ]]; then
 	export LIBRARY_PATH="\$HOME/.local/lib:\$LIBRARY_PATH"
 	export DYLD_LIBRARY_PATH="\$HOME/.local/lib:\$DYLD_LIBRARY_PATH"
@@ -360,7 +360,7 @@ export TERM="xterm-256color"
 export CLICOLOR=1
 export LSCOLORS="GxFxCxDxBxegedabagaced"
 
-# locale
+# Locale
 export LC_ALL="en_US.UTF-8"
 
 # Compilers
@@ -407,7 +407,7 @@ export PATH="/usr/local/opt/openssl/bin:\$PATH"
 # gettext
 export PATH="/usr/local/opt/gettext/bin:\$PATH"
 
-# ncurses
+# NCURSES
 export PATH="/usr/local/opt/ncurses/bin:\$PATH"
 export C_INCLUDE_PATH="/usr/local/opt/ncurses/include:\$C_INCLUDE_PATH"
 export CPLUS_INCLUDE_PATH="/usr/local/opt/ncurses/include:\$CPLUS_INCLUDE_PATH"
@@ -420,7 +420,7 @@ export PATH="/usr/local/opt/sqlite/bin:\$PATH"
 # LLVM
 export PATH="/usr/local/opt/llvm/bin:\$PATH"
 
-# Fzf
+# fzf
 if [[ -f "\$HOME/.fzf.zsh" ]]; then
 	source "\$HOME/.fzf.zsh"
 fi
@@ -429,7 +429,7 @@ export FZF_CTRL_T_COMMAND="\$FZF_DEFAULT_COMMAND"
 FZF_PREVIEW_COMMAND="(bat --color=always {} || highlight -O ansi {} || cat {}) 2>/dev/null | head -100"
 export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --ansi --preview='\${FZF_PREVIEW_COMMAND}'"
 
-# Bat
+# bat
 export BAT_THEME="Monokai Extended"
 
 # iTerm
@@ -605,7 +605,7 @@ source "\$ZSH/oh-my-zsh.sh"
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
 
-# ssh
+# SSH
 # export SSH_KEY_PATH="~/.ssh/rsa_id"
 
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
@@ -626,7 +626,7 @@ alias ll='ls -lh'
 alias la='ls -Alh'
 
 if [[ -z "\$ZSH_PUREPOWER" ]]; then
-	# Setup colorls
+	# Setup Color LS
 	source "\$(dirname "\$(gem which colorls)")"/tab_complete.sh
 	alias ls='colorls --sd --gs'
 else
@@ -661,7 +661,7 @@ if ! grep -qF '/usr/local/bin/zsh-purepower' /etc/shells; then
 	echo_and_eval 'echo "/usr/local/bin/zsh-purepower" | sudo tee -a /etc/shells'
 fi
 
-# Add Utility Script File
+# Add utility script file
 backup_dotfiles .dotfiles/utilities.sh
 
 cat >.dotfiles/utilities.sh <<EOF
@@ -744,7 +744,7 @@ function upgrade_homebrew() {
 	# Uninstall formulae that no longer needed
 	echo_and_eval 'brew autoremove'
 
-	# Clean Homebrew cache
+	# Clean up Homebrew cache
 	echo_and_eval 'brew cleanup -s --prune 7'
 }
 
@@ -797,7 +797,7 @@ function upgrade_conda() {
 	# Upgrade Conda
 	echo_and_eval 'conda update conda --name base --yes'
 
-	# Upgrade Conda Packages in Each Environment
+	# Upgrade Conda packages in each environment
 	ENVS=(base \$(
 		cd "\$(conda info --base)/envs"
 		find -L . -mindepth 1 -maxdepth 1 -not -empty \\( -type d -or -type l \\) |
@@ -810,7 +810,7 @@ function upgrade_conda() {
 		fi
 	done
 
-	# Clean Conda Cache
+	# Clean up Conda cache
 	echo_and_eval 'conda clean --all --yes'
 }
 
@@ -900,23 +900,23 @@ case \$- in
 esac
 
 # Source global definitions
-# include /etc/bashrc if it exists
+# Include /etc/bashrc if it exists
 if [[ -f /etc/bashrc ]]; then
 	. /etc/bashrc
 fi
 
-# don't put duplicate lines or lines starting with space in the history.
+# Don't put duplicate lines or lines starting with space in the history.
 # See bash for more options
 HISTCONTROL=ignoreboth
 
-# append to the history file, don't overwrite it
+# Append to the history file, don't overwrite it
 shopt -s histappend
 
-# for setting history length see HISTSIZE and HISTFILESIZE in bash
+# For setting history length see HISTSIZE and HISTFILESIZE in bash
 HISTSIZE=1000
 HISTFILESIZE=2000
 
-# check the window size after each command and, if necessary,
+# Check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
 
@@ -924,7 +924,7 @@ shopt -s checkwinsize
 # match all files and zero or more directories and subdirectories.
 #shopt -s globstar
 
-# some more ls aliases
+# Some more ls aliases
 alias lsa='ls -AF'
 alias l='ls -alhF'
 alias ll='ls -lhF'
@@ -937,7 +937,7 @@ if [[ -f "\$HOME/.bash_aliases" ]]; then
 	. "\$HOME/.bash_aliases"
 fi
 
-# enable programmable completion features
+# Enable programmable completion features
 if ! shopt -oq posix; then
 	if [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]]; then
 		. "/usr/local/etc/profile.d/bash_completion.sh"
@@ -948,9 +948,9 @@ if ! shopt -oq posix; then
 	fi
 fi
 
-# always source ~/.bash_profile
+# Always source ~/.bash_profile
 if ! shopt -q login_shell; then
-	# include ~/.bash_profile if it exists
+	# Include ~/.bash_profile if it exists
 	if [[ -f "\$HOME/.bash_profile" ]]; then
 		. "\$HOME/.bash_profile"
 	elif [[ -f "\$HOME/.profile" ]]; then
@@ -968,31 +968,31 @@ cat >.dotfiles/.bash_profile <<EOF
 
 # Get the aliases and functions
 # Source global definitions
-# include /etc/profile if it exists
+# Include /etc/profile if it exists
 if [[ -f /etc/profile ]]; then
 	. /etc/profile
 fi
 
-# if running bash as login shell
+If running bash as login shell
 if [[ -n "\$BASH_VERSION" ]] && shopt -q login_shell; then
-	# include ~/.bashrc if it exists
+	# Include ~/.bashrc if it exists
 	if [[ -f "\$HOME/.bashrc" ]]; then
 		. "\$HOME/.bashrc"
 	fi
 fi
 
-# set PATH so it includes user's private bin if it exists
+# Set PATH so it includes user's private bin if it exists
 if [[ -d "\$HOME/.local/bin" ]]; then
 	export PATH="\$HOME/.local/bin:\$PATH"
 fi
 
-# set C_INCLUDE_PATH and CPLUS_INCLUDE_PATH so it includes user's private include if it exists
+# Set C_INCLUDE_PATH and CPLUS_INCLUDE_PATH so it includes user's private include if it exists
 if [[ -d "\$HOME/.local/include" ]]; then
 	export C_INCLUDE_PATH="\$HOME/.local/include:\$C_INCLUDE_PATH"
 	export CPLUS_INCLUDE_PATH="\$HOME/.local/include:\$CPLUS_INCLUDE_PATH"
 fi
 
-# set LIBRARY_PATH and DYLD_LIBRARY_PATH so it includes user's private lib if it exists
+# Set LIBRARY_PATH and DYLD_LIBRARY_PATH so it includes user's private lib if it exists
 if [[ -d "\$HOME/.local/lib" ]]; then
 	export LIBRARY_PATH="\$HOME/.local/lib:\$LIBRARY_PATH"
 	export DYLD_LIBRARY_PATH="\$HOME/.local/lib:\$DYLD_LIBRARY_PATH"
@@ -1009,7 +1009,7 @@ export CLICOLOR=1
 export LSCOLORS="GxFxCxDxBxegedabagaced"
 export PS1='[\\[\\e[1;33m\\]\\u\\[\\e[0m\\]@\\[\\e[1;32m\\]\\h\\[\\e[0m\\]:\\[\\e[1;35m\\]\\w\\[\\e[0m\\]]\\\$ '
 
-# locale
+# Locale
 export LC_ALL="en_US.UTF-8"
 
 # Compilers
@@ -1056,7 +1056,7 @@ export PATH="/usr/local/opt/openssl/bin:\$PATH"
 # gettext
 export PATH="/usr/local/opt/gettext/bin:\$PATH"
 
-# ncurses
+# NCURSES
 export PATH="/usr/local/opt/ncurses/bin:\$PATH"
 export C_INCLUDE_PATH="/usr/local/opt/ncurses/include:\$C_INCLUDE_PATH"
 export CPLUS_INCLUDE_PATH="/usr/local/opt/ncurses/include:\$CPLUS_INCLUDE_PATH"
@@ -1069,7 +1069,7 @@ export PATH="/usr/local/opt/sqlite/bin:\$PATH"
 # LLVM
 export PATH="/usr/local/opt/llvm/bin:\$PATH"
 
-# Fzf
+# fzf
 if [[ -f "\$HOME/.fzf.bash" ]]; then
 	source "\$HOME/.fzf.bash"
 fi
@@ -1078,7 +1078,7 @@ export FZF_CTRL_T_COMMAND="\$FZF_DEFAULT_COMMAND"
 FZF_PREVIEW_COMMAND="(bat --color=always {} || highlight -O ansi {} || cat {}) 2>/dev/null | head -100"
 export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --ansi --preview='\${FZF_PREVIEW_COMMAND}'"
 
-# Bat
+# bat
 export BAT_THEME="Monokai Extended"
 
 # iTerm
@@ -1126,7 +1126,7 @@ fi
 export DISPLAY=":0.0"
 xhost +local: &>/dev/null
 
-# Bash Completion
+# Bash completion
 if [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]]; then
 	. "/usr/local/etc/profile.d/bash_completion.sh"
 fi
@@ -1134,12 +1134,12 @@ EOF
 
 ln -sf .dotfiles/.bash_profile .
 
-# Color Theme for iTerm
+# Color theme for iTerm
 echo_and_eval 'wget -O "$HOME/Desktop/SpaceGray Eighties.itermcolors" \
 	https://raw.githubusercontent.com/mbadolato/iTerm2-Color-Schemes/master/schemes/SpaceGray%20Eighties.itermcolors'
 open -R "$HOME/Desktop/SpaceGray Eighties.itermcolors"
 
-# iTerm2 Shell Integration and Utilities
+# iTerm2 shell integration and utilities
 ITERM_UTILITIES=(
 	imgcat imgls it2api it2attention
 	it2check it2copy it2dl it2getvar
@@ -1400,7 +1400,7 @@ EOF
 
 ln -sf .dotfiles/.vimrc .
 
-# Add Vim Monokai Color Theme
+# Add Vim Monokai color theme
 mkdir -p .vim/colors
 
 cat >.vim/colors/monokai.vim <<EOF
@@ -1515,19 +1515,19 @@ highlight cssCommonAttr                ctermfg=81    ctermbg=NONE cterm=NONE    
 highlight cssBraces                    ctermfg=NONE  ctermbg=NONE cterm=NONE         guifg=NONE    guibg=NONE    gui=NONE
 EOF
 
-# Install Vim-Plug Plugin Manager
+# Install Vim-Plug plugin manager
 if [[ ! -f "$HOME/.vim/autoload/plug.vim" ]]; then
 	echo_and_eval 'curl -fL#o "$HOME/.vim/autoload/plug.vim" --create-dirs \
 		https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 fi
 
-# Install Vim Plugins
+# Install Vim plugins
 echo_and_eval 'vim -c "PlugUpgrade | PlugInstall | PlugUpdate | quitall"'
 if [[ ! -f "$HOME/.vim/plugged/markdown-preview.nvim/app/bin/markdown-preview-macos" ]]; then
 	echo_and_eval 'cd "$HOME/.vim/plugged/markdown-preview.nvim/app"; ./install.sh; cd "$HOME"'
 fi
 
-# Configurations for Tmux
+# Configurations for tmux
 backup_dotfiles .tmux.conf .dotfiles/.tmux.conf \
 	.tmux.conf.local .dotfiles/.tmux.conf.local \
 	.tmux.conf.user .dotfiles/.tmux.conf.user
@@ -1689,7 +1689,7 @@ Temporary Items
 ##### Linux.gitignore #####
 *~
 
-# temporary files which can be created if a process still has a handle open of a deleted file
+# Temporary files which can be created if a process still has a handle open of a deleted file
 .fuse_hidden*
 
 # KDE directory preferences
@@ -1772,11 +1772,11 @@ ehthumbs_vista.db
 ## User settings
 xcuserdata/
 
-## compatibility with Xcode 8 and earlier (ignoring not required starting Xcode 9)
+## Compatibility with Xcode 8 and earlier (ignoring not required starting Xcode 9)
 *.xcscmblueprint
 *.xccheckout
 
-## compatibility with Xcode 3 and earlier (ignoring not required starting Xcode 4)
+## Compatibility with Xcode 3 and earlier (ignoring not required starting Xcode 4)
 build/
 DerivedData/
 *.moved-aside
@@ -1825,7 +1825,7 @@ DerivedData/
 
 # Gradle and Maven with auto-import
 # When using Gradle or Maven with auto-import, you should exclude module files,
-# since they will be recreated, and may cause churn.  Uncomment if using
+# since they will be recreated, and may cause churn. Uncomment if using
 # auto-import.
 # .idea/artifacts
 # .idea/compiler.xml
@@ -1988,7 +1988,7 @@ if [[ ! -d "$HOME/$CONDA_DIR" ]]; then
 	echo_and_eval "rm -f \"$TMP_DIR/Miniconda3-latest-MacOSX-x86_64.sh\""
 fi
 
-# Install Conda Packages
+# Install Conda packages
 export PATH="$PATH:$HOME/$CONDA_DIR/condabin"
 echo_and_eval 'conda update conda --yes'
 echo_and_eval 'conda install pip jupyter ipython notebook jupyterlab ipdb \
@@ -2003,16 +2003,16 @@ if $SET_MIRRORS; then
 	echo_and_eval "\"\$HOME/$CONDA_DIR/bin/pip\" config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple"
 fi
 
-# Install Casks
+# Install casks
 echo_and_eval 'brew install visual-studio-code xquartz --cask'
 echo_and_eval 'brew install typora transmission teamviewer google-chrome --cask'
 echo_and_eval 'brew install neteasemusic iina --cask'
 
-# Install Develop Casks and Packages
+# Install casks and packages for development
 echo_and_eval 'brew install gcc gdb llvm make cmake automake autoconf'
 echo_and_eval 'brew cleanup -s --prune 7'
 
-# Miscellaneous Settings
+# Miscellaneous settings
 echo_and_eval 'defaults write -globalDomain KeyRepeat -int 2'
 echo_and_eval 'defaults write -globalDomain InitialKeyRepeat -int 45'
 echo_and_eval 'defaults write com.apple.screencapture disable-shadow -boolean true'

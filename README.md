@@ -71,7 +71,7 @@ After running the script, all the old configuration files involved will be backe
   vimdiff ~/.dotfiles/$FILE ~/.dotfiles/backups/latest/.dotfiles/$FILE
   ```
 
-  You can get vimdiff reference manual from [https://vimhelp.org/diff.txt.html](https://vimhelp.org/diff.txt.html), or type command `:help diff` inside vim.
+  You can get vimdiff reference manual from [https://vimhelp.org/diff.txt.html](https://vimhelp.org/diff.txt.html), or type command `:help diff` inside Vim.
 
 ### Restoration
 
@@ -136,11 +136,11 @@ Add a new config file to the script:
 ```bash
 cd $HOME   # this line has already been added at the top of the script
 
-# replace ${cfg_file_name} with the config file's name
+# Replace ${cfg_file_name} with the config file's name
 backup_dotfiles ${cfg_file_name} .dotfiles/${cfg_file_name}
 
 cat >.dotfiles/${cfg_file_name} <<EOF
-# paste the contents in the temp file `temp.txt` here
+# Paste the contents in the temp file `temp.txt` here
 EOF
 
 ln -sf .dotfiles/${cfg_file_name} .
@@ -231,11 +231,11 @@ Shell:
 
 ![shell](https://raw.githubusercontent.com/XuehaiPan/OS-Setup/2c0039813cd1fe82f7dd3127ec0d40056f2cfc65/screenshots/shell.png)
 
-Tmux:
+tmux:
 
 ![tmux](https://raw.githubusercontent.com/XuehaiPan/OS-Setup/2c0039813cd1fe82f7dd3127ec0d40056f2cfc65/screenshots/tmux.png)
 
-Fzf:
+fzf:
 
 ![fzf](https://raw.githubusercontent.com/XuehaiPan/OS-Setup/2c0039813cd1fe82f7dd3127ec0d40056f2cfc65/screenshots/fzf.gif)
 
@@ -243,6 +243,6 @@ Vim:
 
 ![vim](https://raw.githubusercontent.com/XuehaiPan/OS-Setup/2c0039813cd1fe82f7dd3127ec0d40056f2cfc65/screenshots/vim.png)
 
-Live markdown preview support for vim:
+Live markdown preview support for Vim:
 
 ![markdown](https://raw.githubusercontent.com/XuehaiPan/OS-Setup/2c0039813cd1fe82f7dd3127ec0d40056f2cfc65/screenshots/vim-markdown.png)

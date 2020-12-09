@@ -6,13 +6,13 @@ export SET_MIRRORS="${SET_MIRRORS:-true}"
 # Set USER
 export USER="${USER:-"$(whoami)"}"
 
-# Set Configuration Backup Directory
+# Set configuration backup directory
 DATETIME="$(date +"%Y-%m-%d-%T")"
 BACKUP_DIR="$HOME/.dotfiles/backups/$DATETIME"
 mkdir -p "$BACKUP_DIR/.dotfiles"
 ln -sfn "$DATETIME" "$HOME/.dotfiles/backups/latest"
 
-# Set Temporary Directory
+# Set temporary directory
 TMP_DIR="$(mktemp -d -t os-setup.XXXXXX)"
 
 # Check if has sudo privileges
@@ -27,7 +27,7 @@ if [[ -n "$WSL_DISTRO_NAME" ]] || (uname -r | grep -qF 'Microsoft'); then
 	IN_WSL=true
 fi
 
-# Set Default Conda Installation Directory
+# Set default Conda installation directory
 CONDA_DIR="Miniconda3"
 if [[ -d "$HOME/miniconda3" && ! -d "$HOME/Miniconda3" ]]; then
 	CONDA_DIR="miniconda3"
@@ -37,7 +37,7 @@ elif [[ -d "$HOME/anaconda3" ]]; then
 	CONDA_DIR="anaconda3"
 fi
 
-# Common Functions
+# Common functions
 function echo_and_eval() {
 	printf "%s" "$@" | awk -f <(
 		cat - <<-EOD
@@ -153,7 +153,7 @@ function check_binary() {
 }
 
 if $IS_SUDOER; then
-	# Setup Apt Sources
+	# Setup APT sources
 	if $SET_MIRRORS; then
 		SOURCES_LIST=($(find -L /etc/apt -type f -name '*.list'))
 		URL_LIST=(
@@ -171,14 +171,14 @@ if $IS_SUDOER; then
 
 	echo_and_eval 'sudo apt-get update'
 
-	# Install and Setup Shells
+	# Install and setup shells
 	echo_and_eval 'sudo apt-get install zsh --yes'
 
 	if ! grep -qF '/usr/bin/zsh' /etc/shells; then
 		echo_and_eval 'echo "/usr/bin/zsh" | sudo tee -a /etc/shells'
 	fi
 
-	# Install Packages
+	# Install packages
 	echo_and_eval 'sudo apt-get install bash-completion wget curl git git-lfs vim tmux --yes'
 	echo_and_eval 'sudo apt-get install ranger highlight shellcheck git-extras --yes'
 	if [[ -n "$(apt-cache search '^fd-find$' --names-only)" ]]; then
@@ -228,7 +228,7 @@ if $IS_SUDOER; then
 	echo_and_eval 'sudo apt-get autoclean --yes'
 fi
 
-# Change Default Shell to Zsh
+# Change default shell to Zsh
 if [[ "$(basename "$SHELL")" != "zsh" ]]; then
 	if grep -qF '/usr/bin/zsh' /etc/shells; then
 		echo_and_eval 'chsh --shell /usr/bin/zsh'
@@ -292,14 +292,14 @@ else
 	rm -f "$HOME"/.zcompdump* 2>/dev/null
 fi
 
-# Install Powerlevel10k Theme
+# Install Powerlevel10k theme
 if [[ ! -d "$ZSH_CUSTOM/themes/powerlevel10k/.git" ]]; then
 	echo_and_eval 'git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "$ZSH_CUSTOM/themes/powerlevel10k" 2>&1'
 else
 	echo_and_eval 'git -C "$ZSH_CUSTOM/themes/powerlevel10k" pull --ff-only 2>&1'
 fi
 
-# Install Zsh Plugins
+# Install Zsh plugins
 for plugin in zsh-{syntax-highlighting,autosuggestions,completions}; do
 	if [[ ! -d "$ZSH_CUSTOM/plugins/$plugin/.git" ]]; then
 		echo_and_eval "git clone --depth=1 https://github.com/zsh-users/${plugin}.git \"\$ZSH_CUSTOM/plugins/$plugin\" 2>&1"
@@ -308,7 +308,7 @@ for plugin in zsh-{syntax-highlighting,autosuggestions,completions}; do
 	fi
 done
 
-# Install Fzf
+# Install fzf
 if [[ ! -d "$HOME/.fzf" ]]; then
 	echo_and_eval 'git clone --depth=1 https://github.com/junegunn/fzf.git "$HOME/.fzf" 2>&1'
 else
@@ -336,7 +336,7 @@ fi
 
 ln -sf .dotfiles/.gemrc .
 
-# Update RubyGems and Install Colorls
+# Update RubyGems and install Color LS
 if [[ -x "$(command -v ruby)" && -x "$(command -v gem)" ]]; then
 	export RUBYOPT="-W0"
 	export PATH="$(ruby -r rubygems -e 'puts Gem.dir')/bin:$PATH"
@@ -373,33 +373,33 @@ backup_dotfiles .dotfiles/.zshrc
 
 cat >.dotfiles/.zshrc <<EOF
 # Source global definitions
-# include /etc/zshrc if it exists
+# Include /etc/zshrc if it exists
 if [[ -f /etc/zshrc ]]; then
 	. /etc/zshrc
 fi
 
-# include /etc/profile if it exists
+# Include /etc/profile if it exists
 if [[ -f /etc/profile ]]; then
 	. /etc/profile
 fi
 
-# include /etc/zprofile if it exists
+# Include /etc/zprofile if it exists
 if [[ -f /etc/zprofile ]]; then
 	. /etc/zprofile
 fi
 
-# set PATH so it includes user's private bin if it exists
+# Set PATH so it includes user's private bin if it exists
 if [[ -d "\$HOME/.local/bin" ]]; then
 	export PATH="\$HOME/.local/bin:\$PATH"
 fi
 
-# set C_INCLUDE_PATH and CPLUS_INCLUDE_PATH so it includes user's private include if it exists
+# Set C_INCLUDE_PATH and CPLUS_INCLUDE_PATH so it includes user's private include if it exists
 if [[ -d "\$HOME/.local/include" ]]; then
 	export C_INCLUDE_PATH="\$HOME/.local/include:\$C_INCLUDE_PATH"
 	export CPLUS_INCLUDE_PATH="\$HOME/.local/include:\$CPLUS_INCLUDE_PATH"
 fi
 
-# set LIBRARY_PATH and LD_LIBRARY_PATH so it includes user's private lib if it exists
+# Set LIBRARY_PATH and LD_LIBRARY_PATH so it includes user's private lib if it exists
 if [[ -d "\$HOME/.local/lib" ]]; then
 	export LIBRARY_PATH="\$HOME/.local/lib:\$LIBRARY_PATH"
 	export LD_LIBRARY_PATH="\$HOME/.local/lib:\$LD_LIBRARY_PATH"
@@ -412,7 +412,7 @@ fi
 # User specific environment
 export TERM="xterm-256color"
 
-# locale
+# Locale
 export LC_ALL="en_US.utf8"
 
 # Compilers
@@ -449,7 +449,7 @@ fi
 # Perl
 eval "\$(perl -I\$HOME/.perl/lib/perl5 -Mlocal::lib=\$HOME/.perl)"
 
-# Fzf
+# fzf
 if [[ -f "\$HOME/.fzf.zsh" ]]; then
 	source "\$HOME/.fzf.zsh"
 fi
@@ -470,7 +470,7 @@ else
 fi
 export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --ansi --preview='\${FZF_PREVIEW_COMMAND}'"
 
-# Bat
+# bat
 export BAT_THEME="Monokai Extended"
 
 # Remove duplicate entries
@@ -636,7 +636,7 @@ source "\$ZSH/oh-my-zsh.sh"
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
 
-# ssh
+# SSH
 # export SSH_KEY_PATH="~/.ssh/rsa_id"
 
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
@@ -655,7 +655,7 @@ alias ll='ls -lh'
 alias la='ls -Alh'
 
 if [[ -z "\$ZSH_PUREPOWER" ]]; then
-	# Setup colorls
+	# Setup Color LS
 	if [[ -x "\$(command -v ruby)" && -x "\$(command -v gem)" ]]; then
 		if gem query --silent --installed colorls; then
 			source "\$(dirname "\$(gem which colorls)")"/tab_complete.sh
@@ -675,7 +675,7 @@ EOF
 
 ln -sf .dotfiles/.zshrc .
 
-# Configurations for Zsh Purepower
+# Configurations for Zsh purepower
 SHEBANG='#!/bin/sh'
 COMMAND='ZSH_PUREPOWER=true exec /usr/bin/zsh "$@"'
 cat >"$TMP_DIR/zsh-purepower" <<EOF
@@ -703,7 +703,7 @@ else
 	chmod +x "$HOME/.local/bin/zsh-purepower"
 fi
 
-# Add Utility Script File
+# Add utility script file
 backup_dotfiles .dotfiles/utilities.sh
 
 cat >.dotfiles/utilities.sh <<EOF
@@ -776,16 +776,16 @@ function echo_and_eval() {
 }
 
 function upgrade_ubuntu() {
-	# Upgrade Packages
+	# Upgrade packages
 	echo_and_eval 'sudo apt-get update'
 	echo_and_eval 'sudo apt-get dist-upgrade --yes'
 	echo_and_eval 'sudo apt-get full-upgrade --yes'
 	echo_and_eval 'sudo apt-get upgrade --yes'
 
-	# Remove Unused Packages
+	# Remove unused packages
 	echo_and_eval 'sudo apt-get autoremove --yes'
 
-	# Clean Cache
+	# Clean up cache
 	echo_and_eval 'sudo apt-get autoclean'
 }
 
@@ -842,7 +842,7 @@ function upgrade_conda() {
 	# Upgrade Conda
 	echo_and_eval 'conda update conda --name base --yes'
 
-	# Upgrade Conda Packages in Each Environment
+	# Upgrade Conda packages in each environment
 	ENVS=(base \$(
 		cd "\$(conda info --base)/envs"
 		find -L . -mindepth 1 -maxdepth 1 -not -empty \\( -type d -or -type l \\) |
@@ -855,7 +855,7 @@ function upgrade_conda() {
 		fi
 	done
 
-	# Clean Conda Cache
+	# Clean up Conda cache
 	echo_and_eval 'conda clean --all --yes'
 }
 
@@ -968,9 +968,9 @@ backup_dotfiles .bashrc .dotfiles/.bashrc
 if ! grep -qF 'shopt -q login_shell' .bashrc; then
 	cat >>.bashrc <<EOF
 
-# always source ~/.bash_profile
+# Always source ~/.bash_profile
 if ! shopt -q login_shell; then
-	# include ~/.bash_profile if it exists
+	# Include ~/.bash_profile if it exists
 	if [[ -f "\$HOME/.bash_profile" ]]; then
 		. "\$HOME/.bash_profile"
 	elif [[ -f "\$HOME/.profile" ]]; then
@@ -989,33 +989,33 @@ cat >.dotfiles/.profile <<EOF
 # ~/.profile: executed by the command interpreter for login shells.
 # This file is not read by bash(1), if ~/.bash_profile or ~/.bash_login
 # exists.
-# see /usr/share/doc/bash/examples/startup-files for examples.
-# the files are located in the bash-doc package.
+# See /usr/share/doc/bash/examples/startup-files for examples.
+# The files are located in the bash-doc package.
 
-# the default umask is set in /etc/profile; for setting the umask
+# The default umask is set in /etc/profile; for setting the umask
 # for ssh logins, install and configure the libpam-umask package.
 #umask 022
 
-# if running bash as login shell
+# If running bash as login shell
 if [[ -n "\$BASH_VERSION" ]] && shopt -q login_shell; then
-	# include ~/.bashrc if it exists
+	# Include ~/.bashrc if it exists
 	if [[ -f "\$HOME/.bashrc" ]]; then
 		. "\$HOME/.bashrc"
 	fi
 fi
 
-# set PATH so it includes user's private bin if it exists
+# Set PATH so it includes user's private bin if it exists
 if [[ -d "\$HOME/.local/bin" ]]; then
 	export PATH="\$HOME/.local/bin:\$PATH"
 fi
 
-# set C_INCLUDE_PATH and CPLUS_INCLUDE_PATH so it includes user's private include if it exists
+# Set C_INCLUDE_PATH and CPLUS_INCLUDE_PATH so it includes user's private include if it exists
 if [[ -d "\$HOME/.local/include" ]]; then
 	export C_INCLUDE_PATH="\$HOME/.local/include:\$C_INCLUDE_PATH"
 	export CPLUS_INCLUDE_PATH="\$HOME/.local/include:\$CPLUS_INCLUDE_PATH"
 fi
 
-# set LIBRARY_PATH and LD_LIBRARY_PATH so it includes user's private lib if it exists
+# Set LIBRARY_PATH and LD_LIBRARY_PATH so it includes user's private lib if it exists
 if [[ -d "\$HOME/.local/lib" ]]; then
 	export LIBRARY_PATH="\$HOME/.local/lib:\$LIBRARY_PATH"
 	export LD_LIBRARY_PATH="\$HOME/.local/lib:\$LD_LIBRARY_PATH"
@@ -1029,7 +1029,7 @@ fi
 export TERM="xterm-256color"
 export PS1='[\\[\\e[1;33m\\]\\u\\[\\e[0m\\]@\\[\\e[1;32m\\]\\h\\[\\e[0m\\]:\\[\\e[1;35m\\]\\w\\[\\e[0m\\]]\\\$ '
 
-# locale
+# Locale
 export LC_ALL="en_US.utf8"
 
 # Compilers
@@ -1066,7 +1066,7 @@ fi
 # Perl
 eval "\$(perl -I\$HOME/.perl/lib/perl5 -Mlocal::lib=\$HOME/.perl)"
 
-# Fzf
+# fzf
 if [[ -f "\$HOME/.fzf.bash" ]]; then
 	source "\$HOME/.fzf.bash"
 fi
@@ -1087,7 +1087,7 @@ else
 fi
 export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --ansi --preview='\${FZF_PREVIEW_COMMAND}'"
 
-# Bat
+# bat
 export BAT_THEME="Monokai Extended"
 
 # Remove duplicate entries
@@ -1126,7 +1126,7 @@ if [[ -f "\$HOME/.dotfiles/utilities.sh" ]]; then
 	. "\$HOME/.dotfiles/utilities.sh"
 fi
 
-# Bash Completion
+# Bash completion
 if [[ -r "/etc/profile.d/bash_completion.sh" ]]; then
 	. "/etc/profile.d/bash_completion.sh"
 elif [[ -r "/usr/share/bash-completion/bash_completion" ]]; then
@@ -1304,7 +1304,7 @@ EOF
 
 ln -sf .dotfiles/.vimrc .
 
-# Add Vim Monokai Color Theme
+# Add Vim Monokai color theme
 mkdir -p .vim/colors
 
 cat >.vim/colors/monokai.vim <<EOF
@@ -1419,13 +1419,13 @@ highlight cssCommonAttr                ctermfg=81    ctermbg=NONE cterm=NONE    
 highlight cssBraces                    ctermfg=NONE  ctermbg=NONE cterm=NONE         guifg=NONE    guibg=NONE    gui=NONE
 EOF
 
-# Install Vim-Plug Plugin Manager
+# Install Vim-Plug plugin manager
 if [[ ! -f "$HOME/.vim/autoload/plug.vim" ]]; then
 	echo_and_eval 'curl -fL#o "$HOME/.vim/autoload/plug.vim" --create-dirs \
 		https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 fi
 
-# Install Vim Plugins
+# Install Vim plugins
 if [[ -x "$(command -v vim)" ]]; then
 	echo_and_eval 'vim -c "PlugUpgrade | PlugInstall | PlugUpdate | quitall"'
 	if [[ ! -f "$HOME/.vim/plugged/markdown-preview.nvim/app/bin/markdown-preview-linux" ]]; then
@@ -1433,7 +1433,7 @@ if [[ -x "$(command -v vim)" ]]; then
 	fi
 fi
 
-# Configurations for Tmux
+# Configurations for tmux
 backup_dotfiles .tmux.conf .dotfiles/.tmux.conf \
 	.tmux.conf.local .dotfiles/.tmux.conf.local \
 	.tmux.conf.user .dotfiles/.tmux.conf.user
@@ -1595,7 +1595,7 @@ Temporary Items
 ##### Linux.gitignore #####
 *~
 
-# temporary files which can be created if a process still has a handle open of a deleted file
+# Temporary files which can be created if a process still has a handle open of a deleted file
 .fuse_hidden*
 
 # KDE directory preferences
@@ -1678,11 +1678,11 @@ ehthumbs_vista.db
 ## User settings
 xcuserdata/
 
-## compatibility with Xcode 8 and earlier (ignoring not required starting Xcode 9)
+## Compatibility with Xcode 8 and earlier (ignoring not required starting Xcode 9)
 *.xcscmblueprint
 *.xccheckout
 
-## compatibility with Xcode 3 and earlier (ignoring not required starting Xcode 4)
+## Compatibility with Xcode 3 and earlier (ignoring not required starting Xcode 4)
 build/
 DerivedData/
 *.moved-aside
@@ -1731,7 +1731,7 @@ DerivedData/
 
 # Gradle and Maven with auto-import
 # When using Gradle or Maven with auto-import, you should exclude module files,
-# since they will be recreated, and may cause churn.  Uncomment if using
+# since they will be recreated, and may cause churn. Uncomment if using
 # auto-import.
 # .idea/artifacts
 # .idea/compiler.xml
@@ -1882,7 +1882,7 @@ if [[ ! -d "$HOME/$CONDA_DIR" ]]; then
 	echo_and_eval "rm -f \"$TMP_DIR/Miniconda3-latest-Linux-x86_64.sh\""
 fi
 
-# Install Conda Packages
+# Install Conda packages
 export PATH="$PATH:$HOME/$CONDA_DIR/condabin"
 echo_and_eval 'conda update conda --yes'
 echo_and_eval 'conda install pip jupyter ipython notebook jupyterlab ipdb \
@@ -1897,7 +1897,7 @@ if $SET_MIRRORS; then
 	echo_and_eval "\"\$HOME/$CONDA_DIR/bin/pip\" config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple"
 fi
 
-# Install Fonts
+# Install fonts
 mkdir -p "$HOME/.local/share/fonts"
 FONT_DIR_LIST=('$HOME/.local/share/fonts')
 if $IN_WSL; then
@@ -1921,5 +1921,5 @@ if [[ -x "$(command -v fc-cache)" ]]; then
 	echo_and_eval 'fc-cache --force'
 fi
 
-# Select Default Editor
+# Select default editor
 echo_and_eval 'select-editor'

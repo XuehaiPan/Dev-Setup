@@ -7,23 +7,23 @@ case $- in
 esac
 
 # Source global definitions
-# include /etc/bashrc if it exists
+# Include /etc/bashrc if it exists
 if [[ -f /etc/bashrc ]]; then
 	. /etc/bashrc
 fi
 
-# don't put duplicate lines or lines starting with space in the history.
+# Don't put duplicate lines or lines starting with space in the history.
 # See bash for more options
 HISTCONTROL=ignoreboth
 
-# append to the history file, don't overwrite it
+# Append to the history file, don't overwrite it
 shopt -s histappend
 
-# for setting history length see HISTSIZE and HISTFILESIZE in bash
+# For setting history length see HISTSIZE and HISTFILESIZE in bash
 HISTSIZE=1000
 HISTFILESIZE=2000
 
-# check the window size after each command and, if necessary,
+# Check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
 
@@ -31,7 +31,7 @@ shopt -s checkwinsize
 # match all files and zero or more directories and subdirectories.
 #shopt -s globstar
 
-# some more ls aliases
+# Some more ls aliases
 alias lsa='ls -AF'
 alias l='ls -alhF'
 alias ll='ls -lhF'
@@ -44,7 +44,7 @@ if [[ -f "$HOME/.bash_aliases" ]]; then
 	. "$HOME/.bash_aliases"
 fi
 
-# enable programmable completion features
+# Enable programmable completion features
 if ! shopt -oq posix; then
 	if [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]]; then
 		. "/usr/local/etc/profile.d/bash_completion.sh"
@@ -55,9 +55,9 @@ if ! shopt -oq posix; then
 	fi
 fi
 
-# always source ~/.bash_profile
+# Always source ~/.bash_profile
 if ! shopt -q login_shell; then
-	# include ~/.bash_profile if it exists
+	# Include ~/.bash_profile if it exists
 	if [[ -f "$HOME/.bash_profile" ]]; then
 		. "$HOME/.bash_profile"
 	elif [[ -f "$HOME/.profile" ]]; then

@@ -77,7 +77,7 @@ function upgrade_homebrew() {
 	# Uninstall formulae that no longer needed
 	echo_and_eval 'brew autoremove'
 
-	# Clean Homebrew cache
+	# Clean up Homebrew cache
 	echo_and_eval 'brew cleanup -s --prune 7'
 }
 
@@ -134,7 +134,7 @@ function upgrade_conda() {
 	# Upgrade Conda
 	echo_and_eval 'conda update conda --name base --yes'
 
-	# Upgrade Conda Packages in Each Environment
+	# Upgrade Conda packages in each environment
 	ENVS=(base $(
 		cd "$(conda info --base)/envs"
 		find -L . -mindepth 1 -maxdepth 1 -not -empty \( -type d -or -type l \) |
@@ -147,7 +147,7 @@ function upgrade_conda() {
 		fi
 	done
 
-	# Clean Conda Cache
+	# Clean up Conda cache
 	echo_and_eval 'conda clean --all --yes'
 }
 
@@ -227,10 +227,10 @@ function auto_reannounce_trackers() {
 function pull_projects() {
 	local BASE_DIRS BASE_DIR PROJ_DIRS PROJ_DIR
 
-	# Project Directories
+	# Project directories
 	BASE_DIRS=("$HOME/VSCodeProjects" "$HOME/PycharmProjects" "$HOME/ClionProjects" "$HOME/IdeaProjects")
 
-	# Fetch and Pull Git
+	# Fetch and pull
 	for BASE_DIR in "${BASE_DIRS[@]}"; do
 		PROJ_DIRS=($(
 			find -L "$BASE_DIR" -not -empty -type d -name '.git' |

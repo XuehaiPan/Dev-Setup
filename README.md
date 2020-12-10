@@ -242,4 +242,4 @@ Vim:
 
 Live markdown preview support for Vim:
 
-![markdown](https://user-images.githubusercontent.com/16078332/101661698-8ddb0500-3a83-11eb-92bb-203071c2163e.gif)
+![markdown](https://user-images.githubusercontent.com/16078332/101730862-bc91c380-3af5-11eb-82a0-1d3f4e75481d.gif)

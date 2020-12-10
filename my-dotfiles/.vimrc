@@ -43,7 +43,7 @@ set wildmode=longest:list,full
 set completeopt=longest,menu
 set background=dark
 set t_Co=256
-set guifont=DejaVuSansMonoNerdFontComplete-Book:h14
+set guifont=DejaVuSansMonoNerdFontCompleteM-Book:h14
 set linespace=2
 colorscheme monokai
 
@@ -69,21 +69,37 @@ let g:NERDTreeShowHidden = 1
 let g:NERDTreeShowLineNumbers = 0
 let g:NERDTreeWinPos = 'left'
 let g:NERDTreeWinSize = 31
-autocmd VimEnter * if str2nr(system("ls -l $PWD | wc -l")) <= 1000 |
-                 \     let width = winwidth('%') |
-                 \     let numberwidth = ((&number || &relativenumber) ? max([&numberwidth, strlen(line('$')) + 1]) : 0) |
-                 \     let signwidth = ((&signcolumn == 'yes' || &signcolumn == 'auto') ? 2 : 0) |
-                 \     let foldwidth = &foldcolumn |
-                 \     let bufwidth = width - numberwidth - foldwidth - signwidth |
-                 \     if bufwidth > 80 + NERDTreeWinSize |
-                 \         NERDTree |
-                 \         wincmd p |
-                 \     endif |
-                 \     unlet width numberwidth signwidth foldwidth bufwidth |
-                 \ endif
-autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() |
-                 \ quit |
-                 \ endif
+let g:NERDTreeClosedByResizing = 1
+function NERDTreeAutoToggle()
+    if ! (exists('b:NERDTree') && b:NERDTree.isTabTree())
+        if str2nr(system('ls -l "$PWD" | wc -l')) <= 1000
+            let width = winwidth('%')
+            let numberwidth = ((&number || &relativenumber) ? max([&numberwidth, strlen(line('$')) + 1]) : 0)
+            let signwidth = ((&signcolumn == 'yes' || &signcolumn == 'auto') ? 2 : 0)
+            let foldwidth = &foldcolumn
+            let bufwidth = width - numberwidth - foldwidth - signwidth
+            if bufwidth > 80 + g:NERDTreeWinSize
+                if ! (g:NERDTree.ExistsForTab() && g:NERDTree.IsOpen()) && g:NERDTreeClosedByResizing
+                    NERDTree
+                    wincmd p
+                    let g:NERDTreeClosedByResizing = 0
+                endif
+                return
+            endif
+        endif
+        if (g:NERDTree.ExistsForTab() && g:NERDTree.IsOpen()) && ! g:NERDTreeClosedByResizing
+            NERDTreeClose
+            let g:NERDTreeClosedByResizing = 1
+        endif
+    endif
+endfunction
+function NERDTreeAutoQuit()
+    if winnr('$') == 1 && (exists('b:NERDTree') && b:NERDTree.isTabTree())
+        quit
+    endif
+endfunction
+autocmd VimEnter,VimResized * call NERDTreeAutoToggle()
+autocmd BufEnter * call NERDTreeAutoQuit()
 
 let g:airline#extensions#tabline#enabled = 1
 
@@ -146,10 +162,11 @@ call plug#begin('~/.vim/plugged')
     Plug 'scrooloose/nerdtree'
     Plug 'scrooloose/nerdcommenter'
     Plug 'Xuyuanp/nerdtree-git-plugin'
+    Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+    Plug 'ryanoasis/vim-devicons'
     Plug 'vim-airline/vim-airline'
     Plug 'vim-airline/vim-airline-themes'
     Plug 'bling/vim-bufferline'
-    Plug 'ryanoasis/vim-devicons'
     Plug 'chrisbra/vim-diff-enhanced'
     Plug 'yggdroot/indentline'
     Plug 'luochen1990/rainbow'

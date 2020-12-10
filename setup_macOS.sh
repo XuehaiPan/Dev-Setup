@@ -120,7 +120,15 @@ function wget() {
 # Install and setup Homebrew
 if [[ ! -x "$(command -v brew)" ]]; then
 	echo_and_eval 'xcode-select --install'
-	echo_and_eval '/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"'
+	if $SET_MIRRORS; then
+		echo_and_eval "curl -fsSL -o \"$TMP_DIR/install-Homebrew.sh\" https://raw.githubusercontent.com/Homebrew/install/master/install.sh"
+		sed -i "" 's|^BREW_REPO=.*$|BREW_REPO="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"|g' "$TMP_DIR/install-Homebrew.sh"
+		echo_and_eval 'export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git"'
+		echo_and_eval 'export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles"'
+		echo_and_eval "/bin/bash \"$TMP_DIR/install-Homebrew.sh\""
+	else
+		echo_and_eval '/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"'
+	fi
 fi
 
 if $SET_MIRRORS; then

@@ -1150,9 +1150,9 @@ let g:NERDTreeShowHidden = 1
 let g:NERDTreeShowLineNumbers = 0
 let g:NERDTreeWinPos = 'left'
 let g:NERDTreeWinSize = 31
-let g:NERDTreeClosedByResizing = 1
+let g:NERDTreeClosedByResizing = !&diff
 function NERDTreeAutoToggle()
-    if ! (exists('b:NERDTree') && b:NERDTree.isTabTree())
+    if !(exists('b:NERDTree') && b:NERDTree.isTabTree())
         if str2nr(system('ls -l "\$PWD" | wc -l')) <= 1000
             let width = winwidth('%')
             let numberwidth = ((&number || &relativenumber) ? max([&numberwidth, strlen(line('\$')) + 1]) : 0)
@@ -1160,7 +1160,7 @@ function NERDTreeAutoToggle()
             let foldwidth = &foldcolumn
             let bufwidth = width - numberwidth - foldwidth - signwidth
             if bufwidth > 80 + g:NERDTreeWinSize
-                if ! (g:NERDTree.ExistsForTab() && g:NERDTree.IsOpen()) && g:NERDTreeClosedByResizing
+                if !(g:NERDTree.ExistsForTab() && g:NERDTree.IsOpen()) && g:NERDTreeClosedByResizing
                     NERDTree
                     wincmd p
                     let g:NERDTreeClosedByResizing = 0
@@ -1168,7 +1168,7 @@ function NERDTreeAutoToggle()
                 return
             endif
         endif
-        if (g:NERDTree.ExistsForTab() && g:NERDTree.IsOpen()) && ! g:NERDTreeClosedByResizing
+        if (g:NERDTree.ExistsForTab() && g:NERDTree.IsOpen()) && !g:NERDTreeClosedByResizing
             NERDTreeClose
             let g:NERDTreeClosedByResizing = 1
         endif
@@ -1212,7 +1212,7 @@ autocmd GUIEnter * let g:syntastic_check_on_open = 1
 
 let g:tex_flavor = 'latex'
 
-if ! exists('\$SSH_CONNECTION')
+if !exists('\$SSH_CONNECTION')
     let g:mkdp_auto_start = 1
 endif
 
@@ -1232,7 +1232,7 @@ call plug#begin('~/.vim/plugged')
     Plug 'luochen1990/rainbow'
     Plug 'jaxbot/semantic-highlight.vim'
     Plug 'chrisbra/Colorizer'
-	Plug 'psliwka/vim-smoothie'
+    Plug 'psliwka/vim-smoothie'
     Plug 'jiangmiao/auto-pairs'
     Plug 'tpope/vim-surround'
     Plug 'mg979/vim-visual-multi'

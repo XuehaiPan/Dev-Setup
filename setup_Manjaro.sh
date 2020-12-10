@@ -1232,6 +1232,7 @@ call plug#begin('~/.vim/plugged')
     Plug 'luochen1990/rainbow'
     Plug 'jaxbot/semantic-highlight.vim'
     Plug 'chrisbra/Colorizer'
+	Plug 'psliwka/vim-smoothie'
     Plug 'jiangmiao/auto-pairs'
     Plug 'tpope/vim-surround'
     Plug 'mg979/vim-visual-multi'

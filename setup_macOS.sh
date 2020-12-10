@@ -742,7 +742,7 @@ function upgrade_homebrew() {
 	echo_and_eval 'brew upgrade'
 
 	# Uninstall formulae that no longer needed
-	echo_and_eval 'brew autoremove'
+	echo_and_eval 'brew autoremove --verbose'
 
 	# Clean up Homebrew cache
 	echo_and_eval 'brew cleanup -s --prune 7'

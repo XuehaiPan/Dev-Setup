@@ -603,7 +603,7 @@ alias la='ls -Alh'
 if [[ -z "\$ZSH_PUREPOWER" ]]; then
 	# Setup Color LS
 	if [[ -x "\$(command -v ruby)" && -x "\$(command -v gem)" ]]; then
-		if gem query --silent --installed colorls; then
+		if gem list --silent --installed colorls; then
 			source "\$(dirname "\$(gem which colorls)")"/tab_complete.sh
 			alias ls='colorls --sd --gs'
 		fi

@@ -184,7 +184,7 @@ function NERDTreeAutoToggle(minbufwidth = 80)
         let signwidth = ((&signcolumn == 'yes' || &signcolumn == 'auto') ? 2 : 0)
         let foldwidth = &foldcolumn
         let bufwidth = width - numberwidth - foldwidth - signwidth
-        if bufwidth >= a:minbufwidth + g:NERDTreeWinSize * (1 - NERDTreeIsOpen)
+        if bufwidth >= a:minbufwidth + (g:NERDTreeWinSize + 1) * (1 - NERDTreeIsOpen)
             if !NERDTreeIsOpen && g:NERDTreeClosedByResizing
                 if str2nr(system('dir /b "' . getcwd() . '" | find /v /c ""')) <= g:NERDTreeNotificationThreshold
                     NERDTree

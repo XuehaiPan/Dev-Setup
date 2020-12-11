@@ -175,20 +175,21 @@ let g:NERDTreeShowLineNumbers = 0
 let g:NERDTreeWinPos = 'left'
 let g:NERDTreeWinSize = 31
 let g:NERDTreeClosedByResizing = !&diff
-function NERDTreeAutoToggle()
+function NERDTreeAutoToggle(minbufwidth = 80)
     if !(exists('b:NERDTree') && b:NERDTree.isTabTree())
+        let NERDTreeIsOpen = (g:NERDTree.ExistsForTab() && g:NERDTree.IsOpen())
         let width = winwidth('%')
         let numberwidth = ((&number || &relativenumber) ? max([&numberwidth, strlen(line('`$')) + 1]) : 0)
         let signwidth = ((&signcolumn == 'yes' || &signcolumn == 'auto') ? 2 : 0)
         let foldwidth = &foldcolumn
         let bufwidth = width - numberwidth - foldwidth - signwidth
-        if bufwidth > 80 + g:NERDTreeWinSize
-            if !(g:NERDTree.ExistsForTab() && g:NERDTree.IsOpen()) && g:NERDTreeClosedByResizing
+        if bufwidth >= a:minbufwidth + g:NERDTreeWinSize * (1 - NERDTreeIsOpen)
+            if !NERDTreeIsOpen && g:NERDTreeClosedByResizing
                 NERDTree
                 wincmd p
                 let g:NERDTreeClosedByResizing = 0
             endif
-        elseif (g:NERDTree.ExistsForTab() && g:NERDTree.IsOpen()) && !g:NERDTreeClosedByResizing
+        elseif NERDTreeIsOpen && !g:NERDTreeClosedByResizing
             NERDTreeClose
             let g:NERDTreeClosedByResizing = 1
         endif
@@ -200,7 +201,7 @@ function NERDTreeAutoQuit()
     endif
 endfunction
 autocmd VimEnter,VimResized * call NERDTreeAutoToggle()
-autocmd BufEnter * call NERDTreeAutoQuit()
+autocmd BufEnter * if winnr('`$') == 1 && (exists('b:NERDTree') && b:NERDTree.isTabTree()) | quit | endif
 
 let g:airline#extensions#tabline#enabled = 1
 

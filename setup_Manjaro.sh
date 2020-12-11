@@ -1150,37 +1150,29 @@ let g:NERDTreeShowHidden = 1
 let g:NERDTreeShowLineNumbers = 0
 let g:NERDTreeWinPos = 'left'
 let g:NERDTreeWinSize = 31
-let g:NERDTreeClosedByResizing = !&diff
-function NERDTreeAutoToggle()
+let g:NERDTreeClosedByResizing = (!&diff && str2nr(system('ls -l "\$PWD" | wc -l')) <= 1000)
+function NERDTreeAutoToggle(minbufwidth = 80)
     if !(exists('b:NERDTree') && b:NERDTree.isTabTree())
-        if str2nr(system('ls -l "\$PWD" | wc -l')) <= 1000
-            let width = winwidth('%')
-            let numberwidth = ((&number || &relativenumber) ? max([&numberwidth, strlen(line('\$')) + 1]) : 0)
-            let signwidth = ((&signcolumn == 'yes' || &signcolumn == 'auto') ? 2 : 0)
-            let foldwidth = &foldcolumn
-            let bufwidth = width - numberwidth - foldwidth - signwidth
-            if bufwidth > 80 + g:NERDTreeWinSize
-                if !(g:NERDTree.ExistsForTab() && g:NERDTree.IsOpen()) && g:NERDTreeClosedByResizing
-                    NERDTree
-                    wincmd p
-                    let g:NERDTreeClosedByResizing = 0
-                endif
-                return
+        let NERDTreeIsOpen = (g:NERDTree.ExistsForTab() && g:NERDTree.IsOpen())
+        let width = winwidth('%')
+        let numberwidth = ((&number || &relativenumber) ? max([&numberwidth, strlen(line('\$')) + 1]) : 0)
+        let signwidth = ((&signcolumn == 'yes' || &signcolumn == 'auto') ? 2 : 0)
+        let foldwidth = &foldcolumn
+        let bufwidth = width - numberwidth - foldwidth - signwidth
+        if bufwidth >= a:minbufwidth + g:NERDTreeWinSize * (1 - NERDTreeIsOpen)
+            if !NERDTreeIsOpen && g:NERDTreeClosedByResizing
+                NERDTree
+                wincmd p
+                let g:NERDTreeClosedByResizing = 0
             endif
-        endif
-        if (g:NERDTree.ExistsForTab() && g:NERDTree.IsOpen()) && !g:NERDTreeClosedByResizing
+        elseif NERDTreeIsOpen && !g:NERDTreeClosedByResizing
             NERDTreeClose
             let g:NERDTreeClosedByResizing = 1
         endif
     endif
 endfunction
-function NERDTreeAutoQuit()
-    if winnr('\$') == 1 && (exists('b:NERDTree') && b:NERDTree.isTabTree())
-        quit
-    endif
-endfunction
-autocmd VimEnter,VimResized * call NERDTreeAutoToggle()
-autocmd BufEnter * call NERDTreeAutoQuit()
+autocmd VimEnter,VimResized * call NERDTreeAutoToggle(80)
+autocmd BufEnter * if winnr('\$') == 1 && (exists('b:NERDTree') && b:NERDTree.isTabTree()) | quit | endif
 
 let g:airline#extensions#tabline#enabled = 1
 
@@ -1189,6 +1181,7 @@ let g:bufferline_echo = 0
 if &diff
     let &diffexpr = 'EnhancedDiff#Diff("git diff", "--diff-algorithm=histogram")'
 endif
+autocmd VimResized * if &diff | wincmd = | endif
 
 let g:indentLine_char_list = ['|', '¦', '┆', '┊']
 

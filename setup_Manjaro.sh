@@ -1150,7 +1150,8 @@ let g:NERDTreeShowHidden = 1
 let g:NERDTreeShowLineNumbers = 0
 let g:NERDTreeWinPos = 'left'
 let g:NERDTreeWinSize = 31
-let g:NERDTreeClosedByResizing = (!&diff && str2nr(system('ls -l "\$PWD" | wc -l')) <= 1000)
+let g:NERDTreeNotificationThreshold = 200
+let g:NERDTreeClosedByResizing = !&diff
 function NERDTreeAutoToggle(minbufwidth = 80)
     if !(exists('b:NERDTree') && b:NERDTree.isTabTree())
         let NERDTreeIsOpen = (g:NERDTree.ExistsForTab() && g:NERDTree.IsOpen())
@@ -1161,9 +1162,11 @@ function NERDTreeAutoToggle(minbufwidth = 80)
         let bufwidth = width - numberwidth - foldwidth - signwidth
         if bufwidth >= a:minbufwidth + g:NERDTreeWinSize * (1 - NERDTreeIsOpen)
             if !NERDTreeIsOpen && g:NERDTreeClosedByResizing
-                NERDTree
-                wincmd p
-                let g:NERDTreeClosedByResizing = 0
+                if str2nr(system('find "' . getcwd() . '" -mindepth 1 -maxdepth 1 | wc -l')) <= g:NERDTreeNotificationThreshold
+                    NERDTree
+                    wincmd p
+                    let g:NERDTreeClosedByResizing = 0
+                endif
             endif
         elseif NERDTreeIsOpen && !g:NERDTreeClosedByResizing
             NERDTreeClose

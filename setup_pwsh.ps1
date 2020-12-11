@@ -174,6 +174,7 @@ let g:NERDTreeShowHidden = 1
 let g:NERDTreeShowLineNumbers = 0
 let g:NERDTreeWinPos = 'left'
 let g:NERDTreeWinSize = 31
+let g:NERDTreeNotificationThreshold = 200
 let g:NERDTreeClosedByResizing = !&diff
 function NERDTreeAutoToggle(minbufwidth = 80)
     if !(exists('b:NERDTree') && b:NERDTree.isTabTree())
@@ -195,12 +196,7 @@ function NERDTreeAutoToggle(minbufwidth = 80)
         endif
     endif
 endfunction
-function NERDTreeAutoQuit()
-    if winnr('`$') == 1 && (exists('b:NERDTree') && b:NERDTree.isTabTree())
-        quit
-    endif
-endfunction
-autocmd VimEnter,VimResized * call NERDTreeAutoToggle()
+autocmd VimEnter,VimResized * call NERDTreeAutoToggle(80)
 autocmd BufEnter * if winnr('`$') == 1 && (exists('b:NERDTree') && b:NERDTree.isTabTree()) | quit | endif
 
 let g:airline#extensions#tabline#enabled = 1
@@ -210,6 +206,7 @@ let g:bufferline_echo = 0
 if &diff
     let &diffexpr = 'EnhancedDiff#Diff("git diff", "--diff-algorithm=histogram")'
 endif
+autocmd VimResized * if &diff | wincmd = | endif
 
 let g:indentLine_char_list = ['|', '¦', '┆', '┊']
 

@@ -1321,8 +1321,8 @@ let g:NERDTreeShowLineNumbers = 0
 let g:NERDTreeWinPos = 'left'
 let g:NERDTreeWinSize = 31
 let g:NERDTreeNotificationThreshold = 200
-let g:NERDTreeClosedByResizing = !&diff
-function NERDTreeAutoToggle(minbufwidth = 80)
+let s:NERDTreeClosedByResizing = !&diff
+function s:NERDTreeAutoToggle(minbufwidth = 80)
     if !(exists('b:NERDTree') && b:NERDTree.isTabTree())
         let NERDTreeIsOpen = (g:NERDTree.ExistsForTab() && g:NERDTree.IsOpen())
         let width = winwidth('%')
@@ -1331,20 +1331,20 @@ function NERDTreeAutoToggle(minbufwidth = 80)
         let foldwidth = &foldcolumn
         let bufwidth = width - numberwidth - foldwidth - signwidth
         if bufwidth >= a:minbufwidth + (g:NERDTreeWinSize + 1) * (1 - NERDTreeIsOpen)
-            if !NERDTreeIsOpen && g:NERDTreeClosedByResizing
+            if !NERDTreeIsOpen && s:NERDTreeClosedByResizing
                 if str2nr(system('find "' . getcwd() . '" -mindepth 1 -maxdepth 1 | wc -l')) <= g:NERDTreeNotificationThreshold
                     NERDTree
                     wincmd p
-                    let g:NERDTreeClosedByResizing = 0
+                    let s:NERDTreeClosedByResizing = 0
                 endif
             endif
-        elseif NERDTreeIsOpen && !g:NERDTreeClosedByResizing
+        elseif NERDTreeIsOpen && !s:NERDTreeClosedByResizing
             NERDTreeClose
-            let g:NERDTreeClosedByResizing = 1
+            let s:NERDTreeClosedByResizing = 1
         endif
     endif
 endfunction
-autocmd VimEnter,VimResized * call NERDTreeAutoToggle(80)
+autocmd VimEnter,VimResized * call s:NERDTreeAutoToggle(80)
 autocmd BufEnter * if winnr('\$') == 1 && (exists('b:NERDTree') && b:NERDTree.isTabTree()) | quit | endif
 
 let g:airline#extensions#tabline#enabled = 1

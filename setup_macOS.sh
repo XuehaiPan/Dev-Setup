@@ -127,8 +127,8 @@ if [[ ! -x "$(command -v brew)" ]]; then
 	echo_and_eval 'xcode-select --install'
 	if $SET_MIRRORS; then
 		echo_and_eval "curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh \\
-			| sed 's|^BREW_REPO=.*\$|BREW_REPO=\"https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git\"|g' \\
-			| /bin/bash -"
+				| sed 's|^BREW_REPO=.*\$|BREW_REPO=\"https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git\"|g' \\
+				| /bin/bash -"
 	else
 		echo_and_eval '/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"'
 	fi
@@ -241,10 +241,10 @@ if [[ -d "$ZSH/.git" && -f "$ZSH/tools/upgrade.sh" ]]; then
 	echo_and_eval 'zsh "$ZSH/tools/upgrade.sh" 2>&1'
 else
 	echo_and_eval 'git clone -c core.eol=lf -c core.autocrlf=false \
-		-c fsck.zeroPaddedFilemode=ignore \
-		-c fetch.fsck.zeroPaddedFilemode=ignore \
-		-c receive.fsck.zeroPaddedFilemode=ignore \
-		--depth=1 https://github.com/robbyrussell/oh-my-zsh.git "${ZSH:-"$HOME/.oh-my-zsh"}" 2>&1'
+			-c fsck.zeroPaddedFilemode=ignore \
+			-c fetch.fsck.zeroPaddedFilemode=ignore \
+			-c receive.fsck.zeroPaddedFilemode=ignore \
+			--depth=1 https://github.com/robbyrussell/oh-my-zsh.git "${ZSH:-"$HOME/.oh-my-zsh"}" 2>&1'
 	rm -f "$HOME"/.zcompdump* 2>/dev/null
 fi
 
@@ -304,10 +304,10 @@ export PERL_MM_OPT='INSTALL_BASE="/usr/local/opt/perl"'
 echo_and_eval 'printf "\n\n\n%s\n" "quit" | cpan'
 if $SET_MIRRORS; then
 	echo_and_eval 'printf "%s\n%s\n%s\n" \
-						"o conf urllist https://mirrors.tuna.tsinghua.edu.cn/CPAN/" \
-						"o conf commit" \
-						"quit" \
-						| cpan'
+			"o conf urllist https://mirrors.tuna.tsinghua.edu.cn/CPAN/" \
+			"o conf commit" \
+			"quit" \
+			| cpan'
 fi
 echo_and_eval 'cpan -i local::lib'
 echo_and_eval 'eval "$(perl -I/usr/local/opt/perl/lib/perl5 -Mlocal::lib=/usr/local/opt/perl)"'
@@ -1144,7 +1144,7 @@ ln -sf .dotfiles/.bash_profile .
 
 # Color theme for iTerm
 echo_and_eval 'wget -O "$HOME/Desktop/SpaceGray Eighties.itermcolors" \
-	https://raw.githubusercontent.com/mbadolato/iTerm2-Color-Schemes/master/schemes/SpaceGray%20Eighties.itermcolors'
+		https://raw.githubusercontent.com/mbadolato/iTerm2-Color-Schemes/master/schemes/SpaceGray%20Eighties.itermcolors'
 open -R "$HOME/Desktop/SpaceGray Eighties.itermcolors"
 
 # iTerm2 shell integration and utilities
@@ -1540,7 +1540,7 @@ EOF
 # Install Vim-Plug plugin manager
 if [[ ! -f "$HOME/.vim/autoload/plug.vim" ]]; then
 	echo_and_eval 'curl -fL#o "$HOME/.vim/autoload/plug.vim" --create-dirs \
-		https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+			https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 fi
 
 # Install Vim plugins
@@ -2014,9 +2014,9 @@ fi
 export PATH="$PATH:$HOME/$CONDA_DIR/condabin"
 echo_and_eval 'conda update conda --yes'
 echo_and_eval 'conda install pip jupyter ipython notebook jupyterlab ipdb \
-							 jupyterthemes jupyter_contrib_nbextensions \
-							 cython numpy numba matplotlib pandas seaborn \
-							 tqdm yapf autopep8 pycodestyle pylint --yes'
+		jupyterthemes jupyter_contrib_nbextensions \
+		cython numpy numba matplotlib pandas seaborn \
+		tqdm yapf autopep8 pycodestyle pylint --yes'
 echo_and_eval 'conda update --all --yes'
 echo_and_eval 'conda clean --all --yes'
 echo_and_eval "\"\$HOME/$CONDA_DIR/bin/jt\" --theme monokai --toolbar --nbname --kernellogo"

@@ -145,7 +145,7 @@ if $IS_SUDOER; then
 		for repo in "arch4edu" "archlinuxcn"; do
 			if ! grep -qF "[$repo]" /etc/pacman.conf; then
 				echo_and_eval "printf \"\\n%s\\n%s\\n\" '[$repo]' 'Server = https://mirrors.tuna.tsinghua.edu.cn/$repo/\$arch' \\
-									| sudo tee -a /etc/pacman.conf"
+						| sudo tee -a /etc/pacman.conf"
 			fi
 		done
 	fi
@@ -241,10 +241,10 @@ if [[ -d "$ZSH/.git" && -f "$ZSH/tools/upgrade.sh" ]]; then
 	echo_and_eval 'zsh "$ZSH/tools/upgrade.sh" 2>&1'
 else
 	echo_and_eval 'git clone -c core.eol=lf -c core.autocrlf=false \
-		-c fsck.zeroPaddedFilemode=ignore \
-		-c fetch.fsck.zeroPaddedFilemode=ignore \
-		-c receive.fsck.zeroPaddedFilemode=ignore \
-		--depth=1 https://github.com/robbyrussell/oh-my-zsh.git "${ZSH:-"$HOME/.oh-my-zsh"}" 2>&1'
+			-c fsck.zeroPaddedFilemode=ignore \
+			-c fetch.fsck.zeroPaddedFilemode=ignore \
+			-c receive.fsck.zeroPaddedFilemode=ignore \
+			--depth=1 https://github.com/robbyrussell/oh-my-zsh.git "${ZSH:-"$HOME/.oh-my-zsh"}" 2>&1'
 	rm -f "$HOME"/.zcompdump* 2>/dev/null
 fi
 
@@ -313,10 +313,10 @@ export PERL_MM_OPT="INSTALL_BASE=\"$HOME/.perl\""
 echo_and_eval 'printf "\n\n\n%s\n" "quit" | cpan'
 if $SET_MIRRORS; then
 	echo_and_eval 'printf "%s\n%s\n%s\n" \
-						"o conf urllist https://mirrors.tuna.tsinghua.edu.cn/CPAN/" \
-						"o conf commit" \
-						"quit" \
-						| cpan'
+			"o conf urllist https://mirrors.tuna.tsinghua.edu.cn/CPAN/" \
+			"o conf commit" \
+			"quit" \
+			| cpan'
 fi
 echo_and_eval 'cpan -i local::lib'
 echo_and_eval 'eval "$(perl -I$HOME/.perl/lib/perl5 -Mlocal::lib=$HOME/.perl)"'
@@ -1368,7 +1368,7 @@ EOF
 # Install Vim-Plug plugin manager
 if [[ ! -f "$HOME/.vim/autoload/plug.vim" ]]; then
 	echo_and_eval 'curl -fL#o "$HOME/.vim/autoload/plug.vim" --create-dirs \
-		https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+			https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 fi
 
 # Install Vim plugins
@@ -1832,9 +1832,9 @@ fi
 export PATH="$PATH:$HOME/$CONDA_DIR/condabin"
 echo_and_eval 'conda update conda --yes'
 echo_and_eval 'conda install pip jupyter ipython notebook jupyterlab ipdb \
-							 jupyterthemes jupyter_contrib_nbextensions \
-							 cython numpy numba matplotlib pandas seaborn \
-							 tqdm yapf autopep8 pycodestyle pylint --yes'
+		jupyterthemes jupyter_contrib_nbextensions \
+		cython numpy numba matplotlib pandas seaborn \
+		tqdm yapf autopep8 pycodestyle pylint --yes'
 echo_and_eval 'conda update --all --yes'
 echo_and_eval 'conda clean --all --yes'
 echo_and_eval "\"\$HOME/$CONDA_DIR/bin/jt\" --theme monokai --toolbar --nbname --kernellogo"

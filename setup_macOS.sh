@@ -188,9 +188,9 @@ echo_and_eval 'brew upgrade'
 # Change default shell to Zsh
 if [[ "$(basename "$SHELL")" != "zsh" ]]; then
 	if grep -qF '/usr/local/bin/zsh' /etc/shells; then
-		echo_and_eval 'chsh --shell /usr/local/bin/zsh'
+		echo_and_eval 'chsh -s /usr/local/bin/zsh'
 	elif grep -qF '/bin/zsh' /etc/shells; then
-		echo_and_eval 'chsh --shell /bin/zsh'
+		echo_and_eval 'chsh -s /bin/zsh'
 	fi
 fi
 

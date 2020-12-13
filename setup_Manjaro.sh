@@ -187,9 +187,9 @@ fi
 # Change default shell to Zsh
 if [[ "$(basename "$SHELL")" != "zsh" ]]; then
 	if grep -qF '/usr/bin/zsh' /etc/shells; then
-		echo_and_eval 'chsh --shell /usr/bin/zsh'
+		echo_and_eval 'chsh -s /usr/bin/zsh'
 	elif grep -qF '/bin/zsh' /etc/shells; then
-		echo_and_eval 'chsh --shell /bin/zsh'
+		echo_and_eval 'chsh -s /bin/zsh'
 	fi
 fi
 

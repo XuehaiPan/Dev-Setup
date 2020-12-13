@@ -117,7 +117,7 @@ See [Font configurations for Powerlevel10k](https://github.com/romkatv/powerleve
 Or use the Powerlevel10k lean theme:
 
 ```bash
-chsh --shell /usr/local/bin/zsh-purepower
+chsh -s /usr/local/bin/zsh-purepower
 ```
 
 which do not need additional font settings.

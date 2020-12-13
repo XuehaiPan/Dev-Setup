@@ -118,14 +118,17 @@ function wget() {
 }
 
 # Install and setup Homebrew
+if $SET_MIRRORS; then
+	echo_and_eval 'export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"'
+	echo_and_eval 'export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git"'
+	echo_and_eval 'export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles"'
+fi
 if [[ ! -x "$(command -v brew)" ]]; then
 	echo_and_eval 'xcode-select --install'
 	if $SET_MIRRORS; then
-		echo_and_eval "curl -fsSL -o \"$TMP_DIR/install-Homebrew.sh\" https://raw.githubusercontent.com/Homebrew/install/master/install.sh"
-		sed -i "" 's|^BREW_REPO=.*$|BREW_REPO="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"|g' "$TMP_DIR/install-Homebrew.sh"
-		echo_and_eval 'export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git"'
-		echo_and_eval 'export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles"'
-		echo_and_eval "/bin/bash \"$TMP_DIR/install-Homebrew.sh\""
+		echo_and_eval "curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh \\
+			| sed 's|^BREW_REPO=.*\$|BREW_REPO=\"https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git\"|g' \\
+			| /bin/bash -"
 	else
 		echo_and_eval '/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"'
 	fi
@@ -141,7 +144,6 @@ if $SET_MIRRORS; then
 			echo_and_eval "brew tap --force-auto-update homebrew/${tap} https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-${tap}.git"
 		fi
 	done
-	export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles"
 else
 	BREW_TAPS="$(brew tap)"
 	for tap in core cask{,-fonts,-drivers}; do

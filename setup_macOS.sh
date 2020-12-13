@@ -446,7 +446,7 @@ if [[ -f "\$HOME/.iterm2/.iterm2_shell_integration.zsh" ]]; then
 fi
 
 # Remove duplicate entries
-function remove_duplicate() {
+function __remove_duplicate() {
 	local SEP NAME VALUE
 	SEP="\$1"
 	NAME="\$2"
@@ -458,9 +458,8 @@ function remove_duplicate() {
 				flag[""] = 1;
 			}
 			{
-				if (!(flag[\$0]++)) {
+				if (!(flag[\$0]++))
 					printf("%s%s", (!(idx++) ? "" : RS), \$0);
-				}
 			}'
 	)"
 	if [[ -n "\$VALUE" ]]; then
@@ -469,12 +468,12 @@ function remove_duplicate() {
 		unset "\$NAME"
 	fi
 }
-remove_duplicate ':' PATH
-remove_duplicate ':' C_INCLUDE_PATH
-remove_duplicate ':' CPLUS_INCLUDE_PATH
-remove_duplicate ':' LIBRARY_PATH
-remove_duplicate ':' DYLD_LIBRARY_PATH
-unset -f remove_duplicate
+__remove_duplicate ':' PATH
+__remove_duplicate ':' C_INCLUDE_PATH
+__remove_duplicate ':' CPLUS_INCLUDE_PATH
+__remove_duplicate ':' LIBRARY_PATH
+__remove_duplicate ':' DYLD_LIBRARY_PATH
+unset -f __remove_duplicate
 
 # Utilities
 if [[ -f "\$HOME/.dotfiles/utilities.sh" ]]; then
@@ -1095,7 +1094,7 @@ if [[ -f "\$HOME/.iterm2/.iterm2_shell_integration.bash" ]]; then
 fi
 
 # Remove duplicate entries
-function remove_duplicate() {
+function __remove_duplicate() {
 	local SEP NAME VALUE
 	SEP="\$1"
 	NAME="\$2"
@@ -1107,9 +1106,8 @@ function remove_duplicate() {
 				flag[""] = 1;
 			}
 			{
-				if (!(flag[\$0]++)) {
+				if (!(flag[\$0]++))
 					printf("%s%s", (!(idx++) ? "" : RS), \$0);
-				}
 			}'
 	)"
 	if [[ -n "\$VALUE" ]]; then
@@ -1118,12 +1116,12 @@ function remove_duplicate() {
 		unset "\$NAME"
 	fi
 }
-remove_duplicate ':' PATH
-remove_duplicate ':' C_INCLUDE_PATH
-remove_duplicate ':' CPLUS_INCLUDE_PATH
-remove_duplicate ':' LIBRARY_PATH
-remove_duplicate ':' DYLD_LIBRARY_PATH
-unset -f remove_duplicate
+__remove_duplicate ':' PATH
+__remove_duplicate ':' C_INCLUDE_PATH
+__remove_duplicate ':' CPLUS_INCLUDE_PATH
+__remove_duplicate ':' LIBRARY_PATH
+__remove_duplicate ':' DYLD_LIBRARY_PATH
+unset -f __remove_duplicate
 
 # Utilities
 if [[ -f "\$HOME/.dotfiles/utilities.sh" ]]; then

@@ -126,9 +126,10 @@ fi
 if [[ ! -x "$(command -v brew)" ]]; then
 	echo_and_eval 'xcode-select --install'
 	if $SET_MIRRORS; then
-		echo_and_eval "curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh \\
-				| sed 's|^BREW_REPO=.*\$|BREW_REPO=\"https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git\"|g' \\
-				| /bin/bash -"
+		echo_and_eval "/bin/bash -c \"\$(
+					curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh |
+					sed 's|^BREW_REPO=.*\$|BREW_REPO=\"https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git\"|g'
+				)\""
 	else
 		echo_and_eval '/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"'
 	fi

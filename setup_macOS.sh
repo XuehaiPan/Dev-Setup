@@ -127,11 +127,11 @@ if [[ ! -x "$(command -v brew)" ]]; then
 	echo_and_eval 'xcode-select --install'
 	if $SET_MIRRORS; then
 		echo_and_eval "/bin/bash -c \"\$(
-					curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh |
+					curl -fsSL https://github.com/Homebrew/install/raw/master/install.sh |
 					sed 's|^BREW_REPO=.*\$|BREW_REPO=\"https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git\"|g'
 				)\""
 	else
-		echo_and_eval '/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"'
+		echo_and_eval '/bin/bash -c "$(curl -fsSL https://github.com/Homebrew/install/raw/master/install.sh)"'
 	fi
 fi
 
@@ -1145,7 +1145,7 @@ ln -sf .dotfiles/.bash_profile .
 
 # Color theme for iTerm
 echo_and_eval 'wget -O "$HOME/Desktop/SpaceGray Eighties.itermcolors" \
-		https://raw.githubusercontent.com/mbadolato/iTerm2-Color-Schemes/master/schemes/SpaceGray%20Eighties.itermcolors'
+		https://github.com/mbadolato/iTerm2-Color-Schemes/raw/master/schemes/SpaceGray%20Eighties.itermcolors'
 open -R "$HOME/Desktop/SpaceGray Eighties.itermcolors"
 
 # iTerm2 shell integration and utilities
@@ -1541,7 +1541,7 @@ EOF
 # Install Vim-Plug plugin manager
 if [[ ! -f "$HOME/.vim/autoload/plug.vim" ]]; then
 	echo_and_eval 'curl -fL#o "$HOME/.vim/autoload/plug.vim" --create-dirs \
-			https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+			https://github.com/junegunn/vim-plug/raw/master/plug.vim'
 fi
 
 # Install Vim plugins
@@ -1659,7 +1659,7 @@ bind-key r source-file ~/.tmux.conf \\; display-message "tmux.conf reloaded"
 # set-option -gs status-right ' #[fg=colour120][#{?#{==:#{=-60:pane_title},#{pane_title}},#{pane_title},…#{=-59:pane_title}}]#[default] #[none]%a %b-%d %H:%M:%S#[default] '
 EOF
 
-echo_and_eval 'wget -N -P "$HOME/.dotfiles/" https://raw.githubusercontent.com/gpakosz/.tmux/master/.tmux.conf{,.local}'
+echo_and_eval 'wget -N -P "$HOME/.dotfiles/" https://github.com/gpakosz//raw.tmux/master/.tmux.conf{,.local}'
 ln -sf .dotfiles/.tmux.conf .
 ln -sf .dotfiles/.tmux.conf.local .
 

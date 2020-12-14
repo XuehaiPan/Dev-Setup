@@ -73,10 +73,10 @@
     //* Window */
     "window.zoomLevel": -0.25,
     "window.closeWhenEmpty": false,
-    "window.titleBarStyle": "custom",
     "window.newWindowDimensions": "maximized",
     "window.openFilesInNewWindow": "default",
     "window.openFoldersInNewWindow": "default",
+    "window.titleBarStyle": "custom",
     "window.title": "${dirty}${activeEditorMedium}${separator}${rootName}",
 
     //* Breadcrumb Navigation */
@@ -379,7 +379,6 @@
     "git.autorefresh": true,
     "git.detectSubmodules": true,
     "git.autofetch": true,
-    "git.checkoutType": "all",
     "git.confirmSync": true,
 
     //* Git Graph */
@@ -427,7 +426,7 @@
     "java.format.onType.enabled": true,
     "java.format.comments.enabled": true,
     "java.format.settings.profile": "GoogleStyle",
-    "java.format.settings.url": "https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml",
+    "java.format.settings.url": "https://github.com/google/styleguide/raw/gh-pages/eclipse-java-google-style.xml",
 
     //* Julia */
     "julia.executablePath": "julia",

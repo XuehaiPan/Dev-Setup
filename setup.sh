@@ -50,10 +50,10 @@ fi
 # Download and run
 if [[ -x "$(command -v wget)" ]]; then
 	echo -e "${BOLDWHITE}Download and run script via ${BOLDGREEN}wget${BOLDWHITE}.${RESET}" >&2
-	bash -c "$(wget --progress=bar:force:noscroll -O - https://raw.githubusercontent.com/XuehaiPan/OS-Setup/master/setup_${OS_NAME}.sh)"
+	bash -c "$(wget --progress=bar:force:noscroll -O - https://github.com/XuehaiPan/OS-Setup/raw/master/setup_${OS_NAME}.sh)"
 elif [[ -x "$(command -v curl)" ]]; then
 	echo -e "${BOLDWHITE}Download and run script via ${BOLDGREEN}curl${BOLDWHITE}.${RESET}" >&2
-	bash -c "$(curl -fL# https://raw.githubusercontent.com/XuehaiPan/OS-Setup/master/setup_${OS_NAME}.sh)"
+	bash -c "$(curl -fL# https://github.com/XuehaiPan/OS-Setup/raw/master/setup_${OS_NAME}.sh)"
 elif [[ -x "$(command -v git)" ]]; then
 	echo -e "${BOLDWHITE}Download and run script via ${BOLDGREEN}git${BOLDWHITE}.${RESET}" >&2
 	git clone --depth=1 https://github.com/XuehaiPan/OS-Setup.git 2>&1

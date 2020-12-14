@@ -95,7 +95,7 @@ choco install windows-adk adobereader openjdk googlechrome --yes
 # Setup Vim
 New-Item -Path "~\vimfiles\autoload" -Type Directory -Force
 (New-Object -TypeName System.Net.WebClient).DownloadFile(
-    'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim',
+    'https://github.com/junegunn/vim-plug/raw/master/plug.vim',
     $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath(
         "~\vimfiles\autoload\plug.vim"
     )

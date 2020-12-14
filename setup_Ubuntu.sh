@@ -218,7 +218,7 @@ if $IS_SUDOER; then
 		echo_and_eval 'sudo chmod a+x /usr/local/bin/shfmt'
 		echo_and_eval 'sudo chown root:root /usr/local/bin/shfmt'
 	fi
-	echo_and_eval "wget -N -P \"$TMP_DIR/\" https://raw.githubusercontent.com/so-fancy/diff-so-fancy/master/third_party/build_fatpack/diff-so-fancy"
+	echo_and_eval "wget -N -P \"$TMP_DIR/\" https://github.com/so-fancy/diff-so-fancy/raw/master/third_party/build_fatpack/diff-so-fancy"
 	echo_and_eval "sudo mv -f \"$TMP_DIR/diff-so-fancy\" /usr/local/bin/diff-so-fancy"
 	echo_and_eval 'sudo chmod a+x /usr/local/bin/diff-so-fancy'
 	echo_and_eval 'sudo chown root:root /usr/local/bin/diff-so-fancy'
@@ -1434,7 +1434,7 @@ EOF
 # Install Vim-Plug plugin manager
 if [[ ! -f "$HOME/.vim/autoload/plug.vim" ]]; then
 	echo_and_eval 'curl -fL#o "$HOME/.vim/autoload/plug.vim" --create-dirs \
-			https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+			https://github.com/junegunn/vim-plug/raw/master/plug.vim'
 fi
 
 # Install Vim plugins
@@ -1554,7 +1554,7 @@ bind-key r source-file ~/.tmux.conf \\; display-message "tmux.conf reloaded"
 # set-option -gs status-right ' #[fg=colour120][#{?#{==:#{=-60:pane_title},#{pane_title}},#{pane_title},…#{=-59:pane_title}}]#[default] #[none]%a %b-%d %H:%M:%S#[default] '
 EOF
 
-echo_and_eval 'wget -N -P "$HOME/.dotfiles/" https://raw.githubusercontent.com/gpakosz/.tmux/master/.tmux.conf{,.local}'
+echo_and_eval 'wget -N -P "$HOME/.dotfiles/" https://github.com/gpakosz//raw.tmux/master/.tmux.conf{,.local}'
 ln -sf .dotfiles/.tmux.conf .
 ln -sf .dotfiles/.tmux.conf.local .
 
@@ -1920,7 +1920,7 @@ URL_LIST=(
 	"https://github.com/ryanoasis/nerd-fonts/releases/latest/download/DejaVuSansMono.zip"
 	"https://github.com/microsoft/cascadia-code/releases/latest/download/CascadiaCode-${LATEST_CASCADIA_VERSION#v}.zip"
 )
-echo_and_eval "wget -N -P \"$TMP_DIR/\" https://raw.githubusercontent.com/XuehaiPan/OS-Setup/master/Menlo.ttc"
+echo_and_eval "wget -N -P \"$TMP_DIR/fonts\" https://github.com/XuehaiPan/OS-Setup/raw/master/Menlo.ttc"
 for url in "${URL_LIST[@]}"; do
 	echo_and_eval "wget -N -P \"$TMP_DIR/\" $url"
 	echo_and_eval "unzip -o \"$TMP_DIR/$(basename "$url")\" -d \"$TMP_DIR/fonts\""

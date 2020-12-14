@@ -23,7 +23,7 @@ Download the script file using [wget](https://www.gnu.org/software/wget/) / [cur
 # Download and run via wget
 # Uncomment the following line to avoid modifying mirror settings
 # export SET_MIRRORS=false
-bash -c "$(wget -O - https://raw.githubusercontent.com/XuehaiPan/OS-Setup/master/setup.sh)"
+bash -c "$(wget -O - https://github.com/XuehaiPan/OS-Setup/raw/master/setup.sh)"
 ```
 
 **via curl**
@@ -31,7 +31,7 @@ bash -c "$(wget -O - https://raw.githubusercontent.com/XuehaiPan/OS-Setup/master
 # Download and run via curl
 # Uncomment the following line to avoid modifying mirror settings
 # export SET_MIRRORS=false
-bash -c "$(curl -fL https://raw.githubusercontent.com/XuehaiPan/OS-Setup/master/setup.sh)"
+bash -c "$(curl -fL https://github.com/XuehaiPan/OS-Setup/raw/master/setup.sh)"
 ```
 
 **via git**

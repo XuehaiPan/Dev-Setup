@@ -1860,7 +1860,9 @@ for url in "${URL_LIST[@]}"; do
 	echo_and_eval "unzip -o \"$TMP_DIR/$(basename "$url")\" -d \"$TMP_DIR/fonts\""
 done
 for font_dir in "${FONT_DIR_LIST[@]}"; do
-	echo_and_eval "find -L \"$TMP_DIR/fonts\" -not -empty -type f -name '*.[ot]t[fc]' -exec cp -f '{}' \"$font_dir\" \\;"
+	echo_and_eval "find -L \"$TMP_DIR/fonts\" -not -empty -type f -name '*.[ot]t[fc]' \\
+			-printf 'cp -f \"%p\" \"$font_dir\"\n' \\
+			-exec cp -f '{}' \"$font_dir\" \\;"
 done
 rm -rf "$TMP_DIR"
 if [[ -x "$(command -v fc-cache)" ]]; then

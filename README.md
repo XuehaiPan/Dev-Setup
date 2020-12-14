@@ -16,7 +16,7 @@ Bash scripts for setting up a newly installed OS automatically. ([screenshots](#
 
 ### Installation
 
-Download the script file using [wget](https://www.gnu.org/software/wget/) / [curl](https://curl.haxx.se) / [git](https://git-scm.com) or any browser ([click to download zip](https://codeload.github.com/XuehaiPan/OS-Setup/zip/master)). And then open `Terminal` and run:
+Download the script file using [wget](https://www.gnu.org/software/wget) / [curl](https://curl.haxx.se) / [git](https://git-scm.com) or any browser ([click to download zip](https://codeload.github.com/XuehaiPan/OS-Setup/zip/master)). And then open `Terminal` and run:
 
 **via wget**
 ```bash
@@ -159,7 +159,7 @@ The following packages will be setup:
 | [Mirrors at TUNA (China)](https://mirrors.tuna.tsinghua.edu.cn)                                                                  |   ✔   |      ✔       |       ✔       |
 | [Homebrew (macOS)](https://brew.sh)                                                                                              |   ✔   |      ✘       |       ✘       |
 |                                                                                                                                  |       |              |               |
-| [bash](https://www.gnu.org/software/bash/)                                                                                       |   ✔   |      ✔       |       ✔       |
+| [bash](https://www.gnu.org/software/bash)                                                                                        |   ✔   |      ✔       |       ✔       |
 | [bash-completion](https://salsa.debian.org/debian/bash-completion)                                                               |   ✔   |      ✔       |       ✔       |
 | [zsh](http://zsh.sourceforge.net) & [oh-my-zsh](https://ohmyz.sh)                                                                |   ✔   |      ✔       |       ✔       |
 | [powerlevel10k](https://github.com/romkatv/powerlevel10k)                                                                        |   ✔   |      ✔       |       ✔       |
@@ -180,17 +180,17 @@ The following packages will be setup:
 | [highlight](http://www.andre-simon.de/doku/highlight/en/highlight.php)                                                           |   ✔   |      ✔       |       ✔       |
 | [ripgrep](https://github.com/BurntSushi/ripgrep)                                                                                 |   ✔   |      ✔       |       ✔       |
 |                                                                                                                                  |       |              |               |
-| [wget](https://www.gnu.org/software/wget/)                                                                                       |   ✔   |      ✔       |       ✔       |
+| [wget](https://www.gnu.org/software/wget)                                                                                        |   ✔   |      ✔       |       ✔       |
 | [curl](https://curl.haxx.se)                                                                                                     |   ✔   |      ✔       |       ✔       |
-| [openssh](https://www.ssh.com/ssh/openssh/)                                                                                      |   ✔   |      ✔       |       ✔       |
-| [ruby](https://www.ruby-lang.org/en/) & [rubygems](https://rubygems.org)                                                         |   ✔   |      ✔       |       ✔       |
+| [openssh](https://www.ssh.com/ssh/openssh)                                                                                       |   ✔   |      ✔       |       ✔       |
+| [ruby](https://www.ruby-lang.org/en) & [rubygems](https://rubygems.org)                                                          |   ✔   |      ✔       |       ✔       |
 | [perl](https://www.perl.org) & [cpan](https://www.cpan.org)                                                                      |   ✔   |      ✔       |       ✔       |
-| [htop](https://hisham.hm/htop/)                                                                                                  |   ✔   |      ✔       |       ✔       |
-| [net-tools](https://sourceforge.net/projects/net-tools/)                                                                         |   ✔   |      ✔       |       ✔       |
+| [htop](https://hisham.hm/htop)                                                                                                   |   ✔   |      ✔       |       ✔       |
+| [net-tools](https://sourceforge.net/projects/net-tools)                                                                          |   ✔   |      ✔       |       ✔       |
 | [exfat-utils](https://pkgs.org/download/exfat-utils)                                                                             |   ✔   |      ✔       |       ✔       |
 | [tree](http://mama.indstate.edu/users/ice/tree/)                                                                                 |   ✔   |      ✔       |       ✔       |
 | [git-extras](https://github.com/tj/git-extras)                                                                                   |   ✔   |      ✔       |       ✔       |
-| [diffutils](https://www.gnu.org/software/diffutils/)                                                                             |   ✔   |      ✔       |       ✔       |
+| [diffutils](https://www.gnu.org/software/diffutils)                                                                              |   ✔   |      ✔       |       ✔       |
 | [colordiff](https://www.colordiff.org)                                                                                           |   ✔   |      ✔       |       ✔       |
 | [diff-so-fancy](https://github.com/so-fancy/diff-so-fancy)                                                                       |   ✔   |      ✔       |       ✔       |
 | [shfmt](https://github.com/mvdan/sh)                                                                                             |   ✔   |      ✔       |       ✔       |
@@ -198,13 +198,13 @@ The following packages will be setup:
 |                                                                                                                                  |       |              |               |
 | [Miniconda3](https://docs.conda.io/en/latest/miniconda.html)                                                                     |   ✔   |      ✔       |       ✔       |
 | [gcc](https://gcc.gnu.org)                                                                                                       |   ✔   |      ✔       |       ✔       |
-| [gdb](https://www.gnu.org/software/gdb/)                                                                                         |   ✔   |      ✔       |       ✔       |
+| [gdb](https://www.gnu.org/software/gdb)                                                                                          |   ✔   |      ✔       |       ✔       |
 | [clang](https://clang.llvm.org) & [llvm](https://llvm.org)                                                                       |   ✔   |      ✔       |       ✔       |
 | [lldb](http://lldb.llvm.org)                                                                                                     |   ✔   |      ✔       |       ✔       |
-| [make](https://www.gnu.org/software/make/)                                                                                       |   ✔   |      ✔       |       ✔       |
+| [make](https://www.gnu.org/software/make)                                                                                        |   ✔   |      ✔       |       ✔       |
 | [cmake](https://cmake.org)                                                                                                       |   ✔   |      ✔       |       ✔       |
-| [automake](https://www.gnu.org/software/automake/)                                                                               |   ✔   |      ✔       |       ✔       |
-| [autoconf](https://www.gnu.org/software/autoconf/)                                                                               |   ✔   |      ✔       |       ✔       |
+| [automake](https://www.gnu.org/software/automake)                                                                                |   ✔   |      ✔       |       ✔       |
+| [autoconf](https://www.gnu.org/software/autoconf)                                                                                |   ✔   |      ✔       |       ✔       |
 |                                                                                                                                  |       |              |               |
 | [DejaVu Sans Mono Nerd Font](https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/DejaVuSansMono)                   |   ✔   |      ✔       |       ✔       |
 | [Cascadia Code Font](https://github.com/microsoft/cascadia-code)                                                                 |   ✔   |      ✔       |       ✔       |

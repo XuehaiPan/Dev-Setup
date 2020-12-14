@@ -1496,7 +1496,7 @@ bind-key r source-file ~/.tmux.conf \\; display-message "tmux.conf reloaded"
 # set-option -gs status-right ' #[fg=colour120][#{?#{==:#{=-60:pane_title},#{pane_title}},#{pane_title},…#{=-59:pane_title}}]#[default] #[none]%a %b-%d %H:%M:%S#[default] '
 EOF
 
-echo_and_eval 'wget -N -P "$HOME/.dotfiles/" https://github.com/gpakosz//raw.tmux/master/.tmux.conf{,.local}'
+echo_and_eval 'wget -N -P "$HOME/.dotfiles" https://github.com/gpakosz//raw.tmux/master/.tmux.conf{,.local}'
 ln -sf .dotfiles/.tmux.conf .
 ln -sf .dotfiles/.tmux.conf.local .
 
@@ -1828,9 +1828,9 @@ ln -sf .dotfiles/.condarc .
 # Install Miniconda
 if [[ ! -d "$HOME/$CONDA_DIR" ]]; then
 	if $SET_MIRRORS; then
-		echo_and_eval "wget -N -P \"$TMP_DIR/\" https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-latest-Linux-x86_64.sh"
+		echo_and_eval "wget -N -P \"$TMP_DIR\" https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-latest-Linux-x86_64.sh"
 	else
-		echo_and_eval "wget -N -P \"$TMP_DIR/\" https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh"
+		echo_and_eval "wget -N -P \"$TMP_DIR\" https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh"
 	fi
 	echo_and_eval "bash \"$TMP_DIR/Miniconda3-latest-Linux-x86_64.sh\" -b -p \"\$HOME/$CONDA_DIR\""
 	echo_and_eval "rm -f \"$TMP_DIR/Miniconda3-latest-Linux-x86_64.sh\""
@@ -1864,7 +1864,7 @@ URL_LIST=(
 )
 echo_and_eval "wget -N -P \"$TMP_DIR/fonts\" https://github.com/XuehaiPan/OS-Setup/raw/master/Menlo.ttc"
 for url in "${URL_LIST[@]}"; do
-	echo_and_eval "wget -N -P \"$TMP_DIR/\" $url"
+	echo_and_eval "wget -N -P \"$TMP_DIR\" $url"
 	echo_and_eval "unzip -o \"$TMP_DIR/$(basename "$url")\" -d \"$TMP_DIR/fonts\""
 done
 for font_dir in "${FONT_DIR_LIST[@]}"; do

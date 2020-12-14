@@ -42,27 +42,31 @@ function echo_and_eval() {
 	printf "%s" "$@" | awk -f <(
 		cat - <<-EOD
 			BEGIN {
-				UnderlineBoldGreen = "\\033[4;1;32m";
-				BoldRed = "\\033[1;31m";
-				BoldGreen = "\\033[1;32m";
-				BoldYellow = "\\033[1;33m";
-				BoldWhite = "\\033[1;37m";
-				Reset = "\\033[0m";
+				BOLD = "\\033[1m"
+				UNDERLINE = "\\033[4m";
+				RED = "\\033[31m";
+				GREEN = "\\033[32m";
+				YELLOW = "\\033[33m";
+				WHITE = "\\033[37m";
+				RESET = "\\033[0m";
 				idx = 0;
 				in_string = 0;
 				double_quoted = 1;
-				printf("%s\$%s", BoldWhite, Reset);
+				printf("%s\$", BOLD WHITE);
 			}
 			{
 				for (i = 1; i <= NF; ++i) {
-					Style = BoldWhite;
+					style = WHITE;
+					style_post = WHITE;
 					if (!in_string) {
 						if (\$i ~ /^-/)
-							Style = BoldYellow;
-						else if (\$i == "sudo" && idx == 0)
-							Style = UnderlineBoldGreen;
+							style = YELLOW;
+						else if (\$i == "sudo" && idx == 0) {
+							style = UNDERLINE GREEN;
+							style_post = RESET BOLD WHITE;
+						}
 						else if (\$i ~ /^[12&]?>>?/)
-							Style = BoldRed;
+							style = RED;
 						else {
 							++idx;
 							if (\$i ~ /^"/) {
@@ -74,7 +78,7 @@ function echo_and_eval() {
 								double_quoted = 0;
 							}
 							if (idx == 1)
-								Style = BoldGreen;
+								style = GREEN;
 						}
 					}
 					if (in_string) {
@@ -85,19 +89,19 @@ function echo_and_eval() {
 						if (!in_string) {
 							idx = 0;
 							if (\$i !~ /;\$/)
-								Style = BoldRed;
+								style = RED;
 						}
 					}
 					if (\$i ~ /;\$/)
-						printf(" %s%s%s;%s", Style, substr(\$i, 1, length(\$i) - 1), (in_string ? BoldWhite : BoldRed), Reset);
+						printf(" %s%s%s;%s", style, substr(\$i, 1, length(\$i) - 1), (in_string ? WHITE : RED), style_post);
 					else
-						printf(" %s%s%s", Style, \$i, Reset);
+						printf(" %s%s%s", style, \$i, style_post);
 					if (\$i == "\\\\")
 						printf("\\n\\t");
 				}
 			}
 			END {
-				printf("\\n");
+				printf("%s\\n", RESET);
 			}
 		EOD
 	) >&2
@@ -712,27 +716,31 @@ function echo_and_eval() {
 	printf "%s" "\$@" | awk -f <(
 		cat - <<-EOD
 			BEGIN {
-				UnderlineBoldGreen = "\\\\033[4;1;32m";
-				BoldRed = "\\\\033[1;31m";
-				BoldGreen = "\\\\033[1;32m";
-				BoldYellow = "\\\\033[1;33m";
-				BoldWhite = "\\\\033[1;37m";
-				Reset = "\\\\033[0m";
+				BOLD = "\\\\033[1m"
+				UNDERLINE = "\\\\033[4m";
+				RED = "\\\\033[31m";
+				GREEN = "\\\\033[32m";
+				YELLOW = "\\\\033[33m";
+				WHITE = "\\\\033[37m";
+				RESET = "\\\\033[0m";
 				idx = 0;
 				in_string = 0;
 				double_quoted = 1;
-				printf("%s\\\$%s", BoldWhite, Reset);
+				printf("%s\\\$", BOLD WHITE);
 			}
 			{
 				for (i = 1; i <= NF; ++i) {
-					Style = BoldWhite;
+					style = WHITE;
+					style_post = WHITE;
 					if (!in_string) {
 						if (\\\$i ~ /^-/)
-							Style = BoldYellow;
-						else if (\\\$i == "sudo" && idx == 0)
-							Style = UnderlineBoldGreen;
+							style = YELLOW;
+						else if (\\\$i == "sudo" && idx == 0) {
+							style = UNDERLINE GREEN;
+							style_post = RESET BOLD WHITE;
+						}
 						else if (\\\$i ~ /^[12&]?>>?/)
-							Style = BoldRed;
+							style = RED;
 						else {
 							++idx;
 							if (\\\$i ~ /^"/) {
@@ -744,7 +752,7 @@ function echo_and_eval() {
 								double_quoted = 0;
 							}
 							if (idx == 1)
-								Style = BoldGreen;
+								style = GREEN;
 						}
 					}
 					if (in_string) {
@@ -755,19 +763,19 @@ function echo_and_eval() {
 						if (!in_string) {
 							idx = 0;
 							if (\\\$i !~ /;\\\$/)
-								Style = BoldRed;
+								style = RED;
 						}
 					}
 					if (\\\$i ~ /;\\\$/)
-						printf(" %s%s%s;%s", Style, substr(\\\$i, 1, length(\\\$i) - 1), (in_string ? BoldWhite : BoldRed), Reset);
+						printf(" %s%s%s;%s", style, substr(\\\$i, 1, length(\\\$i) - 1), (in_string ? WHITE : RED), style_post);
 					else
-						printf(" %s%s%s", Style, \\\$i, Reset);
+						printf(" %s%s%s", style, \\\$i, style_post);
 					if (\\\$i == "\\\\\\\\")
 						printf("\\\\n\\\\t");
 				}
 			}
 			END {
-				printf("\\\\n");
+				printf("%s\\\\n", RESET);
 			}
 		EOD
 	)
@@ -1927,7 +1935,7 @@ for url in "${URL_LIST[@]}"; do
 done
 for font_dir in "${FONT_DIR_LIST[@]}"; do
 	echo_and_eval "find -L \"$TMP_DIR/fonts\" -not -empty -type f -name '*.[ot]t[fc]' \\
-			-printf 'cp -f \"%p\" \"$font_dir\"\n' \\
+			-printf '==> cp -f \"%p\" \"$font_dir\"\n' \\
 			-exec cp -f '{}' \"$font_dir\" \\;"
 done
 rm -rf "$TMP_DIR"

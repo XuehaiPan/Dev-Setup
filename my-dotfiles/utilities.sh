@@ -4,13 +4,15 @@ function echo_and_eval() {
 	printf "%s" "$@" | awk -f <(
 		cat - <<-EOD
 			BEGIN {
+				RESET = "\\033[0m";
 				BOLD = "\\033[1m"
 				UNDERLINE = "\\033[4m";
+				UNDERLINEOFF = "\\033[24m";
 				RED = "\\033[31m";
 				GREEN = "\\033[32m";
 				YELLOW = "\\033[33m";
 				WHITE = "\\033[37m";
-				RESET = "\\033[0m";
+				GRAY = "\\033[90m"
 				idx = 0;
 				in_string = 0;
 				double_quoted = 1;
@@ -19,31 +21,37 @@ function echo_and_eval() {
 			{
 				for (i = 1; i <= NF; ++i) {
 					style = WHITE;
-					style_post = WHITE;
+					post_style = WHITE;
 					if (!in_string) {
 						if (\$i ~ /^-/)
 							style = YELLOW;
 						else if (\$i == "sudo" && idx == 0) {
 							style = UNDERLINE GREEN;
-							style_post = RESET BOLD WHITE;
+							post_style = UNDERLINEOFF WHITE;
 						}
-						else if (\$i ~ /^[12&]?>>?/)
+						else if (\$i ~ /^[A-Za-z_]+=/ && idx == 0) {
+							style = GRAY;
+							if (\$i ~ /^[A-Za-z_]+=["']/) {
+								in_string = 1;
+								double_quoted = (\$i ~ /^[A-Za-z_]+="/);
+							}
+						}
+						else if (\$i ~ /^[12&]?>>?/ || \$i == "\\\\")
 							style = RED;
 						else {
 							++idx;
-							if (\$i ~ /^"/) {
+							if (\$i ~ /^["']/) {
 								in_string = 1;
-								double_quoted = 1;
-							}
-							else if (\$i ~ /^'/) {
-								in_string = 1;
-								double_quoted = 0;
+								double_quoted = (\$i ~ /^"/);
 							}
 							if (idx == 1)
 								style = GREEN;
 						}
 					}
 					if (in_string) {
+						if (style == WHITE)
+							style = "";
+						post_style = "";
 						if ((double_quoted && \$i ~ /";?\$/ && \$i !~ /\\\\";?\$/) || (!double_quoted && \$i ~ /';?\$/))
 							in_string = 0;
 					}
@@ -55,9 +63,9 @@ function echo_and_eval() {
 						}
 					}
 					if (\$i ~ /;\$/)
-						printf(" %s%s%s;%s", style, substr(\$i, 1, length(\$i) - 1), (in_string ? WHITE : RED), style_post);
+						printf(" %s%s%s;%s", style, substr(\$i, 1, length(\$i) - 1), (in_string ? WHITE : RED), post_style);
 					else
-						printf(" %s%s%s", style, \$i, style_post);
+						printf(" %s%s%s", style, \$i, post_style);
 					if (\$i == "\\\\")
 						printf("\\n\\t");
 				}

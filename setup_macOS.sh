@@ -31,47 +31,47 @@ fi
 # Common functions
 function echo_and_eval() {
 	printf "%s" "$@" | awk -f <(
-		cat - <<-EOD
+		cat - <<-'EOD'
 			BEGIN {
-				RESET = "\\033[0m";
-				BOLD = "\\033[1m"
-				UNDERLINE = "\\033[4m";
-				UNDERLINEOFF = "\\033[24m";
-				RED = "\\033[31m";
-				GREEN = "\\033[32m";
-				YELLOW = "\\033[33m";
-				WHITE = "\\033[37m";
-				GRAY = "\\033[90m"
+				RESET = "\033[0m";
+				BOLD = "\033[1m"
+				UNDERLINE = "\033[4m";
+				UNDERLINEOFF = "\033[24m";
+				RED = "\033[31m";
+				GREEN = "\033[32m";
+				YELLOW = "\033[33m";
+				WHITE = "\033[37m";
+				GRAY = "\033[90m"
 				idx = 0;
 				in_string = 0;
 				double_quoted = 1;
-				printf("%s\$", BOLD WHITE);
+				printf("%s$", BOLD WHITE);
 			}
 			{
 				for (i = 1; i <= NF; ++i) {
 					style = WHITE;
 					post_style = WHITE;
 					if (!in_string) {
-						if (\$i ~ /^-/)
+						if ($i ~ /^-/)
 							style = YELLOW;
-						else if (\$i == "sudo" && idx == 0) {
+						else if ($i == "sudo" && idx == 0) {
 							style = UNDERLINE GREEN;
 							post_style = UNDERLINEOFF WHITE;
 						}
-						else if (\$i ~ /^[A-Za-z_]+=/ && idx == 0) {
+						else if ($i ~ /^[A-Za-z_]+=/ && idx == 0) {
 							style = GRAY;
-							if (\$i ~ /^[A-Za-z_]+=["']/) {
+							if ($i ~ /^[A-Za-z_]+=["']/) {
 								in_string = 1;
-								double_quoted = (\$i ~ /^[A-Za-z_]+="/);
+								double_quoted = ($i ~ /^[A-Za-z_]+="/);
 							}
 						}
-						else if (\$i ~ /^[12&]?>>?/ || \$i == "\\\\")
+						else if ($i ~ /^[12&]?>>?/ || $i == "\\")
 							style = RED;
 						else {
 							++idx;
-							if (\$i ~ /^["']/) {
+							if ($i ~ /^["']/) {
 								in_string = 1;
-								double_quoted = (\$i ~ /^"/);
+								double_quoted = ($i ~ /^"/);
 							}
 							if (idx == 1)
 								style = GREEN;
@@ -81,26 +81,26 @@ function echo_and_eval() {
 						if (style == WHITE)
 							style = "";
 						post_style = "";
-						if ((double_quoted && \$i ~ /";?\$/ && \$i !~ /\\\\";?\$/) || (!double_quoted && \$i ~ /';?\$/))
+						if ((double_quoted && $i ~ /";?$/ && $i !~ /\\";?$/) || (!double_quoted && $i ~ /';?$/))
 							in_string = 0;
 					}
-					if (\$i ~ /;\$/ || \$i == "|" || \$i == "||" || \$i == "&&") {
+					if ($i ~ /;$/ || $i == "|" || $i == "||" || $i == "&&") {
 						if (!in_string) {
 							idx = 0;
-							if (\$i !~ /;\$/)
+							if ($i !~ /;$/)
 								style = RED;
 						}
 					}
-					if (\$i ~ /;\$/)
-						printf(" %s%s%s;%s", style, substr(\$i, 1, length(\$i) - 1), (in_string ? WHITE : RED), post_style);
+					if ($i ~ /;$/)
+						printf(" %s%s%s;%s", style, substr($i, 1, length($i) - 1), (in_string ? WHITE : RED), post_style);
 					else
-						printf(" %s%s%s", style, \$i, post_style);
-					if (\$i == "\\\\")
-						printf("\\n\\t");
+						printf(" %s%s%s", style, $i, post_style);
+					if ($i == "\\")
+						printf("\n\t");
 				}
 			}
 			END {
-				printf("%s\\n", RESET);
+				printf("%s\n", RESET);
 			}
 		EOD
 	) >&2
@@ -691,47 +691,47 @@ cat >.dotfiles/utilities.sh <<EOF
 
 function echo_and_eval() {
 	printf "%s" "\$@" | awk -f <(
-		cat - <<-EOD
+		cat - <<-'EOD'
 			BEGIN {
-				RESET = "\\\\033[0m";
-				BOLD = "\\\\033[1m"
-				UNDERLINE = "\\\\033[4m";
-				UNDERLINEOFF = "\\\\033[24m";
-				RED = "\\\\033[31m";
-				GREEN = "\\\\033[32m";
-				YELLOW = "\\\\033[33m";
-				WHITE = "\\\\033[37m";
-				GRAY = "\\\\033[90m"
+				RESET = "\\033[0m";
+				BOLD = "\\033[1m"
+				UNDERLINE = "\\033[4m";
+				UNDERLINEOFF = "\\033[24m";
+				RED = "\\033[31m";
+				GREEN = "\\033[32m";
+				YELLOW = "\\033[33m";
+				WHITE = "\\033[37m";
+				GRAY = "\\033[90m"
 				idx = 0;
 				in_string = 0;
 				double_quoted = 1;
-				printf("%s\\\$", BOLD WHITE);
+				printf("%s\$", BOLD WHITE);
 			}
 			{
 				for (i = 1; i <= NF; ++i) {
 					style = WHITE;
 					post_style = WHITE;
 					if (!in_string) {
-						if (\\\$i ~ /^-/)
+						if (\$i ~ /^-/)
 							style = YELLOW;
-						else if (\\\$i == "sudo" && idx == 0) {
+						else if (\$i == "sudo" && idx == 0) {
 							style = UNDERLINE GREEN;
 							post_style = UNDERLINEOFF WHITE;
 						}
-						else if (\\\$i ~ /^[A-Za-z_]+=/ && idx == 0) {
+						else if (\$i ~ /^[A-Za-z_]+=/ && idx == 0) {
 							style = GRAY;
-							if (\\\$i ~ /^[A-Za-z_]+=["']/) {
+							if (\$i ~ /^[A-Za-z_]+=["']/) {
 								in_string = 1;
-								double_quoted = (\\\$i ~ /^[A-Za-z_]+="/);
+								double_quoted = (\$i ~ /^[A-Za-z_]+="/);
 							}
 						}
-						else if (\\\$i ~ /^[12&]?>>?/ || \\\$i == "\\\\\\\\")
+						else if (\$i ~ /^[12&]?>>?/ || \$i == "\\\\")
 							style = RED;
 						else {
 							++idx;
-							if (\\\$i ~ /^["']/) {
+							if (\$i ~ /^["']/) {
 								in_string = 1;
-								double_quoted = (\\\$i ~ /^"/);
+								double_quoted = (\$i ~ /^"/);
 							}
 							if (idx == 1)
 								style = GREEN;
@@ -741,26 +741,26 @@ function echo_and_eval() {
 						if (style == WHITE)
 							style = "";
 						post_style = "";
-						if ((double_quoted && \\\$i ~ /";?\\\$/ && \\\$i !~ /\\\\\\\\";?\\\$/) || (!double_quoted && \\\$i ~ /';?\\\$/))
+						if ((double_quoted && \$i ~ /";?\$/ && \$i !~ /\\\\";?\$/) || (!double_quoted && \$i ~ /';?\$/))
 							in_string = 0;
 					}
-					if (\\\$i ~ /;\\\$/ || \\\$i == "|" || \\\$i == "||" || \\\$i == "&&") {
+					if (\$i ~ /;\$/ || \$i == "|" || \$i == "||" || \$i == "&&") {
 						if (!in_string) {
 							idx = 0;
-							if (\\\$i !~ /;\\\$/)
+							if (\$i !~ /;\$/)
 								style = RED;
 						}
 					}
-					if (\\\$i ~ /;\\\$/)
-						printf(" %s%s%s;%s", style, substr(\\\$i, 1, length(\\\$i) - 1), (in_string ? WHITE : RED), post_style);
+					if (\$i ~ /;\$/)
+						printf(" %s%s%s;%s", style, substr(\$i, 1, length(\$i) - 1), (in_string ? WHITE : RED), post_style);
 					else
-						printf(" %s%s%s", style, \\\$i, post_style);
-					if (\\\$i == "\\\\\\\\")
-						printf("\\\\n\\\\t");
+						printf(" %s%s%s", style, \$i, post_style);
+					if (\$i == "\\\\")
+						printf("\\n\\t");
 				}
 			}
 			END {
-				printf("%s\\\\n", RESET);
+				printf("%s\\n", RESET);
 			}
 		EOD
 	)

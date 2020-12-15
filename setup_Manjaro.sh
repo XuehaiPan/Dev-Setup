@@ -287,7 +287,7 @@ echo_and_eval '"$HOME/.fzf/install" --key-bindings --completion --no-update-rc'
 # Configurations for RubyGems
 backup_dotfiles .gemrc .dotfiles/.gemrc
 
-cat >.dotfiles/.gemrc <<EOF
+cat >.dotfiles/.gemrc <<'EOF'
 ---
 :backtrace: false
 :bulk_threshold: 1000
@@ -296,10 +296,10 @@ cat >.dotfiles/.gemrc <<EOF
 :concurrent_downloads: 8
 EOF
 if $SET_MIRRORS; then
-	cat >>.dotfiles/.gemrc <<EOF
-:sources:
-- https://mirrors.tuna.tsinghua.edu.cn/rubygems/
-EOF
+	cat >>.dotfiles/.gemrc <<-'EOF'
+		:sources:
+		- https://mirrors.tuna.tsinghua.edu.cn/rubygems/
+	EOF
 fi
 
 ln -sf .dotfiles/.gemrc .
@@ -339,7 +339,7 @@ echo_and_eval "AUTOMATED_TESTING=1 perl -MCPAN -e 'install Term::ReadLine::Perl,
 # Configurations for Zsh
 backup_dotfiles .dotfiles/.zshrc
 
-cat >.dotfiles/.zshrc <<EOF
+cat >.dotfiles/.zshrc <<'EOF'
 # Source global definitions
 # Include /etc/zshrc if it exists
 if [[ -f /etc/zshrc ]]; then
@@ -357,24 +357,24 @@ if [[ -f /etc/zprofile ]]; then
 fi
 
 # Set PATH so it includes user's private bin if it exists
-if [[ -d "\$HOME/.local/bin" ]]; then
-	export PATH="\$HOME/.local/bin:\$PATH"
+if [[ -d "$HOME/.local/bin" ]]; then
+	export PATH="$HOME/.local/bin:$PATH"
 fi
 
 # Set C_INCLUDE_PATH and CPLUS_INCLUDE_PATH so it includes user's private include if it exists
-if [[ -d "\$HOME/.local/include" ]]; then
-	export C_INCLUDE_PATH="\$HOME/.local/include:\$C_INCLUDE_PATH"
-	export CPLUS_INCLUDE_PATH="\$HOME/.local/include:\$CPLUS_INCLUDE_PATH"
+if [[ -d "$HOME/.local/include" ]]; then
+	export C_INCLUDE_PATH="$HOME/.local/include:$C_INCLUDE_PATH"
+	export CPLUS_INCLUDE_PATH="$HOME/.local/include:$CPLUS_INCLUDE_PATH"
 fi
 
 # Set LIBRARY_PATH and LD_LIBRARY_PATH so it includes user's private lib if it exists
-if [[ -d "\$HOME/.local/lib" ]]; then
-	export LIBRARY_PATH="\$HOME/.local/lib:\$LIBRARY_PATH"
-	export LD_LIBRARY_PATH="\$HOME/.local/lib:\$LD_LIBRARY_PATH"
+if [[ -d "$HOME/.local/lib" ]]; then
+	export LIBRARY_PATH="$HOME/.local/lib:$LIBRARY_PATH"
+	export LD_LIBRARY_PATH="$HOME/.local/lib:$LD_LIBRARY_PATH"
 fi
-if [[ -d "\$HOME/.local/lib64" ]]; then
-	export LIBRARY_PATH="\$HOME/.local/lib64:\$LIBRARY_PATH"
-	export LD_LIBRARY_PATH="\$HOME/.local/lib64:\$LD_LIBRARY_PATH"
+if [[ -d "$HOME/.local/lib64" ]]; then
+	export LIBRARY_PATH="$HOME/.local/lib64:$LIBRARY_PATH"
+	export LD_LIBRARY_PATH="$HOME/.local/lib64:$LD_LIBRARY_PATH"
 fi
 
 # User specific environment
@@ -387,10 +387,12 @@ export LC_ALL="en_US.utf8"
 export CC="/usr/bin/gcc"
 export CXX="/usr/bin/g++"
 export FC="/usr/bin/gfortran"
-export OMPI_CC="\$CC" MPICH_CC="\$CC"
-export OMPI_CXX="\$CXX" MPICH_CXX="\$CXX"
-export OMPI_FC="\$FC" MPICH_FC="\$FC"
+export OMPI_CC="$CC" MPICH_CC="$CC"
+export OMPI_CXX="$CXX" MPICH_CXX="$CXX"
+export OMPI_FC="$FC" MPICH_FC="$FC"
 
+EOF
+cat >>.dotfiles/.zshrc <<EOF
 # Anaconda
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
@@ -407,26 +409,28 @@ fi
 unset __conda_setup
 # <<< conda initialize <<<
 
+EOF
+cat >>.dotfiles/.zshrc <<'EOF'
 # Ruby
-if [[ -x "\$(command -v ruby)" && -x "\$(command -v gem)" ]]; then
+if [[ -x "$(command -v ruby)" && -x "$(command -v gem)" ]]; then
 	export RUBYOPT="-W0"
-	export PATH="\$(ruby -r rubygems -e 'puts Gem.dir')/bin:\$PATH"
-	export PATH="\$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:\$PATH"
+	export PATH="$(ruby -r rubygems -e 'puts Gem.dir')/bin:$PATH"
+	export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
 fi
 
 # Perl
-eval "\$(perl -I\$HOME/.perl/lib/perl5 -Mlocal::lib=\$HOME/.perl)"
+eval "$(perl -I$HOME/.perl/lib/perl5 -Mlocal::lib=$HOME/.perl)"
 
 # fzf
-if [[ -f "\$HOME/.fzf.zsh" ]]; then
-	source "\$HOME/.fzf.zsh"
+if [[ -f "$HOME/.fzf.zsh" ]]; then
+	source "$HOME/.fzf.zsh"
 fi
-if [[ -x "\$(command -v fd)" ]]; then
+if [[ -x "$(command -v fd)" ]]; then
 	export FZF_DEFAULT_COMMAND="fd --type file --follow --hidden --no-ignore-vcs --exclude '.git' --color=always"
-	export FZF_CTRL_T_COMMAND="\$FZF_DEFAULT_COMMAND"
+	export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 fi
 FZF_PREVIEW_COMMAND="(bat --color=always {} || highlight -O ansi {} || cat {}) 2>/dev/null | head -100"
-export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --ansi --preview='\${FZF_PREVIEW_COMMAND}'"
+export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --ansi --preview='${FZF_PREVIEW_COMMAND}'"
 
 # bat
 export BAT_THEME="Monokai Extended"
@@ -434,24 +438,24 @@ export BAT_THEME="Monokai Extended"
 # Remove duplicate entries
 function __remove_duplicate() {
 	local SEP NAME VALUE
-	SEP="\$1"
-	NAME="\$2"
-	VALUE="\$(
-		eval "printf \\"%s\\" \\"\\\$\$NAME\\"" | awk -v RS="\$SEP" \\
+	SEP="$1"
+	NAME="$2"
+	VALUE="$(
+		eval "printf \"%s\" \"\$$NAME\"" | awk -v RS="$SEP" \
 			'BEGIN {
 				idx = 0;
 				delete flag;
 				flag[""] = 1;
 			}
 			{
-				if (!(flag[\$0]++))
-					printf("%s%s", (!(idx++) ? "" : RS), \$0);
+				if (!(flag[$0]++))
+					printf("%s%s", (!(idx++) ? "" : RS), $0);
 			}'
 	)"
-	if [[ -n "\$VALUE" ]]; then
-		export "\$NAME"="\$VALUE"
+	if [[ -n "$VALUE" ]]; then
+		export "$NAME"="$VALUE"
 	else
-		unset "\$NAME"
+		unset "$NAME"
 	fi
 }
 __remove_duplicate ':' PATH
@@ -462,19 +466,23 @@ __remove_duplicate ':' LD_LIBRARY_PATH
 unset -f __remove_duplicate
 
 # Utilities
-if [[ -f "\$HOME/.dotfiles/utilities.sh" ]]; then
-	. "\$HOME/.dotfiles/utilities.sh"
+if [[ -f "$HOME/.dotfiles/utilities.sh" ]]; then
+	. "$HOME/.dotfiles/utilities.sh"
 fi
 
 # Path to your oh-my-zsh installation.
-export ZSH="\$HOME/.oh-my-zsh"
-ZSH_COMPDUMP="\$HOME/.zcompdump"
-HISTFILE="\$HOME/.zsh_history"
+export ZSH="$HOME/.oh-my-zsh"
+ZSH_COMPDUMP="$HOME/.zcompdump"
+HISTFILE="$HOME/.zsh_history"
+EOF
+cat >>.dotfiles/.zshrc <<EOF
 DEFAULT_USER="$USER"
 
+EOF
+cat >>.dotfiles/.zshrc <<'EOF'
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
-# to know which specific one was loaded, run: echo \$RANDOM_THEME
+# to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 ZSH_THEME="powerlevel10k/powerlevel10k"
 
@@ -483,7 +491,7 @@ POWERLEVEL9K_MODE="nerdfont-complete"
 POWERLEVEL9K_PROMPT_ON_NEWLINE=true
 POWERLEVEL9K_RPROMPT_ON_NEWLINE=false
 POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX=""
-POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="%K{white}%F{black} \\ue795 \\uf155 %f%k%F{white}\\ue0b0%f "
+POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="%K{white}%F{black} \ue795 \uf155 %f%k%F{white}\ue0b0%f "
 POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(virtualenv anaconda pyenv context root_indicator dir dir_writable vcs)
 POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(command_execution_time status background_jobs time ssh)
 POWERLEVEL9K_SHORTEN_DIR_LENGTH=3
@@ -539,7 +547,7 @@ GITSTATUS_NUM_THREADS=4
 # see 'man strftime' for details.
 # HIST_STAMPS="mm/dd/yyyy"
 
-# Would you like to use another custom folder than \$ZSH/custom?
+# Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
 # Which plugins would you like to load?
@@ -574,17 +582,17 @@ plugins=(
 ZSH_COLORIZE_STYLE="monokai"
 ZSH_DISABLE_COMPFIX=true
 
-source "\$ZSH/oh-my-zsh.sh"
+source "$ZSH/oh-my-zsh.sh"
 
 # User configuration
 
-# export MANPATH="/usr/local/man:\$MANPATH"
+# export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
-# if [[ -n "\$SSH_CONNECTION" ]]; then
+# if [[ -n "$SSH_CONNECTION" ]]; then
 #   export EDITOR='vim'
 # else
 #   export EDITOR='mvim'
@@ -599,7 +607,7 @@ source "\$ZSH/oh-my-zsh.sh"
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run \$(alias).
+# For a full list of active aliases, run $(alias).
 #
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
@@ -611,17 +619,17 @@ alias l='ls -alh'
 alias ll='ls -lh'
 alias la='ls -Alh'
 
-if [[ -z "\$ZSH_PUREPOWER" ]]; then
+if [[ -z "$ZSH_PUREPOWER" ]]; then
 	# Setup Color LS
-	if [[ -x "\$(command -v ruby)" && -x "\$(command -v gem)" ]]; then
+	if [[ -x "$(command -v ruby)" && -x "$(command -v gem)" ]]; then
 		if gem list --silent --installed colorls; then
-			source "\$(dirname "\$(gem which colorls)")"/tab_complete.sh
+			source "$(dirname "$(gem which colorls)")"/tab_complete.sh
 			alias ls='colorls --sd --gs'
 		fi
 	fi
 else
 	# Use Powerlevel10k purepower theme
-	source "\$ZSH_CUSTOM/themes/powerlevel10k/config/p10k-lean.zsh"
+	source "$ZSH_CUSTOM/themes/powerlevel10k/config/p10k-lean.zsh"
 	POWERLEVEL9K_MODE="compatible"
 	POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(dir vcs newline prompt_char)
 	POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status command_execution_time background_jobs virtualenv anaconda pyenv time)
@@ -663,52 +671,52 @@ fi
 # Add utility script file
 backup_dotfiles .dotfiles/utilities.sh
 
-cat >.dotfiles/utilities.sh <<EOF
+cat >.dotfiles/utilities.sh <<'EOF'
 #!/usr/bin/env bash
 
 function echo_and_eval() {
-	printf "%s" "\$@" | awk -f <(
+	printf "%s" "$@" | awk -f <(
 		cat - <<-'EOD'
 			BEGIN {
-				RESET = "\\033[0m";
-				BOLD = "\\033[1m"
-				UNDERLINE = "\\033[4m";
-				UNDERLINEOFF = "\\033[24m";
-				RED = "\\033[31m";
-				GREEN = "\\033[32m";
-				YELLOW = "\\033[33m";
-				WHITE = "\\033[37m";
-				GRAY = "\\033[90m"
+				RESET = "\033[0m";
+				BOLD = "\033[1m"
+				UNDERLINE = "\033[4m";
+				UNDERLINEOFF = "\033[24m";
+				RED = "\033[31m";
+				GREEN = "\033[32m";
+				YELLOW = "\033[33m";
+				WHITE = "\033[37m";
+				GRAY = "\033[90m"
 				idx = 0;
 				in_string = 0;
 				double_quoted = 1;
-				printf("%s\$", BOLD WHITE);
+				printf("%s$", BOLD WHITE);
 			}
 			{
 				for (i = 1; i <= NF; ++i) {
 					style = WHITE;
 					post_style = WHITE;
 					if (!in_string) {
-						if (\$i ~ /^-/)
+						if ($i ~ /^-/)
 							style = YELLOW;
-						else if (\$i == "sudo" && idx == 0) {
+						else if ($i == "sudo" && idx == 0) {
 							style = UNDERLINE GREEN;
 							post_style = UNDERLINEOFF WHITE;
 						}
-						else if (\$i ~ /^[A-Za-z_]+=/ && idx == 0) {
+						else if ($i ~ /^[A-Za-z_]+=/ && idx == 0) {
 							style = GRAY;
-							if (\$i ~ /^[A-Za-z_]+=["']/) {
+							if ($i ~ /^[A-Za-z_]+=["']/) {
 								in_string = 1;
-								double_quoted = (\$i ~ /^[A-Za-z_]+="/);
+								double_quoted = ($i ~ /^[A-Za-z_]+="/);
 							}
 						}
-						else if (\$i ~ /^[12&]?>>?/ || \$i == "\\\\")
+						else if ($i ~ /^[12&]?>>?/ || $i == "\\")
 							style = RED;
 						else {
 							++idx;
-							if (\$i ~ /^["']/) {
+							if ($i ~ /^["']/) {
 								in_string = 1;
-								double_quoted = (\$i ~ /^"/);
+								double_quoted = ($i ~ /^"/);
 							}
 							if (idx == 1)
 								style = GREEN;
@@ -718,30 +726,30 @@ function echo_and_eval() {
 						if (style == WHITE)
 							style = "";
 						post_style = "";
-						if ((double_quoted && \$i ~ /";?\$/ && \$i !~ /\\\\";?\$/) || (!double_quoted && \$i ~ /';?\$/))
+						if ((double_quoted && $i ~ /";?$/ && $i !~ /\\";?$/) || (!double_quoted && $i ~ /';?$/))
 							in_string = 0;
 					}
-					if (\$i ~ /;\$/ || \$i == "|" || \$i == "||" || \$i == "&&") {
+					if ($i ~ /;$/ || $i == "|" || $i == "||" || $i == "&&") {
 						if (!in_string) {
 							idx = 0;
-							if (\$i !~ /;\$/)
+							if ($i !~ /;$/)
 								style = RED;
 						}
 					}
-					if (\$i ~ /;\$/)
-						printf(" %s%s%s;%s", style, substr(\$i, 1, length(\$i) - 1), (in_string ? WHITE : RED), post_style);
+					if ($i ~ /;$/)
+						printf(" %s%s%s;%s", style, substr($i, 1, length($i) - 1), (in_string ? WHITE : RED), post_style);
 					else
-						printf(" %s%s%s", style, \$i, post_style);
-					if (\$i == "\\\\")
-						printf("\\n\\t");
+						printf(" %s%s%s", style, $i, post_style);
+					if ($i == "\\")
+						printf("\n\t");
 				}
 			}
 			END {
-				printf("%s\\n", RESET);
+				printf("%s\n", RESET);
 			}
 		EOD
 	)
-	eval "\$@"
+	eval "$@"
 }
 
 function upgrade_manjaro() {
@@ -760,29 +768,29 @@ function upgrade_ohmyzsh() {
 	local REPOS repo
 
 	# Set oh-my-zsh installation path
-	export ZSH="\${ZSH:-"\$HOME/.oh-my-zsh"}"
-	export ZSH_CUSTOM="\${ZSH_CUSTOM:-"\$ZSH/custom"}"
-	export ZSH_CACHE_DIR="\${ZSH_CACHE_DIR:-"\$ZSH/cache"}"
+	export ZSH="${ZSH:-"$HOME/.oh-my-zsh"}"
+	export ZSH_CUSTOM="${ZSH_CUSTOM:-"$ZSH/custom"}"
+	export ZSH_CACHE_DIR="${ZSH_CACHE_DIR:-"$ZSH/cache"}"
 
 	# Upgrade oh my zsh
-	rm -f "\$ZSH_CACHE_DIR/.zsh-update" 2>/dev/null
-	zsh "\$ZSH/tools/check_for_upgrade.sh" 2>/dev/null
-	echo_and_eval 'zsh "\$ZSH/tools/upgrade.sh"'
+	rm -f "$ZSH_CACHE_DIR/.zsh-update" 2>/dev/null
+	zsh "$ZSH/tools/check_for_upgrade.sh" 2>/dev/null
+	echo_and_eval 'zsh "$ZSH/tools/upgrade.sh"'
 
 	# Upgrade themes and plugins
-	REPOS=(\$(
-		cd "\$ZSH_CUSTOM"
+	REPOS=($(
+		cd "$ZSH_CUSTOM"
 		find -L . -mindepth 3 -maxdepth 3 -not -empty -type d -name '.git' |
-			sed -E 's#^\\./(.*)/\\.git\$#\\1#'
+			sed -E 's#^\./(.*)/\.git$#\1#'
 	))
-	for repo in "\${REPOS[@]}"; do
-		echo_and_eval "git -C \\"\\\$ZSH_CUSTOM/\$repo\\" pull --ff-only"
+	for repo in "${REPOS[@]}"; do
+		echo_and_eval "git -C \"\$ZSH_CUSTOM/$repo\" pull --ff-only"
 	done
 }
 
 function upgrade_fzf() {
-	echo_and_eval 'git -C "\$HOME/.fzf" pull --ff-only'
-	echo_and_eval '"\$HOME/.fzf/install" --key-bindings --completion --no-update-rc'
+	echo_and_eval 'git -C "$HOME/.fzf" pull --ff-only'
+	echo_and_eval '"$HOME/.fzf/install" --key-bindings --completion --no-update-rc'
 }
 
 function upgrade_vim() {
@@ -791,9 +799,9 @@ function upgrade_vim() {
 
 function upgrade_gems() {
 	if groups | grep -qE '(wheel|root)'; then
-		echo_and_eval 'sudo gem update --system --config-file "\$HOME/.gemrc"'
-		echo_and_eval 'sudo gem update --config-file "\$HOME/.gemrc"'
-		echo_and_eval 'sudo gem cleanup --config-file "\$HOME/.gemrc"'
+		echo_and_eval 'sudo gem update --system --config-file "$HOME/.gemrc"'
+		echo_and_eval 'sudo gem update --config-file "$HOME/.gemrc"'
+		echo_and_eval 'sudo gem cleanup --config-file "$HOME/.gemrc"'
 	fi
 	echo_and_eval 'gem update --user-install'
 	echo_and_eval 'gem cleanup --user-install'
@@ -810,15 +818,15 @@ function upgrade_conda() {
 	echo_and_eval 'conda update conda --name base --yes'
 
 	# Upgrade Conda packages in each environment
-	ENVS=(base \$(
-		cd "\$(conda info --base)/envs"
-		find -L . -mindepth 1 -maxdepth 1 -not -empty \\( -type d -or -type l \\) |
-			sed -E 's#^\\./(.*)\$#\\1#'
+	ENVS=(base $(
+		cd "$(conda info --base)/envs"
+		find -L . -mindepth 1 -maxdepth 1 -not -empty \( -type d -or -type l \) |
+			sed -E 's#^\./(.*)$#\1#'
 	))
-	for env in "\${ENVS[@]}"; do
-		echo_and_eval "conda update --all --name \$env --yes"
-		if conda list --full-name anaconda --name "\$env" | grep -q '^anaconda[^-]'; then
-			echo_and_eval "conda update anaconda --name \$env --yes"
+	for env in "${ENVS[@]}"; do
+		echo_and_eval "conda update --all --name $env --yes"
+		if conda list --full-name anaconda --name "$env" | grep -q '^anaconda[^-]'; then
+			echo_and_eval "conda update anaconda --name $env --yes"
 		fi
 	done
 
@@ -832,57 +840,57 @@ function upgrade_packages() {
 	fi
 	upgrade_ohmyzsh
 	upgrade_fzf
-	if [[ -x "\$(command -v vim)" ]]; then
+	if [[ -x "$(command -v vim)" ]]; then
 		upgrade_vim
 	fi
-	if [[ -x "\$(command -v ruby)" && -x "\$(command -v gem)" ]]; then
+	if [[ -x "$(command -v ruby)" && -x "$(command -v gem)" ]]; then
 		upgrade_gems
 	fi
 	# upgrade_cpan
 	# upgrade_conda
 
-	if [[ -n "\$ZSH_VERSION" ]]; then
-		if [[ -f "\${ZDOTDIR:-"\$HOME"}/.zshrc" ]]; then
-			source "\${ZDOTDIR:-"\$HOME"}/.zshrc"
+	if [[ -n "$ZSH_VERSION" ]]; then
+		if [[ -f "${ZDOTDIR:-"$HOME"}/.zshrc" ]]; then
+			source "${ZDOTDIR:-"$HOME"}/.zshrc"
 		fi
-	elif [[ -n "\$BASH_VERSION" ]]; then
-		if [[ -f "\$HOME/.bash_profile" ]]; then
-			source "\$HOME/.bash_profile"
+	elif [[ -n "$BASH_VERSION" ]]; then
+		if [[ -f "$HOME/.bash_profile" ]]; then
+			source "$HOME/.bash_profile"
 		fi
 	fi
 }
 
 function set_proxy() {
-	local PROXY_HOST="\${1:-"127.0.0.1"}"
-	local HTTP_PORT="\${2:-"7890"}"
-	local HTTPS_PORT="\${3:-"7890"}"
-	local FTP_PORT="\${4:-"7890"}"
-	local SOCKS_PORT="\${5:-"7891"}"
+	local PROXY_HOST="${1:-"127.0.0.1"}"
+	local HTTP_PORT="${2:-"7890"}"
+	local HTTPS_PORT="${3:-"7890"}"
+	local FTP_PORT="${4:-"7890"}"
+	local SOCKS_PORT="${5:-"7891"}"
 
-	if [[ -x "\$(command -v /usr/bin/gsettings)" ]]; then
+	if [[ -x "$(command -v /usr/bin/gsettings)" ]]; then
 		/usr/bin/gsettings set org.gnome.system.proxy mode 'manual'
-		/usr/bin/gsettings set org.gnome.system.proxy.http host "\$PROXY_HOST"
-		/usr/bin/gsettings set org.gnome.system.proxy.http port "\$HTTP_PORT"
-		/usr/bin/gsettings set org.gnome.system.proxy.https host "\$PROXY_HOST"
-		/usr/bin/gsettings set org.gnome.system.proxy.https port "\$HTTPS_PORT"
-		/usr/bin/gsettings set org.gnome.system.proxy.ftp host "\$PROXY_HOST"
-		/usr/bin/gsettings set org.gnome.system.proxy.ftp port "\$FTP_PORT"
-		/usr/bin/gsettings set org.gnome.system.proxy.socks host "\$PROXY_HOST"
-		/usr/bin/gsettings set org.gnome.system.proxy.socks port "\$SOCKS_PORT"
+		/usr/bin/gsettings set org.gnome.system.proxy.http host "$PROXY_HOST"
+		/usr/bin/gsettings set org.gnome.system.proxy.http port "$HTTP_PORT"
+		/usr/bin/gsettings set org.gnome.system.proxy.https host "$PROXY_HOST"
+		/usr/bin/gsettings set org.gnome.system.proxy.https port "$HTTPS_PORT"
+		/usr/bin/gsettings set org.gnome.system.proxy.ftp host "$PROXY_HOST"
+		/usr/bin/gsettings set org.gnome.system.proxy.ftp port "$FTP_PORT"
+		/usr/bin/gsettings set org.gnome.system.proxy.socks host "$PROXY_HOST"
+		/usr/bin/gsettings set org.gnome.system.proxy.socks port "$SOCKS_PORT"
 	fi
 
-	export http_proxy="http://\${PROXY_HOST}:\${HTTP_PORT}"
-	export https_proxy="http://\${PROXY_HOST}:\${HTTPS_PORT}"
-	export ftp_proxy="http://\${PROXY_HOST}:\${FTP_PORT}"
-	export all_proxy="socks5://\${PROXY_HOST}:\${SOCKS_PORT}"
-	export HTTP_PROXY="\$http_proxy"
-	export HTTPS_PROXY="\$https_proxy"
-	export FTP_PROXY="\$ftp_proxy"
-	export ALL_PROXY="\$all_proxy"
+	export http_proxy="http://${PROXY_HOST}:${HTTP_PORT}"
+	export https_proxy="http://${PROXY_HOST}:${HTTPS_PORT}"
+	export ftp_proxy="http://${PROXY_HOST}:${FTP_PORT}"
+	export all_proxy="socks5://${PROXY_HOST}:${SOCKS_PORT}"
+	export HTTP_PROXY="$http_proxy"
+	export HTTPS_PROXY="$https_proxy"
+	export FTP_PROXY="$ftp_proxy"
+	export ALL_PROXY="$all_proxy"
 }
 
 function reset_proxy() {
-	if [[ -x "\$(command -v /usr/bin/gsettings)" ]]; then
+	if [[ -x "$(command -v /usr/bin/gsettings)" ]]; then
 		/usr/bin/gsettings set org.gnome.system.proxy mode 'none'
 		/usr/bin/gsettings set org.gnome.system.proxy.http host '127.0.0.1'
 		/usr/bin/gsettings set org.gnome.system.proxy.http port 8080
@@ -905,27 +913,27 @@ function reset_proxy() {
 }
 
 function auto_reannounce_trackers() {
-	local TIMES="\${1:-60}"
-	local INTERVAL="\${2:-60}"
+	local TIMES="${1:-60}"
+	local INTERVAL="${2:-60}"
 	local TORRENT CMD t r
 
-	echo -ne "\\033[?25l"
+	echo -ne "\033[?25l"
 
 	for ((t = 0; t <= TIMES; ++t)); do
-		if [[ \$((t % 5)) != 0 ]]; then
+		if [[ $((t % 5)) != 0 ]]; then
 			TORRENT="active"
 		else
 			TORRENT="all"
 		fi
-		CMD="transmission-remote --torrent \$TORRENT --reannounce"
-		eval "\$CMD" 1>/dev/null
+		CMD="transmission-remote --torrent $TORRENT --reannounce"
+		eval "$CMD" 1>/dev/null
 		for ((r = INTERVAL - 1; r >= 0; --r)); do
-			echo -ne "\$CMD (\$t/\$TIMES, next reannounce in \${r}s)\\033[K\\r"
+			echo -ne "$CMD ($t/$TIMES, next reannounce in ${r}s)\033[K\r"
 			sleep 1
 		done
 	done
 
-	echo -ne "\\033[K\\033[?25h"
+	echo -ne "\033[K\033[?25h"
 }
 EOF
 
@@ -933,15 +941,15 @@ EOF
 backup_dotfiles .bashrc .dotfiles/.bashrc
 
 if ! grep -qF 'shopt -q login_shell' .bashrc; then
-	cat >>.bashrc <<EOF
+	cat >>.bashrc <<'EOF'
 
 # Always source ~/.bash_profile
 if ! shopt -q login_shell; then
 	# Include ~/.bash_profile if it exists
-	if [[ -f "\$HOME/.bash_profile" ]]; then
-		. "\$HOME/.bash_profile"
-	elif [[ -f "\$HOME/.profile" ]]; then
-		. "\$HOME/.profile"
+	if [[ -f "$HOME/.bash_profile" ]]; then
+		. "$HOME/.bash_profile"
+	elif [[ -f "$HOME/.profile" ]]; then
+		. "$HOME/.profile"
 	fi
 fi
 EOF
@@ -952,7 +960,7 @@ ln -sf .dotfiles/.bashrc .
 
 backup_dotfiles .bash_profile .dotfiles/.bash_profile
 
-cat >.dotfiles/.bash_profile <<EOF
+cat >.dotfiles/.bash_profile <<'EOF'
 #
 # ~/.bash_profile
 #
@@ -964,37 +972,37 @@ cat >.dotfiles/.bash_profile <<EOF
 #umask 022
 
 # If running bash as login shell
-if [[ -n "\$BASH_VERSION" ]] && shopt -q login_shell; then
+if [[ -n "$BASH_VERSION" ]] && shopt -q login_shell; then
 	# Include ~/.bashrc if it exists
-	if [[ -f "\$HOME/.bashrc" ]]; then
-		. "\$HOME/.bashrc"
+	if [[ -f "$HOME/.bashrc" ]]; then
+		. "$HOME/.bashrc"
 	fi
 fi
 
 # Set PATH so it includes user's private bin if it exists
-if [[ -d "\$HOME/.local/bin" ]]; then
-	export PATH="\$HOME/.local/bin:\$PATH"
+if [[ -d "$HOME/.local/bin" ]]; then
+	export PATH="$HOME/.local/bin:$PATH"
 fi
 
 # Set C_INCLUDE_PATH and CPLUS_INCLUDE_PATH so it includes user's private include if it exists
-if [[ -d "\$HOME/.local/include" ]]; then
-	export C_INCLUDE_PATH="\$HOME/.local/include:\$C_INCLUDE_PATH"
-	export CPLUS_INCLUDE_PATH="\$HOME/.local/include:\$CPLUS_INCLUDE_PATH"
+if [[ -d "$HOME/.local/include" ]]; then
+	export C_INCLUDE_PATH="$HOME/.local/include:$C_INCLUDE_PATH"
+	export CPLUS_INCLUDE_PATH="$HOME/.local/include:$CPLUS_INCLUDE_PATH"
 fi
 
 # Set LIBRARY_PATH and LD_LIBRARY_PATH so it includes user's private lib if it exists
-if [[ -d "\$HOME/.local/lib" ]]; then
-	export LIBRARY_PATH="\$HOME/.local/lib:\$LIBRARY_PATH"
-	export LD_LIBRARY_PATH="\$HOME/.local/lib:\$LD_LIBRARY_PATH"
+if [[ -d "$HOME/.local/lib" ]]; then
+	export LIBRARY_PATH="$HOME/.local/lib:$LIBRARY_PATH"
+	export LD_LIBRARY_PATH="$HOME/.local/lib:$LD_LIBRARY_PATH"
 fi
-if [[ -d "\$HOME/.local/lib64" ]]; then
-	export LIBRARY_PATH="\$HOME/.local/lib64:\$LIBRARY_PATH"
-	export LD_LIBRARY_PATH="\$HOME/.local/lib64:\$LD_LIBRARY_PATH"
+if [[ -d "$HOME/.local/lib64" ]]; then
+	export LIBRARY_PATH="$HOME/.local/lib64:$LIBRARY_PATH"
+	export LD_LIBRARY_PATH="$HOME/.local/lib64:$LD_LIBRARY_PATH"
 fi
 
 # User specific environment and startup programs
 export TERM="xterm-256color"
-export PS1='[\\[\\e[1;33m\\]\\u\\[\\e[0m\\]@\\[\\e[1;32m\\]\\h\\[\\e[0m\\]:\\[\\e[1;35m\\]\\w\\[\\e[0m\\]]\\\$ '
+export PS1='[\[\e[1;33m\]\u\[\e[0m\]@\[\e[1;32m\]\h\[\e[0m\]:\[\e[1;35m\]\w\[\e[0m\]]\$ '
 
 # Locale
 export LC_ALL="en_US.utf8"
@@ -1003,10 +1011,12 @@ export LC_ALL="en_US.utf8"
 export CC="/usr/bin/gcc"
 export CXX="/usr/bin/g++"
 export FC="/usr/bin/gfortran"
-export OMPI_CC="\$CC" MPICH_CC="\$CC"
-export OMPI_CXX="\$CXX" MPICH_CXX="\$CXX"
-export OMPI_FC="\$FC" MPICH_FC="\$FC"
+export OMPI_CC="$CC" MPICH_CC="$CC"
+export OMPI_CXX="$CXX" MPICH_CXX="$CXX"
+export OMPI_FC="$FC" MPICH_FC="$FC"
 
+EOF
+cat >>.dotfiles/.bash_profile <<EOF
 # Anaconda
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
@@ -1023,26 +1033,28 @@ fi
 unset __conda_setup
 # <<< conda initialize <<<
 
+EOF
+cat >>.dotfiles/.bash_profile <<'EOF'
 # Ruby
-if [[ -x "\$(command -v ruby)" && -x "\$(command -v gem)" ]]; then
+if [[ -x "$(command -v ruby)" && -x "$(command -v gem)" ]]; then
 	export RUBYOPT="-W0"
-	export PATH="\$(ruby -r rubygems -e 'puts Gem.dir')/bin:\$PATH"
-	export PATH="\$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:\$PATH"
+	export PATH="$(ruby -r rubygems -e 'puts Gem.dir')/bin:$PATH"
+	export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
 fi
 
 # Perl
-eval "\$(perl -I\$HOME/.perl/lib/perl5 -Mlocal::lib=\$HOME/.perl)"
+eval "$(perl -I$HOME/.perl/lib/perl5 -Mlocal::lib=$HOME/.perl)"
 
 # fzf
-if [[ -f "\$HOME/.fzf.bash" ]]; then
-	source "\$HOME/.fzf.bash"
+if [[ -f "$HOME/.fzf.bash" ]]; then
+	source "$HOME/.fzf.bash"
 fi
-if [[ -x "\$(command -v fd)" ]]; then
+if [[ -x "$(command -v fd)" ]]; then
 	export FZF_DEFAULT_COMMAND="fd --type file --follow --hidden --no-ignore-vcs --exclude '.git' --color=always"
-	export FZF_CTRL_T_COMMAND="\$FZF_DEFAULT_COMMAND"
+	export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 fi
 FZF_PREVIEW_COMMAND="(bat --color=always {} || highlight -O ansi {} || cat {}) 2>/dev/null | head -100"
-export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --ansi --preview='\${FZF_PREVIEW_COMMAND}'"
+export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --ansi --preview='${FZF_PREVIEW_COMMAND}'"
 
 # bat
 export BAT_THEME="Monokai Extended"
@@ -1050,24 +1062,24 @@ export BAT_THEME="Monokai Extended"
 # Remove duplicate entries
 function __remove_duplicate() {
 	local SEP NAME VALUE
-	SEP="\$1"
-	NAME="\$2"
-	VALUE="\$(
-		eval "printf \\"%s\\" \\"\\\$\$NAME\\"" | awk -v RS="\$SEP" \\
+	SEP="$1"
+	NAME="$2"
+	VALUE="$(
+		eval "printf \"%s\" \"\$$NAME\"" | awk -v RS="$SEP" \
 			'BEGIN {
 				idx = 0;
 				delete flag;
 				flag[""] = 1;
 			}
 			{
-				if (!(flag[\$0]++))
-					printf("%s%s", (!(idx++) ? "" : RS), \$0);
+				if (!(flag[$0]++))
+					printf("%s%s", (!(idx++) ? "" : RS), $0);
 			}'
 	)"
-	if [[ -n "\$VALUE" ]]; then
-		export "\$NAME"="\$VALUE"
+	if [[ -n "$VALUE" ]]; then
+		export "$NAME"="$VALUE"
 	else
-		unset "\$NAME"
+		unset "$NAME"
 	fi
 }
 __remove_duplicate ':' PATH
@@ -1078,8 +1090,8 @@ __remove_duplicate ':' LD_LIBRARY_PATH
 unset -f __remove_duplicate
 
 # Utilities
-if [[ -f "\$HOME/.dotfiles/utilities.sh" ]]; then
-	. "\$HOME/.dotfiles/utilities.sh"
+if [[ -f "$HOME/.dotfiles/utilities.sh" ]]; then
+	. "$HOME/.dotfiles/utilities.sh"
 fi
 
 # Bash completion
@@ -1101,7 +1113,7 @@ GUI_FONT='DejaVuSansMono\ Nerd\ Font\ Mono\ 10'
 if $IN_WSL; then
 	GUI_FONT='DejaVuSansMono\ NF\ 10'
 fi
-cat >.dotfiles/.vimrc <<EOF
+cat >.dotfiles/.vimrc <<'EOF'
 set nocompatible
 set backspace=indent,eol,start
 syntax on
@@ -1117,7 +1129,7 @@ set tabstop=4
 set shiftwidth=4
 set expandtab
 set list
-set listchars=tab:»\\ ,trail:·
+set listchars=tab:»\ ,trail:·
 set conceallevel=2
 set concealcursor=""
 set number
@@ -1147,20 +1159,24 @@ set wildmode=longest:list,full
 set completeopt=longest,menu
 set background=dark
 set t_Co=256
+EOF
+cat >>.dotfiles/.vimrc <<EOF
 set guifont=${GUI_FONT}
+EOF
+cat >>.dotfiles/.vimrc <<'EOF'
 colorscheme monokai
 
 if &term =~ "xterm"
-    let &t_SI = "\\<Esc>]50;CursorShape=1\\x7"
-    let &t_SR = "\\<Esc>]50;CursorShape=2\\x7"
-    let &t_EI = "\\<Esc>]50;CursorShape=0\\x7"
+    let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+    let &t_SR = "\<Esc>]50;CursorShape=2\x7"
+    let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 endif
 
 autocmd GUIEnter * set lines=50 columns=160
 
 autocmd GUIEnter * set spell spelllang=en_us
 
-autocmd BufReadPost * if line("'\\"") > 1 && line("'\\"") <= line("\$") | execute "normal! g'\\"" | endif
+autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | execute "normal! g'\"" | endif
 autocmd BufWritePre,FileWritePre * RemoveTrailingSpaces
 autocmd Filetype sh,zsh,gitconfig,c,cpp,make,go set noexpandtab
 autocmd FileType vim,tex let b:autoformat_autoindent = 0
@@ -1178,7 +1194,7 @@ function s:NERDTreeAutoToggle(minbufwidth = 80)
     if !(exists('b:NERDTree') && b:NERDTree.isTabTree())
         let NERDTreeIsOpen = (g:NERDTree.ExistsForTab() && g:NERDTree.IsOpen())
         let width = winwidth('%')
-        let numberwidth = ((&number || &relativenumber) ? max([&numberwidth, strlen(line('\$')) + 1]) : 0)
+        let numberwidth = ((&number || &relativenumber) ? max([&numberwidth, strlen(line('$')) + 1]) : 0)
         let signwidth = ((&signcolumn == 'yes' || &signcolumn == 'auto') ? 2 : 0)
         let foldwidth = &foldcolumn
         let bufwidth = width - numberwidth - foldwidth - signwidth
@@ -1197,7 +1213,7 @@ function s:NERDTreeAutoToggle(minbufwidth = 80)
     endif
 endfunction
 autocmd VimEnter,VimResized * call s:NERDTreeAutoToggle(80)
-autocmd BufEnter * if winnr('\$') == 1 && (exists('b:NERDTree') && b:NERDTree.isTabTree()) | quit | endif
+autocmd BufEnter * if winnr('$') == 1 && (exists('b:NERDTree') && b:NERDTree.isTabTree()) | quit | endif
 
 let g:airline#extensions#tabline#enabled = 1
 
@@ -1230,7 +1246,7 @@ autocmd GUIEnter * let g:syntastic_check_on_open = 1
 
 let g:tex_flavor = 'latex'
 
-if !exists('\$SSH_CONNECTION')
+if !exists('$SSH_CONNECTION')
     let g:mkdp_auto_start = 1
 endif
 
@@ -1277,7 +1293,7 @@ ln -sf .dotfiles/.vimrc .
 # Add Vim Monokai color theme
 mkdir -p .vim/colors
 
-cat >.vim/colors/monokai.vim <<EOF
+cat >.vim/colors/monokai.vim <<'EOF'
 " Vim color file
 " Converted from Textmate theme Monokai using Coloration v0.3.2 (http://github.com/sickill/coloration)
 
@@ -1408,12 +1424,11 @@ backup_dotfiles .tmux.conf .dotfiles/.tmux.conf \
 	.tmux.conf.local .dotfiles/.tmux.conf.local \
 	.tmux.conf.user .dotfiles/.tmux.conf.user
 
-cat >.dotfiles/.tmux.conf.user <<EOF
+cat >.dotfiles/.tmux.conf.user <<'EOF'
 # Set default terminal
 set-option -gs default-terminal "tmux-256color"
 set-option -gsa terminal-overrides ",xterm-termite:Tc"
 set-option -gs default-shell /usr/bin/zsh
-# set-option -gs default-command "reattach-to-user-namespace -l zsh"
 
 # Automatically set window title
 set-option -gs automatic-rename on
@@ -1490,29 +1505,10 @@ bind-key -n S-Left previous-window
 bind-key -n S-Right next-window
 
 # Reload tmux config
-bind-key r source-file ~/.tmux.conf \\; display-message "tmux.conf reloaded"
-
-# Theme
-# set-option -gs window-style fg=white
-# set-option -gs window-active-style fg=brightwhite
-# set-option -gs pane-border-status top
-# set-option -gs pane-border-style fg=white,default
-# set-option -gs pane-active-border-style fg=brightgreen,bold
-# set-option -gs -q status-utf8 on
-# set-option -gs status-position bottom
-# set-option -gs status-interval 1
-# set-option -gs status-bg blue
-# set-option -gs status-fg black
-# set-option -gs status-attr bold
-# set-option -gs window-status-fg colour208
-# set-option -gs window-status-current-fg colour129
-# set-option -gs status-left-length 30
-# set-option -gs status-right-length 90
-# set-option -gs status-left '#[none][#{session_name}]#[default] '
-# set-option -gs status-right ' #[fg=colour120][#{?#{==:#{=-60:pane_title},#{pane_title}},#{pane_title},…#{=-59:pane_title}}]#[default] #[none]%a %b-%d %H:%M:%S#[default] '
+bind-key r source-file ~/.tmux.conf \; display-message "tmux.conf reloaded"
 EOF
 
-echo_and_eval 'wget -N -P "$HOME/.dotfiles" https://github.com/gpakosz//raw.tmux/master/.tmux.conf{,.local}'
+echo_and_eval 'wget -N -P "$HOME/.dotfiles" https://github.com/gpakosz/.tmux/raw/master/.tmux.conf{,.local}'
 ln -sf .dotfiles/.tmux.conf .
 ln -sf .dotfiles/.tmux.conf.local .
 
@@ -1520,7 +1516,7 @@ sed -i 's/tmux_conf_copy_to_os_clipboard=false/tmux_conf_copy_to_os_clipboard=tr
 sed -i 's/#set -g history-limit 10000/set -g history-limit 10000/g' .dotfiles/.tmux.conf.local
 sed -i 's/#set -g mouse on/set -g mouse on/g' .dotfiles/.tmux.conf.local
 if ! grep -qF 'source-file ~/.dotfiles/.tmux.conf.user' .dotfiles/.tmux.conf.local; then
-	cat >>.dotfiles/.tmux.conf.local <<EOF
+	cat >>.dotfiles/.tmux.conf.local <<'EOF'
 
 %if '[ -f ~/.dotfiles/.tmux.conf.user ]'
     source-file ~/.dotfiles/.tmux.conf.user
@@ -1562,6 +1558,8 @@ Temporary Items
 .apdisk
 
 
+EOF
+cat >>.dotfiles/.gitignore_global <<'EOF'
 ##### Linux.gitignore #####
 *~
 
@@ -1592,7 +1590,7 @@ ehthumbs_vista.db
 [Dd]esktop.ini
 
 # Recycle Bin used on file shares
-\$RECYCLE.BIN/
+$RECYCLE.BIN/
 
 # Windows Installer files
 *.cab
@@ -1785,9 +1783,13 @@ ln -sf .dotfiles/.gitignore_global .
 # Configurations for Conda
 backup_dotfiles .condarc .dotfiles/.condarc
 
-CONDA_MIRROR_SETTINGS=""
+cat >.dotfiles/.condarc <<'EOF'
+auto_activate_base: false
+auto_update_conda: true
+
+EOF
 if $SET_MIRRORS; then
-	CONDA_MIRROR_SETTINGS='
+	cat >>.dotfiles/.condarc <<'EOF'
 channels:
   - defaults
 default_channels:
@@ -1806,12 +1808,10 @@ custom_channels:
   menpo: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
   simpleitk: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
 channel_priority: flexible
-'
+
+EOF
 fi
-cat >.dotfiles/.condarc <<EOF
-auto_activate_base: false
-auto_update_conda: true
-${CONDA_MIRROR_SETTINGS}
+cat >>.dotfiles/.condarc <<'EOF'
 ssl_verify: true
 show_channel_urls: false
 report_errors: false

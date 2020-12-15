@@ -80,22 +80,3 @@ bind-key -n S-Right next-window
 
 # Reload tmux config
 bind-key r source-file ~/.tmux.conf \; display-message "tmux.conf reloaded"
-
-# Theme
-# set-option -gs window-style fg=white
-# set-option -gs window-active-style fg=brightwhite
-# set-option -gs pane-border-status top
-# set-option -gs pane-border-style fg=white,default
-# set-option -gs pane-active-border-style fg=brightgreen,bold
-# set-option -gs -q status-utf8 on
-# set-option -gs status-position bottom
-# set-option -gs status-interval 1
-# set-option -gs status-bg blue
-# set-option -gs status-fg black
-# set-option -gs status-attr bold
-# set-option -gs window-status-fg colour208
-# set-option -gs window-status-current-fg colour129
-# set-option -gs status-left-length 30
-# set-option -gs status-right-length 90
-# set-option -gs status-left '#[none][#{session_name}]#[default] '
-# set-option -gs status-right ' #[fg=colour120][#{?#{==:#{=-60:pane_title},#{pane_title}},#{pane_title},…#{=-59:pane_title}}]#[default] #[none]%a %b-%d %H:%M:%S#[default] '

@@ -303,22 +303,22 @@ echo_and_eval 'gem update'
 echo_and_eval 'gem install colorls'
 echo_and_eval 'gem cleanup'
 
-# Configurations for CPAN
+# Configurations for Perl
 export PERL_MB_OPT='--install_base "/usr/local/opt/perl"'
 export PERL_MM_OPT='INSTALL_BASE="/usr/local/opt/perl"'
-echo_and_eval 'printf "\n\n\n%s\n" "quit" | cpan'
+echo_and_eval "PERL_MM_USE_DEFAULT=1 perl -MCPAN -e 'mkmyconfig'"
 if $SET_MIRRORS; then
-	echo_and_eval 'printf "%s\n%s\n%s\n" \
-			"o conf urllist https://mirrors.tuna.tsinghua.edu.cn/CPAN/" \
-			"o conf commit" \
-			"quit" \
-			| cpan'
+	if ! (perl -MCPAN -e 'CPAN::HandleConfig->load();' -e 'CPAN::HandleConfig->prettyprint("urllist")' |
+		grep -qF 'https://mirrors.tuna.tsinghua.edu.cn/CPAN/'); then
+		echo_and_eval "perl -MCPAN -e 'CPAN::HandleConfig->load();' \\
+				-e 'CPAN::HandleConfig->edit(\"urllist\", \"unshift\", \"https://mirrors.tuna.tsinghua.edu.cn/CPAN/\");' \\
+				-e 'CPAN::HandleConfig->commit()'"
+	fi
 fi
-echo_and_eval 'cpan -i local::lib'
+echo_and_eval "perl -MCPAN -e 'install local::lib'"
 echo_and_eval 'eval "$(perl -I/usr/local/opt/perl/lib/perl5 -Mlocal::lib=/usr/local/opt/perl)"'
-echo_and_eval 'cpan -i CPAN'
-echo_and_eval 'cpan -i Log::Log4perl'
-echo_and_eval 'printf "\n%s\n\n" "exit" | cpan -i Term::ReadLine::Perl Term::ReadKey'
+echo_and_eval "perl -MCPAN -e 'install CPAN'"
+echo_and_eval "AUTOMATED_TESTING=1 perl -MCPAN -e 'install Term::ReadLine::Perl, Term::ReadKey'"
 
 # Configurations for Zsh
 backup_dotfiles .dotfiles/.zshrc

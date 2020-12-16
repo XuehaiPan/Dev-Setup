@@ -102,7 +102,7 @@ export MONO_GAC_PREFIX="/usr/local"
 # Qt
 export PATH="/usr/local/opt/qt/bin:$PATH"
 
-# Curl
+# cURL
 export PATH="/usr/local/opt/curl/bin:$PATH"
 
 # OpenSSL

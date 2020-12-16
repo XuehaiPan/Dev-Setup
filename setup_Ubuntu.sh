@@ -679,7 +679,7 @@ alias l='ls -alh'
 alias ll='ls -lh'
 alias la='ls -Alh'
 
-if [[ -z "$ZSH_PUREPOWER" ]]; then
+if [[ -z "$P10K_LEAN_STYLE" ]]; then
 	# Setup Color LS
 	if [[ -x "$(command -v ruby)" && -x "$(command -v gem)" ]]; then
 		if gem list --silent --installed colorls; then
@@ -688,22 +688,27 @@ if [[ -z "$ZSH_PUREPOWER" ]]; then
 		fi
 	fi
 else
-	# Use Powerlevel10k purepower theme
+	# Use Powerlevel10k Lean style
 	source "$ZSH_CUSTOM/themes/powerlevel10k/config/p10k-lean.zsh"
 	POWERLEVEL9K_MODE="compatible"
 	POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(dir vcs newline prompt_char)
 	POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status command_execution_time background_jobs virtualenv anaconda pyenv time)
 	POWERLEVEL9K_TRANSIENT_PROMPT="same-dir"
+	POWERLEVEL9K_MULTILINE_FIRST_PROMPT_GAP_CHAR='·'
+	POWERLEVEL9K_LEFT_PROMPT_LAST_SEGMENT_END_SYMBOL=' '
+	POWERLEVEL9K_RIGHT_PROMPT_FIRST_SEGMENT_START_SYMBOL=' '
+	POWERLEVEL9K_EMPTY_LINE_LEFT_PROMPT_FIRST_SEGMENT_END_SYMBOL='%{%}'
+	POWERLEVEL9K_EMPTY_LINE_RIGHT_PROMPT_FIRST_SEGMENT_START_SYMBOL='%{%}'
 	p10k reload
 fi
 EOF
 
 ln -sf .dotfiles/.zshrc .
 
-# Configurations for Zsh purepower
+# Configurations for Zsh Powerlevel10k Lean style
 SHEBANG='#!/bin/sh'
-COMMAND='ZSH_PUREPOWER=true exec /usr/bin/zsh "$@"'
-cat >"$TMP_DIR/zsh-purepower" <<EOF
+COMMAND='P10K_LEAN_STYLE=true exec /usr/bin/zsh "$@"'
+cat >"$TMP_DIR/zsh-lean" <<EOF
 ${SHEBANG}
 ${COMMAND}
 EOF
@@ -711,21 +716,21 @@ if $IS_SUDOER; then
 	if [[ ! -d "/usr/local/bin" ]]; then
 		echo_and_eval 'sudo mkdir -p "/usr/local/bin"'
 	fi
-	if [[ ! -x "/usr/local/bin/zsh-purepower" || -L "/usr/local/bin/zsh-purepower" ]] ||
-		! diff -EB "/usr/local/bin/zsh-purepower" "$TMP_DIR/zsh-purepower" &>/dev/null; then
-		if [[ -f "/usr/local/bin/zsh-purepower" ]]; then
-			echo_and_eval 'sudo rm -f /usr/local/bin/zsh-purepower'
+	if [[ ! -x "/usr/local/bin/zsh-lean" || -L "/usr/local/bin/zsh-lean" ]] ||
+		! diff -EB "/usr/local/bin/zsh-lean" "$TMP_DIR/zsh-lean" &>/dev/null; then
+		if [[ -f "/usr/local/bin/zsh-lean" ]]; then
+			echo_and_eval 'sudo rm -f /usr/local/bin/zsh-lean'
 		fi
-		echo_and_eval "printf \"%s\\n\" '$SHEBANG' '$COMMAND' | sudo tee /usr/local/bin/zsh-purepower"
-		echo_and_eval 'sudo chmod a+x /usr/local/bin/zsh-purepower'
+		echo_and_eval "printf \"%s\\n\" '$SHEBANG' '$COMMAND' | sudo tee /usr/local/bin/zsh-lean"
+		echo_and_eval 'sudo chmod a+x /usr/local/bin/zsh-lean'
 	fi
-	if ! grep -qF '/usr/local/bin/zsh-purepower' /etc/shells; then
-		echo_and_eval 'echo "/usr/local/bin/zsh-purepower" | sudo tee -a /etc/shells'
+	if ! grep -qF '/usr/local/bin/zsh-lean' /etc/shells; then
+		echo_and_eval 'echo "/usr/local/bin/zsh-lean" | sudo tee -a /etc/shells'
 	fi
 else
 	mkdir -p "$HOME/.local/bin"
-	echo_and_eval "cp -f \"$TMP_DIR/zsh-purepower\" \"\$HOME/.local/bin/zsh-purepower\""
-	chmod +x "$HOME/.local/bin/zsh-purepower"
+	echo_and_eval "cp -f \"$TMP_DIR/zsh-lean\" \"\$HOME/.local/bin/zsh-lean\""
+	chmod +x "$HOME/.local/bin/zsh-lean"
 fi
 
 # Add utility script file

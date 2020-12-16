@@ -346,16 +346,21 @@ alias l='ls -alh'
 alias ll='ls -lh'
 alias la='ls -Alh'
 
-if [[ -z "$ZSH_PUREPOWER" ]]; then
+if [[ -z "$P10K_LEAN_STYLE" ]]; then
 	# Setup Color LS
 	source "$(dirname "$(gem which colorls)")"/tab_complete.sh
 	alias ls='colorls --sd --gs'
 else
-	# Use Powerlevel10k purepower theme
+	# Use Powerlevel10k Lean style
 	source "$ZSH_CUSTOM/themes/powerlevel10k/config/p10k-lean.zsh"
 	POWERLEVEL9K_MODE="compatible"
 	POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(dir vcs newline prompt_char)
 	POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status command_execution_time background_jobs virtualenv anaconda pyenv time)
 	POWERLEVEL9K_TRANSIENT_PROMPT="same-dir"
+	POWERLEVEL9K_MULTILINE_FIRST_PROMPT_GAP_CHAR='·'
+	POWERLEVEL9K_LEFT_PROMPT_LAST_SEGMENT_END_SYMBOL=' '
+	POWERLEVEL9K_RIGHT_PROMPT_FIRST_SEGMENT_START_SYMBOL=' '
+	POWERLEVEL9K_EMPTY_LINE_LEFT_PROMPT_FIRST_SEGMENT_END_SYMBOL='%{%}'
+	POWERLEVEL9K_EMPTY_LINE_RIGHT_PROMPT_FIRST_SEGMENT_START_SYMBOL='%{%}'
 	p10k reload
 fi

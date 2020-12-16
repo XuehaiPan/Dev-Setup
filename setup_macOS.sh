@@ -314,7 +314,7 @@ echo_and_eval 'gem cleanup'
 # Configurations for Perl
 export PERL_MB_OPT='--install_base "/usr/local/opt/perl"'
 export PERL_MM_OPT='INSTALL_BASE="/usr/local/opt/perl"'
-echo_and_eval "PERL_MM_USE_DEFAULT=1 perl -MCPAN -e 'mkmyconfig'"
+echo_and_eval "PERL_MM_USE_DEFAULT=1 http_proxy=\"\" ftp_proxy=\"\" perl -MCPAN -e 'mkmyconfig'"
 if $SET_MIRRORS; then
 	if ! (perl -MCPAN -e 'CPAN::HandleConfig->load();' -e 'CPAN::HandleConfig->prettyprint("urllist")' |
 		grep -qF 'https://mirrors.tuna.tsinghua.edu.cn/CPAN/'); then

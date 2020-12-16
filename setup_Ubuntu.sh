@@ -43,14 +43,15 @@ function echo_and_eval() {
 		cat - <<-'EOD'
 			BEGIN {
 				RESET = "\033[0m";
-				BOLD = "\033[1m"
+				BOLD = "\033[1m";
 				UNDERLINE = "\033[4m";
 				UNDERLINEOFF = "\033[24m";
 				RED = "\033[31m";
 				GREEN = "\033[32m";
 				YELLOW = "\033[33m";
 				WHITE = "\033[37m";
-				GRAY = "\033[90m"
+				GRAY = "\033[90m";
+				IDENTIFIER = "[_a-zA-Z][_a-zA-Z0-9]*";
 				idx = 0;
 				in_string = 0;
 				double_quoted = 1;
@@ -67,11 +68,11 @@ function echo_and_eval() {
 							style = UNDERLINE GREEN;
 							post_style = UNDERLINEOFF WHITE;
 						}
-						else if ($i ~ /^[A-Za-z_]+=/ && idx == 0) {
+						else if ($i ~ "^" IDENTIFIER "+=" && idx == 0) {
 							style = GRAY;
-							if ($i ~ /^[A-Za-z_]+=["']/) {
+							if ($i ~ "^" IDENTIFIER "+=[\"']") {
 								in_string = 1;
-								double_quoted = ($i ~ /^[A-Za-z_]+="/);
+								double_quoted = ($i ~ "^" IDENTIFIER "+=\"");
 							}
 						}
 						else if ($i ~ /^[12&]?>>?/ || $i == "\\")
@@ -744,14 +745,15 @@ function echo_and_eval() {
 		cat - <<-'EOD'
 			BEGIN {
 				RESET = "\033[0m";
-				BOLD = "\033[1m"
+				BOLD = "\033[1m";
 				UNDERLINE = "\033[4m";
 				UNDERLINEOFF = "\033[24m";
 				RED = "\033[31m";
 				GREEN = "\033[32m";
 				YELLOW = "\033[33m";
 				WHITE = "\033[37m";
-				GRAY = "\033[90m"
+				GRAY = "\033[90m";
+				IDENTIFIER = "[_a-zA-Z][_a-zA-Z0-9]*";
 				idx = 0;
 				in_string = 0;
 				double_quoted = 1;
@@ -768,11 +770,11 @@ function echo_and_eval() {
 							style = UNDERLINE GREEN;
 							post_style = UNDERLINEOFF WHITE;
 						}
-						else if ($i ~ /^[A-Za-z_]+=/ && idx == 0) {
+						else if ($i ~ "^" IDENTIFIER "+=" && idx == 0) {
 							style = GRAY;
-							if ($i ~ /^[A-Za-z_]+=["']/) {
+							if ($i ~ "^" IDENTIFIER "+=[\"']") {
 								in_string = 1;
-								double_quoted = ($i ~ /^[A-Za-z_]+="/);
+								double_quoted = ($i ~ "^" IDENTIFIER "+=\"");
 							}
 						}
 						else if ($i ~ /^[12&]?>>?/ || $i == "\\")

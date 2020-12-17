@@ -665,7 +665,7 @@ alias la='ls -Alh'
 if [[ -z "$P10K_LEAN_STYLE" ]]; then
 	# Setup Color LS
 	source "$(dirname "$(gem which colorls)")"/tab_complete.sh
-	alias ls='colorls --sd --gs'
+	alias ls='colorls --sort-dirs --git-status'
 else
 	# Use Powerlevel10k Lean style
 	source "$ZSH_CUSTOM/themes/powerlevel10k/config/p10k-lean.zsh"
@@ -678,6 +678,7 @@ else
 	POWERLEVEL9K_RIGHT_PROMPT_FIRST_SEGMENT_START_SYMBOL=' '
 	POWERLEVEL9K_EMPTY_LINE_LEFT_PROMPT_FIRST_SEGMENT_END_SYMBOL='%{%}'
 	POWERLEVEL9K_EMPTY_LINE_RIGHT_PROMPT_FIRST_SEGMENT_START_SYMBOL='%{%}'
+	unset P10K_LEAN_STYLE
 	p10k reload
 fi
 EOF

@@ -117,7 +117,16 @@
     "search.searchOnType": true,
     "search.showLineNumbers": true,
     "search.smartCase": true,
+    "search.collapseResults": "alwaysExpand",
+    "search.useReplacePreview": true,
+    "search.useGlobalIgnoreFiles": false,
     "search.useIgnoreFiles": true,
+    "search.exclude": {
+        "**/.history": true,
+        "**/node_modules": true,
+        "**/bower_components": true,
+        "**/*.code-search": true
+    },
 
     //* Outline */
     "outline.icons": true,

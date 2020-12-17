@@ -16,7 +16,7 @@ Bash scripts for setting up a newly installed OS automatically. ([screenshots](#
 
 ### Installation
 
-Download the script file using [wget](https://www.gnu.org/software/wget) / [curl](https://curl.haxx.se) / [git](https://git-scm.com) or any browser ([click to download zip](https://codeload.github.com/XuehaiPan/OS-Setup/zip/master)). And then open `Terminal` and run:
+Download the script file using [wget](https://www.gnu.org/software/wget) / [curl](https://curl.haxx.se) / [git](https://git-scm.com) or any browser ([click here to download zip](https://codeload.github.com/XuehaiPan/OS-Setup/zip/master)). And then open `Terminal` and run:
 
 **via wget**
 ```bash
@@ -34,7 +34,7 @@ bash -c "$(wget -O - https://github.com/XuehaiPan/OS-Setup/raw/master/setup.sh)"
 bash -c "$(curl -fL https://github.com/XuehaiPan/OS-Setup/raw/master/setup.sh)"
 ```
 
-**via git**
+**via git or browser**
 ```bash
 # Download via git
 git clone --depth=1 https://github.com/XuehaiPan/OS-Setup.git
@@ -50,9 +50,9 @@ Options:
 
 - `SET_MIRRORS` (default `true`) : set source of package managers to the open source mirrors at [TUNA (China)](https://mirrors.tuna.tsinghua.edu.cn) to speed up downloading. (see [Packages](#packages) for more details).
 
-**Note**: If you are using **WSL on Windows**, you need to run [Windows Terminal](https://github.com/Microsoft/Terminal) as **administrator** to get the permissions to unpack fonts to `C:\Windows\Fonts`. Otherwise, the fonts will not be installed successfully on Windows. You can download them from [nerdfonts.com](https://www.nerdfonts.com) and install them manually.
+**Note**: If you are using **WSL on Windows**, you need to run [Windows Terminal](https://github.com/Microsoft/Terminal) as **administrator** to get the permissions to copy fonts to `C:\Windows\Fonts`. Otherwise, the fonts will not be installed successfully on Windows. You can download them from [nerdfonts.com](https://www.nerdfonts.com) and install them manually. See section [Font Settings](#font-settings) for more details.
 
-After running the script, all the old configuration files involved will be backed up to the folder `$HOME/.dotfiles/backups/$DATETIME`, and a symbolic link `$HOME/.dotfiles/backups/latest` links to the latest one. You can compare the differences using:
+After running the script, all the old configuration files involved will be backed up to the folder `$HOME/.dotfiles/backups/<DATETIME>`, and a symbolic link `$HOME/.dotfiles/backups/latest` links to the latest one. You can compare the differences using:
 
   ```bash
   # Compare the differences
@@ -68,7 +68,7 @@ After running the script, all the old configuration files involved will be backe
 
   ```bash
   # Inspect and move changes using vimdiff
-  vimdiff ~/.dotfiles/$FILE ~/.dotfiles/backups/latest/.dotfiles/$FILE
+  vimdiff ~/.dotfiles/<FILE> ~/.dotfiles/backups/latest/.dotfiles/<FILE>
   ```
 
   You can get vimdiff reference manual from [https://vimhelp.org/diff.txt.html](https://vimhelp.org/diff.txt.html), or type command `:help diff` inside Vim.
@@ -82,7 +82,7 @@ You can restore your previous dotfiles using:
 bash restore_dotfiles.sh
 
 # Restore a specific version
-bash restore_dotfiles.sh "$HOME/.dotfiles/backups/$DATETIME"
+bash restore_dotfiles.sh "$HOME/.dotfiles/backups/<DATETIME>"
 ```
 
 **Note**: the packages installed by [`setup.sh`](setup.sh) (see section [Packages](#packages)) will remain in your system.
@@ -105,7 +105,7 @@ The function definitions are in `$HOME/.dotfiles/utilities.sh`, which will be so
 
 ### Font Settings
 
-The default shell for the current user will be set to **`zsh`**. In order to get a wonderful and enjoyable terminal experience, please change your terminal font to a [**Nerd Font**](https://github.com/ryanoasis/nerd-fonts). You can download any nerd font you like from [nerdfonts.com](https://www.nerdfonts.com) manually. The script will download and install [**`DejaVu Sans Mono Nerd Font`**](https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/DejaVuSansMono) for **macOS**, **Linux** and **Windows**. (Administrator permissions are required to install fonts on Windows)
+The default shell for the current user will be set to **`zsh`**. In order to get a wonderful and enjoyable terminal experience, please change your terminal font to a [**Nerd Font**](https://github.com/ryanoasis/nerd-fonts). You can download any nerd font you like from [nerdfonts.com](https://www.nerdfonts.com) manually. The script will download and install [**`DejaVu Sans Mono Nerd Font`**](https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/DejaVuSansMono) for **macOS**, **Linux** and **Windows** (*administrator privilege* is required to install fonts on Windows).
 
 Configure your terminal to use nerd fonts:
 
@@ -114,13 +114,22 @@ Configure your terminal to use nerd fonts:
 
 See [Font configurations for Powerlevel10k](https://github.com/romkatv/powerlevel10k#fonts) for more details.
 
-Or use the Powerlevel10k lean theme:
+Or use the Powerlevel10k Lean style:
 
 ```bash
 chsh -s /usr/local/bin/zsh-lean
 ```
 
 which do not need additional font settings.
+
+![zsh-lean](https://user-images.githubusercontent.com/16078332/102495805-8cc45c00-40b1-11eb-8838-b5b64c434d33.png)
+
+**Note**: If you are using **WSL on Windows**, you need to run [Windows Terminal](https://github.com/Microsoft/Terminal) as **administrator** to get the permissions to copy fonts to `C:\Windows\Fonts`. If you forgot to obtain the appropriate privileges, you can open WSL in a new terminal window with administrator privilege. Then run the following command:
+
+```bash
+find ~/.local/share/fonts -type f -name '*.[ot]t[fc]' -print \
+	-exec cp -f '{}' /mnt/c/Windows/Fonts \;
+```
 
 ## Customization
 
@@ -136,17 +145,17 @@ Add a new config file to the script:
 ```bash
 cd $HOME   # this line has already been added at the top of the script
 
-# Replace ${cfg_file_name} with the config file's name
-backup_dotfiles ${cfg_file_name} .dotfiles/${cfg_file_name}
+# Replace <CFG_FILE> with the config file's name
+backup_dotfiles <CFG_FILE> .dotfiles/<CFG_FILE>
 
-cat >.dotfiles/${cfg_file_name} <<EOF
+cat >.dotfiles/<CFG_FILE> <<EOF
 # Paste the contents in the temp file `temp.txt` here
 EOF
 
-ln -sf .dotfiles/${cfg_file_name} .
+ln -sf .dotfiles/<CFG_FILE> .
 ```
 
-7. add `${cfg_file_name}` and `.dotfiles/${cfg_file_name}` to `DOTFILES` in [`restore_dotfiles.sh`](restore_dotfiles.sh#L12).
+7. add `<CFG_FILE>` and `.dotfiles/<CFG_FILE>` to `DOTFILES` in [`restore_dotfiles.sh`](restore_dotfiles.sh#L12).
 
 ## Packages
 
@@ -230,7 +239,7 @@ Shell:
 
 tmux:
 
-![tmux](https://user-images.githubusercontent.com/16078332/101630408-cbc53280-3a5d-11eb-9b13-86084fde89d8.png)
+![tmux](https://user-images.githubusercontent.com/16078332/102495801-8afa9880-40b1-11eb-9d3f-5045c37fd576.png)
 
 fzf:
 

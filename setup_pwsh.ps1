@@ -58,7 +58,7 @@ Function Set-Proxy(`$proxyHost = "127.0.0.1",
     [Environment]::SetEnvironmentVariable('http_proxy', "http://`${proxyHost}:`${httpPort}", 'User')
     [Environment]::SetEnvironmentVariable('https_proxy', "http://`${proxyHost}:`${httpsPort}", 'User')
     [Environment]::SetEnvironmentVariable('ftp_proxy', "http://`${proxyHost}:`${ftpPort}", 'User')
-    [Environment]::SetEnvironmentVariable('all_proxy', "http://`${proxyHost}:`${socksPort}", 'User')
+    [Environment]::SetEnvironmentVariable('all_proxy', "socks5://`${proxyHost}:`${socksPort}", 'User')
 
     `$regKey = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings"
     Set-ItemProperty -Path `$regKey -Name ProxyEnable -Value 1

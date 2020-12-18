@@ -127,7 +127,7 @@ function backup_dotfiles() {
 }
 
 function wget() {
-	command wget --no-verbose --show-progress --progress=bar:force:noscroll "$@"
+	command wget --no-verbose --timeout=10 --show-progress --progress=bar:force:noscroll "$@"
 }
 
 # Install and setup Homebrew
@@ -1194,7 +1194,7 @@ EOF
 ln -sf .dotfiles/.bash_profile .
 
 # Add color theme for iTerm
-if [[ ! -f "$HOME/Library/Preferences/com.googlecode.iterm2.plist" ]]; then
+if [[ ! -s "$HOME/Library/Preferences/com.googlecode.iterm2.plist" ]]; then
 	echo_and_eval "wget -O \"\$HOME/Library/Preferences/com.googlecode.iterm2.plist\" \\
 			https://github.com/gnachman/iTerm2/raw/master/plists/iTerm2.plist"
 fi

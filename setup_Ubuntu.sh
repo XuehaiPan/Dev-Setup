@@ -132,7 +132,7 @@ function backup_dotfiles() {
 }
 
 function wget() {
-	command wget --no-verbose --show-progress --progress=bar:force:noscroll "$@"
+	command wget --no-verbose --timeout=10 --show-progress --progress=bar:force:noscroll "$@"
 }
 
 function get_latest_version() {

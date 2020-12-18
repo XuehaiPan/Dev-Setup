@@ -1193,27 +1193,20 @@ EOF
 
 ln -sf .dotfiles/.bash_profile .
 
-# Color theme for iTerm
-echo_and_eval 'wget -O "$HOME/Desktop/SpaceGrayEighties.itermcolors" \
-		https://github.com/mbadolato/iTerm2-Color-Schemes/raw/master/schemes/SpaceGray%20Eighties.itermcolors'
+# Add color theme for iTerm
 if [[ ! -f "$HOME/Library/Preferences/com.googlecode.iterm2.plist" ]]; then
-	echo_and_eval 'open -a iTerm'
-	sleep 3
+	echo_and_eval "wget -O \"\$HOME/Library/Preferences/com.googlecode.iterm2.plist\" \\
+			https://github.com/gnachman/iTerm2/raw/master/plists/iTerm2.plist"
 fi
-if [[ -f "$HOME/Library/Preferences/com.googlecode.iterm2.plist" ]]; then
-	if ! /usr/libexec/PlistBuddy -c "Print :Custom\ Color\ Presets" \
-		"$HOME/Library/Preferences/com.googlecode.iterm2.plist" &>/dev/null; then
-		echo_and_eval "plutil -insert 'Custom Color Presets' \\
-				-json \"{}\" \\
-				\"\$HOME/Library/Preferences/com.googlecode.iterm2.plist\""
-	fi
-	echo_and_eval "plutil -replace 'Custom Color Presets.SpaceGray Eighties' \\
-			-xml \"\$(cat \"\$HOME/Desktop/SpaceGrayEighties.itermcolors\")\" \\
+if ! /usr/libexec/PlistBuddy -c "Print :Custom\ Color\ Presets" \
+	"$HOME/Library/Preferences/com.googlecode.iterm2.plist" &>/dev/null; then
+	echo_and_eval "plutil -insert 'Custom Color Presets' \\
+			-json \"{}\" \\
 			\"\$HOME/Library/Preferences/com.googlecode.iterm2.plist\""
-	rm "$HOME/Desktop/SpaceGrayEighties.itermcolors"
-else
-	open -R "$HOME/Desktop/SpaceGrayEighties.itermcolors"
 fi
+echo_and_eval "plutil -replace 'Custom Color Presets.SpaceGray Eighties' \\
+		-xml \"\$(wget -O - https://github.com/mbadolato/iTerm2-Color-Schemes/raw/master/schemes/SpaceGray%20Eighties.itermcolors)\" \\
+		\"\$HOME/Library/Preferences/com.googlecode.iterm2.plist\""
 
 # iTerm2 shell integration and utilities
 ITERM_UTILITIES=(

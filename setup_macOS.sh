@@ -1193,13 +1193,15 @@ EOF
 
 ln -sf .dotfiles/.bash_profile .
 
-# Add color theme for iTerm
+# Add 'SpaceGray Eighties' color scheme for iTerm
 if [[ ! -s "$HOME/Library/Preferences/com.googlecode.iterm2.plist" ]]; then
+	# Download the default iTerm configuration file if not exists
 	echo_and_eval "wget -O \"\$HOME/Library/Preferences/com.googlecode.iterm2.plist\" \\
 			https://github.com/gnachman/iTerm2/raw/master/plists/iTerm2.plist"
 fi
-if ! /usr/libexec/PlistBuddy -c "Print :Custom\ Color\ Presets" \
+if ! /usr/libexec/PlistBuddy -c 'Print "Custom Color Presets"' \
 	"$HOME/Library/Preferences/com.googlecode.iterm2.plist" &>/dev/null; then
+	# Create 'Custom Color Presets' entry if not exists
 	echo_and_eval "plutil -insert 'Custom Color Presets' \\
 			-json \"{}\" \\
 			\"\$HOME/Library/Preferences/com.googlecode.iterm2.plist\""

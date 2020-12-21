@@ -122,10 +122,11 @@
     "search.useGlobalIgnoreFiles": false,
     "search.useIgnoreFiles": true,
     "search.exclude": {
-        "**/.history": true,
         "**/node_modules": true,
         "**/bower_components": true,
-        "**/*.code-search": true
+        "**/*.code-search": true,
+        "**/cmake-build*": true,
+        "**/.history": true
     },
 
     //* Outline */

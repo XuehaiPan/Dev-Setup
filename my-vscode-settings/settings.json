@@ -234,14 +234,17 @@
     "bracket-pair-colorizer-2.highlightActiveScope": true,
 
     //* C/C++ */
-    "C_Cpp.default.compilerPath": "/usr/local/opt/llvm/bin/clang",
-    "C_Cpp.clang_format_path": "/usr/local/opt/llvm/bin/clang-format",
+    "C_Cpp.default.compilerPath": "/usr/bin/gcc",
     "C_Cpp.default.cppStandard": "c++17",
     "C_Cpp.default.cStandard": "c11",
-    "C_Cpp.default.intelliSenseMode": "clang-x64",
-    "C_Cpp.autocomplete": "Default",
-    "C_Cpp.formatting": "Default",
+    "C_Cpp.default.intelliSenseMode": "gcc-x64",
+    "C_Cpp.intelliSenseEngine": "Default",
     "C_Cpp.configurationWarnings": "Enabled",
+    "C_Cpp.autocomplete": "Default",
+    "C_Cpp.formatting": "clangFormat",
+    "C_Cpp.clang_format_sortIncludes": false,
+    "C_Cpp.clang_format_style": "file",
+    "C_Cpp.clang_format_fallbackStyle": "Visual Studio",
 
     //* C/C++ Clang Command Adapter */
     "clang.executable": "clang",

@@ -108,16 +108,16 @@ function echo_and_eval() {
 	eval "$@"
 }
 
+function realpath() {
+	python -c "import os,sys; print(os.path.realpath(sys.argv[1]))" "$1"
+}
+
 function backup_dotfiles() {
 	local file original_file
 	for file in "$@"; do
 		if [[ -f "$file" || -d "$file" ]]; then
 			if [[ -L "$file" ]]; then
-				if [[ -x "$(command -v realpath)" ]]; then
-					original_file="$(realpath "$file")"
-				else
-					original_file="$(readlink "$file")"
-				fi
+				original_file="$(realpath "$file")"
 				rm -f "$file"
 				cp -rf "$original_file" "$file"
 			fi
@@ -131,11 +131,6 @@ function wget() {
 }
 
 # Install and setup Homebrew
-if $SET_MIRRORS; then
-	echo_and_eval 'export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"'
-	echo_and_eval 'export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git"'
-	echo_and_eval 'export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles"'
-fi
 if [[ ! -x "$(command -v brew)" ]]; then
 	echo_and_eval 'xcode-select --install'
 	if $SET_MIRRORS; then
@@ -158,6 +153,7 @@ if $SET_MIRRORS; then
 			echo_and_eval "brew tap --force-auto-update homebrew/${tap} https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-${tap}.git"
 		fi
 	done
+	echo_and_eval 'export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles"'
 else
 	BREW_TAPS="$(brew tap)"
 	for tap in core cask{,-fonts,-drivers}; do

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Options
-export SET_MIRRORS="${SET_MIRRORS:-true}"
+export SET_MIRRORS="${SET_MIRRORS:-false}"
 
 # Set USER
 export USER="${USER:-"$(whoami)"}"

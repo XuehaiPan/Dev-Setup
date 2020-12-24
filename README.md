@@ -21,16 +21,12 @@ Download the script file using [wget](https://www.gnu.org/software/wget) / [curl
 **via wget**
 ```bash
 # Download and run via wget
-# Uncomment the following line to avoid modifying mirror settings
-# export SET_MIRRORS=false
 bash -c "$(wget -O - https://github.com/XuehaiPan/OS-Setup/raw/master/setup.sh)"
 ```
 
 **via curl**
 ```bash
 # Download and run via curl
-# Uncomment the following line to avoid modifying mirror settings
-# export SET_MIRRORS=false
 bash -c "$(curl -fL https://github.com/XuehaiPan/OS-Setup/raw/master/setup.sh)"
 ```
 
@@ -41,14 +37,12 @@ git clone --depth=1 https://github.com/XuehaiPan/OS-Setup.git
 
 # Run the script file
 cd OS-Setup
-# Uncomment the following line to avoid modifying mirror settings
-# export SET_MIRRORS=false
 bash setup.sh
 ```
 
 Options:
 
-- `SET_MIRRORS` (default `true`) : set source of package managers to the open source mirrors at [TUNA (China)](https://mirrors.tuna.tsinghua.edu.cn) to speed up downloading. (see [Packages](#packages) for more details).
+- `SET_MIRRORS` (default `false`) : set source of package managers to the open source mirrors at [TUNA (China)](https://mirrors.tuna.tsinghua.edu.cn) to speed up downloading. (see [Packages](#packages) for more details).
 
 **Note**: If you are using **WSL on Windows**, you need to run [Windows Terminal](https://github.com/Microsoft/Terminal) as **administrator** to get the permissions to copy fonts to `C:\Windows\Fonts`. Otherwise, the fonts will not be installed successfully on Windows. You can download them from [nerdfonts.com](https://www.nerdfonts.com) and install them manually. See section [Font Settings](#font-settings) for more details.
 

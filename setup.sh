@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
 
-# Options
-export SET_MIRRORS="${SET_MIRRORS:-true}"
-
 # Colors
 RESET="\033[0m"
+UNDERLINE="\033[4m"
+UNDERLINEOFF="\033[24m"
 BOLD="\033[1m"
 RED="\033[31m"
 GREEN="\033[32m"
@@ -37,6 +36,27 @@ if [[ -z "$OS_NAME" ]]; then
 fi
 
 echo -e "${BOLD}${WHITE}Operating System: ${GREEN}${OS_NAME}${RESET}"
+
+# Options
+if [[ "$SET_MIRRORS" =~ (yes|Yes|YES|true|True|TRUE) ]]; then
+	SET_MIRRORS=true
+elif [[ "$SET_MIRRORS" =~ (no|No|NO|false|False|FALSE) ]]; then
+	SET_MIRRORS=false
+else
+	while true; do
+		read -p "$(echo -e "${BOLD}${WHITE}Do you wish to set the source of package managers ${GREEN}(Homebrew / APT / Pacman, CPAN, Gem, Conda and Pip)${WHITE}
+to the open source mirrors at ${YELLOW}TUNA (China) (${UNDERLINE}https://mirrors.tuna.tsinghua.edu.cn${UNDERLINEOFF})${WHITE} [y/n]: ${RESET}")" answer
+		if [[ "$answer" == [Yy] ]]; then
+			SET_MIRRORS=true
+			break
+		elif [[ "$answer" == [Nn] ]]; then
+			SET_MIRRORS=false
+			break
+		fi
+		echo
+	done
+fi
+export SET_MIRRORS
 
 # Run script if it exists
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"

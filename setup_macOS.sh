@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Options
-export SET_MIRRORS="${SET_MIRRORS:-true}"
+export SET_MIRRORS="${SET_MIRRORS:-false}"
 
 # Set PATH
 export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin:/Library/Apple/bin${PATH:+:"$PATH"}"

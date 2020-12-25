@@ -199,7 +199,10 @@
     },
     "[python]": {
         "editor.formatOnSave": false,
-        "editor.formatOnType": false
+        "editor.formatOnType": false,
+        "gitlens.codeLens.symbolScopes": [
+            "!Module"
+        ]
     },
     "[shellscript]": {
         "editor.insertSpaces": false
@@ -792,12 +795,16 @@
     "python.showStartPage": false,
     "python.autoComplete.addBrackets": true,
     "python.autoComplete.showAdvancedMembers": true,
+    "python.analysis.autoImportCompletions": true,
+    "python.analysis.autoSearchPaths": true,
+    "python.analysis.completeFunctionParens": true,
+    "python.analysis.useLibraryCodeForTypes": true,
     "python.autoUpdateLanguageServer": true,
     "python.condaPath": "~/Miniconda3/condabin/conda",
     "python.pythonPath": "~/Miniconda3/envs/python37/bin/python",
     "python.terminal.activateEnvironment": true,
     "python.terminal.activateEnvInCurrentTerminal": true,
-    "python.languageServer": "Microsoft",
+    "python.languageServer": "Pylance",
     "python.formatting.provider": "autopep8",
     "python.formatting.autopep8Path": "autopep8",
     "python.formatting.autopep8Args": [
@@ -811,6 +818,15 @@
     "python.linting.lintOnSave": true,
     "python.linting.pylintEnabled": true,
     "python.linting.pylintPath": "pylint",
+    "jupyter.allowImportFromNotebook": true,
+    "jupyter.defaultCellMarker": "# %%",
+    "jupyter.allowInput": true,
+    "workbench.editorAssociations": [
+        {
+            "viewType": "jupyter.notebook.ipynb",
+            "filenamePattern": "*.ipynb"
+        }
+    ],
 
     //* Remote */
     "remote.extensionKind": {
@@ -818,17 +834,21 @@
         "ms-azuretools.vscode-docker": "workspace"
     },
     "remote.SSH.defaultExtensions": [
-        "ms-python.anaconda-extension-pack",
         "ms-ceintl.vscode-language-pack-zh-hans",
         "formulahendry.code-runner",
         "streetsidesoftware.code-spell-checker",
-        "donjayamanne.githistory",
         "eamodio.gitlens",
+        "mhutchie.git-graph",
+        "donjayamanne.githistory",
+        "xyz.local-history",
+        "gruntfuggly.todo-tree",
         "yzhang.markdown-all-in-one",
         "ryu1kn.partial-diff",
         "christian-kohler.path-intellisense",
+        "ms-python.anaconda-extension-pack",
         "ms-python.python",
-        "gruntfuggly.todo-tree"
+        "ms-python.vscode-pylance",
+        "ms-toolsai.jupyter"
     ],
 
     //* Settings Sync */
@@ -843,10 +863,10 @@
     "shellcheck.executablePath": "shellcheck",
     "shellcheck.enable": true,
     "shellcheck.enableQuickFix": true,
-    "shellcheck.run": "manual",
+    "shellcheck.run": "onSave",
 
     //* Shell-format */
-    "shellformat.flag": "-i 0",
+    "shellformat.flag": "-i 0 -ci",
 
     //* SQL Server (mssql) */
     "mssql.format.datatypeCasing": "lowercase",
@@ -860,7 +880,7 @@
     "mssql.showBatchTime": true,
 
     //* Visual Studio IntelliCode */
-    "vsintellicode.features.python.deepLearning": "default",
+    "vsintellicode.features.python.deepLearning": "enabled",
     "vsintellicode.python.completionsEnabled": true,
     "vsintellicode.java.completionsEnabled": true,
     "vsintellicode.typescript.completionsEnabled": true,

@@ -4,8 +4,8 @@ rogalmic.bash-debug
 aaron-bond.better-comments
 jeff-hykin.better-shellscript-syntax
 CoenraadS.bracket-pair-colorizer-2
-ms-vscode.cmake-tools
 twxs.cmake
+ms-vscode.cmake-tools
 austin.code-gnu-global
 formulahendry.code-runner
 Shan.code-settings-sync
@@ -27,8 +27,8 @@ James-Yu.latex-workshop
 xyz.local-history
 yzhang.markdown-all-in-one
 PKief.material-icon-theme
-AffenWiesel.matlab-formatter
 Gimly81.matlab
+AffenWiesel.matlab-formatter
 ms-mssql.mssql
 christian-kohler.npm-intellisense
 ryu1kn.partial-diff
@@ -36,6 +36,7 @@ christian-kohler.path-intellisense
 jebbs.plantuml
 ms-vscode.powershell
 ms-python.python
+ms-python.vscode-pylance
 mechatroner.rainbow-csv
 ms-vscode-remote.vscode-remote-extensionpack
 ms-vscode-remote.remote-containers
@@ -48,6 +49,7 @@ foxundermoon.shell-format
 timonwong.shellcheck
 Gruntfuggly.todo-tree
 octref.vetur
+dunstontc.viml
 mitaki28.vscode-clang
 ms-azuretools.vscode-docker
 dbaeumer.vscode-eslint

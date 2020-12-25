@@ -42,7 +42,13 @@ bash setup.sh
 
 Options:
 
-- `SET_MIRRORS` (default `false`) : set source of package managers to the open source mirrors at [TUNA (China)](https://mirrors.tuna.tsinghua.edu.cn) to speed up downloading. (see [Packages](#packages) for more details).
+- `SET_MIRRORS` (default `false`) : set source of package managers to the open source mirrors at [TUNA (China)](https://mirrors.tuna.tsinghua.edu.cn) to speed up downloading. (see [Packages](#packages) for more details). If you want to bypass the prompt, run:
+
+  ```bash
+  # Bypass the prompt
+  SET_MIRRORS=true bash setup.sh    # set mirrors to TUNA (China) (recommended for users in China)
+  SET_MIRRORS=false bash setup.sh   # do not modify mirror settings
+  ```
 
 **Note**: If you are using **WSL on Windows**, you need to run [Windows Terminal](https://github.com/Microsoft/Terminal) as **administrator** to get the permissions to copy fonts to `C:\Windows\Fonts`. Otherwise, the fonts will not be installed successfully on Windows. You can download them from [nerdfonts.com](https://www.nerdfonts.com) and install them manually. See section [Font Settings](#font-settings) for more details.
 

@@ -134,10 +134,13 @@ function wget() {
 if [[ ! -x "$(command -v brew)" ]]; then
 	echo_and_eval 'xcode-select --install'
 	if $SET_MIRRORS; then
+		echo_and_eval 'export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"'
+		echo_and_eval 'export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git"'
 		echo_and_eval "/bin/bash -c \"\$(
 					curl -fsSL https://github.com/Homebrew/install/raw/master/install.sh |
 					sed 's|^BREW_REPO=.*\$|BREW_REPO=\"https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git\"|g'
 				)\""
+		echo_and_eval 'unset HOMEBREW_{BREW,CORE}_GIT_REMOTE'
 	else
 		echo_and_eval '/bin/bash -c "$(curl -fsSL https://github.com/Homebrew/install/raw/master/install.sh)"'
 	fi

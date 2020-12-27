@@ -6,7 +6,8 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope LocalMachine
 Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process -Force
 Invoke-Expression -Command (New-Object -TypeName System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1')
 
-choco config set commandExecutionTimeoutSeconds 0
+choco feature enable --name=useRememberedArgumentsForUpgrades
+choco config set --name=commandExecutionTimeoutSeconds --value=0
 $Env:ChocolateyToolsLocation = 'C:\Tools'
 [Environment]::SetEnvironmentVariable('ChocolateyToolsLocation', 'C:\Tools', 'Machine')
 
@@ -88,8 +89,10 @@ Update-SessionEnvironment
 & $PROFILE.CurrentUserAllHosts
 
 # Install Chocolatey packages
-choco install vim fzf vscode conemu mobaxterm vcxsrv --yes
-choco install python3 shellcheck bat wget ripgrep mingw cmake --yes
+choco install vim --params="'/InstallDir:$Env:ChocolateyToolsLocation\Vim /NoDesktopShortcuts'" --yes
+choco install python3 --params="'/InstallDir:$Env:ChocolateyToolsLocation\Python3'" --yes
+choco install vscode conemu mobaxterm vcxsrv --yes
+choco install fzf bat ripgrep shellcheck wget mingw cmake --yes
 choco install windows-adk adobereader openjdk googlechrome --yes
 
 # Setup Vim

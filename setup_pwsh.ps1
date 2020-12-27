@@ -91,9 +91,9 @@ Update-SessionEnvironment
 # Install Chocolatey packages
 choco install vim --params="'/InstallDir:$Env:ChocolateyToolsLocation\Vim /NoDesktopShortcuts'" --yes
 choco install python3 --params="'/InstallDir:$Env:ChocolateyToolsLocation\Python3'" --yes
+choco install cmake --installargs="'ADD_CMAKE_TO_PATH=System'" --yes
 choco install vscode conemu mobaxterm vcxsrv --yes
-choco install fzf bat ripgrep shellcheck wget mingw cmake --yes
-choco install windows-adk adobereader openjdk googlechrome --yes
+choco install fzf bat ripgrep shellcheck wget mingw --yes
 
 # Setup Vim
 New-Item -Path "~\vimfiles\autoload" -Type Directory -Force

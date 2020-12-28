@@ -152,6 +152,7 @@ if $SET_MIRRORS; then
 	for tap in core cask{,-fonts,-drivers}; do
 		if echo "$BREW_TAPS" | grep -qE "^homebrew/${tap}\$"; then
 			echo_and_eval "git -C \"\$(brew --repo homebrew/${tap})\" remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-${tap}.git"
+			echo_and_eval "git -C \"\$(brew --repo homebrew/${tap})\" config homebrew.forceautoupdate true"
 		else
 			echo_and_eval "brew tap --force-auto-update homebrew/${tap} https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-${tap}.git"
 		fi

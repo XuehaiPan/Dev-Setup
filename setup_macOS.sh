@@ -1412,9 +1412,12 @@ let g:airline#extensions#tabline#enabled = 1
 
 let g:bufferline_echo = 0
 
+let g:undotree_WindowLayout = 3
+
 if &diff
     let &diffexpr = 'EnhancedDiff#Diff("git diff", "--diff-algorithm=histogram")'
 endif
+let g:DirDiffExcludes = ".git,.svn,.hg,CVS,.idea,.*.swp,*.pyc,__pycache__"
 autocmd VimResized * if &diff | wincmd = | endif
 
 let g:indentLine_char_list = ['|', '¦', '┆', '┊']
@@ -1455,6 +1458,7 @@ call plug#begin('~/.vim/plugged')
     Plug 'vim-airline/vim-airline-themes'
     Plug 'bling/vim-bufferline'
     Plug 'chrisbra/vim-diff-enhanced'
+    Plug 'will133/vim-dirdiff'
     Plug 'yggdroot/indentline'
     Plug 'luochen1990/rainbow'
     Plug 'jaxbot/semantic-highlight.vim'

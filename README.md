@@ -68,7 +68,7 @@ After running the script, all the old configuration files involved will be backe
 
   ```bash
   # Inspect and move changes using vimdiff
-  vimdiff ~/.dotfiles/<FILE> ~/.dotfiles/backups/latest/.dotfiles/<FILE>
+  vim -c "DirDiff ~/.dotfiles ~/.dotfiles/backups/latest/.dotfiles"
   ```
 
   You can get vimdiff reference manual from [https://vimhelp.org/diff.txt.html](https://vimhelp.org/diff.txt.html), or type command `:help diff` inside Vim.

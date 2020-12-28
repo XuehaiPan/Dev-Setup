@@ -1,17 +1,12 @@
 # Source global definitions
-# Include /etc/zshrc if it exists
-if [[ -f /etc/zshrc ]]; then
-	. /etc/zshrc
-fi
-
-# Include /etc/profile if it exists
-if [[ -f /etc/profile ]]; then
-	. /etc/profile
-fi
-
 # Include /etc/zprofile if it exists
 if [[ -f /etc/zprofile ]]; then
 	. /etc/zprofile
+fi
+
+# Include /etc/zshrc if it exists
+if [[ -f /etc/zshrc ]]; then
+	. /etc/zshrc
 fi
 
 # Set PATH so it includes user's private bin if it exists

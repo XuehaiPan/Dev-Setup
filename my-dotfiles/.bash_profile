@@ -41,7 +41,11 @@ export TERM="xterm-256color"
 export GREP_OPTIONS='--color=auto'
 export CLICOLOR=1
 export LSCOLORS="GxFxCxDxBxegedabagaced"
-export PS1='[\[\e[1;33m\]\u\[\e[0m\]@\[\e[1;32m\]\h\[\e[0m\]:\[\e[1;35m\]\w\[\e[0m\]]\$ '
+if [[ -n "$SSH_CONNECTION" ]]; then
+	export PS1='[\[\e[1;33m\]\u\[\e[0m\]@\[\e[1;32m\]\h\[\e[0m\]:\[\e[1;35m\]\w\[\e[0m\]]\$ '
+else
+	export PS1='[\[\e[1;33m\]\u\[\e[0m\]:\[\e[1;35m\]\w\[\e[0m\]]\$ '
+fi
 
 # Locale
 export LC_ALL="en_US.UTF-8"

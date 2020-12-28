@@ -387,19 +387,14 @@ backup_dotfiles .dotfiles/.zshrc
 
 cat >.dotfiles/.zshrc <<'EOF'
 # Source global definitions
-# Include /etc/zshrc if it exists
-if [[ -f /etc/zshrc ]]; then
-	. /etc/zshrc
-fi
-
-# Include /etc/profile if it exists
-if [[ -f /etc/profile ]]; then
-	. /etc/profile
-fi
-
 # Include /etc/zprofile if it exists
 if [[ -f /etc/zprofile ]]; then
 	. /etc/zprofile
+fi
+
+# Include /etc/zshrc if it exists
+if [[ -f /etc/zshrc ]]; then
+	. /etc/zshrc
 fi
 
 # Set PATH so it includes user's private bin if it exists
@@ -1073,7 +1068,11 @@ fi
 
 # User specific environment and startup programs
 export TERM="xterm-256color"
-export PS1='[\[\e[1;33m\]\u\[\e[0m\]@\[\e[1;32m\]\h\[\e[0m\]:\[\e[1;35m\]\w\[\e[0m\]]\$ '
+if [[ -n "$SSH_CONNECTION" ]]; then
+	export PS1='[\[\e[1;33m\]\u\[\e[0m\]@\[\e[1;32m\]\h\[\e[0m\]:\[\e[1;35m\]\w\[\e[0m\]]\$ '
+else
+	export PS1='[\[\e[1;33m\]\u\[\e[0m\]:\[\e[1;35m\]\w\[\e[0m\]]\$ '
+fi
 
 # Locale
 export LC_ALL="en_US.utf8"

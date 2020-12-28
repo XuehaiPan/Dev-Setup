@@ -978,7 +978,12 @@ cat >.dotfiles/.bash_profile <<'EOF'
 
 # The default umask is set in /etc/profile; for setting the umask
 # for ssh logins, install and configure the libpam-umask package.
-#umask 022
+# umask 022
+
+# Include /etc/profile if it exists
+if [[ -f /etc/profile ]]; then
+	. /etc/profile
+fi
 
 # If running bash as login shell
 if [[ -n "$BASH_VERSION" ]] && shopt -q login_shell; then

@@ -1382,9 +1382,10 @@ let g:NERDTreeShowLineNumbers = 0
 let g:NERDTreeWinPos = 'left'
 let g:NERDTreeWinSize = 31
 let g:NERDTreeNotificationThreshold = 200
-let s:NERDTreeClosedByResizing = !&diff
+let g:NERDTreeAutoToggleEnabled = (!&diff && argc() > 0)
+let s:NERDTreeClosedByResizing = 1
 function s:NERDTreeAutoToggle(minbufwidth = 80)
-    if !(exists('b:NERDTree') && b:NERDTree.isTabTree())
+    if g:NERDTreeAutoToggleEnabled && !(exists('b:NERDTree') && b:NERDTree.isTabTree())
         let NERDTreeIsOpen = (g:NERDTree.ExistsForTab() && g:NERDTree.IsOpen())
         let width = winwidth('%')
         let numberwidth = ((&number || &relativenumber) ? max([&numberwidth, strlen(line('$')) + 1]) : 0)

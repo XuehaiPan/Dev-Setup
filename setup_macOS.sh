@@ -157,6 +157,7 @@ if $SET_MIRRORS; then
 			echo_and_eval "brew tap --force-auto-update homebrew/${tap} https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-${tap}.git"
 		fi
 	done
+	echo_and_eval 'brew update-reset'
 	echo_and_eval 'export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles"'
 else
 	BREW_TAPS="$(brew tap)"

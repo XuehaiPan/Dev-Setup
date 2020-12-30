@@ -369,9 +369,14 @@ fi
 export PERL_MB_OPT="--install_base \"$HOME/.perl\""
 export PERL_MM_OPT="INSTALL_BASE=\"$HOME/.perl\""
 echo_and_eval "PERL_MM_USE_DEFAULT=1 http_proxy=\"\" ftp_proxy=\"\" perl -MCPAN -e 'mkmyconfig'"
+echo_and_eval "perl -MCPAN -e 'CPAN::HandleConfig->load();' \\
+		-e 'CPAN::HandleConfig->edit(\"cleanup_after_install\", \"1\");' \\
+		-e 'CPAN::HandleConfig->commit()'"
 if $SET_MIRRORS; then
-	if ! (perl -MCPAN -e 'CPAN::HandleConfig->load();' -e 'CPAN::HandleConfig->prettyprint("urllist")' |
-		grep -qF 'https://mirrors.tuna.tsinghua.edu.cn/CPAN/'); then
+	if ! (
+		perl -MCPAN -e 'CPAN::HandleConfig->load();' -e 'CPAN::HandleConfig->prettyprint("urllist")' |
+			grep -qF 'https://mirrors.tuna.tsinghua.edu.cn/CPAN/'
+	); then
 		echo_and_eval "perl -MCPAN -e 'CPAN::HandleConfig->load();' \\
 				-e 'CPAN::HandleConfig->edit(\"urllist\", \"unshift\", \"https://mirrors.tuna.tsinghua.edu.cn/CPAN/\");' \\
 				-e 'CPAN::HandleConfig->commit()'"

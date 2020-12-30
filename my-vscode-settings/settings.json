@@ -818,15 +818,13 @@
     "python.linting.lintOnSave": true,
     "python.linting.pylintEnabled": true,
     "python.linting.pylintPath": "pylint",
+    "python.linting.pylintArgs": [
+        "--generated-members=numpy.*,torch.*",
+        "--max-line-length=120"
+    ],
     "jupyter.allowImportFromNotebook": true,
     "jupyter.defaultCellMarker": "# %%",
     "jupyter.allowInput": true,
-    "workbench.editorAssociations": [
-        {
-            "viewType": "jupyter.notebook.ipynb",
-            "filenamePattern": "*.ipynb"
-        }
-    ],
 
     //* Remote */
     "remote.extensionKind": {

@@ -19,18 +19,21 @@ Bash scripts for setting up a newly installed OS automatically. ([screenshots](#
 Download the script file using [wget](https://www.gnu.org/software/wget) / [curl](https://curl.haxx.se) / [git](https://git-scm.com) or any browser ([click here to download zip](https://codeload.github.com/XuehaiPan/OS-Setup/zip/master)). And then open `Terminal` and run:
 
 **via wget**
+
 ```bash
 # Download and run via wget
 bash -c "$(wget -O - https://github.com/XuehaiPan/OS-Setup/raw/master/setup.sh)"
 ```
 
 **via curl**
+
 ```bash
 # Download and run via curl
 bash -c "$(curl -fL https://github.com/XuehaiPan/OS-Setup/raw/master/setup.sh)"
 ```
 
 **via git or browser**
+
 ```bash
 # Download via git
 git clone --depth=1 https://github.com/XuehaiPan/OS-Setup.git
@@ -54,24 +57,24 @@ Options:
 
 After running the script, all the old configuration files involved will be backed up to the folder `$HOME/.dotfiles/backups/<DATETIME>`, and a symbolic link `$HOME/.dotfiles/backups/latest` links to the latest one. You can compare the differences using:
 
-  ```bash
-  # Compare the differences
-  colordiff -uEB ~/.dotfiles/backups/latest ~/.dotfiles
-  colordiff -uEB ~/.dotfiles/backups/latest/.dotfiles ~/.dotfiles
+```bash
+# Compare the differences
+colordiff -uEB ~/.dotfiles/backups/latest ~/.dotfiles
+colordiff -uEB ~/.dotfiles/backups/latest/.dotfiles ~/.dotfiles
 
-  # Ignore miscellaneous directories
-  colordiff -uEB -x 'backups' -x '.dotfiles' ~/.dotfiles/backups/latest ~/.dotfiles
-  colordiff -uEB -x 'backups' ~/.dotfiles/backups/latest/.dotfiles ~/.dotfiles
-  ```
+# Ignore miscellaneous directories
+colordiff -uEB -x 'backups' -x '.dotfiles' ~/.dotfiles/backups/latest ~/.dotfiles
+colordiff -uEB -x 'backups' ~/.dotfiles/backups/latest/.dotfiles ~/.dotfiles
+```
 
-  There is a nice way to inspect and move changes from one version to another version of the same file using [`vimdiff`](https://www.vim.org) or [`meld`](http://meldmerge.org). Run:
+There is a nice way to inspect and move changes from one version to another version of the same file using [`vimdiff`](https://www.vim.org) or [`meld`](http://meldmerge.org). Run:
 
-  ```bash
-  # Inspect and move changes using vimdiff
-  vim -c "DirDiff ~/.dotfiles ~/.dotfiles/backups/latest/.dotfiles"
-  ```
+```bash
+# Inspect and move changes using vimdiff
+vim -c "DirDiff ~/.dotfiles ~/.dotfiles/backups/latest/.dotfiles"
+```
 
-  You can get vimdiff reference manual from [https://vimhelp.org/diff.txt.html](https://vimhelp.org/diff.txt.html), or type command `:help diff` inside Vim.
+You can get vimdiff reference manual from [https://vimhelp.org/diff.txt.html](https://vimhelp.org/diff.txt.html), or type command `:help diff` inside Vim.
 
 ### Restoration
 
@@ -128,7 +131,7 @@ which do not need additional font settings.
 
 ```bash
 find ~/.local/share/fonts -type f -name '*.[ot]t[fc]' -print \
-	-exec cp -f '{}' /mnt/c/Windows/Fonts \;
+        -exec cp -f '{}' /mnt/c/Windows/Fonts \;
 ```
 
 ## Customization

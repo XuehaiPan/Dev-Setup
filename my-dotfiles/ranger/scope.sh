@@ -43,7 +43,7 @@ HIGHLIGHT_SIZE_MAX=262143  # 256KiB
 HIGHLIGHT_TABWIDTH=${HIGHLIGHT_TABWIDTH:-4}
 HIGHLIGHT_STYLE=${HIGHLIGHT_STYLE:-pablo}
 HIGHLIGHT_OPTIONS="--replace-tabs=${HIGHLIGHT_TABWIDTH} --style=${HIGHLIGHT_STYLE} ${HIGHLIGHT_OPTIONS:-}"
-PYGMENTIZE_STYLE=${PYGMENTIZE_STYLE:-autumn}
+PYGMENTIZE_STYLE=${PYGMENTIZE_STYLE:-monokai}
 OPENSCAD_IMGSIZE=${RNGR_OPENSCAD_IMGSIZE:-1000,1000}
 OPENSCAD_COLORSCHEME=${RNGR_OPENSCAD_COLORSCHEME:-Tomorrow Night}
 
@@ -119,9 +119,11 @@ handle_extension() {
 		## SQLite
 		sqlite)
 			sqlite3 "${FILE_PATH}" "SELECT name FROM sqlite_master WHERE type='table';" |
-				xargs -I {} bash -c "echo \"{}:\"; sqlite-utils query \"${FILE_PATH}\" \"SELECT * FROM {};\" --table --fmt fancy_grid; echo" && exit 5
+				xargs -I {} bash -c "echo \"{}:\"; sqlite-utils query \"${FILE_PATH}\" \"SELECT * FROM {};\" --table --fmt fancy_grid; echo" &&
+				exit 5
 			sqlite3 "${FILE_PATH}" "SELECT name FROM sqlite_master WHERE type='table';" |
-				xargs -I {} bash -c "echo \"{}:\"; sqlite3 \"${FILE_PATH}\" \"SELECT * FROM {};\" --header --column; echo" && exit 5
+				xargs -I {} bash -c "echo \"{}:\"; sqlite3 \"${FILE_PATH}\" \"SELECT * FROM {};\" --header --column; echo" &&
+				exit 5
 			;;
 
 		## Direct Stream Digital/Transfer (DSDIFF) and wavpack aren't detected
@@ -241,10 +243,14 @@ handle_image() {
 				{ [ "$rar" ] && fn=$(unrar lb -p- -- "${FILE_PATH}"); } ||
 				{ [ "$zip" ] && fn=$(zipinfo -1 -- "${FILE_PATH}"); } || return
 
-			fn=$(echo "$fn" | python -c "import sys; import mimetypes as m; \
-                        [ print(l, end='') for l in sys.stdin if \
-                          (m.guess_type(l[:-1])[0] or '').startswith('image/') ]" |
-				sort -V | head -n 1)
+			fn=$(echo "$fn" | python <(
+				cat - <<-'EOD'
+					from __future__ import print_function
+					import sys
+					import mimetypes as m
+					[ print(l, end='') for l in sys.stdin if (m.guess_type(l[:-1])[0] or '').startswith('image/') ]
+				EOD
+			) | sort -V | head -n 1)
 			[ "$fn" = "" ] && return
 			[ "$bsd" ] && fn=$(printf '%b' "$fn")
 
@@ -331,6 +337,8 @@ handle_mime() {
 			env HIGHLIGHT_OPTIONS="${HIGHLIGHT_OPTIONS}" highlight \
 				--out-format="${highlight_format}" \
 				--force -- "${FILE_PATH}" && exit 5
+			env COLORTERM=8bit batcat --color=always --style="plain" \
+				-- "${FILE_PATH}" && exit 5
 			env COLORTERM=8bit bat --color=always --style="plain" \
 				-- "${FILE_PATH}" && exit 5
 			pygmentize -f "${pygmentize_format}" -O "style=${PYGMENTIZE_STYLE}" \

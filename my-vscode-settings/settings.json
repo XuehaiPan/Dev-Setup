@@ -475,14 +475,18 @@
         "--unique",
         "%PDF%#src:%LINE%%TEX%"
     ],
-    "latex-workshop.latex.outDir": "%DIR%",
+    "latex-workshop.latex.outDir": "%DIR%/out",
     "latex-workshop.latex.magic.args": [
         "-synctex=1",
+        "-shell-escape",
         "-interaction=nonstopmode",
         "-file-line-error",
-        "-shell-escape",
         "-output-directory=%OUTDIR%",
         "%DOC%"
+    ],
+    "latex-workshop.latex.magic.bib.args": [
+        "--output-directory=%OUTDIR%",
+        "%DOCFILE%"
     ],
     "latex-workshop.latex.tools": [
         {
@@ -491,9 +495,9 @@
             "args": [
                 "-pdflatex",
                 "-synctex=1",
+                "-shell-escape",
                 "-interaction=nonstopmode",
                 "-file-line-error",
-                "-shell-escape",
                 "-output-directory=%OUTDIR%",
                 "%DOC%"
             ],
@@ -505,9 +509,9 @@
             "args": [
                 "-xelatex",
                 "-synctex=1",
+                "-shell-escape",
                 "-interaction=nonstopmode",
                 "-file-line-error",
-                "-shell-escape",
                 "-output-directory=%OUTDIR%",
                 "%DOC%"
             ],
@@ -519,9 +523,9 @@
             "args": [
                 "-lualatex",
                 "-synctex=1",
+                "-shell-escape",
                 "-interaction=nonstopmode",
                 "-file-line-error",
-                "-shell-escape",
                 "-output-directory=%OUTDIR%",
                 "%DOC%"
             ],
@@ -532,9 +536,9 @@
             "command": "pdflatex",
             "args": [
                 "-synctex=1",
+                "-shell-escape",
                 "-interaction=nonstopmode",
                 "-file-line-error",
-                "-shell-escape",
                 "-output-directory=%OUTDIR%",
                 "%DOC%"
             ],
@@ -545,9 +549,9 @@
             "command": "xelatex",
             "args": [
                 "-synctex=1",
+                "-shell-escape",
                 "-interaction=nonstopmode",
                 "-file-line-error",
-                "-shell-escape",
                 "-output-directory=%OUTDIR%",
                 "%DOC%"
             ],
@@ -558,9 +562,9 @@
             "command": "lualatex",
             "args": [
                 "-synctex=1",
+                "-shell-escape",
                 "-interaction=nonstopmode",
                 "-file-line-error",
-                "-shell-escape",
                 "-output-directory=%OUTDIR%",
                 "%DOC%"
             ],
@@ -570,6 +574,7 @@
             "name": "biber",
             "command": "biber",
             "args": [
+                "--output-directory=%OUTDIR%",
                 "%DOCFILE%"
             ],
             "env": {}
@@ -578,9 +583,11 @@
             "name": "bibtex",
             "command": "bibtex",
             "args": [
-                "%DOCFILE%"
+                "out/%DOCFILE%"
             ],
-            "env": {}
+            "env": {
+                "BIBINPUTS": "%OUTDIR%:"
+            }
         }
     ],
     "latex-workshop.latex.recipes": [
@@ -716,7 +723,7 @@
         "*.synctex(busy)",
         "*.synctex.gz(busy)",
         "_minted-*/*",
-        "_minted-*"
+        "_minted-*/"
     ],
 
     //* Live Share */

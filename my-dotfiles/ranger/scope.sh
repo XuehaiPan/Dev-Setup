@@ -46,6 +46,7 @@ HIGHLIGHT_OPTIONS="--replace-tabs=${HIGHLIGHT_TABWIDTH} --style=${HIGHLIGHT_STYL
 PYGMENTIZE_STYLE=${PYGMENTIZE_STYLE:-monokai}
 OPENSCAD_IMGSIZE=${RNGR_OPENSCAD_IMGSIZE:-1000,1000}
 OPENSCAD_COLORSCHEME=${RNGR_OPENSCAD_COLORSCHEME:-Tomorrow Night}
+SQLITE_ROW_LIMIT=5  # Display only the last <limit> records in each table, set to 0 for no limits.
 
 handle_extension() {
 	case "${FILE_EXTENSION_LOWER}" in
@@ -111,18 +112,24 @@ handle_extension() {
 			;;
 
 		## JSON
-		json)
+		json | ipynb)
 			jq --color-output . "${FILE_PATH}" && exit 5
 			python -m json.tool -- "${FILE_PATH}" && exit 5
 			;;
 
 		## SQLite
 		sqlite)
+			local query="SELECT * FROM {} LIMIT ${SQLITE_ROW_LIMIT} OFFSET ((SELECT COUNT(*) FROM {})-${SQLITE_ROW_LIMIT});"
+			if ((SQLITE_ROW_LIMIT <= 0)); then
+				query="SELECT * FROM {};"
+			fi
+			if [[ -x "$(command -v sqlite-utils)" ]]; then
+				sqlite3 "${FILE_PATH}" "SELECT name FROM sqlite_master WHERE type='table';" |
+					xargs -I {} bash -c "echo \"{}:\"; sqlite-utils query \"${FILE_PATH}\" \"${query}\" --table --fmt fancy_grid; echo" &&
+					exit 5
+			fi
 			sqlite3 "${FILE_PATH}" "SELECT name FROM sqlite_master WHERE type='table';" |
-				xargs -I {} bash -c "echo \"{}:\"; sqlite-utils query \"${FILE_PATH}\" \"SELECT * FROM {};\" --table --fmt fancy_grid; echo" &&
-				exit 5
-			sqlite3 "${FILE_PATH}" "SELECT name FROM sqlite_master WHERE type='table';" |
-				xargs -I {} bash -c "echo \"{}:\"; sqlite3 \"${FILE_PATH}\" \"SELECT * FROM {};\" --header --column; echo" &&
+				xargs -I {} bash -c "echo \"{}:\"; sqlite3 \"${FILE_PATH}\" \"${query}\" --header --column; echo" &&
 				exit 5
 			;;
 

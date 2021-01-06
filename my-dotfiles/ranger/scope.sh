@@ -117,22 +117,6 @@ handle_extension() {
 			python -m json.tool -- "${FILE_PATH}" && exit 5
 			;;
 
-		## SQLite
-		sqlite)
-			local query="SELECT * FROM {} LIMIT ${SQLITE_ROW_LIMIT} OFFSET ((SELECT COUNT(*) FROM {})-${SQLITE_ROW_LIMIT});"
-			if ((SQLITE_ROW_LIMIT <= 0)); then
-				query="SELECT * FROM {};"
-			fi
-			if [[ -x "$(command -v sqlite-utils)" ]]; then
-				sqlite3 "${FILE_PATH}" "SELECT name FROM sqlite_master WHERE type='table';" |
-					xargs -I {} bash -c "echo \"{}:\"; sqlite-utils query \"${FILE_PATH}\" \"${query}\" --table --fmt fancy_grid; echo" &&
-					exit 5
-			fi
-			sqlite3 "${FILE_PATH}" "SELECT name FROM sqlite_master WHERE type='table';" |
-				xargs -I {} bash -c "echo \"{}:\"; sqlite3 \"${FILE_PATH}\" \"${query}\" --header --column; echo" &&
-				exit 5
-			;;
-
 		## Direct Stream Digital/Transfer (DSDIFF) and wavpack aren't detected
 		## by file(1).
 		dff | dsf | wv | wvc)
@@ -233,12 +217,8 @@ handle_image() {
 		## (Very useful for comic book collections for example.)
 		application/zip | application/x-rar | application/x-7z-compressed | \
 			application/x-xz | application/x-bzip2 | application/x-gzip | application/x-tar)
-			local fn=""
-			local fe=""
-			local zip=""
-			local rar=""
-			local tar=""
-			local bsd=""
+			local fn=""; local fe=""
+			local zip=""; local rar=""; local tar=""; local bsd=""
 			case "${mimetype}" in
 				application/zip) zip=1 ;;
 				application/x-rar) rar=1 ;;
@@ -326,6 +306,35 @@ handle_mime() {
 			##   http://www.wagner.pp.ru/~vitus/software/catdoc/
 			xls2csv -- "${FILE_PATH}" && exit 5
 			exit 1
+			;;
+
+		## SQLite
+		*sqlite3)
+			## Preview as text conversion
+			local tables=""
+			if tables="$(sqlite3 "file:${FILE_PATH}?mode=ro" "SELECT name FROM sqlite_master WHERE type='table';")"; then
+				local query="SELECT * FROM {};"
+				if ! [ "$SQLITE_ROW_LIMIT" -ge 0 ] 2>/dev/null; then
+					SQLITE_ROW_LIMIT=5  # fallback to 5 if an invalid value is given
+				fi
+				if [[ "$SQLITE_ROW_LIMIT" != 0 ]]; then
+					query="SELECT * FROM {} LIMIT ${SQLITE_ROW_LIMIT} OFFSET ((SELECT COUNT(*) FROM {}) - ${SQLITE_ROW_LIMIT});"
+				fi
+				if [[ -x "$(command -v sqlite-utils)" ]]; then
+					sqlite-utils tables "${FILE_PATH}" --counts --columns --table --fmt fancy_grid
+					echo; printf '#%.0s' $(seq "${PV_WIDTH}"); echo; echo
+					echo "$tables" | xargs -I {} \
+						bash -c "echo '{}:'; sqlite-utils query '${FILE_PATH}' '${query}' --table --fmt fancy_grid; echo" &&
+						exit 5
+				fi
+				sqlite3 "file:${FILE_PATH}?mode=ro" "SELECT type, name FROM sqlite_master;" --header --column
+				echo; printf '#%.0s' $(seq "${PV_WIDTH}"); echo; echo
+				echo "$tables" | xargs -I {} \
+					bash -c "echo '{}:'; sqlite3 'file:${FILE_PATH}?mode=ro' '${query}' --header --column; echo" &&
+					exit 5
+			else
+				exit 1
+			fi
 			;;
 
 		## Text

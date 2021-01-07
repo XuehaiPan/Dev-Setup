@@ -46,7 +46,8 @@ HIGHLIGHT_OPTIONS="--replace-tabs=${HIGHLIGHT_TABWIDTH} --style=${HIGHLIGHT_STYL
 PYGMENTIZE_STYLE=${PYGMENTIZE_STYLE:-monokai}
 OPENSCAD_IMGSIZE=${RNGR_OPENSCAD_IMGSIZE:-1000,1000}
 OPENSCAD_COLORSCHEME=${RNGR_OPENSCAD_COLORSCHEME:-Tomorrow Night}
-SQLITE_ROW_LIMIT=5  # Display only the last <limit> records in each table, set to 0 for no limits.
+SQLITE_TABLE_LIMIT=20  # Display only the top <limit> tables in database, set to 0 for no exhaustive preview (only the sqlite_master table is displayed).
+SQLITE_ROW_LIMIT=5     # Display only the last <limit> records in each table, set to 0 for no limits.
 
 handle_extension() {
 	case "${FILE_EXTENSION_LOWER}" in
@@ -312,29 +313,29 @@ handle_mime() {
 		*sqlite3)
 			## Preview as text conversion
 			local tables=""
-			if tables="$(sqlite3 "file:${FILE_PATH}?mode=ro" "SELECT name FROM sqlite_master WHERE type='table';")"; then
-				local query="SELECT * FROM {};"
-				if ! [ "$SQLITE_ROW_LIMIT" -ge 0 ] 2>/dev/null; then
-					SQLITE_ROW_LIMIT=5  # fallback to 5 if an invalid value is given
-				fi
-				if [[ "$SQLITE_ROW_LIMIT" != 0 ]]; then
-					query="SELECT * FROM {} LIMIT ${SQLITE_ROW_LIMIT} OFFSET ((SELECT COUNT(*) FROM {}) - ${SQLITE_ROW_LIMIT});"
-				fi
-				if [[ -x "$(command -v sqlite-utils)" ]]; then
-					sqlite-utils tables "${FILE_PATH}" --counts --columns --table --fmt fancy_grid
-					echo; printf '#%.0s' $(seq "${PV_WIDTH}"); echo; echo
-					echo "$tables" | xargs -I {} \
-						bash -c "echo '{}:'; sqlite-utils query '${FILE_PATH}' '${query}' --table --fmt fancy_grid; echo" &&
-						exit 5
-				fi
-				sqlite3 "file:${FILE_PATH}?mode=ro" "SELECT type, name FROM sqlite_master;" --header --column
-				echo; printf '#%.0s' $(seq "${PV_WIDTH}"); echo; echo
-				echo "$tables" | xargs -I {} \
-					bash -c "echo '{}:'; sqlite3 'file:${FILE_PATH}?mode=ro' '${query}' --header --column; echo" &&
+			[ "$SQLITE_TABLE_LIMIT" -ge 0 ] || SQLITE_TABLE_LIMIT=20  # fallback to 20 if an invalid value is given
+			[ "$SQLITE_ROW_LIMIT" -ge 0 ] || SQLITE_ROW_LIMIT=5       # fallback to 5 if an invalid value is given
+			if tables="$(sqlite3 "file:${FILE_PATH}?mode=ro" "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' LIMIT ${SQLITE_TABLE_LIMIT};")"; then
+				if [[ -n "$(sqlite3 "file:${FILE_PATH}?mode=ro" '.tables')" ]]; then
+					local query="SELECT * FROM {};"
+					[[ "$SQLITE_ROW_LIMIT" -gt 0 ]] && query="SELECT * FROM {} LIMIT ${SQLITE_ROW_LIMIT} OFFSET ((SELECT count(*) FROM {}) - ${SQLITE_ROW_LIMIT});"
+					local preview_command="sqlite3 'file:${FILE_PATH}?mode=ro' '${query}' --header --column"
+					if [[ -x "$(command -v sqlite-utils)" ]]; then
+						sqlite-utils tables "${FILE_PATH}" --counts --columns --table --fmt fancy_grid
+						preview_command="sqlite-utils query '${FILE_PATH}' '${query}' --table --fmt fancy_grid"
+					else
+						sqlite3 "file:${FILE_PATH}?mode=ro" "SELECT name as 'table', (SELECT '(' || group_concat(name || ' ' || type, ', ') || ')' FROM pragma_table_info(sqlite_master.name)) as columns FROM sqlite_master WHERE name NOT LIKE 'sqlite_%';" --header --column
+					fi
+					if [[ "$SQLITE_TABLE_LIMIT" -gt 0 ]]; then
+						echo; printf '>%.0s' $(seq "${PV_WIDTH}"); echo
+						echo "$tables" | xargs -I {} bash -c "echo; echo '{}:'; ${preview_command}"
+					fi
 					exit 5
-			else
-				exit 1
+				else
+					echo "Empty SQLite database." && exit 5
+				fi
 			fi
+			exit 1
 			;;
 
 		## Text

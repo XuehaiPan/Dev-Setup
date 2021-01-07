@@ -315,18 +315,31 @@ handle_mime() {
 			local tables=""
 			[ "$SQLITE_TABLE_LIMIT" -ge 0 ] || SQLITE_TABLE_LIMIT=20  # fallback to 20 if an invalid value is given
 			[ "$SQLITE_ROW_LIMIT" -ge 0 ] || SQLITE_ROW_LIMIT=5       # fallback to 5 if an invalid value is given
-			if tables="$(sqlite3 "file:${FILE_PATH}?mode=ro" "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' LIMIT ${SQLITE_TABLE_LIMIT};")"; then
+			if tables="$(
+				sqlite3 "file:${FILE_PATH}?mode=ro" \
+					"SELECT name FROM sqlite_master \
+					WHERE type='table' AND name NOT LIKE 'sqlite_%' LIMIT ${SQLITE_TABLE_LIMIT};"
+			)"; then
 				if [[ -n "$(sqlite3 "file:${FILE_PATH}?mode=ro" '.tables')" ]]; then
+					local table_info_query='SELECT name as "table",
+												(
+													SELECT "(" || group_concat(name || " " || upper(type) || (CASE WHEN pk > 0 THEN " PRIMARY KEY" ELSE "" END), ", ") || ")"
+													FROM pragma_table_info(sqlite_master.name)
+												) as columns
+											FROM sqlite_master
+											WHERE name NOT LIKE "sqlite_%";'
 					local query="SELECT * FROM {};"
 					[[ "$SQLITE_ROW_LIMIT" -gt 0 ]] && query="SELECT * FROM {} LIMIT ${SQLITE_ROW_LIMIT} OFFSET ((SELECT count(*) FROM {}) - ${SQLITE_ROW_LIMIT});"
 					local preview_command="sqlite3 'file:${FILE_PATH}?mode=ro' '${query}' --header --column"
+					# Display basic table infomation
 					if [[ -x "$(command -v sqlite-utils)" ]]; then
-						sqlite-utils tables "${FILE_PATH}" --counts --columns --table --fmt fancy_grid
+						sqlite-utils query "${FILE_PATH}" "${table_info_query}" --table --fmt fancy_grid
 						preview_command="sqlite-utils query '${FILE_PATH}' '${query}' --table --fmt fancy_grid"
 					else
-						sqlite3 "file:${FILE_PATH}?mode=ro" "SELECT name as 'table', (SELECT '(' || group_concat(name || ' ' || type, ', ') || ')' FROM pragma_table_info(sqlite_master.name)) as columns FROM sqlite_master WHERE name NOT LIKE 'sqlite_%';" --header --column
+						sqlite3 "file:${FILE_PATH}?mode=ro" "${table_info_query}" --header --column
 					fi
 					if [[ "$SQLITE_TABLE_LIMIT" -gt 0 ]]; then
+						# Do exhaustive preview
 						echo; printf '>%.0s' $(seq "${PV_WIDTH}"); echo
 						echo "$tables" | xargs -I {} bash -c "echo; echo '{}:'; ${preview_command}"
 					fi

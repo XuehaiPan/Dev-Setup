@@ -314,36 +314,39 @@ handle_mime() {
 			## Preview as text conversion
 			[ -x "$(command -v sqlite3)" ] || exit 1
 			if [ -n "$(sqlite3 "file:${FILE_PATH}?mode=ro" '.tables')" ]; then
-				sqlite_query() {
+				sqlite_show_query() {
 					if [ -x "$(command -v sqlite-utils)" ]; then
 						sqlite-utils query "${FILE_PATH}" "${1}" --table --fmt fancy_grid
 					else
-						sqlite3 "file:${FILE_PATH}?mode=ro" "${1}" --header --column
+						sqlite3 "file:${FILE_PATH}?mode=ro" "${1}" -header -column
 					fi
 				}
 				# Display basic table infomation
-				sqlite_query \
-					'SELECT name as "table",
+				sqlite_rowcount_query="$(sqlite3 "file:${FILE_PATH}?mode=ro" -noheader \
+					'SELECT (group_concat("SELECT """ || name || """ as tblname, count(*) as rowcount FROM " || name, " UNION ALL "))
+					FROM sqlite_master WHERE type="table" AND name NOT LIKE "sqlite_%";')"
+				sqlite_show_query \
+					'SELECT tblname as "table", rowcount as "count",
 					(
 						SELECT "(" || group_concat(name, ", ") || ")"
-						FROM pragma_table_info(sqlite_master.name)
+						FROM pragma_table_info(tblname)
 					) as "columns",
 					(
 						SELECT "(" || group_concat(upper(type) || (CASE WHEN pk > 0 THEN " PRIMARY KEY" ELSE "" END), ", ") || ")"
-						FROM pragma_table_info(sqlite_master.name)
+						FROM pragma_table_info(tblname)
 					) as "types"
-					FROM sqlite_master
-					WHERE name NOT LIKE "sqlite_%";'
+					FROM '"(${sqlite_rowcount_query});"
 				if [ "$SQLITE_TABLE_LIMIT" -gt 0 ] && [ "$SQLITE_ROW_LIMIT" -ge 0 ]; then
 					# Do exhaustive preview
 					echo; printf '>%.0s' $(seq "${PV_WIDTH}"); echo
-					sqlite3 "file:${FILE_PATH}?mode=ro" \
+					sqlite3 "file:${FILE_PATH}?mode=ro" -noheader \
 						"SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' LIMIT ${SQLITE_TABLE_LIMIT};" |
 						while read -r sqlite_table; do
-							echo; echo "${sqlite_table}[$(sqlite3 "file:${FILE_PATH}?mode=ro" "SELECT count(*) FROM ${sqlite_table}")]:"
+							sqlite_table_rowcount="$(sqlite3 "file:${FILE_PATH}?mode=ro" -noheader "SELECT count(*) FROM ${sqlite_table}")"
+							echo; echo "${sqlite_table}[${sqlite_table_rowcount}]:"
 							sqlite_table_query="SELECT * FROM ${sqlite_table};"
-							[ "$SQLITE_ROW_LIMIT" -gt 0 ] && sqlite_table_query="SELECT * FROM ${sqlite_table} LIMIT ${SQLITE_ROW_LIMIT} OFFSET ((SELECT count(*) FROM ${sqlite_table}) - ${SQLITE_ROW_LIMIT});"
-							sqlite_query "${sqlite_table_query}"
+							[ "$SQLITE_ROW_LIMIT" -gt 0 ] && sqlite_table_query="SELECT * FROM ${sqlite_table} LIMIT ${SQLITE_ROW_LIMIT} OFFSET (${sqlite_table_rowcount} - ${SQLITE_ROW_LIMIT});"
+							sqlite_show_query "${sqlite_table_query}"
 						done
 				fi
 				exit 5

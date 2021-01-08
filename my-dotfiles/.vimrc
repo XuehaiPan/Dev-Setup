@@ -130,18 +130,14 @@ let g:syntastic_check_on_wq = 0
 autocmd GUIEnter * let g:syntastic_check_on_open = 1
 
 let g:ycm_python_interpreter_path = trim(system('realpath $(which python3)'))
-let g:ycm_server_python_interpreter_path = '/usr/local/bin/python3'
-let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
-let g:ycm_confirm_extra_conf = 0
-let g:ycm_min_num_of_chars_for_completion = 2
-let g:ycm_cache_omnifunc = 0
+let g:ycm_cache_omnifunc = 1
 let g:ycm_seed_identifiers_with_syntax = 1
 let g:ycm_complete_in_comments = 1
 let g:ycm_complete_in_strings = 1
 let g:ycm_collect_identifiers_from_tags_files = 1
 let g:ycm_collect_identifiers_from_comments_and_strings = 0
 autocmd InsertLeave * if pumvisible() == 0 | pclose | endif
-inoremap <expr> <CR>       pumvisible() ? "\<C-y>\<Esc>a" : "\<CR>"
+inoremap <expr> <CR>       pumvisible() ? "\<Down>\<C-y>\<Esc>a" : "\<CR>"
 inoremap <expr> <Down>     pumvisible() ? "\<C-n>" : "\<Down>"
 inoremap <expr> <Up>       pumvisible() ? "\<C-p>" : "\<Up>"
 inoremap <expr> <PageDown> pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<PageDown>"
@@ -184,7 +180,7 @@ call plug#begin('~/.vim/plugged')
     Plug 'junegunn/fzf.vim'
     Plug 'Chiel92/vim-autoformat'
     Plug 'vim-syntastic/syntastic'
-    Plug 'ycm-core/YouCompleteMe'
+    Plug 'codota/tabnine-vim'
     Plug 'SirVer/ultisnips'
     Plug 'honza/vim-snippets'
     Plug 'PProvost/vim-ps1'

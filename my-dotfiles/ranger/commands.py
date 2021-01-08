@@ -56,7 +56,7 @@ class fzf_select(Command):
             bat --color=always {} ||
             cat {} ||
             tree -ahpCL 3 -I '.git' -I '*.pyc' -I '.*pyo' -I '__pycache__' {}
-        ) 2>/dev/null | head -100"'''
+        ) 2>/dev/null | head -n 100"'''
         fzf = self.fm.execute_command(command, universal_newlines=True, stdout=subprocess.PIPE)
         stdout, _ = fzf.communicate()
         if fzf.returncode == 0:

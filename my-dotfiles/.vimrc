@@ -136,7 +136,7 @@ let g:ycm_complete_in_comments = 1
 let g:ycm_complete_in_strings = 1
 let g:ycm_collect_identifiers_from_tags_files = 1
 let g:ycm_collect_identifiers_from_comments_and_strings = 0
-autocmd InsertLeave * if pumvisible() == 0 | pclose | endif
+autocmd InsertLeave * if pumvisible() | pclose | endif
 inoremap <expr> <CR>       pumvisible() ? "\<Down>\<C-y>\<Esc>a" : "\<CR>"
 inoremap <expr> <Down>     pumvisible() ? "\<C-n>" : "\<Down>"
 inoremap <expr> <Up>       pumvisible() ? "\<C-p>" : "\<Up>"

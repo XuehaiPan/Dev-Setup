@@ -457,7 +457,7 @@
     "latex-workshop.latex.autoBuild.run": "onFileChange",
     "latex-workshop.latex.autoBuild.cleanAndRetry.enabled": true,
     "latex-workshop.latex.autoBuild.interval": 300000,
-    "latex-workshop.latex.autoClean.run": "never",
+    "latex-workshop.latex.autoClean.run": "onFailed",
     "latex-workshop.latex.clean.subfolder.enabled": true,
     "latex-workshop.synctex.afterBuild.enabled": true,
     "latex-workshop.view.autoFocus.enabled": true,
@@ -856,7 +856,6 @@
         "yzhang.markdown-all-in-one",
         "ryu1kn.partial-diff",
         "christian-kohler.path-intellisense",
-        "ms-python.anaconda-extension-pack",
         "ms-python.python",
         "ms-python.vscode-pylance",
         "ms-toolsai.jupyter"

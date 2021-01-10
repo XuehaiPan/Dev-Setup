@@ -1,6 +1,5 @@
 {
     "recommendations": [
-        "ms-python.anaconda-extension-pack",
         "ms-vscode.azure-account",
         "rogalmic.bash-debug",
         "aaron-bond.better-comments",

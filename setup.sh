@@ -65,7 +65,7 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 if [[ -x "$SCRIPT_DIR/setup_${OS_NAME}.sh" && "$(basename "$0")" == "setup.sh" ]]; then
 	if [[ -d "$SCRIPT_DIR/.git" || "$(basename "$SCRIPT_DIR")" == "OS-Setup-master" ]]; then
 		echo -e "${BOLD}${WHITE}Run existing script ${GREEN}\"$SCRIPT_DIR/setup_${OS_NAME}.sh\"${WHITE}.${RESET}" >&2
-		bash "$SCRIPT_DIR/setup_${OS_NAME}.sh"
+		/bin/bash "$SCRIPT_DIR/setup_${OS_NAME}.sh"
 		exit
 	fi
 fi
@@ -73,14 +73,14 @@ fi
 # Download and run
 if [[ -x "$(command -v wget)" ]]; then
 	echo -e "${BOLD}${WHITE}Download and run script via ${GREEN}wget${WHITE}.${RESET}" >&2
-	bash -c "$(wget --progress=bar:force:noscroll -O - https://github.com/XuehaiPan/OS-Setup/raw/master/setup_${OS_NAME}.sh)"
+	/bin/bash -c "$(wget --progress=bar:force:noscroll -O - https://github.com/XuehaiPan/OS-Setup/raw/master/setup_${OS_NAME}.sh)"
 elif [[ -x "$(command -v curl)" ]]; then
 	echo -e "${BOLD}${WHITE}Download and run script via ${GREEN}curl${WHITE}.${RESET}" >&2
-	bash -c "$(curl -fL# https://github.com/XuehaiPan/OS-Setup/raw/master/setup_${OS_NAME}.sh)"
+	/bin/bash -c "$(curl -fL# https://github.com/XuehaiPan/OS-Setup/raw/master/setup_${OS_NAME}.sh)"
 elif [[ -x "$(command -v git)" ]]; then
 	echo -e "${BOLD}${WHITE}Download and run script via ${GREEN}git${WHITE}.${RESET}" >&2
 	git clone --depth=1 https://github.com/XuehaiPan/OS-Setup.git 2>&1
-	bash "OS-Setup/setup_${OS_NAME}.sh"
+	/bin/bash "OS-Setup/setup_${OS_NAME}.sh"
 else
 	echo -e "${BOLD}${WHITE}Please download the script from ${YELLOW}https://github.com/XuehaiPan/OS-Setup${WHITE} manually.${RESET}" >&2
 fi

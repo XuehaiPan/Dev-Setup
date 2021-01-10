@@ -22,14 +22,14 @@ Download the script file using [wget](https://www.gnu.org/software/wget) / [curl
 
 ```bash
 # Download and run via wget
-bash -c "$(wget -O - https://github.com/XuehaiPan/OS-Setup/raw/master/setup.sh)"
+/bin/bash -c "$(wget -O - https://github.com/XuehaiPan/OS-Setup/raw/master/setup.sh)"
 ```
 
 **via curl**
 
 ```bash
 # Download and run via curl
-bash -c "$(curl -fL https://github.com/XuehaiPan/OS-Setup/raw/master/setup.sh)"
+/bin/bash -c "$(curl -fL https://github.com/XuehaiPan/OS-Setup/raw/master/setup.sh)"
 ```
 
 **via git or browser**
@@ -40,7 +40,7 @@ git clone --depth=1 https://github.com/XuehaiPan/OS-Setup.git
 
 # Run the script file
 cd OS-Setup
-bash setup.sh
+/bin/bash setup.sh
 ```
 
 Options:

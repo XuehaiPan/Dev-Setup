@@ -1863,21 +1863,19 @@ report_errors: false
 create_default_packages:
   # - anaconda
   - pip
-  - jupyter
   - ipython
+  - ipdb
+  - jupyter
   - notebook
   - jupyterlab
-  - ipdb
-  - tqdm
-  - cython
   - numpy
   - numba
   - matplotlib
   - pandas
   - seaborn
-  - yapf
+  - cython
+  - tqdm
   - autopep8
-  - pycodestyle
   - pylint
 
 # vim: filetype=yaml tabstop=2 shiftwidth=2 expandtab
@@ -1893,19 +1891,17 @@ if [[ ! -d "$HOME/$CONDA_DIR" ]]; then
 		echo_and_eval "wget -N -P \"$TMP_DIR\" https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh"
 	fi
 	echo_and_eval "bash \"$TMP_DIR/Miniconda3-latest-Linux-x86_64.sh\" -b -p \"\$HOME/$CONDA_DIR\""
-	echo_and_eval "rm -f \"$TMP_DIR/Miniconda3-latest-Linux-x86_64.sh\""
 fi
 
 # Install Conda packages
 export PATH="$PATH:$HOME/$CONDA_DIR/condabin"
 echo_and_eval 'conda update conda --yes'
-echo_and_eval 'conda install pip jupyter ipython notebook jupyterlab ipdb \
-		jupyterthemes jupyter_contrib_nbextensions \
-		cython numpy numba matplotlib pandas seaborn \
-		tqdm yapf autopep8 pycodestyle pylint --yes'
+echo_and_eval 'conda install pip ipython ipdb \
+		jupyter notebook jupyterlab jupyter_contrib_nbextensions \
+		numpy numba matplotlib pandas seaborn \
+		cython tqdm autopep8 pylint --yes'
 echo_and_eval 'conda update --all --yes'
 echo_and_eval 'conda clean --all --yes'
-echo_and_eval "\"\$HOME/$CONDA_DIR/bin/jt\" --theme monokai --toolbar --nbname --kernellogo"
 echo_and_eval "\"\$HOME/$CONDA_DIR/bin/jupyter\" contrib nbextension install --user &>/dev/null"
 if $SET_MIRRORS; then
 	echo_and_eval "\"\$HOME/$CONDA_DIR/bin/pip\" config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple"

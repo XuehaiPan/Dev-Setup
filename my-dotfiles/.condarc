@@ -27,21 +27,19 @@ report_errors: false
 create_default_packages:
   # - anaconda
   - pip
-  - jupyter
   - ipython
+  - ipdb
+  - jupyter
   - notebook
   - jupyterlab
-  - ipdb
-  - tqdm
-  - cython
   - numpy
   - numba
   - matplotlib
   - pandas
   - seaborn
-  - yapf
+  - cython
+  - tqdm
   - autopep8
-  - pycodestyle
   - pylint
 
 # vim: filetype=yaml tabstop=2 shiftwidth=2 expandtab

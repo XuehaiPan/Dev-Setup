@@ -892,6 +892,9 @@
     "mssql.intelliSense.lowerCaseSuggestions": true,
     "mssql.showBatchTime": true,
 
+    //* TabNine */
+    "tabnine.experimentalAutoImports": true,
+
     //* Visual Studio IntelliCode */
     "vsintellicode.features.python.deepLearning": "enabled",
     "vsintellicode.python.completionsEnabled": true,

@@ -301,7 +301,7 @@ handle_mime() {
                 sqlite-utils query "${FILE_PATH}" "${1}" --table --fmt fancy_grid ||
                 sqlite3 "file:${FILE_PATH}?mode=ro" "${1}" -header -column
             }
-            ## Display basic table infomation
+            ## Display basic table information
             sqlite_rowcount_query="$( sqlite3 "file:${FILE_PATH}?mode=ro" -noheader \
                 'SELECT (group_concat("SELECT """ || name || """ AS tblname, count(*) AS rowcount FROM " || name, " UNION ALL "))
                 FROM sqlite_master WHERE type="table" AND name NOT LIKE "sqlite_%";' )"

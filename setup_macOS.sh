@@ -468,19 +468,12 @@ fi
 
 # Remove duplicate entries
 function __remove_duplicate() {
-	local SEP NAME VALUE
-	SEP="$1"
-	NAME="$2"
+	local SEP="$1" NAME="$2" VALUE
 	VALUE="$(
-		eval "printf \"%s\" \"\$$NAME\"" | rev | awk -v RS="$SEP" \
-			'BEGIN {
-				idx = 0;
-				exists[""] = 1;
-			}
-			{
-				if (!(exists[$0]++))
-					printf("%s%s", (!(idx++) ? "" : RS), $0);
-			}' | rev
+		eval "printf \"%s\" \"\$$NAME\"" | /usr/bin/rev |
+			/usr/bin/awk -v RS="$SEP" 'BEGIN { idx = 0; exists[""] = 1; }
+				{ if (!(exists[$0]++)) printf("%s%s", (!(idx++) ? "" : RS), $0); }' |
+			/usr/bin/rev
 	)"
 	if [[ -n "$VALUE" ]]; then
 		export "$NAME"="$VALUE"
@@ -1151,19 +1144,12 @@ fi
 
 # Remove duplicate entries
 function __remove_duplicate() {
-	local SEP NAME VALUE
-	SEP="$1"
-	NAME="$2"
+	local SEP="$1" NAME="$2" VALUE
 	VALUE="$(
-		eval "printf \"%s\" \"\$$NAME\"" | rev | awk -v RS="$SEP" \
-			'BEGIN {
-				idx = 0;
-				exists[""] = 1;
-			}
-			{
-				if (!(exists[$0]++))
-					printf("%s%s", (!(idx++) ? "" : RS), $0);
-			}' | rev
+		eval "printf \"%s\" \"\$$NAME\"" | /usr/bin/rev |
+			/usr/bin/awk -v RS="$SEP" 'BEGIN { idx = 0; exists[""] = 1; }
+				{ if (!(exists[$0]++)) printf("%s%s", (!(idx++) ? "" : RS), $0); }' |
+			/usr/bin/rev
 	)"
 	if [[ -n "$VALUE" ]]; then
 		export "$NAME"="$VALUE"
@@ -1221,10 +1207,8 @@ ITERM_UTILITIES=(
 )
 
 function join_by() {
-	local sep="$1"
-	shift
-	echo -n "$1"
-	shift
+	local sep="$1"; shift
+	echo -n "$1"; shift
 	printf "%s" "${@/#/"$sep"}"
 }
 

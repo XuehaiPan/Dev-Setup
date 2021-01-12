@@ -136,9 +136,7 @@ function wget() {
 }
 
 function get_latest_version() {
-	local REPO="$1"
-	local VERSION=""
-	local i
+	local REPO="$1" VERSION="" i
 	for ((i = 0; i < 5; ++i)); do
 		VERSION="$(
 			curl --silent --connect-timeout 10 "https://api.github.com/repos/$REPO/releases/latest" |
@@ -153,9 +151,7 @@ function get_latest_version() {
 }
 
 function check_binary() {
-	local CMD OPT REQUIRED VERSION
-	CMD="$1"
-	REQUIRED="${2#v}"
+	local CMD="$1" OPT REQUIRED="${2#v}" VERSION
 	for OPT in "--version" "-v" "-V"; do
 		VERSION="$("$CMD" "$OPT" 2>&1)"
 		if [[ $? -eq 0 && "$VERSION" == *"$REQUIRED"* ]]; then
@@ -493,19 +489,12 @@ export BAT_THEME="Monokai Extended"
 
 # Remove duplicate entries
 function __remove_duplicate() {
-	local SEP NAME VALUE
-	SEP="$1"
-	NAME="$2"
+	local SEP="$1" NAME="$2" VALUE
 	VALUE="$(
-		eval "printf \"%s\" \"\$$NAME\"" | rev | awk -v RS="$SEP" \
-			'BEGIN {
-				idx = 0;
-				exists[""] = 1;
-			}
-			{
-				if (!(exists[$0]++))
-					printf("%s%s", (!(idx++) ? "" : RS), $0);
-			}' | rev
+		eval "printf \"%s\" \"\$$NAME\"" | /usr/bin/rev |
+			/usr/bin/awk -v RS="$SEP" 'BEGIN { idx = 0; exists[""] = 1; }
+				{ if (!(exists[$0]++)) printf("%s%s", (!(idx++) ? "" : RS), $0); }' |
+			/usr/bin/rev
 	)"
 	if [[ -n "$VALUE" ]]; then
 		export "$NAME"="$VALUE"
@@ -1149,19 +1138,12 @@ export BAT_THEME="Monokai Extended"
 
 # Remove duplicate entries
 function __remove_duplicate() {
-	local SEP NAME VALUE
-	SEP="$1"
-	NAME="$2"
+	local SEP="$1" NAME="$2" VALUE
 	VALUE="$(
-		eval "printf \"%s\" \"\$$NAME\"" | rev | awk -v RS="$SEP" \
-			'BEGIN {
-				idx = 0;
-				exists[""] = 1;
-			}
-			{
-				if (!(exists[$0]++))
-					printf("%s%s", (!(idx++) ? "" : RS), $0);
-			}' | rev
+		eval "printf \"%s\" \"\$$NAME\"" | /usr/bin/rev |
+			/usr/bin/awk -v RS="$SEP" 'BEGIN { idx = 0; exists[""] = 1; }
+				{ if (!(exists[$0]++)) printf("%s%s", (!(idx++) ? "" : RS), $0); }' |
+			/usr/bin/rev
 	)"
 	if [[ -n "$VALUE" ]]; then
 		export "$NAME"="$VALUE"

@@ -176,21 +176,21 @@ if $IS_SUDOER; then
 		echo_and_eval 'sudo pacman-key --recv-keys 7931B6D628C8D3BA'
 		echo_and_eval 'sudo pacman-key --finger 7931B6D628C8D3BA'
 		echo_and_eval 'sudo pacman-key --lsign-key 7931B6D628C8D3BA'
-		echo_and_eval "yes \$'\\n' | sudo pacman -S archlinuxcn-keyring --needed"
+		echo_and_eval "yes '' | sudo pacman -S archlinuxcn-keyring --needed"
 	fi
 
 	# Install and setup shells
-	echo_and_eval "yes \$'\\n' | sudo pacman -S zsh --needed"
+	echo_and_eval "yes '' | sudo pacman -S zsh --needed"
 
 	if ! grep -qF '/usr/bin/zsh' /etc/shells; then
 		echo_and_eval 'echo "/usr/bin/zsh" | sudo tee -a /etc/shells'
 	fi
 
 	# Install packages
-	echo_and_eval "yes \$'\\n' | sudo pacman -S bash-completion wget curl git git-lfs gvim tmux --needed"
-	echo_and_eval "yes \$'\\n' | sudo pacman -S ranger fd bat highlight ripgrep git-extras shfmt shellcheck --needed"
-	echo_and_eval "yes \$'\\n' | sudo pacman -S htop openssh net-tools exfat-utils tree colordiff diff-so-fancy xclip --needed"
-	echo_and_eval "yes \$'\\n' | sudo pacman -S gcc gdb clang llvm lldb make cmake automake autoconf ruby --needed"
+	echo_and_eval "yes '' | sudo pacman -S bash-completion wget curl git git-lfs gvim tmux --needed"
+	echo_and_eval "yes '' | sudo pacman -S ranger fd bat highlight ripgrep git-extras shfmt shellcheck --needed"
+	echo_and_eval "yes '' | sudo pacman -S htop openssh net-tools exfat-utils tree colordiff diff-so-fancy xclip --needed"
+	echo_and_eval "yes '' | sudo pacman -S gcc gdb clang llvm lldb make cmake automake autoconf ruby --needed"
 	echo_and_eval 'yes | sudo pacman -Scc'
 
 	echo_and_eval 'sudo systemctl start sshd'
@@ -767,7 +767,7 @@ function echo_and_eval() {
 function upgrade_manjaro() {
 	# Upgrade packages
 	echo_and_eval 'sudo pacman -Syy'
-	echo_and_eval "yes \$'\\n' | sudo pacman -Syu"
+	echo_and_eval "yes '' | sudo pacman -Syu"
 
 	# Remove unused packages
 	echo_and_eval 'sudo paccache -ruk0'

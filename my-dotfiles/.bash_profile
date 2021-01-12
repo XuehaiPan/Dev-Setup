@@ -161,16 +161,15 @@ function __remove_duplicate() {
 	SEP="$1"
 	NAME="$2"
 	VALUE="$(
-		eval "printf \"%s\" \"\$$NAME\"" | awk -v RS="$SEP" \
+		eval "printf \"%s\" \"\$$NAME\"" | rev | awk -v RS="$SEP" \
 			'BEGIN {
 				idx = 0;
-				delete flag;
-				flag[""] = 1;
+				exists[""] = 1;
 			}
 			{
-				if (!(flag[$0]++))
+				if (!(exists[$0]++))
 					printf("%s%s", (!(idx++) ? "" : RS), $0);
-			}'
+			}' | rev
 	)"
 	if [[ -n "$VALUE" ]]; then
 		export "$NAME"="$VALUE"

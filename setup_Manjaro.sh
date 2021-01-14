@@ -438,10 +438,9 @@ export BAT_THEME="Monokai Extended"
 function __remove_duplicate() {
 	local SEP="$1" NAME="$2" VALUE
 	VALUE="$(
-		eval "printf \"%s\" \"\$$NAME\"" | /usr/bin/rev |
-			/usr/bin/awk -v RS="$SEP" 'BEGIN { idx = 0; exists[""] = 1; }
-				{ if (!(exists[$0]++)) printf("%s%s", (!(idx++) ? "" : RS), $0); }' |
-			/usr/bin/rev
+		eval "printf \"%s\" \"\$$NAME\"" | /usr/bin/awk -v RS="$SEP" \
+			'BEGIN { idx = 0; exists[""] = 1; }
+			{ if (!(exists[$0]++)) printf("%s%s", (!(idx++) ? "" : RS), $0); }'
 	)"
 	if [[ -n "$VALUE" ]]; then
 		export "$NAME"="$VALUE"
@@ -1075,10 +1074,9 @@ export BAT_THEME="Monokai Extended"
 function __remove_duplicate() {
 	local SEP="$1" NAME="$2" VALUE
 	VALUE="$(
-		eval "printf \"%s\" \"\$$NAME\"" | /usr/bin/rev |
-			/usr/bin/awk -v RS="$SEP" 'BEGIN { idx = 0; exists[""] = 1; }
-				{ if (!(exists[$0]++)) printf("%s%s", (!(idx++) ? "" : RS), $0); }' |
-			/usr/bin/rev
+		eval "printf \"%s\" \"\$$NAME\"" | /usr/bin/awk -v RS="$SEP" \
+			'BEGIN { idx = 0; exists[""] = 1; }
+			{ if (!(exists[$0]++)) printf("%s%s", (!(idx++) ? "" : RS), $0); }'
 	)"
 	if [[ -n "$VALUE" ]]; then
 		export "$NAME"="$VALUE"

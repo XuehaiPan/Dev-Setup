@@ -109,7 +109,7 @@ function echo_and_eval() {
 }
 
 function realpath() {
-	python -c "import os,sys; print(os.path.realpath(sys.argv[1]))" "$1"
+	/usr/bin/python3 -c "import os,sys; print(os.path.realpath(sys.argv[1]))" "$1"
 }
 
 function backup_dotfiles() {

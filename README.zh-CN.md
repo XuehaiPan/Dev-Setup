@@ -1,4 +1,4 @@
-# OS-Setup
+# Dev-Setup
 
 [English Version](README.md) 👈
 
@@ -19,30 +19,30 @@
 
 ### 安装
 
-使用 [wget](https://www.gnu.org/software/wget) / [curl](https://curl.haxx.se) / [git](https://git-scm.com) 或浏览器（[点此下载 zip](https://codeload.github.com/XuehaiPan/OS-Setup/zip/master)）下载本脚本。打开 `终端` 运行：
+使用 [wget](https://www.gnu.org/software/wget) / [curl](https://curl.haxx.se) / [git](https://git-scm.com) 或浏览器（[点此下载 zip](https://codeload.github.com/XuehaiPan/Dev-Setup/zip/master)）下载本脚本。打开 `终端` 运行：
 
 **via wget**
 
 ```bash
 # Download and run via wget
-/bin/bash -c "$(wget -O - https://github.com/XuehaiPan/OS-Setup/raw/master/setup.sh)"
+/bin/bash -c "$(wget -O - https://github.com/XuehaiPan/Dev-Setup/raw/master/setup.sh)"
 ```
 
 **via curl**
 
 ```bash
 # Download and run via curl
-/bin/bash -c "$(curl -fL https://github.com/XuehaiPan/OS-Setup/raw/master/setup.sh)"
+/bin/bash -c "$(curl -fL https://github.com/XuehaiPan/Dev-Setup/raw/master/setup.sh)"
 ```
 
 **via git or browser**
 
 ```bash
 # Download via git
-git clone --depth=1 https://github.com/XuehaiPan/OS-Setup.git
+git clone --depth=1 https://github.com/XuehaiPan/Dev-Setup.git
 
 # Run the script file
-cd OS-Setup
+cd Dev-Setup
 /bin/bash setup.sh
 ```
 
@@ -222,7 +222,7 @@ ln -sf .dotfiles/<CFG_FILE> .
 |                                                                                                                                  |       |              |               |
 | [DejaVu Sans Mono Nerd Font](https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/DejaVuSansMono)                   |   ✔   |      ✔       |       ✔       |
 | [Cascadia Code Font](https://github.com/microsoft/cascadia-code)                                                                 |   ✔   |      ✔       |       ✔       |
-| [Menlo Font](https://github.com/XuehaiPan/OS-Setup/blob/master/Menlo.zip)                                                        |   ✔   |      ✔       |       ✔       |
+| [Menlo Font](https://github.com/XuehaiPan/Dev-Setup/blob/master/Menlo.zip)                                                        |   ✔   |      ✔       |       ✔       |
 
 仅在 macOS 上由 Homebrew 安装的 App：
 

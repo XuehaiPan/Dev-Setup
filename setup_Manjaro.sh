@@ -1893,7 +1893,7 @@ URL_LIST=(
 	"https://github.com/ryanoasis/nerd-fonts/releases/latest/download/DejaVuSansMono.zip"
 	"https://github.com/microsoft/cascadia-code/releases/latest/download/CascadiaCode-${LATEST_CASCADIA_VERSION#v}.zip"
 )
-echo_and_eval "wget -N -P \"$TMP_DIR/fonts\" https://github.com/XuehaiPan/OS-Setup/raw/master/Menlo.ttc"
+echo_and_eval "wget -N -P \"$TMP_DIR/fonts\" https://github.com/XuehaiPan/Dev-Setup/raw/master/Menlo.ttc"
 for url in "${URL_LIST[@]}"; do
 	echo_and_eval "wget -N -P \"$TMP_DIR\" $url"
 	echo_and_eval "unzip -o \"$TMP_DIR/$(basename "$url")\" -d \"$TMP_DIR/fonts\""

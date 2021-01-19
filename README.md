@@ -1,4 +1,4 @@
-# OS-Setup
+# Dev-Setup
 
 [中文版](README.zh-CN.md) 👈
 
@@ -19,30 +19,30 @@ Automation scripts for setting up basic development environment. ([screenshots](
 
 ### Installation
 
-Download the script file using [wget](https://www.gnu.org/software/wget) / [curl](https://curl.haxx.se) / [git](https://git-scm.com) or any browser ([click here to download zip](https://codeload.github.com/XuehaiPan/OS-Setup/zip/master)). And then open `Terminal` and run:
+Download the script file using [wget](https://www.gnu.org/software/wget) / [curl](https://curl.haxx.se) / [git](https://git-scm.com) or any browser ([click here to download zip](https://codeload.github.com/XuehaiPan/Dev-Setup/zip/master)). And then open `Terminal` and run:
 
 **via wget**
 
 ```bash
 # Download and run via wget
-/bin/bash -c "$(wget -O - https://github.com/XuehaiPan/OS-Setup/raw/master/setup.sh)"
+/bin/bash -c "$(wget -O - https://github.com/XuehaiPan/Dev-Setup/raw/master/setup.sh)"
 ```
 
 **via curl**
 
 ```bash
 # Download and run via curl
-/bin/bash -c "$(curl -fL https://github.com/XuehaiPan/OS-Setup/raw/master/setup.sh)"
+/bin/bash -c "$(curl -fL https://github.com/XuehaiPan/Dev-Setup/raw/master/setup.sh)"
 ```
 
 **via git or browser**
 
 ```bash
 # Download via git
-git clone --depth=1 https://github.com/XuehaiPan/OS-Setup.git
+git clone --depth=1 https://github.com/XuehaiPan/Dev-Setup.git
 
 # Run the script file
-cd OS-Setup
+cd Dev-Setup
 /bin/bash setup.sh
 ```
 
@@ -222,7 +222,7 @@ The following packages will be setup:
 |                                                                                                                                  |       |              |               |
 | [DejaVu Sans Mono Nerd Font](https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/DejaVuSansMono)                   |   ✔   |      ✔       |       ✔       |
 | [Cascadia Code Font](https://github.com/microsoft/cascadia-code)                                                                 |   ✔   |      ✔       |       ✔       |
-| [Menlo Font](https://github.com/XuehaiPan/OS-Setup/blob/master/Menlo.zip)                                                        |   ✔   |      ✔       |       ✔       |
+| [Menlo Font](https://github.com/XuehaiPan/Dev-Setup/blob/master/Menlo.zip)                                                       |   ✔   |      ✔       |       ✔       |
 
 Currently macOS only casks installed by Homebrew:
 

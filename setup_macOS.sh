@@ -4,7 +4,11 @@
 export SET_MIRRORS="${SET_MIRRORS:-false}"
 
 # Set PATH
-export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin:/Library/Apple/bin${PATH:+:"$PATH"}"
+HOMEBREW_PREFIX="/usr/local"
+if [[ "$(uname -m)" == "arm64" ]]; then
+	HOMEBREW_PREFIX="/opt/homebrew"
+fi
+export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin:/Library/Apple/bin:$HOMEBREW_PREFIX/bin:${PATH:+:"$PATH"}"
 
 # Set USER
 export USER="${USER:-"$(whoami)"}"
@@ -30,49 +34,48 @@ fi
 
 # Common functions
 function echo_and_eval() {
-	printf "%s" "$@" | awk -f <(
-		cat - <<-'EOD'
-			BEGIN {
-				RESET = "\033[0m";
-				BOLD = "\033[1m";
-				UNDERLINE = "\033[4m";
-				UNDERLINEOFF = "\033[24m";
-				RED = "\033[31m";
-				GREEN = "\033[32m";
-				YELLOW = "\033[33m";
-				WHITE = "\033[37m";
-				GRAY = "\033[90m";
-				IDENTIFIER = "[_a-zA-Z][_a-zA-Z0-9]*";
+	printf "%s" "$@" | awk \
+			"BEGIN {
+				RESET = \"\\033[0m\";
+				BOLD = \"\\033[1m\";
+				UNDERLINE = \"\\033[4m\";
+				UNDERLINEOFF = \"\\033[24m\";
+				RED = \"\\033[31m\";
+				GREEN = \"\\033[32m\";
+				YELLOW = \"\\033[33m\";
+				WHITE = \"\\033[37m\";
+				GRAY = \"\\033[90m\";
+				IDENTIFIER = \"[_a-zA-Z][_a-zA-Z0-9]*\";
 				idx = 0;
 				in_string = 0;
 				double_quoted = 1;
-				printf("%s$", BOLD WHITE);
+				printf(\"%s\$\", BOLD WHITE);
 			}
 			{
 				for (i = 1; i <= NF; ++i) {
 					style = WHITE;
 					post_style = WHITE;
 					if (!in_string) {
-						if ($i ~ /^-/)
+						if (\$i ~ /^-/)
 							style = YELLOW;
-						else if ($i == "sudo" && idx == 0) {
+						else if (\$i == \"sudo\" && idx == 0) {
 							style = UNDERLINE GREEN;
 							post_style = UNDERLINEOFF WHITE;
 						}
-						else if ($i ~ "^" IDENTIFIER "+=" && idx == 0) {
+						else if (\$i ~ \"^\" IDENTIFIER \"+=\" && idx == 0) {
 							style = GRAY;
-							if ($i ~ "^" IDENTIFIER "+=[\"']") {
+							if (\$i ~ \"^\" IDENTIFIER \"+=[\\\"']\") {
 								in_string = 1;
-								double_quoted = ($i ~ "^" IDENTIFIER "+=\"");
+								double_quoted = (\$i ~ \"^\" IDENTIFIER \"+=\\\"\");
 							}
 						}
-						else if ($i ~ /^[12&]?>>?/ || $i == "\\")
+						else if (\$i ~ /^[12&]?>>?/ || \$i == \"\\\\\")
 							style = RED;
 						else {
 							++idx;
-							if ($i ~ /^["']/) {
+							if (\$i ~ /^[\"']/) {
 								in_string = 1;
-								double_quoted = ($i ~ /^"/);
+								double_quoted = (\$i ~ /^\"/);
 							}
 							if (idx == 1)
 								style = GREEN;
@@ -80,31 +83,29 @@ function echo_and_eval() {
 					}
 					if (in_string) {
 						if (style == WHITE)
-							style = "";
-						post_style = "";
-						if ((double_quoted && $i ~ /";?$/ && $i !~ /\\";?$/) || (!double_quoted && $i ~ /';?$/))
+							style = \"\";
+						post_style = \"\";
+						if ((double_quoted && \$i ~ /\";?\$/ && \$i !~ /\\\\\";?\$/) || (!double_quoted && \$i ~ /';?\$/))
 							in_string = 0;
 					}
-					if ($i ~ /;$/ || $i == "|" || $i == "||" || $i == "&&") {
+					if (\$i ~ /;\$/ || \$i == \"|\" || \$i == \"||\" || \$i == \"&&\") {
 						if (!in_string) {
 							idx = 0;
-							if ($i !~ /;$/)
+							if (\$i !~ /;\$/)
 								style = RED;
 						}
 					}
-					if ($i ~ /;$/)
-						printf(" %s%s%s;%s", style, substr($i, 1, length($i) - 1), (in_string ? WHITE : RED), post_style);
+					if (\$i ~ /;\$/)
+						printf(\" %s%s%s;%s\", style, substr(\$i, 1, length(\$i) - 1), (in_string ? WHITE : RED), post_style);
 					else
-						printf(" %s%s%s", style, $i, post_style);
-					if ($i == "\\")
-						printf("\n\t");
+						printf(\" %s%s%s\", style, \$i, post_style);
+					if (\$i == \"\\\\\")
+						printf(\"\\n\\t\");
 				}
 			}
 			END {
-				printf("%s\n", RESET);
-			}
-		EOD
-	) >&2
+				printf(\"%s\\n\", RESET);
+			}" >&2
 	eval "$@"
 }
 
@@ -145,6 +146,8 @@ if [[ ! -x "$(command -v brew)" ]]; then
 		echo_and_eval '/bin/bash -c "$(curl -fsSL https://github.com/Homebrew/install/raw/master/install.sh)"'
 	fi
 fi
+
+echo_and_eval "eval \"\$($HOMEBREW_PREFIX/bin/brew shellenv)\""
 
 if $SET_MIRRORS; then
 	echo_and_eval 'git -C "$(brew --repo)" remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git'
@@ -187,7 +190,7 @@ echo_and_eval 'brew install shfmt shellcheck diffutils colordiff diff-so-fancy'
 echo_and_eval 'brew install htop openssh tree reattach-to-user-namespace'
 
 echo_and_eval 'brew install ruby perl'
-export PATH="/usr/local/opt/ruby/bin:$PATH"
+export PATH="$HOMEBREW_PREFIX/opt/ruby/bin:$PATH"
 export PATH="$(ruby -r rubygems -e 'puts Gem.dir')/bin:$PATH"
 export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
 
@@ -314,8 +317,8 @@ echo_and_eval 'gem install colorls'
 echo_and_eval 'gem cleanup'
 
 # Configurations for Perl
-export PERL_MB_OPT='--install_base "/usr/local/opt/perl"'
-export PERL_MM_OPT='INSTALL_BASE="/usr/local/opt/perl"'
+export PERL_MB_OPT="--install_base \"$HOMEBREW_PREFIX/opt/perl\""
+export PERL_MM_OPT="INSTALL_BASE=\"$HOMEBREW_PREFIX/opt/perl\""
 echo_and_eval "PERL_MM_USE_DEFAULT=1 http_proxy=\"\" ftp_proxy=\"\" perl -MCPAN -e 'mkmyconfig'"
 echo_and_eval "perl -MCPAN -e 'CPAN::HandleConfig->load();' \\
 		-e 'CPAN::HandleConfig->edit(\"cleanup_after_install\", \"1\");' \\
@@ -331,7 +334,7 @@ if $SET_MIRRORS; then
 	fi
 fi
 echo_and_eval "perl -MCPAN -e 'install local::lib'"
-echo_and_eval 'eval "$(perl -I/usr/local/opt/perl/lib/perl5 -Mlocal::lib=/usr/local/opt/perl)"'
+echo_and_eval "eval \"\$(perl -I$HOMEBREW_PREFIX/opt/perl/lib/perl5 -Mlocal::lib=$HOMEBREW_PREFIX/opt/perl)\""
 echo_and_eval "perl -MCPAN -e 'install CPAN'"
 echo_and_eval "AUTOMATED_TESTING=1 perl -MCPAN -e 'install Term::ReadLine::Perl, Term::ReadKey'"
 
@@ -339,10 +342,12 @@ echo_and_eval "AUTOMATED_TESTING=1 perl -MCPAN -e 'install Term::ReadLine::Perl,
 backup_dotfiles .dotfiles/.zshrc
 
 HOMEBREW_SETTINGS='# Homebrew
+'"eval \"\$($HOMEBREW_PREFIX/bin/brew shellenv)\""'
 export HOMEBREW_EDITOR="vim"
 export HOMEBREW_BAT=true'
 if $SET_MIRRORS; then
 	HOMEBREW_SETTINGS='# Homebrew
+'"eval \"\$($HOMEBREW_PREFIX/bin/brew shellenv)\""'
 export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles"
 export HOMEBREW_EDITOR="vim"
 export HOMEBREW_BAT=true'
@@ -351,12 +356,12 @@ cat >.dotfiles/.zshrc <<'EOF'
 # Source global definitions
 # Include /etc/zprofile if it exists
 if [[ -f /etc/zprofile ]]; then
-	. /etc/zprofile
+	source /etc/zprofile
 fi
 
 # Include /etc/zshrc if it exists
 if [[ -f /etc/zshrc ]]; then
-	. /etc/zshrc
+	source /etc/zshrc
 fi
 
 # Set PATH so it includes user's private bin if it exists
@@ -388,14 +393,6 @@ export LSCOLORS="GxFxCxDxBxegedabagaced"
 # Locale
 export LC_ALL="en_US.UTF-8"
 
-# Compilers
-export CC="/usr/bin/gcc"
-export CXX="/usr/bin/g++"
-export FC="/usr/local/bin/gfortran"
-export OMPI_CC="$CC" MPICH_CC="$CC"
-export OMPI_CXX="$CXX" MPICH_CXX="$CXX"
-export OMPI_FC="$FC" MPICH_FC="$FC"
-
 EOF
 cat >>.dotfiles/.zshrc <<EOF
 ${HOMEBREW_SETTINGS}
@@ -408,7 +405,7 @@ if [[ \$? -eq 0 ]]; then
 	eval "\$__conda_setup"
 else
 	if [[ -f "\$HOME/$CONDA_DIR/etc/profile.d/conda.sh" ]]; then
-		. "\$HOME/$CONDA_DIR/etc/profile.d/conda.sh"
+		source "\$HOME/$CONDA_DIR/etc/profile.d/conda.sh"
 	else
 		export PATH="\$HOME/$CONDA_DIR/bin:\$PATH"
 	fi
@@ -418,36 +415,44 @@ unset __conda_setup
 
 EOF
 cat >>.dotfiles/.zshrc <<'EOF'
+# CXX Compilers
+export CC="/usr/bin/gcc"
+export CXX="/usr/bin/g++"
+export FC="$HOMEBREW_PREFIX/bin/gfortran"
+export OMPI_CC="$CC" MPICH_CC="$CC"
+export OMPI_CXX="$CXX" MPICH_CXX="$CXX"
+export OMPI_FC="$FC" MPICH_FC="$FC"
+
 # Ruby
 export RUBYOPT="-W0"
-export PATH="/usr/local/opt/ruby/bin:$PATH"
+export PATH="$HOMEBREW_PREFIX/opt/ruby/bin:$PATH"
 export PATH="$(ruby -r rubygems -e 'puts Gem.dir')/bin:$PATH"
 export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
 
 # Perl
-eval "$(perl -I/usr/local/opt/perl/lib/perl5 -Mlocal::lib=/usr/local/opt/perl)"
+eval "$(perl -I$HOMEBREW_PREFIX/opt/perl/lib/perl5 -Mlocal::lib=$HOMEBREW_PREFIX/opt/perl)"
 
 # cURL
-export PATH="/usr/local/opt/curl/bin:$PATH"
+export PATH="$HOMEBREW_PREFIX/opt/curl/bin:$PATH"
 
 # OpenSSL
-export PATH="/usr/local/opt/openssl/bin:$PATH"
+export PATH="$HOMEBREW_PREFIX/opt/openssl/bin:$PATH"
 
 # gettext
-export PATH="/usr/local/opt/gettext/bin:$PATH"
+export PATH="$HOMEBREW_PREFIX/opt/gettext/bin:$PATH"
 
 # NCURSES
-export PATH="/usr/local/opt/ncurses/bin:$PATH"
-export C_INCLUDE_PATH="/usr/local/opt/ncurses/include:$C_INCLUDE_PATH"
-export CPLUS_INCLUDE_PATH="/usr/local/opt/ncurses/include:$CPLUS_INCLUDE_PATH"
-export LIBRARY_PATH="/usr/local/opt/ncurses/lib:$LIBRARY_PATH"
-export DYLD_LIBRARY_PATH="/usr/local/opt/ncurses/lib:$DYLD_LIBRARY_PATH"
+export PATH="$HOMEBREW_PREFIX/opt/ncurses/bin:$PATH"
+export C_INCLUDE_PATH="$HOMEBREW_PREFIX/opt/ncurses/include:$C_INCLUDE_PATH"
+export CPLUS_INCLUDE_PATH="$HOMEBREW_PREFIX/opt/ncurses/include:$CPLUS_INCLUDE_PATH"
+export LIBRARY_PATH="$HOMEBREW_PREFIX/opt/ncurses/lib:$LIBRARY_PATH"
+export DYLD_LIBRARY_PATH="$HOMEBREW_PREFIX/opt/ncurses/lib:$DYLD_LIBRARY_PATH"
 
 # SQLite
-export PATH="/usr/local/opt/sqlite/bin:$PATH"
+export PATH="$HOMEBREW_PREFIX/opt/sqlite/bin:$PATH"
 
 # LLVM
-export PATH="/usr/local/opt/llvm/bin:$PATH"
+export PATH="$HOMEBREW_PREFIX/opt/llvm/bin:$PATH"
 
 # fzf
 if [[ -f "$HOME/.fzf.zsh" ]]; then
@@ -489,7 +494,7 @@ unset -f __remove_duplicate
 
 # Utilities
 if [[ -f "$HOME/.dotfiles/utilities.sh" ]]; then
-	. "$HOME/.dotfiles/utilities.sh"
+	source "$HOME/.dotfiles/utilities.sh"
 fi
 
 # X11
@@ -949,7 +954,7 @@ esac
 # Source global definitions
 # Include /etc/bashrc if it exists
 if [[ -f /etc/bashrc ]]; then
-	. /etc/bashrc
+	source /etc/bashrc
 fi
 
 # Don't put duplicate lines or lines starting with space in the history.
@@ -981,17 +986,17 @@ alias la='ls -AlhF'
 # You may want to put all your additions into a separate file like
 # ~/.bash_aliases, instead of adding them here directly.
 if [[ -f "$HOME/.bash_aliases" ]]; then
-	. "$HOME/.bash_aliases"
+	source "$HOME/.bash_aliases"
 fi
 
 # Enable programmable completion features
 if ! shopt -oq posix; then
 	if [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]]; then
-		. "/usr/local/etc/profile.d/bash_completion.sh"
+		source "/usr/local/etc/profile.d/bash_completion.sh"
 	elif [[ -f "/usr/share/bash-completion/bash_completion" ]]; then
-		. "/usr/share/bash-completion/bash_completion"
+		source "/usr/share/bash-completion/bash_completion"
 	elif [[ -f "/etc/bash_completion" ]]; then
-		. "/etc/bash_completion"
+		source "/etc/bash_completion"
 	fi
 fi
 
@@ -999,9 +1004,9 @@ fi
 if ! shopt -q login_shell; then
 	# Include ~/.bash_profile if it exists
 	if [[ -f "$HOME/.bash_profile" ]]; then
-		. "$HOME/.bash_profile"
+		source "$HOME/.bash_profile"
 	elif [[ -f "$HOME/.profile" ]]; then
-		. "$HOME/.profile"
+		source "$HOME/.profile"
 	fi
 fi
 EOF
@@ -1017,14 +1022,14 @@ cat >.dotfiles/.bash_profile <<'EOF'
 # Source global definitions
 # Include /etc/profile if it exists
 if [[ -f /etc/profile ]]; then
-	. /etc/profile
+	source /etc/profile
 fi
 
 # If running bash as login shell
 if [[ -n "$BASH_VERSION" ]] && shopt -q login_shell; then
 	# Include ~/.bashrc if it exists
 	if [[ -f "$HOME/.bashrc" ]]; then
-		. "$HOME/.bashrc"
+		source "$HOME/.bashrc"
 	fi
 fi
 
@@ -1063,14 +1068,6 @@ fi
 # Locale
 export LC_ALL="en_US.UTF-8"
 
-# Compilers
-export CC="/usr/bin/gcc"
-export CXX="/usr/bin/g++"
-export FC="/usr/local/bin/gfortran"
-export OMPI_CC="$CC" MPICH_CC="$CC"
-export OMPI_CXX="$CXX" MPICH_CXX="$CXX"
-export OMPI_FC="$FC" MPICH_FC="$FC"
-
 EOF
 cat >>.dotfiles/.bash_profile <<EOF
 ${HOMEBREW_SETTINGS}
@@ -1083,7 +1080,7 @@ if [[ \$? -eq 0 ]]; then
 	eval "\$__conda_setup"
 else
 	if [[ -f "\$HOME/$CONDA_DIR/etc/profile.d/conda.sh" ]]; then
-		. "\$HOME/$CONDA_DIR/etc/profile.d/conda.sh"
+		source "\$HOME/$CONDA_DIR/etc/profile.d/conda.sh"
 	else
 		export PATH="\$HOME/$CONDA_DIR/bin:\$PATH"
 	fi
@@ -1093,36 +1090,44 @@ unset __conda_setup
 
 EOF
 cat >>.dotfiles/.bash_profile <<'EOF'
+# CXX Compilers
+export CC="/usr/bin/gcc"
+export CXX="/usr/bin/g++"
+export FC="$HOMEBREW_PREFIX/bin/gfortran"
+export OMPI_CC="$CC" MPICH_CC="$CC"
+export OMPI_CXX="$CXX" MPICH_CXX="$CXX"
+export OMPI_FC="$FC" MPICH_FC="$FC"
+
 # Ruby
 export RUBYOPT="-W0"
-export PATH="/usr/local/opt/ruby/bin:$PATH"
+export PATH="$HOMEBREW_PREFIX/opt/ruby/bin:$PATH"
 export PATH="$(ruby -r rubygems -e 'puts Gem.dir')/bin:$PATH"
 export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
 
 # Perl
-eval "$(perl -I/usr/local/opt/perl/lib/perl5 -Mlocal::lib=/usr/local/opt/perl)"
+eval "$(perl -I$HOMEBREW_PREFIX/opt/perl/lib/perl5 -Mlocal::lib=$HOMEBREW_PREFIX/opt/perl)"
 
 # cURL
-export PATH="/usr/local/opt/curl/bin:$PATH"
+export PATH="$HOMEBREW_PREFIX/opt/curl/bin:$PATH"
 
 # OpenSSL
-export PATH="/usr/local/opt/openssl/bin:$PATH"
+export PATH="$HOMEBREW_PREFIX/opt/openssl/bin:$PATH"
 
 # gettext
-export PATH="/usr/local/opt/gettext/bin:$PATH"
+export PATH="$HOMEBREW_PREFIX/opt/gettext/bin:$PATH"
 
 # NCURSES
-export PATH="/usr/local/opt/ncurses/bin:$PATH"
-export C_INCLUDE_PATH="/usr/local/opt/ncurses/include:$C_INCLUDE_PATH"
-export CPLUS_INCLUDE_PATH="/usr/local/opt/ncurses/include:$CPLUS_INCLUDE_PATH"
-export LIBRARY_PATH="/usr/local/opt/ncurses/lib:$LIBRARY_PATH"
-export DYLD_LIBRARY_PATH="/usr/local/opt/ncurses/lib:$DYLD_LIBRARY_PATH"
+export PATH="$HOMEBREW_PREFIX/opt/ncurses/bin:$PATH"
+export C_INCLUDE_PATH="$HOMEBREW_PREFIX/opt/ncurses/include:$C_INCLUDE_PATH"
+export CPLUS_INCLUDE_PATH="$HOMEBREW_PREFIX/opt/ncurses/include:$CPLUS_INCLUDE_PATH"
+export LIBRARY_PATH="$HOMEBREW_PREFIX/opt/ncurses/lib:$LIBRARY_PATH"
+export DYLD_LIBRARY_PATH="$HOMEBREW_PREFIX/opt/ncurses/lib:$DYLD_LIBRARY_PATH"
 
 # SQLite
-export PATH="/usr/local/opt/sqlite/bin:$PATH"
+export PATH="$HOMEBREW_PREFIX/opt/sqlite/bin:$PATH"
 
 # LLVM
-export PATH="/usr/local/opt/llvm/bin:$PATH"
+export PATH="$HOMEBREW_PREFIX/opt/llvm/bin:$PATH"
 
 # fzf
 if [[ -f "$HOME/.fzf.bash" ]]; then
@@ -1164,7 +1169,7 @@ unset -f __remove_duplicate
 
 # Utilities
 if [[ -f "$HOME/.dotfiles/utilities.sh" ]]; then
-	. "$HOME/.dotfiles/utilities.sh"
+	source "$HOME/.dotfiles/utilities.sh"
 fi
 
 # X11
@@ -1173,7 +1178,7 @@ xhost +local: &>/dev/null
 
 # Bash completion
 if [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]]; then
-	. "/usr/local/etc/profile.d/bash_completion.sh"
+	source "/usr/local/etc/profile.d/bash_completion.sh"
 fi
 EOF
 
@@ -1207,7 +1212,7 @@ ITERM_UTILITIES=(
 function join_by() {
 	local sep="$1"; shift
 	echo -n "$1"; shift
-	printf "%s" "${@/#/"$sep"}"
+	printf "%s" "${@/#/$sep}"
 }
 
 ALIASES_ARRAY=()
@@ -1715,12 +1720,10 @@ ln -sf .dotfiles/.tmux.conf.local .
 sed -i "" 's/tmux_conf_copy_to_os_clipboard=false/tmux_conf_copy_to_os_clipboard=true/g' .dotfiles/.tmux.conf.local
 sed -i "" 's/#set -g history-limit 10000/set -g history-limit 10000/g' .dotfiles/.tmux.conf.local
 sed -i "" 's/#set -g mouse on/set -g mouse on/g' .dotfiles/.tmux.conf.local
-if ! grep -qF 'source-file ~/.dotfiles/.tmux.conf.user' .dotfiles/.tmux.conf.local; then
+if ! grep -qF 'source-file -q ~/.dotfiles/.tmux.conf.user' .dotfiles/.tmux.conf.local; then
 	cat >>.dotfiles/.tmux.conf.local <<'EOF'
 
-%if '[ -f ~/.dotfiles/.tmux.conf.user ]'
-    source-file ~/.dotfiles/.tmux.conf.user
-%endif
+source-file -q ~/.dotfiles/.tmux.conf.user
 EOF
 fi
 

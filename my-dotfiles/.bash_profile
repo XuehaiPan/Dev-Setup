@@ -4,14 +4,14 @@
 # Source global definitions
 # Include /etc/profile if it exists
 if [[ -f /etc/profile ]]; then
-	. /etc/profile
+	source /etc/profile
 fi
 
 # If running bash as login shell
 if [[ -n "$BASH_VERSION" ]] && shopt -q login_shell; then
 	# Include ~/.bashrc if it exists
 	if [[ -f "$HOME/.bashrc" ]]; then
-		. "$HOME/.bashrc"
+		source "$HOME/.bashrc"
 	fi
 fi
 
@@ -50,15 +50,8 @@ fi
 # Locale
 export LC_ALL="en_US.UTF-8"
 
-# Compilers
-export CC="/usr/local/bin/gcc-10"
-export CXX="/usr/local/bin/g++-10"
-export FC="/usr/local/bin/gfortran-10"
-export OMPI_CC="$CC" MPICH_CC="$CC"
-export OMPI_CXX="$CXX" MPICH_CXX="$CXX"
-export OMPI_FC="$FC" MPICH_FC="$FC"
-
 # Homebrew
+eval "$(/usr/local/bin/brew shellenv)"
 export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles"
 export HOMEBREW_EDITOR="vim"
 export HOMEBREW_BAT=true
@@ -71,7 +64,7 @@ if [[ $? -eq 0 ]]; then
 	eval "$__conda_setup"
 else
 	if [[ -f "$HOME/Miniconda3/etc/profile.d/conda.sh" ]]; then
-		. "$HOME/Miniconda3/etc/profile.d/conda.sh"
+		source "$HOME/Miniconda3/etc/profile.d/conda.sh"
 	else
 		export PATH="$HOME/Miniconda3/bin:$PATH"
 	fi
@@ -80,63 +73,71 @@ unset __conda_setup
 # <<< conda initialize <<<
 export CONDA_JL_HOME="$HOME/Miniconda3/envs/python37"
 
+# CXX Compilers
+export CC="$HOMEBREW_PREFIX/bin/gcc-10"
+export CXX="$HOMEBREW_PREFIX/bin/g++-10"
+export FC="$HOMEBREW_PREFIX/bin/gfortran-10"
+export OMPI_CC="$CC" MPICH_CC="$CC"
+export OMPI_CXX="$CXX" MPICH_CXX="$CXX"
+export OMPI_FC="$FC" MPICH_FC="$FC"
+
 # Java
 export JAVA_HOME="$(/usr/libexec/java_home)"
 export CLASSPATH=".:$JAVA_HOME/lib/tools.jar:$JAVA_HOME/lib/dt.jar"
 export PATH="$JAVA_HOME/bin:$PATH"
 
 # Go
-export GOPATH="/usr/local/opt/go"
+export GOPATH="$HOMEBREW_PREFIX/opt/go"
 export GOBIN="$GOPATH/bin"
 export GOROOT="$GOPATH/libexec"
 export PATH="$GOBIN:$PATH"
 
 # Ruby
 export RUBYOPT="-W0"
-export PATH="/usr/local/opt/ruby/bin:$PATH"
+export PATH="$HOMEBREW_PREFIX/opt/ruby/bin:$PATH"
 export PATH="$(ruby -r rubygems -e 'puts Gem.dir')/bin:$PATH"
 export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
 
 # Perl
-eval "$(perl -I/usr/local/opt/perl/lib/perl5 -Mlocal::lib=/usr/local/opt/perl)"
+eval "$(perl -I$HOMEBREW_PREFIX/opt/perl/lib/perl5 -Mlocal::lib=$HOMEBREW_PREFIX/opt/perl)"
 
 # Mono
-export MONO_GAC_PREFIX="/usr/local"
+export MONO_GAC_PREFIX="$HOMEBREW_PREFIX"
 
 # Qt
-export PATH="/usr/local/opt/qt/bin:$PATH"
+export PATH="$HOMEBREW_PREFIX/opt/qt/bin:$PATH"
 
 # cURL
-export PATH="/usr/local/opt/curl/bin:$PATH"
+export PATH="$HOMEBREW_PREFIX/opt/curl/bin:$PATH"
 
 # OpenSSL
-export PATH="/usr/local/opt/openssl/bin:$PATH"
+export PATH="$HOMEBREW_PREFIX/opt/openssl/bin:$PATH"
 
 # gettext
-export PATH="/usr/local/opt/gettext/bin:$PATH"
+export PATH="$HOMEBREW_PREFIX/opt/gettext/bin:$PATH"
 
 # Bison
-export PATH="/usr/local/opt/bison/bin:$PATH"
+export PATH="$HOMEBREW_PREFIX/opt/bison/bin:$PATH"
 
 # NCURSES
-export PATH="/usr/local/opt/ncurses/bin:$PATH"
-export C_INCLUDE_PATH="/usr/local/opt/ncurses/include:$C_INCLUDE_PATH"
-export CPLUS_INCLUDE_PATH="/usr/local/opt/ncurses/include:$CPLUS_INCLUDE_PATH"
-export LIBRARY_PATH="/usr/local/opt/ncurses/lib:$LIBRARY_PATH"
-export DYLD_LIBRARY_PATH="/usr/local/opt/ncurses/lib:$DYLD_LIBRARY_PATH"
+export PATH="$HOMEBREW_PREFIX/opt/ncurses/bin:$PATH"
+export C_INCLUDE_PATH="$HOMEBREW_PREFIX/opt/ncurses/include:$C_INCLUDE_PATH"
+export CPLUS_INCLUDE_PATH="$HOMEBREW_PREFIX/opt/ncurses/include:$CPLUS_INCLUDE_PATH"
+export LIBRARY_PATH="$HOMEBREW_PREFIX/opt/ncurses/lib:$LIBRARY_PATH"
+export DYLD_LIBRARY_PATH="$HOMEBREW_PREFIX/opt/ncurses/lib:$DYLD_LIBRARY_PATH"
 
 # SQLite
-export PATH="/usr/local/opt/sqlite/bin:$PATH"
+export PATH="$HOMEBREW_PREFIX/opt/sqlite/bin:$PATH"
 
 # LLVM
-export PATH="/usr/local/opt/llvm/bin:$PATH"
+export PATH="$HOMEBREW_PREFIX/opt/llvm/bin:$PATH"
 
 # Wine
 export WINEARCH="win32"
 export WINEPREFIX="$HOME/.wine32"
 export WINEDEBUG="-all"
-export DYLD_FALLBACK_LIBRARY_PATH="$DYLD_FALLBACK_LIBRARY_PATH:/usr/X11/lib:/usr/local/lib"
-export DYLD_FALLBACK_LIBRARY_PATH="$DYLD_FALLBACK_LIBRARY_PATH:/usr/local/opt/ncurses/lib"
+export DYLD_FALLBACK_LIBRARY_PATH="$DYLD_FALLBACK_LIBRARY_PATH:/usr/X11/lib:$HOMEBREW_PREFIX/lib"
+export DYLD_FALLBACK_LIBRARY_PATH="$DYLD_FALLBACK_LIBRARY_PATH:$HOMEBREW_PREFIX/opt/ncurses/lib"
 
 # fzf
 if [[ -f "$HOME/.fzf.bash" ]]; then
@@ -180,7 +181,7 @@ unset -f __remove_duplicate
 
 # Utilities
 if [[ -f "$HOME/.dotfiles/utilities.sh" ]]; then
-	. "$HOME/.dotfiles/utilities.sh"
+	source "$HOME/.dotfiles/utilities.sh"
 	if pgrep ClashX &>/dev/null; then
 		set_proxy 127.0.0.1
 	fi
@@ -192,5 +193,5 @@ xhost +local: &>/dev/null
 
 # Bash completion
 if [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]]; then
-	. "/usr/local/etc/profile.d/bash_completion.sh"
+	source "/usr/local/etc/profile.d/bash_completion.sh"
 fi

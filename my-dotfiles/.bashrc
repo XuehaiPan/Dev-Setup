@@ -9,7 +9,7 @@ esac
 # Source global definitions
 # Include /etc/bashrc if it exists
 if [[ -f /etc/bashrc ]]; then
-	. /etc/bashrc
+	source /etc/bashrc
 fi
 
 # Don't put duplicate lines or lines starting with space in the history.
@@ -41,17 +41,17 @@ alias la='ls -AlhF'
 # You may want to put all your additions into a separate file like
 # ~/.bash_aliases, instead of adding them here directly.
 if [[ -f "$HOME/.bash_aliases" ]]; then
-	. "$HOME/.bash_aliases"
+	source "$HOME/.bash_aliases"
 fi
 
 # Enable programmable completion features
 if ! shopt -oq posix; then
 	if [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]]; then
-		. "/usr/local/etc/profile.d/bash_completion.sh"
+		source "/usr/local/etc/profile.d/bash_completion.sh"
 	elif [[ -f "/usr/share/bash-completion/bash_completion" ]]; then
-		. "/usr/share/bash-completion/bash_completion"
+		source "/usr/share/bash-completion/bash_completion"
 	elif [[ -f "/etc/bash_completion" ]]; then
-		. "/etc/bash_completion"
+		source "/etc/bash_completion"
 	fi
 fi
 
@@ -59,8 +59,8 @@ fi
 if ! shopt -q login_shell; then
 	# Include ~/.bash_profile if it exists
 	if [[ -f "$HOME/.bash_profile" ]]; then
-		. "$HOME/.bash_profile"
+		source "$HOME/.bash_profile"
 	elif [[ -f "$HOME/.profile" ]]; then
-		. "$HOME/.profile"
+		source "$HOME/.profile"
 	fi
 fi

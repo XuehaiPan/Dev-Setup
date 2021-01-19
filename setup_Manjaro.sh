@@ -39,49 +39,48 @@ fi
 
 # Common functions
 function echo_and_eval() {
-	printf "%s" "$@" | awk -f <(
-		cat - <<-'EOD'
-			BEGIN {
-				RESET = "\033[0m";
-				BOLD = "\033[1m";
-				UNDERLINE = "\033[4m";
-				UNDERLINEOFF = "\033[24m";
-				RED = "\033[31m";
-				GREEN = "\033[32m";
-				YELLOW = "\033[33m";
-				WHITE = "\033[37m";
-				GRAY = "\033[90m";
-				IDENTIFIER = "[_a-zA-Z][_a-zA-Z0-9]*";
+	printf "%s" "$@" | awk \
+			"BEGIN {
+				RESET = \"\\033[0m\";
+				BOLD = \"\\033[1m\";
+				UNDERLINE = \"\\033[4m\";
+				UNDERLINEOFF = \"\\033[24m\";
+				RED = \"\\033[31m\";
+				GREEN = \"\\033[32m\";
+				YELLOW = \"\\033[33m\";
+				WHITE = \"\\033[37m\";
+				GRAY = \"\\033[90m\";
+				IDENTIFIER = \"[_a-zA-Z][_a-zA-Z0-9]*\";
 				idx = 0;
 				in_string = 0;
 				double_quoted = 1;
-				printf("%s$", BOLD WHITE);
+				printf(\"%s\$\", BOLD WHITE);
 			}
 			{
 				for (i = 1; i <= NF; ++i) {
 					style = WHITE;
 					post_style = WHITE;
 					if (!in_string) {
-						if ($i ~ /^-/)
+						if (\$i ~ /^-/)
 							style = YELLOW;
-						else if ($i == "sudo" && idx == 0) {
+						else if (\$i == \"sudo\" && idx == 0) {
 							style = UNDERLINE GREEN;
 							post_style = UNDERLINEOFF WHITE;
 						}
-						else if ($i ~ "^" IDENTIFIER "+=" && idx == 0) {
+						else if (\$i ~ \"^\" IDENTIFIER \"+=\" && idx == 0) {
 							style = GRAY;
-							if ($i ~ "^" IDENTIFIER "+=[\"']") {
+							if (\$i ~ \"^\" IDENTIFIER \"+=[\\\"']\") {
 								in_string = 1;
-								double_quoted = ($i ~ "^" IDENTIFIER "+=\"");
+								double_quoted = (\$i ~ \"^\" IDENTIFIER \"+=\\\"\");
 							}
 						}
-						else if ($i ~ /^[12&]?>>?/ || $i == "\\")
+						else if (\$i ~ /^[12&]?>>?/ || \$i == \"\\\\\")
 							style = RED;
 						else {
 							++idx;
-							if ($i ~ /^["']/) {
+							if (\$i ~ /^[\"']/) {
 								in_string = 1;
-								double_quoted = ($i ~ /^"/);
+								double_quoted = (\$i ~ /^\"/);
 							}
 							if (idx == 1)
 								style = GREEN;
@@ -89,31 +88,29 @@ function echo_and_eval() {
 					}
 					if (in_string) {
 						if (style == WHITE)
-							style = "";
-						post_style = "";
-						if ((double_quoted && $i ~ /";?$/ && $i !~ /\\";?$/) || (!double_quoted && $i ~ /';?$/))
+							style = \"\";
+						post_style = \"\";
+						if ((double_quoted && \$i ~ /\";?\$/ && \$i !~ /\\\\\";?\$/) || (!double_quoted && \$i ~ /';?\$/))
 							in_string = 0;
 					}
-					if ($i ~ /;$/ || $i == "|" || $i == "||" || $i == "&&") {
+					if (\$i ~ /;\$/ || \$i == \"|\" || \$i == \"||\" || \$i == \"&&\") {
 						if (!in_string) {
 							idx = 0;
-							if ($i !~ /;$/)
+							if (\$i !~ /;\$/)
 								style = RED;
 						}
 					}
-					if ($i ~ /;$/)
-						printf(" %s%s%s;%s", style, substr($i, 1, length($i) - 1), (in_string ? WHITE : RED), post_style);
+					if (\$i ~ /;\$/)
+						printf(\" %s%s%s;%s\", style, substr(\$i, 1, length(\$i) - 1), (in_string ? WHITE : RED), post_style);
 					else
-						printf(" %s%s%s", style, $i, post_style);
-					if ($i == "\\")
-						printf("\n\t");
+						printf(\" %s%s%s\", style, \$i, post_style);
+					if (\$i == \"\\\\\")
+						printf(\"\\n\\t\");
 				}
 			}
 			END {
-				printf("%s\n", RESET);
-			}
-		EOD
-	) >&2
+				printf(\"%s\\n\", RESET);
+			}" >&2
 	eval "$@"
 }
 
@@ -347,12 +344,12 @@ cat >.dotfiles/.zshrc <<'EOF'
 # Source global definitions
 # Include /etc/zprofile if it exists
 if [[ -f /etc/zprofile ]]; then
-	. /etc/zprofile
+	source /etc/zprofile
 fi
 
 # Include /etc/zshrc if it exists
 if [[ -f /etc/zshrc ]]; then
-	. /etc/zshrc
+	source /etc/zshrc
 fi
 
 # Set PATH so it includes user's private bin if it exists
@@ -382,14 +379,6 @@ export TERM="xterm-256color"
 # Locale
 export LC_ALL="en_US.utf8"
 
-# Compilers
-export CC="/usr/bin/gcc"
-export CXX="/usr/bin/g++"
-export FC="/usr/bin/gfortran"
-export OMPI_CC="$CC" MPICH_CC="$CC"
-export OMPI_CXX="$CXX" MPICH_CXX="$CXX"
-export OMPI_FC="$FC" MPICH_FC="$FC"
-
 EOF
 cat >>.dotfiles/.zshrc <<EOF
 # Anaconda
@@ -400,7 +389,7 @@ if [[ \$? -eq 0 ]]; then
 	eval "\$__conda_setup"
 else
 	if [[ -f "\$HOME/$CONDA_DIR/etc/profile.d/conda.sh" ]]; then
-		. "\$HOME/$CONDA_DIR/etc/profile.d/conda.sh"
+		source "\$HOME/$CONDA_DIR/etc/profile.d/conda.sh"
 	else
 		export PATH="\$HOME/$CONDA_DIR/bin:\$PATH"
 	fi
@@ -410,6 +399,14 @@ unset __conda_setup
 
 EOF
 cat >>.dotfiles/.zshrc <<'EOF'
+# CXX Compilers
+export CC="/usr/bin/gcc"
+export CXX="/usr/bin/g++"
+export FC="/usr/bin/gfortran"
+export OMPI_CC="$CC" MPICH_CC="$CC"
+export OMPI_CXX="$CXX" MPICH_CXX="$CXX"
+export OMPI_FC="$FC" MPICH_FC="$FC"
+
 # Ruby
 if [[ -x "$(command -v ruby)" && -x "$(command -v gem)" ]]; then
 	export RUBYOPT="-W0"
@@ -457,7 +454,7 @@ unset -f __remove_duplicate
 
 # Utilities
 if [[ -f "$HOME/.dotfiles/utilities.sh" ]]; then
-	. "$HOME/.dotfiles/utilities.sh"
+	source "$HOME/.dotfiles/utilities.sh"
 fi
 
 # Path to your oh-my-zsh installation.
@@ -949,9 +946,9 @@ if ! grep -qF 'shopt -q login_shell' .bashrc; then
 if ! shopt -q login_shell; then
 	# Include ~/.bash_profile if it exists
 	if [[ -f "$HOME/.bash_profile" ]]; then
-		. "$HOME/.bash_profile"
+		source "$HOME/.bash_profile"
 	elif [[ -f "$HOME/.profile" ]]; then
-		. "$HOME/.profile"
+		source "$HOME/.profile"
 	fi
 fi
 EOF
@@ -975,14 +972,14 @@ cat >.dotfiles/.bash_profile <<'EOF'
 
 # Include /etc/profile if it exists
 if [[ -f /etc/profile ]]; then
-	. /etc/profile
+	source /etc/profile
 fi
 
 # If running bash as login shell
 if [[ -n "$BASH_VERSION" ]] && shopt -q login_shell; then
 	# Include ~/.bashrc if it exists
 	if [[ -f "$HOME/.bashrc" ]]; then
-		. "$HOME/.bashrc"
+		source "$HOME/.bashrc"
 	fi
 fi
 
@@ -1018,14 +1015,6 @@ fi
 # Locale
 export LC_ALL="en_US.utf8"
 
-# Compilers
-export CC="/usr/bin/gcc"
-export CXX="/usr/bin/g++"
-export FC="/usr/bin/gfortran"
-export OMPI_CC="$CC" MPICH_CC="$CC"
-export OMPI_CXX="$CXX" MPICH_CXX="$CXX"
-export OMPI_FC="$FC" MPICH_FC="$FC"
-
 EOF
 cat >>.dotfiles/.bash_profile <<EOF
 # Anaconda
@@ -1036,7 +1025,7 @@ if [[ \$? -eq 0 ]]; then
 	eval "\$__conda_setup"
 else
 	if [[ -f "\$HOME/$CONDA_DIR/etc/profile.d/conda.sh" ]]; then
-		. "\$HOME/$CONDA_DIR/etc/profile.d/conda.sh"
+		source "\$HOME/$CONDA_DIR/etc/profile.d/conda.sh"
 	else
 		export PATH="\$HOME/$CONDA_DIR/bin:\$PATH"
 	fi
@@ -1046,6 +1035,14 @@ unset __conda_setup
 
 EOF
 cat >>.dotfiles/.bash_profile <<'EOF'
+# CXX Compilers
+export CC="/usr/bin/gcc"
+export CXX="/usr/bin/g++"
+export FC="/usr/bin/gfortran"
+export OMPI_CC="$CC" MPICH_CC="$CC"
+export OMPI_CXX="$CXX" MPICH_CXX="$CXX"
+export OMPI_FC="$FC" MPICH_FC="$FC"
+
 # Ruby
 if [[ -x "$(command -v ruby)" && -x "$(command -v gem)" ]]; then
 	export RUBYOPT="-W0"
@@ -1093,16 +1090,16 @@ unset -f __remove_duplicate
 
 # Utilities
 if [[ -f "$HOME/.dotfiles/utilities.sh" ]]; then
-	. "$HOME/.dotfiles/utilities.sh"
+	source "$HOME/.dotfiles/utilities.sh"
 fi
 
 # Bash completion
 if [[ -r "/etc/profile.d/bash_completion.sh" ]]; then
-	. "/etc/profile.d/bash_completion.sh"
+	source "/etc/profile.d/bash_completion.sh"
 elif [[ -r "/usr/share/bash-completion/bash_completion" ]]; then
-	. "/usr/share/bash-completion/bash_completion"
+	source "/usr/share/bash-completion/bash_completion"
 elif [[ -r "/etc/bash_completion" ]]; then
-	. "/etc/bash_completion"
+	source "/etc/bash_completion"
 fi
 EOF
 
@@ -1539,12 +1536,10 @@ ln -sf .dotfiles/.tmux.conf.local .
 sed -i 's/tmux_conf_copy_to_os_clipboard=false/tmux_conf_copy_to_os_clipboard=true/g' .dotfiles/.tmux.conf.local
 sed -i 's/#set -g history-limit 10000/set -g history-limit 10000/g' .dotfiles/.tmux.conf.local
 sed -i 's/#set -g mouse on/set -g mouse on/g' .dotfiles/.tmux.conf.local
-if ! grep -qF 'source-file ~/.dotfiles/.tmux.conf.user' .dotfiles/.tmux.conf.local; then
+if ! grep -qF 'source-file -q ~/.dotfiles/.tmux.conf.user' .dotfiles/.tmux.conf.local; then
 	cat >>.dotfiles/.tmux.conf.local <<'EOF'
 
-%if '[ -f ~/.dotfiles/.tmux.conf.user ]'
-    source-file ~/.dotfiles/.tmux.conf.user
-%endif
+source-file -q ~/.dotfiles/.tmux.conf.user
 EOF
 fi
 

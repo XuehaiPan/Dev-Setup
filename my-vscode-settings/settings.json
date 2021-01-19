@@ -759,6 +759,12 @@
     "markdown.extension.orderedList.autoRenumber": true,
     "markdown.extension.tableFormatter.enabled": true,
     "markdown.extension.toc.updateOnSave": true,
+    "markdown.extension.toc.levels": "2..6",
+    "markdown.extension.toc.omittedFromToc": {
+        "README.md": [
+            "## Table of Contents"
+        ]
+    },
 
     //* Matlab */
     "matlab.matlabpath": "/Applications/MATLAB_R2020a.app/bin/matlab",
@@ -832,12 +838,6 @@
     "jupyter.allowImportFromNotebook": true,
     "jupyter.defaultCellMarker": "# %%",
     "jupyter.allowInput": true,
-    "workbench.editorAssociations": [
-        {
-            "viewType": "jupyter.notebook.ipynb",
-            "filenamePattern": "*.ipynb"
-        }
-    ],
 
     //* Remote */
     "remote.extensionKind": {

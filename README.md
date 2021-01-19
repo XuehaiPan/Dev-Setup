@@ -2,15 +2,16 @@
 
 Bash scripts for setting up a newly installed OS automatically. ([screenshots](#screenshots))
 
-- [OS-Setup](#os-setup)
-  - [Usage](#usage)
-    - [Installation](#installation)
-    - [Restoration](#restoration)
-    - [Upgrade Packages](#upgrade-packages)
-    - [Font Settings](#font-settings)
-  - [Customization](#customization)
-  - [Packages](#packages)
-  - [Screenshots](#screenshots)
+## Table of Contents
+
+- [Usage](#usage)
+  - [Installation](#installation)
+  - [Restoration](#restoration)
+  - [Upgrade Packages](#upgrade-packages)
+  - [Font Settings](#font-settings)
+- [Customization](#customization)
+- [Packages](#packages)
+- [Screenshots](#screenshots)
 
 ## Usage
 

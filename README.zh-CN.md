@@ -19,7 +19,7 @@
 
 ### 安装
 
-使用 [wget](https://www.gnu.org/software/wget) / [curl](https://curl.haxx.se) / [git](https://git-scm.com) 或浏览器（[点此下载 zip](https://codeload.github.com/XuehaiPan/Dev-Setup/zip/master)）下载本脚本。打开 `终端` 运行：
+使用 [wget](https://www.gnu.org/software/wget) / [curl](https://curl.haxx.se) / [git](https://git-scm.com) 或浏览器（[点此下载 zip](https://codeload.github.com/XuehaiPan/Dev-Setup/zip/master)）下载本脚本。打开 `终端` 运行如下命令：
 
 **via wget**
 
@@ -48,7 +48,7 @@ cd Dev-Setup
 
 选项：
 
-- `SET_MIRRORS` (默认值 `false`)：将软件包管理器的源设置为开源镜像 [TUNA (China)](https://mirrors.tuna.tsinghua.edu.cn) 以加速下载。（更多信息请参见 [软件包列表](#软件包列表)）。如果你想跳过询问步骤，请运行：
+- `SET_MIRRORS` (默认值 `false`)：将软件包管理器的源设置为开源镜像 [TUNA (China)](https://mirrors.tuna.tsinghua.edu.cn) 以加速下载（更多信息请参见 [软件包列表](#软件包列表)）。如果你想跳过询问步骤，请运行：
 
   ```bash
   # Bypass the prompt
@@ -56,9 +56,9 @@ cd Dev-Setup
   SET_MIRRORS=false bash setup.sh   # do not modify mirror settings
   ```
 
-**注**：如果你使用的是 Windows 上的 **WSL (Windows Subsystem for Linux)**，你需要以 **管理员权限** 运行 [Windows Terminal](https://github.com/Microsoft/Terminal)，以获得权限将字体文件拷贝至文件夹 `C:\Windows\Fonts`。否则将无法在 Windows 上正确安装字体文件。你可以从 [nerdfonts.com](https://www.nerdfonts.com) 下载字体并手动安装。更多信息请参见 [字体设置](#字体设置)。
+**注**：如果你使用的是 Windows 上的 **WSL (Windows Subsystem for Linux)**，你需要以 **管理员权限** 运行 [Windows Terminal](https://github.com/Microsoft/Terminal)，用以获得权限将字体文件拷贝至文件夹 `C:\Windows\Fonts`，否则将无法在 Windows 上正确安装字体文件。你可以从 [nerdfonts.com](https://www.nerdfonts.com) 下载字体并手动安装，更多信息请参见 [字体设置](#字体设置)。
 
-脚本执行结束，所有旧配置文件会被备份至文件夹 `$HOME/.dotfiles/backups/<DATETIME>`，并将会有一个软链接 `$HOME/.dotfiles/backups/latest` 链接至最新的备份文件夹。你可以使用如下命令比较修改：
+脚本执行结束后，所有旧配置文件会被备份至文件夹 `$HOME/.dotfiles/backups/<DATETIME>`，并将会有一个软链接 `$HOME/.dotfiles/backups/latest` 链接至最新的备份文件夹。你可以使用如下命令比较修改：
 
 ```bash
 # Compare the differences
@@ -109,7 +109,7 @@ upgrade_packages; upgrade_conda
 
 ### 字体设置
 
-当前用户的默认 Shell 将被设置为 **`zsh`**。为了获得更好的终端体验，请将你的终端字体设置为 [**Nerd Font**](https://github.com/ryanoasis/nerd-fonts)。你可以从 [nerdfonts.com](https://www.nerdfonts.com) 手动下载你喜欢的字体。本脚本将为 **macOS**, **Linux** and **Windows** 用户自动下载安装 [**`DejaVu Sans Mono Nerd Font`**](https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/DejaVuSansMono)。（Windows 下安装字体需要 *管理员权限*）
+当前用户的默认 Shell 将被设置为 **`zsh`**。为了获得更好的终端体验，请将你的终端字体设置为 [**Nerd Font**](https://github.com/ryanoasis/nerd-fonts)。你可以从 [nerdfonts.com](https://www.nerdfonts.com) 手动下载你喜欢的字体。本脚本将为 **macOS**、**Linux** 和 **Windows** 用户自动下载安装 [**`DejaVu Sans Mono Nerd Font`**](https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/DejaVuSansMono)。（Windows 下安装字体需要 *管理员权限*）
 
 将的终端字体设置为 nerd font：
 
@@ -118,7 +118,7 @@ upgrade_packages; upgrade_conda
 
 查看 [Font configurations for Powerlevel10k](https://github.com/romkatv/powerlevel10k#fonts) 获取更多信息。
 
-或者使用 Powerlevel10k Lean style:
+或者使用 Powerlevel10k Lean style：
 
 ```bash
 chsh -s /usr/local/bin/zsh-lean
@@ -128,7 +128,7 @@ chsh -s /usr/local/bin/zsh-lean
 
 ![zsh-lean](https://user-images.githubusercontent.com/16078332/102495805-8cc45c00-40b1-11eb-8838-b5b64c434d33.png)
 
-**注**：如果你使用的是 Windows 上的 **WSL (Windows Subsystem for Linux)**，你需要以 **管理员权限** 运行 [Windows Terminal](https://github.com/Microsoft/Terminal)，以获得权限将字体文件拷贝至文件夹 `C:\Windows\Fonts`。如果你运行脚本时忘记使用管理员权限，你可以重新使用管理员权限打开一个新的终端窗口，并运行如下命令：
+**注**：如果你使用的是 Windows 上的 **WSL (Windows Subsystem for Linux)**，你需要以 **管理员权限** 运行 [Windows Terminal](https://github.com/Microsoft/Terminal)，用以获得权限将字体文件拷贝至文件夹 `C:\Windows\Fonts`。如果你运行脚本时忘记使用管理员权限，你可以重新使用管理员权限打开一个新的终端窗口，并运行如下命令：
 
 ```bash
 find ~/.local/share/fonts -type f -name '*.[ot]t[fc]' -print \
@@ -164,7 +164,7 @@ ln -sf .dotfiles/<CFG_FILE> .
 
 ## 软件包列表
 
-软件包管理器的源（Homebrew (macOS), APT (Ubuntu), Pacman (Manjaro), CPAN, Gem, Conda 和 Pip）将被设置为 [TUNA (China)](https://mirrors.tuna.tsinghua.edu.cn) 开源镜像。
+软件包管理器（Homebrew (macOS)、APT (Ubuntu)、Pacman (Manjaro)、CPAN、Gem、Conda 和 Pip）的源将被设置为 [TUNA (China)](https://mirrors.tuna.tsinghua.edu.cn) 开源镜像。
 
 本脚本将会安装和配置如下软件包：
 

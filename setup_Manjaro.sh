@@ -40,77 +40,77 @@ fi
 # Common functions
 function echo_and_eval() {
 	printf "%s" "$@" | awk \
-			"BEGIN {
-				RESET = \"\\033[0m\";
-				BOLD = \"\\033[1m\";
-				UNDERLINE = \"\\033[4m\";
-				UNDERLINEOFF = \"\\033[24m\";
-				RED = \"\\033[31m\";
-				GREEN = \"\\033[32m\";
-				YELLOW = \"\\033[33m\";
-				WHITE = \"\\033[37m\";
-				GRAY = \"\\033[90m\";
-				IDENTIFIER = \"[_a-zA-Z][_a-zA-Z0-9]*\";
-				idx = 0;
-				in_string = 0;
-				double_quoted = 1;
-				printf(\"%s\$\", BOLD WHITE);
-			}
-			{
-				for (i = 1; i <= NF; ++i) {
-					style = WHITE;
-					post_style = WHITE;
-					if (!in_string) {
-						if (\$i ~ /^-/)
-							style = YELLOW;
-						else if (\$i == \"sudo\" && idx == 0) {
-							style = UNDERLINE GREEN;
-							post_style = UNDERLINEOFF WHITE;
-						}
-						else if (\$i ~ \"^\" IDENTIFIER \"+=\" && idx == 0) {
-							style = GRAY;
-							if (\$i ~ \"^\" IDENTIFIER \"+=[\\\"']\") {
-								in_string = 1;
-								double_quoted = (\$i ~ \"^\" IDENTIFIER \"+=\\\"\");
-							}
-						}
-						else if (\$i ~ /^[12&]?>>?/ || \$i == \"\\\\\")
-							style = RED;
-						else {
-							++idx;
-							if (\$i ~ /^[\"']/) {
-								in_string = 1;
-								double_quoted = (\$i ~ /^\"/);
-							}
-							if (idx == 1)
-								style = GREEN;
+		'BEGIN {
+			RESET = "\033[0m";
+			BOLD = "\033[1m";
+			UNDERLINE = "\033[4m";
+			UNDERLINEOFF = "\033[24m";
+			RED = "\033[31m";
+			GREEN = "\033[32m";
+			YELLOW = "\033[33m";
+			WHITE = "\033[37m";
+			GRAY = "\033[90m";
+			IDENTIFIER = "[_a-zA-Z][_a-zA-Z0-9]*";
+			idx = 0;
+			in_string = 0;
+			double_quoted = 1;
+			printf("%s$", BOLD WHITE);
+		}
+		{
+			for (i = 1; i <= NF; ++i) {
+				style = WHITE;
+				post_style = WHITE;
+				if (!in_string) {
+					if ($i ~ /^-/)
+						style = YELLOW;
+					else if ($i == "sudo" && idx == 0) {
+						style = UNDERLINE GREEN;
+						post_style = UNDERLINEOFF WHITE;
+					}
+					else if ($i ~ "^" IDENTIFIER "+=" && idx == 0) {
+						style = GRAY;
+						'"if (\$i ~ \"^\" IDENTIFIER \"+=[\\\"']\") {"'
+							in_string = 1;
+							double_quoted = ($i ~ "^" IDENTIFIER "+=\"");
 						}
 					}
-					if (in_string) {
-						if (style == WHITE)
-							style = \"\";
-						post_style = \"\";
-						if ((double_quoted && \$i ~ /\";?\$/ && \$i !~ /\\\\\";?\$/) || (!double_quoted && \$i ~ /';?\$/))
-							in_string = 0;
-					}
-					if (\$i ~ /;\$/ || \$i == \"|\" || \$i == \"||\" || \$i == \"&&\") {
-						if (!in_string) {
-							idx = 0;
-							if (\$i !~ /;\$/)
-								style = RED;
+					else if ($i ~ /^[12&]?>>?/ || $i == "\\")
+						style = RED;
+					else {
+						++idx;
+						'"if (\$i ~ /^[\"']/) {"'
+							in_string = 1;
+							double_quoted = ($i ~ /^"/);
 						}
+						if (idx == 1)
+							style = GREEN;
 					}
-					if (\$i ~ /;\$/)
-						printf(\" %s%s%s;%s\", style, substr(\$i, 1, length(\$i) - 1), (in_string ? WHITE : RED), post_style);
-					else
-						printf(\" %s%s%s\", style, \$i, post_style);
-					if (\$i == \"\\\\\")
-						printf(\"\\n\\t\");
 				}
+				if (in_string) {
+					if (style == WHITE)
+						style = "";
+					post_style = "";
+					'"if ((double_quoted && \$i ~ /\";?\$/ && \$i !~ /\\\\\";?\$/) || (!double_quoted && \$i ~ /';?\$/))"'
+						in_string = 0;
+				}
+				if ($i ~ /;$/ || $i == "|" || $i == "||" || $i == "&&") {
+					if (!in_string) {
+						idx = 0;
+						if ($i !~ /;$/)
+							style = RED;
+					}
+				}
+				if ($i ~ /;$/)
+					printf(" %s%s%s;%s", style, substr($i, 1, length($i) - 1), (in_string ? WHITE : RED), post_style);
+				else
+					printf(" %s%s%s", style, $i, post_style);
+				if ($i == "\\")
+					printf("\n\t");
 			}
-			END {
-				printf(\"%s\\n\", RESET);
-			}" >&2
+		}
+		END {
+			printf("%s\n", RESET);
+		}' >&2
 	eval "$@"
 }
 
@@ -153,7 +153,7 @@ if $IS_SUDOER; then
 		for repo in "arch4edu" "archlinuxcn"; do
 			if ! grep -qF "[$repo]" /etc/pacman.conf; then
 				echo_and_eval "printf \"\\n%s\\n%s\\n\" '[$repo]' 'Server = https://mirrors.tuna.tsinghua.edu.cn/$repo/\$arch' \\
-						| sudo tee -a /etc/pacman.conf"
+					| sudo tee -a /etc/pacman.conf"
 			fi
 		done
 	fi
@@ -249,10 +249,10 @@ if [[ -d "$ZSH/.git" && -f "$ZSH/tools/upgrade.sh" ]]; then
 	echo_and_eval 'zsh "$ZSH/tools/upgrade.sh" 2>&1'
 else
 	echo_and_eval 'git clone -c core.eol=lf -c core.autocrlf=false \
-			-c fsck.zeroPaddedFilemode=ignore \
-			-c fetch.fsck.zeroPaddedFilemode=ignore \
-			-c receive.fsck.zeroPaddedFilemode=ignore \
-			--depth=1 https://github.com/ohmyzsh/ohmyzsh.git "${ZSH:-"$HOME/.oh-my-zsh"}" 2>&1'
+		-c fsck.zeroPaddedFilemode=ignore \
+		-c fetch.fsck.zeroPaddedFilemode=ignore \
+		-c receive.fsck.zeroPaddedFilemode=ignore \
+		--depth=1 https://github.com/ohmyzsh/ohmyzsh.git "${ZSH:-"$HOME/.oh-my-zsh"}" 2>&1'
 	rm -f "$HOME"/.zcompdump* 2>/dev/null
 fi
 
@@ -320,16 +320,16 @@ export PERL_MB_OPT="--install_base \"$HOME/.perl\""
 export PERL_MM_OPT="INSTALL_BASE=\"$HOME/.perl\""
 echo_and_eval "PERL_MM_USE_DEFAULT=1 http_proxy=\"\" ftp_proxy=\"\" perl -MCPAN -e 'mkmyconfig'"
 echo_and_eval "perl -MCPAN -e 'CPAN::HandleConfig->load();' \\
-		-e 'CPAN::HandleConfig->edit(\"cleanup_after_install\", \"1\");' \\
-		-e 'CPAN::HandleConfig->commit()'"
+	-e 'CPAN::HandleConfig->edit(\"cleanup_after_install\", \"1\");' \\
+	-e 'CPAN::HandleConfig->commit()'"
 if $SET_MIRRORS; then
 	if ! (
 		perl -MCPAN -e 'CPAN::HandleConfig->load();' -e 'CPAN::HandleConfig->prettyprint("urllist")' |
 			grep -qF 'https://mirrors.tuna.tsinghua.edu.cn/CPAN/'
 	); then
 		echo_and_eval "perl -MCPAN -e 'CPAN::HandleConfig->load();' \\
-				-e 'CPAN::HandleConfig->edit(\"urllist\", \"unshift\", \"https://mirrors.tuna.tsinghua.edu.cn/CPAN/\");' \\
-				-e 'CPAN::HandleConfig->commit()'"
+			-e 'CPAN::HandleConfig->edit(\"urllist\", \"unshift\", \"https://mirrors.tuna.tsinghua.edu.cn/CPAN/\");' \\
+			-e 'CPAN::HandleConfig->commit()'"
 	fi
 fi
 echo_and_eval "perl -MCPAN -e 'install local::lib'"
@@ -673,81 +673,78 @@ cat >.dotfiles/utilities.sh <<'EOF'
 #!/usr/bin/env bash
 
 function echo_and_eval() {
-	printf "%s" "$@" | awk -f <(
-		cat - <<-'EOD'
-			BEGIN {
-				RESET = "\033[0m";
-				BOLD = "\033[1m";
-				UNDERLINE = "\033[4m";
-				UNDERLINEOFF = "\033[24m";
-				RED = "\033[31m";
-				GREEN = "\033[32m";
-				YELLOW = "\033[33m";
-				WHITE = "\033[37m";
-				GRAY = "\033[90m";
-				IDENTIFIER = "[_a-zA-Z][_a-zA-Z0-9]*";
-				idx = 0;
-				in_string = 0;
-				double_quoted = 1;
-				printf("%s$", BOLD WHITE);
-			}
-			{
-				for (i = 1; i <= NF; ++i) {
-					style = WHITE;
-					post_style = WHITE;
-					if (!in_string) {
-						if ($i ~ /^-/)
-							style = YELLOW;
-						else if ($i == "sudo" && idx == 0) {
-							style = UNDERLINE GREEN;
-							post_style = UNDERLINEOFF WHITE;
-						}
-						else if ($i ~ "^" IDENTIFIER "+=" && idx == 0) {
-							style = GRAY;
-							if ($i ~ "^" IDENTIFIER "+=[\"']") {
-								in_string = 1;
-								double_quoted = ($i ~ "^" IDENTIFIER "+=\"");
-							}
-						}
-						else if ($i ~ /^[12&]?>>?/ || $i == "\\")
-							style = RED;
-						else {
-							++idx;
-							if ($i ~ /^["']/) {
-								in_string = 1;
-								double_quoted = ($i ~ /^"/);
-							}
-							if (idx == 1)
-								style = GREEN;
+	printf "%s" "$@" | awk \
+		'BEGIN {
+			RESET = "\033[0m";
+			BOLD = "\033[1m";
+			UNDERLINE = "\033[4m";
+			UNDERLINEOFF = "\033[24m";
+			RED = "\033[31m";
+			GREEN = "\033[32m";
+			YELLOW = "\033[33m";
+			WHITE = "\033[37m";
+			GRAY = "\033[90m";
+			IDENTIFIER = "[_a-zA-Z][_a-zA-Z0-9]*";
+			idx = 0;
+			in_string = 0;
+			double_quoted = 1;
+			printf("%s$", BOLD WHITE);
+		}
+		{
+			for (i = 1; i <= NF; ++i) {
+				style = WHITE;
+				post_style = WHITE;
+				if (!in_string) {
+					if ($i ~ /^-/)
+						style = YELLOW;
+					else if ($i == "sudo" && idx == 0) {
+						style = UNDERLINE GREEN;
+						post_style = UNDERLINEOFF WHITE;
+					}
+					else if ($i ~ "^" IDENTIFIER "+=" && idx == 0) {
+						style = GRAY;
+						'"if (\$i ~ \"^\" IDENTIFIER \"+=[\\\"']\") {"'
+							in_string = 1;
+							double_quoted = ($i ~ "^" IDENTIFIER "+=\"");
 						}
 					}
-					if (in_string) {
-						if (style == WHITE)
-							style = "";
-						post_style = "";
-						if ((double_quoted && $i ~ /";?$/ && $i !~ /\\";?$/) || (!double_quoted && $i ~ /';?$/))
-							in_string = 0;
-					}
-					if ($i ~ /;$/ || $i == "|" || $i == "||" || $i == "&&") {
-						if (!in_string) {
-							idx = 0;
-							if ($i !~ /;$/)
-								style = RED;
+					else if ($i ~ /^[12&]?>>?/ || $i == "\\")
+						style = RED;
+					else {
+						++idx;
+						'"if (\$i ~ /^[\"']/) {"'
+							in_string = 1;
+							double_quoted = ($i ~ /^"/);
 						}
+						if (idx == 1)
+							style = GREEN;
 					}
-					if ($i ~ /;$/)
-						printf(" %s%s%s;%s", style, substr($i, 1, length($i) - 1), (in_string ? WHITE : RED), post_style);
-					else
-						printf(" %s%s%s", style, $i, post_style);
-					if ($i == "\\")
-						printf("\n\t");
 				}
+				if (in_string) {
+					if (style == WHITE)
+						style = "";
+					post_style = "";
+					'"if ((double_quoted && \$i ~ /\";?\$/ && \$i !~ /\\\\\";?\$/) || (!double_quoted && \$i ~ /';?\$/))"'
+						in_string = 0;
+				}
+				if ($i ~ /;$/ || $i == "|" || $i == "||" || $i == "&&") {
+					if (!in_string) {
+						idx = 0;
+						if ($i !~ /;$/)
+							style = RED;
+					}
+				}
+				if ($i ~ /;$/)
+					printf(" %s%s%s;%s", style, substr($i, 1, length($i) - 1), (in_string ? WHITE : RED), post_style);
+				else
+					printf(" %s%s%s", style, $i, post_style);
+				if ($i == "\\")
+					printf("\n\t");
 			}
-			END {
-				printf("%s\n", RESET);
-			}
-		EOD
-	)
+		}
+		END {
+			printf("%s\n", RESET);
+		}'
 	eval "$@"
 }
 
@@ -778,7 +775,7 @@ function upgrade_ohmyzsh() {
 
 	# Upgrade themes and plugins
 	REPOS=($(
-		cd "$ZSH_CUSTOM"
+		cd "$ZSH_CUSTOM" &&
 		find -L . -mindepth 3 -maxdepth 3 -not -empty -type d -name '.git' |
 			sed -E 's#^\./(.*)/\.git$#\1#'
 	))
@@ -818,7 +815,7 @@ function upgrade_conda() {
 
 	# Upgrade Conda packages in each environment
 	ENVS=(base $(
-		cd "$(conda info --base)/envs"
+		cd "$(conda info --base)/envs" &&
 		find -L . -mindepth 1 -maxdepth 1 -not -empty \( -type d -or -type l \) |
 			sed -E 's#^\./(.*)$#\1#'
 	))
@@ -1429,7 +1426,7 @@ EOF
 # Install Vim-Plug plugin manager
 if [[ ! -f "$HOME/.vim/autoload/plug.vim" ]]; then
 	echo_and_eval 'curl -fL#o "$HOME/.vim/autoload/plug.vim" --create-dirs \
-			https://github.com/junegunn/vim-plug/raw/master/plug.vim'
+		https://github.com/junegunn/vim-plug/raw/master/plug.vim'
 fi
 
 # Install Vim plugins
@@ -1872,9 +1869,9 @@ fi
 export PATH="$PATH:$HOME/$CONDA_DIR/condabin"
 echo_and_eval 'conda update conda --yes'
 echo_and_eval 'conda install pip ipython ipdb \
-		jupyter notebook jupyterlab jupyter_contrib_nbextensions \
-		numpy numba matplotlib pandas seaborn \
-		cython tqdm autopep8 pylint --yes'
+	jupyter notebook jupyterlab jupyter_contrib_nbextensions \
+	numpy numba matplotlib pandas seaborn \
+	cython tqdm autopep8 pylint --yes'
 echo_and_eval 'conda update --all --yes'
 echo_and_eval 'conda clean --all --yes'
 echo_and_eval "\"\$HOME/$CONDA_DIR/bin/jupyter\" contrib nbextension install --user &>/dev/null"
@@ -1900,8 +1897,8 @@ for url in "${URL_LIST[@]}"; do
 done
 for font_dir in "${FONT_DIR_LIST[@]}"; do
 	echo_and_eval "find -L \"$TMP_DIR/fonts\" -not -empty -type f -name '*.[ot]t[fc]' \\
-			-printf '==> cp -f \"%p\" \"$font_dir\"\n' \\
-			-exec cp -f '{}' \"$font_dir\" \\;"
+		-printf '==> cp -f \"%p\" \"$font_dir\"\n' \\
+		-exec cp -f '{}' \"$font_dir\" \\;"
 done
 rm -rf "$TMP_DIR"
 if [[ -x "$(command -v fc-cache)" ]]; then

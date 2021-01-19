@@ -1,25 +1,25 @@
 # OS-Setup
 
-[中文版](README.zh-CN.md) 👈
+[English Version](README.md) 👈
 
-Automation scripts for setting up basic development environment. ([screenshots](#screenshots))
+基本开发环境自动化设置脚本。（[屏幕截图](#屏幕截图)）
 
-**Table of Contents**
+**目录**
 
-- [Usage](#usage)
-  - [Installation](#installation)
-  - [Rollback](#rollback)
-  - [Upgrade Packages](#upgrade-packages)
-  - [Font Settings](#font-settings)
-- [Customization](#customization)
-- [Packages](#packages)
-- [Screenshots](#screenshots)
+- [使用方法](#使用方法)
+  - [安装](#安装)
+  - [回滚旧设置](#回滚旧设置)
+  - [更新软件包](#更新软件包)
+  - [字体设置](#字体设置)
+- [个性化设置](#个性化设置)
+- [软件包列表](#软件包列表)
+- [屏幕截图](#屏幕截图)
 
-## Usage
+## 使用方法
 
-### Installation
+### 安装
 
-Download the script file using [wget](https://www.gnu.org/software/wget) / [curl](https://curl.haxx.se) / [git](https://git-scm.com) or any browser ([click here to download zip](https://codeload.github.com/XuehaiPan/OS-Setup/zip/master)). And then open `Terminal` and run:
+使用 [wget](https://www.gnu.org/software/wget) / [curl](https://curl.haxx.se) / [git](https://git-scm.com) 或浏览器（[点此下载 zip](https://codeload.github.com/XuehaiPan/OS-Setup/zip/master)）下载本脚本。打开 `终端` 运行：
 
 **via wget**
 
@@ -46,9 +46,9 @@ cd OS-Setup
 /bin/bash setup.sh
 ```
 
-Options:
+选项：
 
-- `SET_MIRRORS` (default `false`) : set source of package managers to the open source mirrors at [TUNA (China)](https://mirrors.tuna.tsinghua.edu.cn) to speed up downloading. (see [Packages](#packages) for more details). If you want to bypass the prompt, run:
+- `SET_MIRRORS` (默认值 `false`)：将软件包管理器的源设置为开源镜像 [TUNA (China)](https://mirrors.tuna.tsinghua.edu.cn) 以加速下载。（更多信息请参见 [软件包列表](#软件包列表)）。如果你想跳过询问步骤，请运行：
 
   ```bash
   # Bypass the prompt
@@ -56,9 +56,9 @@ Options:
   SET_MIRRORS=false bash setup.sh   # do not modify mirror settings
   ```
 
-**Note**: If you are using **WSL on Windows**, you need to run [Windows Terminal](https://github.com/Microsoft/Terminal) as **administrator** to get the permissions to copy fonts to `C:\Windows\Fonts`. Otherwise, the fonts will not be installed successfully on Windows. You can download them from [nerdfonts.com](https://www.nerdfonts.com) and install them manually. See section [Font Settings](#font-settings) for more details.
+**注**：如果你使用的是 Windows 上的 **WSL (Windows Subsystem for Linux)**，你需要以 **管理员权限** 运行 [Windows Terminal](https://github.com/Microsoft/Terminal)，以获得权限将字体文件拷贝至文件夹 `C:\Windows\Fonts`。否则将无法在 Windows 上正确安装字体文件。你可以从 [nerdfonts.com](https://www.nerdfonts.com) 下载字体并手动安装。更多信息请参见 [字体设置](#字体设置)。
 
-After running the script, all the old configuration files involved will be backed up to the folder `$HOME/.dotfiles/backups/<DATETIME>`, and a symbolic link `$HOME/.dotfiles/backups/latest` links to the latest one. You can compare the differences using:
+脚本执行结束，所有旧配置文件会被备份至文件夹 `$HOME/.dotfiles/backups/<DATETIME>`，并将会有一个软链接 `$HOME/.dotfiles/backups/latest` 链接至最新的备份文件夹。你可以使用如下命令比较修改：
 
 ```bash
 # Compare the differences
@@ -70,18 +70,18 @@ colordiff -uEB -x 'backups' -x '.dotfiles' ~/.dotfiles/backups/latest ~/.dotfile
 colordiff -uEB -x 'backups' ~/.dotfiles/backups/latest/.dotfiles ~/.dotfiles
 ```
 
-There is a nice way to inspect and move changes from one version to another version of the same file using [`vimdiff`](https://www.vim.org) or [`meld`](http://meldmerge.org). Run:
+使用 [`vimdiff`](https://www.vim.org) 或 [`meld`](http://meldmerge.org) 可以更方便地比较查看文件和在不同版本间拷贝修改。执行：
 
 ```bash
 # Inspect and move changes using vimdiff
 vim -c "DirDiff ~/.dotfiles ~/.dotfiles/backups/latest/.dotfiles"
 ```
 
-You can get vimdiff reference manual from [https://vimhelp.org/diff.txt.html](https://vimhelp.org/diff.txt.html), or type command `:help diff` inside Vim.
+你可以从 [https://vimhelp.org/diff.txt.html](https://vimhelp.org/diff.txt.html) 获得 `vimdiff` 的支持文档，或者在 Vim 中执行 `:help diff` 查看帮助。
 
-### Rollback
+### 回滚旧设置
 
-You can rollback to your previous dotfiles using:
+你可以运行如下命令回滚旧设置：
 
 ```bash
 # Rollback to the latest backup in "$HOME/.dotfiles/backups/latest"
@@ -91,61 +91,61 @@ bash restore_dotfiles.sh
 bash restore_dotfiles.sh "$HOME/.dotfiles/backups/<DATETIME>"
 ```
 
-**Note**: the packages installed by [`setup.sh`](setup.sh) (see section [Packages](#packages)) will remain in your system.
+**注**：由脚本 [`setup.sh`](setup.sh) 安装的软件包将保留在你的系统之中。（更多信息请参见 [软件包列表](#软件包列表)）
 
-### Upgrade Packages
+### 更新软件包
 
-You can upgrade your packages just by running:
+你可以运行如下命令更新软件包：
 
 ```bash
 upgrade_packages
 ```
 
-By default, `upgrade_packages` will not upgrade your conda environments. If you want to always keep your conda up-to-date, you can uncomment the corresponding line in `$HOME/.dotfiles/utilities.sh`. Or run the script as:
+在默认设置下，命令 `upgrade_packages` 不会更新 conda 环境。如果你想总是更新所有 conda 环境，可以解注释 `$HOME/.dotfiles/utilities.sh` 中对应的行。或执行以下命令：
 
 ```bash
 upgrade_packages; upgrade_conda
 ```
 
-### Font Settings
+### 字体设置
 
-The default shell for the current user will be set to **`zsh`**. In order to get a wonderful and enjoyable terminal experience, please change your terminal font to a [**Nerd Font**](https://github.com/ryanoasis/nerd-fonts). You can download any nerd font you like from [nerdfonts.com](https://www.nerdfonts.com) manually. The script will download and install [**`DejaVu Sans Mono Nerd Font`**](https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/DejaVuSansMono) for **macOS**, **Linux** and **Windows** (*administrator privilege* is required to install fonts on Windows).
+当前用户的默认 Shell 将被设置为 **`zsh`**。为了获得更好的终端体验，请将你的终端字体设置为 [**Nerd Font**](https://github.com/ryanoasis/nerd-fonts)。你可以从 [nerdfonts.com](https://www.nerdfonts.com) 手动下载你喜欢的字体。本脚本将为 **macOS**, **Linux** and **Windows** 用户自动下载安装 [**`DejaVu Sans Mono Nerd Font`**](https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/DejaVuSansMono)。（Windows 下安装字体需要 *管理员权限*）
 
-Configure your terminal to use nerd fonts:
+将的终端字体设置为 nerd font：
 
-- For macOS and Linux users, change the terminal font setting to "Nerd Font Complete" (e.g. `'DejaVuSansMono Nerd Font Book'`).
-- For WSL on Windows users, change the terminal font setting to "Nerd Font Complete Windows Compatible" (e.g. `'DejaVuSansMono NF'`).
+- 对 macOS 和 Linux 用户，将的终端字体设置为 "Nerd Font Complete"（例如 `'DejaVuSansMono Nerd Font Book'`）。
+- 对在 Windows 上使用 WSL 的用户，将的终端字体设置为 "Nerd Font Complete Windows Compatible"（例如 `'DejaVuSansMono NF'`）。
 
-See [Font configurations for Powerlevel10k](https://github.com/romkatv/powerlevel10k#fonts) for more details.
+查看 [Font configurations for Powerlevel10k](https://github.com/romkatv/powerlevel10k#fonts) 获取更多信息。
 
-Or use the Powerlevel10k Lean style:
+或者使用 Powerlevel10k Lean style:
 
 ```bash
 chsh -s /usr/local/bin/zsh-lean
 ```
 
-which do not need additional font settings.
+该设置无需额外的字体设置。
 
 ![zsh-lean](https://user-images.githubusercontent.com/16078332/102495805-8cc45c00-40b1-11eb-8838-b5b64c434d33.png)
 
-**Note**: If you are using **WSL on Windows**, you need to run [Windows Terminal](https://github.com/Microsoft/Terminal) as **administrator** to get the permissions to copy fonts to `C:\Windows\Fonts`. If you forgot to obtain the appropriate privileges, you can open WSL in a new terminal window with administrator privilege. Then run the following command:
+**注**：如果你使用的是 Windows 上的 **WSL (Windows Subsystem for Linux)**，你需要以 **管理员权限** 运行 [Windows Terminal](https://github.com/Microsoft/Terminal)，以获得权限将字体文件拷贝至文件夹 `C:\Windows\Fonts`。如果你运行脚本时忘记使用管理员权限，你可以重新使用管理员权限打开一个新的终端窗口，并运行如下命令：
 
 ```bash
 find ~/.local/share/fonts -type f -name '*.[ot]t[fc]' -print \
         -exec cp -f '{}' /mnt/c/Windows/Fonts \;
 ```
 
-## Customization
+## 个性化设置
 
-Make your own setup scripts. Add a new config file to the script:
+打造你自己的自动化设置脚本。向脚本中添加新设置：
 
-1. fork this repository;
-2. copy the contents of the config file to a temp file `temp.txt`;
-3. replace all identifiers of your home directory with `$HOME` in `temp.txt`;
-4. replace all identifiers of your user name with `$USER` in `temp.txt`;
-5. replace all `\` with `\\` in `temp.txt`;
-6. replace all `$` with `\$` in `temp.txt`;
-7. add the following lines to script `setup_<OS_NAME>.sh`:
+1. fork 本仓库；
+2. 拷贝新的配置文件的内容至一个临时文件 `temp.txt`；
+3. 将 `temp.txt` 中的所有的用户文件夹符号 `~` 替换为 `$HOME`；
+4. 将 `temp.txt` 中的所有的当前用户的用户名替换为 `$USER`；
+5. 将 `temp.txt` 中的所有 `\` 替换为 `\\`；
+6. 将 `temp.txt` 中的所有 `$` 替换为 `\$`；
+7. 在脚本 `setup_<OS_NAME>.sh` 中添加如下若干行：
 
 ```bash
 cd $HOME   # this line has already been added at the top of the script
@@ -160,13 +160,13 @@ EOF
 ln -sf .dotfiles/<CFG_FILE> .
 ```
 
-8. add `<CFG_FILE>` and `.dotfiles/<CFG_FILE>` to `DOTFILES` in [`restore_dotfiles.sh`](restore_dotfiles.sh#L12).
+8. 将项目 `<CFG_FILE>` 和 `.dotfiles/<CFG_FILE>` 添加至脚本 [`restore_dotfiles.sh`](restore_dotfiles.sh#L12) 中的 `DOTFILES` 列表中。
 
-## Packages
+## 软件包列表
 
-The source of package managers (Homebrew (macOS), APT (Ubuntu), Pacman (Manjaro), CPAN, Gem, Conda and Pip) will be set to the open source mirrors at [TUNA (China)](https://mirrors.tuna.tsinghua.edu.cn).
+软件包管理器的源（Homebrew (macOS), APT (Ubuntu), Pacman (Manjaro), CPAN, Gem, Conda 和 Pip）将被设置为 [TUNA (China)](https://mirrors.tuna.tsinghua.edu.cn) 开源镜像。
 
-The following packages will be setup:
+本脚本将会安装和配置如下软件包：
 
 | Package                                                                                                                          | macOS | Ubuntu Linux | Manjaro Linux |
 | :------------------------------------------------------------------------------------------------------------------------------- | :---: | :----------: | :-----------: |
@@ -224,7 +224,7 @@ The following packages will be setup:
 | [Cascadia Code Font](https://github.com/microsoft/cascadia-code)                                                                 |   ✔   |      ✔       |       ✔       |
 | [Menlo Font](https://github.com/XuehaiPan/OS-Setup/blob/master/Menlo.zip)                                                        |   ✔   |      ✔       |       ✔       |
 
-Currently macOS only casks installed by Homebrew:
+仅在 macOS 上由 Homebrew 安装的 App：
 
 | Package                                                   | Description                                                                                | macOS | Ubuntu / Manjaro Linux |
 | :-------------------------------------------------------- | ------------------------------------------------------------------------------------------ | :---: | :--------------------: |
@@ -236,24 +236,24 @@ Currently macOS only casks installed by Homebrew:
 | [Visual Studio Code](https://code.visualstudio.com)       | A lightweight but powerful source code editor                                              |   ✔   |           ✘            |
 | [XQuartz](https://www.xquartz.org)                        | An open-source effort to develop a version of the X.Org X Window System that runs on macOS |   ✔   |           ✘            |
 
-## Screenshots
+## 屏幕截图
 
-Shell:
+Shell：
 
 ![shell](https://user-images.githubusercontent.com/16078332/101635454-f6ff5000-3a64-11eb-9b4a-af674432dc69.png)
 
-tmux:
+tmux：
 
 ![tmux](https://user-images.githubusercontent.com/16078332/102495801-8afa9880-40b1-11eb-9d3f-5045c37fd576.png)
 
-fzf:
+fzf：
 
 ![fzf](https://user-images.githubusercontent.com/16078332/101661628-7ac83500-3a83-11eb-80a1-77c772abe2a4.gif)
 
-Vim:
+Vim：
 
 ![vim](https://user-images.githubusercontent.com/16078332/101630446-d7b0f480-3a5d-11eb-9d2a-af9d09f0d2c0.png)
 
-Live markdown preview support for Vim:
+实时 Vim Markdown 预览支持：
 
 ![markdown](https://user-images.githubusercontent.com/16078332/101730862-bc91c380-3af5-11eb-82a0-1d3f4e75481d.gif)

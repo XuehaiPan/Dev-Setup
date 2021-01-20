@@ -192,7 +192,7 @@ if $IS_SUDOER; then
 	echo_and_eval 'sudo systemctl enable sshd.service'
 fi
 
-# Change default shell to Zsh
+# Change the default login shell to Zsh
 if [[ "$(basename "$SHELL")" != "zsh" ]]; then
 	if grep -qF '/usr/bin/zsh' /etc/shells; then
 		echo_and_eval 'chsh -s /usr/bin/zsh'

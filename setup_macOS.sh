@@ -202,7 +202,7 @@ echo_and_eval 'brew install --cask font-dejavu-sans-mono-nerd-font'
 # Upgrade packages
 echo_and_eval 'brew upgrade'
 
-# Change default shell to Zsh
+# Change the default login shell to Zsh
 if [[ "$(basename "$SHELL")" != "zsh" ]]; then
 	if grep -qF '/usr/local/bin/zsh' /etc/shells; then
 		echo_and_eval 'chsh -s /usr/local/bin/zsh'

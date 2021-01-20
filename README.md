@@ -4,7 +4,7 @@
 
 Automation scripts for setting up basic development environment. ([screenshots](#screenshots))
 
-**Table of Contents**
+## Table of Contents <!-- omit in toc -->
 
 - [Usage](#usage)
   - [Installation](#installation)
@@ -19,7 +19,7 @@ Automation scripts for setting up basic development environment. ([screenshots](
 
 ### Installation
 
-Download the script file using [wget](https://www.gnu.org/software/wget) / [curl](https://curl.haxx.se) / [git](https://git-scm.com) or any browser ([click here to download zip](https://codeload.github.com/XuehaiPan/Dev-Setup/zip/master)). And then open `Terminal` and run:
+Download the script file using [wget](https://www.gnu.org/software/wget) / [curl](https://curl.haxx.se) / [git](https://git-scm.com) or any browser ([click here to download zip](https://codeload.github.com/XuehaiPan/Dev-Setup/zip/master)). Open `Terminal` and run:
 
 **via wget**
 
@@ -48,17 +48,17 @@ cd Dev-Setup
 
 Options:
 
-- `SET_MIRRORS` (default `false`) : set source of package managers to the open source mirrors at [TUNA (China)](https://mirrors.tuna.tsinghua.edu.cn) to speed up downloading. (see [Packages](#packages) for more details). If you want to bypass the prompt, run:
+- `SET_MIRRORS` (default `false`) : set the source of package managers to open source mirrors at [TUNA (@China)](https://mirrors.tuna.tsinghua.edu.cn) to speed up downloading. (see [Packages](#packages) for more details). If you want to bypass the prompt, run:
 
   ```bash
   # Bypass the prompt
-  SET_MIRRORS=true bash setup.sh    # set mirrors to TUNA (China) (recommended for users in China)
+  SET_MIRRORS=true bash setup.sh    # set mirrors to TUNA (@China) (recommended for users in China)
   SET_MIRRORS=false bash setup.sh   # do not modify mirror settings
   ```
 
-**Note**: If you are using **WSL on Windows**, you need to run [Windows Terminal](https://github.com/Microsoft/Terminal) as **administrator** to get the permissions to copy fonts to `C:\Windows\Fonts`. Otherwise, the fonts will not be installed successfully on Windows. You can download them from [nerdfonts.com](https://www.nerdfonts.com) and install them manually. See section [Font Settings](#font-settings) for more details.
+**Note**: If you are using **WSL on Windows**, you need to run [Windows Terminal](https://github.com/Microsoft/Terminal) as **administrator** to get the permissions to copy fonts to `C:\Windows\Fonts`. Otherwise, the fonts will not be installed successfully on Windows. You can download them from [nerdfonts.com](https://www.nerdfonts.com) and install them manually. See [Font Settings](#font-settings) for more details.
 
-After running the script, all the old configuration files involved will be backed up to the folder `$HOME/.dotfiles/backups/<DATETIME>`, and a symbolic link `$HOME/.dotfiles/backups/latest` links to the latest one. You can compare the differences using:
+After running the script, all the old configuration files involved will be backed up to the folder `$HOME/.dotfiles/backups/<DATETIME>`, and a symbolic link `$HOME/.dotfiles/backups/latest` will link to the latest one. You can compare the differences using:
 
 ```bash
 # Compare the differences
@@ -91,7 +91,7 @@ bash restore_dotfiles.sh
 bash restore_dotfiles.sh "$HOME/.dotfiles/backups/<DATETIME>"
 ```
 
-**Note**: the packages installed by [`setup.sh`](setup.sh) (see section [Packages](#packages)) will remain in your system.
+**Note**: the packages installed by [`setup.sh`](setup.sh) (see [Packages](#packages)) will remain in your system.
 
 ### Upgrade Packages
 
@@ -109,7 +109,7 @@ upgrade_packages; upgrade_conda
 
 ### Font Settings
 
-The default shell for the current user will be set to **`zsh`**. In order to get a wonderful and enjoyable terminal experience, please change your terminal font to a [**Nerd Font**](https://github.com/ryanoasis/nerd-fonts). You can download any nerd font you like from [nerdfonts.com](https://www.nerdfonts.com) manually. The script will download and install [**`DejaVu Sans Mono Nerd Font`**](https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/DejaVuSansMono) for **macOS**, **Linux** and **Windows** (*administrator privilege* is required to install fonts on Windows).
+The default login shell for the current user will be set to **`zsh`**. In order to get a wonderful and enjoyable terminal experience, please change your terminal font to a [**Nerd Font**](https://github.com/ryanoasis/nerd-fonts). You can download any nerd font you like from [nerdfonts.com](https://www.nerdfonts.com) manually. The script will download and install [**`DejaVu Sans Mono Nerd Font`**](https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/DejaVuSansMono) for **macOS**, **Linux** and **Windows** (**administrator privilege** is required to install fonts on Windows).
 
 Configure your terminal to use nerd fonts:
 
@@ -118,10 +118,10 @@ Configure your terminal to use nerd fonts:
 
 See [Font configurations for Powerlevel10k](https://github.com/romkatv/powerlevel10k#fonts) for more details.
 
-Or use the Powerlevel10k Lean style:
+Or use Zsh with Powerlevel10k Lean style:
 
 ```bash
-chsh -s /usr/local/bin/zsh-lean
+chsh -s /usr/local/bin/zsh-lean   # change the default login shell
 ```
 
 which do not need additional font settings.
@@ -140,7 +140,7 @@ find ~/.local/share/fonts -type f -name '*.[ot]t[fc]' -print \
 Make your own setup scripts. Add a new config file to the script:
 
 1. fork this repository;
-2. copy the contents of the config file to a temp file `temp.txt`;
+2. copy the contents of your config file to a temp file `temp.txt`;
 3. replace all identifiers of your home directory with `$HOME` in `temp.txt`;
 4. replace all identifiers of your user name with `$USER` in `temp.txt`;
 5. replace all `\` with `\\` in `temp.txt`;
@@ -164,13 +164,13 @@ ln -sf .dotfiles/<CFG_FILE> .
 
 ## Packages
 
-The source of package managers (Homebrew (macOS), APT (Ubuntu), Pacman (Manjaro), CPAN, Gem, Conda and Pip) will be set to the open source mirrors at [TUNA (China)](https://mirrors.tuna.tsinghua.edu.cn).
+The source of package managers (Homebrew (macOS), APT (Ubuntu), Pacman (Manjaro), CPAN, Gem, Conda and Pip) will be set to the open source mirrors at [TUNA (@China)](https://mirrors.tuna.tsinghua.edu.cn).
 
 The following packages will be setup:
 
 | Package                                                                                                                          | macOS | Ubuntu Linux | Manjaro Linux |
 | :------------------------------------------------------------------------------------------------------------------------------- | :---: | :----------: | :-----------: |
-| [Mirrors at TUNA (China)](https://mirrors.tuna.tsinghua.edu.cn)                                                                  |   ✔   |      ✔       |       ✔       |
+| [Mirrors at TUNA (@China)](https://mirrors.tuna.tsinghua.edu.cn)                                                                  |   ✔   |      ✔       |       ✔       |
 | [Homebrew (macOS)](https://brew.sh)                                                                                              |   ✔   |      ✘       |       ✘       |
 |                                                                                                                                  |       |              |               |
 | [bash](https://www.gnu.org/software/bash)                                                                                        |   ✔   |      ✔       |       ✔       |

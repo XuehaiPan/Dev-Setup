@@ -45,7 +45,7 @@ elif [[ "$SET_MIRRORS" =~ (no|No|NO|false|False|FALSE) ]]; then
 else
 	while true; do
 		read -n 1 -p "$(echo -e "${BOLD}${WHITE}Do you wish to set the source of package managers ${GREEN}(Homebrew / APT / Pacman, CPAN, Gem, Conda and Pip)${WHITE}
-to the open source mirrors at ${YELLOW}TUNA (China) (${UNDERLINE}https://mirrors.tuna.tsinghua.edu.cn${UNDERLINEOFF})${WHITE} [y/n]: ${RESET}")" answer
+to the open source mirrors at ${YELLOW}TUNA (@China) (${UNDERLINE}https://mirrors.tuna.tsinghua.edu.cn${UNDERLINEOFF})${WHITE} [y/n]: ${RESET}")" answer
 		if [[ -n "$answer" ]]; then
 			echo
 		fi

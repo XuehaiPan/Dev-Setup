@@ -121,7 +121,7 @@ upgrade_packages; upgrade_conda
 或者使用 Zsh with Powerlevel10k Lean style：
 
 ```bash
-chsh -s /usr/local/bin/zsh-lean   # change the default login shell
+chsh -s /usr/local/bin/zsh-lean   # change the login shell
 ```
 
 该设置无需做额外的字体配置。

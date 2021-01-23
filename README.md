@@ -109,7 +109,7 @@ upgrade_packages; upgrade_conda
 
 ### Font Settings
 
-The default login shell for the current user will be set to **`zsh`**. In order to get a wonderful and enjoyable terminal experience, please change your terminal font to a [**Nerd Font**](https://github.com/ryanoasis/nerd-fonts). You can download any nerd font you like from [nerdfonts.com](https://www.nerdfonts.com) manually. The script will download and install [**`DejaVu Sans Mono Nerd Font`**](https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/DejaVuSansMono) for **macOS**, **Linux** and **Windows** (**administrator privilege** is required to install fonts on Windows).
+The login shell for the current user will be set to **`zsh`**. In order to get a wonderful and enjoyable terminal experience, please change your terminal font to a [**Nerd Font**](https://github.com/ryanoasis/nerd-fonts). You can download any nerd font you like from [nerdfonts.com](https://www.nerdfonts.com) manually. The script will download and install [**`DejaVu Sans Mono Nerd Font`**](https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/DejaVuSansMono) for **macOS**, **Linux** and **Windows** (**administrator privilege** is required to install fonts on Windows).
 
 Configure your terminal to use nerd fonts:
 
@@ -121,7 +121,7 @@ See [Font configurations for Powerlevel10k](https://github.com/romkatv/powerleve
 Or use Zsh with Powerlevel10k Lean style:
 
 ```bash
-chsh -s /usr/local/bin/zsh-lean   # change the default login shell
+chsh -s /usr/local/bin/zsh-lean   # change the login shell
 ```
 
 which do not need additional font settings.

@@ -203,7 +203,7 @@ echo_and_eval 'brew install --cask keka typora iina google-chrome'
 
 echo_and_eval 'brew cleanup -s --prune 7'
 
-# Change the default login shell to Zsh
+# Change the login shell to Zsh
 if [[ "$(basename "$SHELL")" != "zsh" ]]; then
 	if grep -qF '/usr/local/bin/zsh' /etc/shells; then
 		echo_and_eval 'chsh -s /usr/local/bin/zsh'
@@ -1629,7 +1629,6 @@ cat >.dotfiles/.tmux.conf.user <<'EOF'
 set-option -gs default-terminal "tmux-256color"
 set-option -gsa terminal-overrides ",xterm-termite:Tc"
 set-option -gs default-shell /usr/local/bin/zsh
-set-option -gs default-command "reattach-to-user-namespace -l zsh"
 
 # Automatically set window title
 set-option -gs automatic-rename on

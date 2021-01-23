@@ -305,11 +305,6 @@ if [[ -x "$(command -v ruby)" && -x "$(command -v gem)" ]]; then
 	export RUBYOPT="-W0"
 	export PATH="$(ruby -r rubygems -e 'puts Gem.dir')/bin:$PATH"
 	export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
-	if $IS_SUDOER; then
-		echo_and_eval 'sudo gem update --system --config-file "$HOME/.gemrc"'
-		echo_and_eval 'sudo gem update --config-file "$HOME/.gemrc"'
-		echo_and_eval 'sudo gem cleanup --config-file "$HOME/.gemrc"'
-	fi
 	echo_and_eval 'gem update --user-install'
 	echo_and_eval 'gem install colorls --user-install'
 	echo_and_eval 'gem cleanup --user-install'
@@ -1872,7 +1867,6 @@ echo_and_eval 'conda install pip ipython ipdb \
 	jupyter notebook jupyterlab jupyter_contrib_nbextensions \
 	numpy numba matplotlib pandas seaborn \
 	cython tqdm autopep8 pylint --yes'
-echo_and_eval 'conda update --all --yes'
 echo_and_eval 'conda clean --all --yes'
 echo_and_eval "\"\$HOME/$CONDA_DIR/bin/jupyter\" contrib nbextension install --user &>/dev/null"
 if $SET_MIRRORS; then

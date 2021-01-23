@@ -312,8 +312,6 @@ fi
 ln -sf .dotfiles/.gemrc .
 
 # Update RubyGems and install Color LS
-echo_and_eval 'gem update'
-echo_and_eval 'gem update'
 echo_and_eval 'gem install colorls'
 echo_and_eval 'gem cleanup'
 
@@ -2069,7 +2067,6 @@ echo_and_eval 'conda install pip ipython ipdb \
 	jupyter notebook jupyterlab jupyter_contrib_nbextensions \
 	numpy numba matplotlib pandas seaborn \
 	cython tqdm autopep8 pylint --yes'
-echo_and_eval 'conda update --all --yes'
 echo_and_eval 'conda clean --all --yes'
 echo_and_eval "\"\$HOME/$CONDA_DIR/bin/jupyter\" contrib nbextension install --user &>/dev/null"
 if $SET_MIRRORS; then

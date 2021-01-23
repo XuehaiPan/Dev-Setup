@@ -184,6 +184,7 @@ if ! grep -qF '/usr/local/bin/zsh' /etc/shells; then
 fi
 
 # Install packages
+echo_and_eval 'brew install gcc gdb llvm make cmake automake autoconf'
 echo_and_eval 'brew install bash-completion wget curl git git-lfs macvim tmux'
 echo_and_eval 'brew install coreutils ranger fd bat highlight ripgrep git-extras'
 echo_and_eval 'brew install shfmt shellcheck diffutils colordiff diff-so-fancy'
@@ -195,12 +196,12 @@ export PATH="$(ruby -r rubygems -e 'puts Gem.dir')/bin:$PATH"
 export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
 
 # Install casks and fonts
-echo_and_eval 'brew install --cask iterm2 keka'
-echo_and_eval 'brew install --cask font-cascadia{-code,-mono}{,-pl}'
-echo_and_eval 'brew install --cask font-dejavu-sans-mono-nerd-font'
+echo_and_eval 'brew install --cask iterm2 xquartz'
+echo_and_eval 'brew install --cask font-dejavu-sans-mono-nerd-font font-cascadia{-code,-mono}{,-pl}'
+echo_and_eval 'brew install --cask visual-studio-code'
+echo_and_eval 'brew install --cask keka typora iina google-chrome'
 
-# Upgrade packages
-echo_and_eval 'brew upgrade'
+echo_and_eval 'brew cleanup -s --prune 7'
 
 # Change the default login shell to Zsh
 if [[ "$(basename "$SHELL")" != "zsh" ]]; then
@@ -2074,14 +2075,6 @@ echo_and_eval "\"\$HOME/$CONDA_DIR/bin/jupyter\" contrib nbextension install --u
 if $SET_MIRRORS; then
 	echo_and_eval "\"\$HOME/$CONDA_DIR/bin/pip\" config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple"
 fi
-
-# Install casks
-echo_and_eval 'brew install --cask visual-studio-code xquartz'
-echo_and_eval 'brew install --cask typora google-chrome iina'
-
-# Install casks and packages for development
-echo_and_eval 'brew install gcc gdb llvm make cmake automake autoconf'
-echo_and_eval 'brew cleanup -s --prune 7'
 
 # Miscellaneous settings
 echo_and_eval 'defaults write -globalDomain KeyRepeat -int 2'

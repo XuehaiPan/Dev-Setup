@@ -4,7 +4,6 @@ Import-Module -Name PSReadLine -Force -ErrorAction:Ignore
 Import-Module -Name posh-git -ErrorAction:Ignore
 Import-Module -Name oh-my-posh -ErrorAction:Ignore
 Import-Module -Name Get-ChildItemColor -ErrorAction:Ignore
-Import-Module -Name WindowsConsoleFonts -ErrorAction:Ignore
 if (Test-Path -Path ~\Miniconda3\shell\condabin\conda-hook.ps1) {
     & ~\Miniconda3\shell\condabin\conda-hook.ps1
 }

@@ -19,7 +19,6 @@ Install-Module -Name posh-git -AcceptLicense -Force -Confirm:$false
 Install-Module -Name oh-my-posh -AcceptLicense -Force -Confirm:$false
 Install-Module -Name PSReadLine -SkipPublisherCheck -AcceptLicense -Force -Confirm:$false
 Install-Module -Name Get-ChildItemColor -AllowClobber -AcceptLicense -Force -Confirm:$false
-Install-Module -Name WindowsConsoleFonts -AcceptLicense -Force -Confirm:$false
 
 if (!(Test-Path -Path $PROFILE.CurrentUserAllHosts)) {
     New-Item -Path $PROFILE.CurrentUserAllHosts -Type File -Force
@@ -31,7 +30,6 @@ Import-Module -Name PSReadLine -Force -ErrorAction:Ignore
 Import-Module -Name posh-git -ErrorAction:Ignore
 Import-Module -Name oh-my-posh -ErrorAction:Ignore
 Import-Module -Name Get-ChildItemColor -ErrorAction:Ignore
-Import-Module -Name WindowsConsoleFonts -ErrorAction:Ignore
 if (Test-Path -Path ~\Miniconda3\shell\condabin\conda-hook.ps1) {
     & ~\Miniconda3\shell\condabin\conda-hook.ps1
 }

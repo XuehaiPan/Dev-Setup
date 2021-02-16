@@ -292,6 +292,11 @@ handle_mime() {
             xls2csv -- "${FILE_PATH}" && exit 5
             exit 1;;
 
+        ## CSV
+        */csv)
+            python3 -c "import pandas as pd; print(pd.read_csv('${FILE_PATH}').to_markdown())" && exit 5
+            exit 2;;
+
         ## SQLite
         *sqlite3)
             ## Preview as text conversion
@@ -373,6 +378,12 @@ handle_mime() {
         video/* | audio/*)
             mediainfo "${FILE_PATH}" && exit 5
             exiftool "${FILE_PATH}" && exit 5
+            exit 1;;
+
+        ## Shared library
+        application/x-sharedlib)
+            objdump --demangle --dynamic-syms "${FILE_PATH}" && exit 5
+            nm --demangle --dynamic --defined-only --extern-only "${FILE_PATH}" && exit 5
             exit 1;;
     esac
 }

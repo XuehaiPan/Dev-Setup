@@ -91,8 +91,15 @@ handle_extension() {
             pandoc -s -t markdown -- "${FILE_PATH}" && exit 5
             exit 1;;
 
+        ## CSV
+        csv)
+            python3 -c "import pandas as pd; print(pd.read_csv('${FILE_PATH}').to_markdown())" && exit 5
+            exit 2;;
+
         ## XLSX
         xlsx)
+            ## Preview as markdown conversion
+            python3 -c "import pandas as pd; print(pd.read_excel('${FILE_PATH}').to_markdown())" && exit 5
             ## Preview as csv conversion
             ## Uses: https://github.com/dilshod/xlsx2csv
             xlsx2csv -- "${FILE_PATH}" && exit 5
@@ -285,7 +292,9 @@ handle_mime() {
             exit 1;;
 
         ## XLS
-        *ms-excel)
+        *ms-excel | application/vnd.openxmlformats-officedocument.spreadsheetml.sheet)
+            ## Preview as markdown conversion
+            python3 -c "import pandas as pd; print(pd.read_excel('${FILE_PATH}').to_markdown())" && exit 5
             ## Preview as csv conversion
             ## xls2csv comes with catdoc:
             ##   http://www.wagner.pp.ru/~vitus/software/catdoc/
@@ -381,9 +390,9 @@ handle_mime() {
             exit 1;;
 
         ## Shared library
-        application/x-sharedlib)
-            objdump --demangle --dynamic-syms "${FILE_PATH}" && exit 5
-            nm --demangle --dynamic --defined-only --extern-only "${FILE_PATH}" && exit 5
+        application/x-sharedlib | application/x-mach-binary)
+            objdump --demangle --syms "${FILE_PATH}" && exit 5
+            nm --demangle "${FILE_PATH}" && exit 5
             exit 1;;
     esac
 }
@@ -403,3 +412,5 @@ handle_mime "${MIMETYPE}"
 handle_fallback
 
 exit 1
+
+# vim: filetype=bash tabstop=4 shiftwidth=4 expandtab

@@ -1894,7 +1894,6 @@ for font_dir in "${FONT_DIR_LIST[@]}"; do
 		-printf '==> cp -f \"%p\" \"$font_dir\"\n' \\
 		-exec cp -f '{}' \"$font_dir\" \\;"
 done
-rm -rf "$TMP_DIR"
 if [[ -x "$(command -v fc-cache)" ]]; then
 	echo_and_eval 'fc-cache --force'
 fi

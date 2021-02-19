@@ -137,10 +137,9 @@ if [[ ! -x "$(command -v brew)" ]]; then
 	if $SET_MIRRORS; then
 		echo_and_eval 'export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"'
 		echo_and_eval 'export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git"'
-		echo_and_eval "/bin/bash -c \"\$(
-					curl -fsSL https://github.com/Homebrew/install/raw/master/install.sh |
-					sed 's|^BREW_REPO=.*\$|BREW_REPO=\"https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git\"|g'
-				)\""
+		echo_and_eval 'export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles"'
+		echo_and_eval "git clone --depth=1 https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/install.git \"$TMP_DIR/brew-install\""
+		echo_and_eval "/bin/bash -c \"\$(sed -E 's#^(\\s*)(HOMEBREW_(BREW|CORE)_GIT_REMOTE)=(.*)\$#\\1\\2=\"\${\\2:-\\4}\"#' \"$TMP_DIR/brew-install/install.sh\")\""
 		echo_and_eval 'unset HOMEBREW_{BREW,CORE}_GIT_REMOTE'
 	else
 		echo_and_eval '/bin/bash -c "$(curl -fsSL https://github.com/Homebrew/install/raw/master/install.sh)"'
@@ -161,7 +160,6 @@ if $SET_MIRRORS; then
 		fi
 	done
 	echo_and_eval 'brew update-reset'
-	echo_and_eval 'export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles"'
 else
 	BREW_TAPS="$(brew tap)"
 	for tap in core cask{,-fonts,-drivers}; do

@@ -384,6 +384,7 @@ fi
 
 # User specific environment
 export TERM="xterm-256color"
+export LESS="-R -M -i -j5"
 export CLICOLOR=1
 export LSCOLORS="GxFxCxDxBxegedabagaced"
 
@@ -1050,6 +1051,7 @@ fi
 
 # User specific environment
 export TERM="xterm-256color"
+export LESS="-R -M -i -j5"
 export GREP_OPTIONS='--color=auto'
 export CLICOLOR=1
 export LSCOLORS="GxFxCxDxBxegedabagaced"

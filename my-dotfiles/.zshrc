@@ -32,6 +32,7 @@ fi
 
 # User specific environment
 export TERM="xterm-256color"
+export LESS="-R -M -i -j5"
 export CLICOLOR=1
 export LSCOLORS="GxFxCxDxBxegedabagaced"
 

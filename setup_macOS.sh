@@ -2017,7 +2017,7 @@ custom_channels:
   bioconda: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
   menpo: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
   simpleitk: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
-channel_priority: flexible
+channel_priority: disabled
 
 EOF
 fi
@@ -2026,6 +2026,7 @@ ssl_verify: true
 show_channel_urls: false
 report_errors: false
 
+force_reinstall: true
 create_default_packages:
   # - anaconda
   - pip

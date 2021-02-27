@@ -103,6 +103,7 @@ function upgrade_ohmyzsh() {
 	rm -f "$ZSH_CACHE_DIR/.zsh-update" 2>/dev/null
 	zsh "$ZSH/tools/check_for_upgrade.sh" 2>/dev/null
 	echo_and_eval 'zsh "$ZSH/tools/upgrade.sh"'
+	echo_and_eval 'git -C "$ZSH" gc --aggressive'
 
 	# Upgrade themes and plugins
 	REPOS=($(
@@ -112,11 +113,13 @@ function upgrade_ohmyzsh() {
 	))
 	for repo in "${REPOS[@]}"; do
 		echo_and_eval "git -C \"\$ZSH_CUSTOM/$repo\" pull --ff-only"
+		echo_and_eval "git -C \"\$ZSH_CUSTOM/$repo\" gc --aggressive"
 	done
 }
 
 function upgrade_fzf() {
 	echo_and_eval 'git -C "$HOME/.fzf" pull --ff-only'
+	echo_and_eval 'git -C "$HOME/.fzf" gc --aggressive'
 	echo_and_eval '"$HOME/.fzf/install" --key-bindings --completion --no-update-rc'
 }
 
@@ -273,6 +276,7 @@ function pull_projects() {
 			if [[ -n "$(git -C "$PROJ_DIR" remote)" ]]; then
 				echo_and_eval "git -C \"${PROJ_DIR/#$HOME/\$HOME}\" fetch --all --prune"
 				echo_and_eval "git -C \"${PROJ_DIR/#$HOME/\$HOME}\" pull --ff-only"
+				echo_and_eval "git -C \"${PROJ_DIR/#$HOME/\$HOME}\" gc --aggressive"
 			fi
 		done
 	done

@@ -101,7 +101,7 @@ tmux_conf_theme_focused_pane_bg="$tmux_conf_theme_colour_2"
 tmux_conf_theme_pane_border_style=thin
 
 # pane borders colours:
-tmux_conf_theme_pane_border="$tmux_conf_theme_colour_2"
+tmux_conf_theme_pane_border="$tmux_conf_theme_colour_3"
 tmux_conf_theme_pane_active_border="$tmux_conf_theme_colour_4"
 
 # pane indicator colours (when you hit <prefix> + q)
@@ -390,6 +390,8 @@ tmux_conf_update_plugins_on_reload=true
 
 # # /!\ do not remove the following line
 # EOF
+#
+# # /!\ do not "uncomment" the functions: the leading "# " characters are needed
 #
 # weather() {
 #   curl -m 1 wttr.in?format=3 2>/dev/null

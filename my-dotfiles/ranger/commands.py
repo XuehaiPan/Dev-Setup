@@ -30,10 +30,10 @@ class fzf_select(Command):
         import subprocess
         from ranger.ext.get_executables import get_executables
 
-        if 'fd' in get_executables():
-            command = 'fd'
-        elif 'fdfind' in get_executables():
+        if 'fdfind' in get_executables():
             command = 'fdfind'
+        elif 'fd' in get_executables():
+            command = 'fd'
         else:
             self.fm.notify('Could not find fd in the PATH.', bad=True)
             return
@@ -82,10 +82,10 @@ class fd_search(Command):
         self.FD_DEQUE.clear()
 
         command = []
-        if 'fd' in get_executables():
-            command.append('fd')
-        elif 'fdfind' in get_executables():
+        if 'fdfind' in get_executables():
             command.append('fdfind')
+        elif 'fd' in get_executables():
+            command = 'fd'
         else:
             self.fm.notify("Couldn't find fd in the PATH.", bad=True)
             return
@@ -103,22 +103,24 @@ class fd_search(Command):
         command.append(depth)
         if self.fm.settings.show_hidden:
             command.append('--hidden')
-        command.extend("--follow --no-ignore-vcs --exclude '.git'".split())
+        command.extend("--follow --no-ignore-vcs --exclude '.git' --print0".split())
         command.append(target)
         fd = self.fm.execute_command(command, universal_newlines=True, stdout=subprocess.PIPE)
         (search_results, _) = fd.communicate()
 
-        search_results = filter(None, search_results.split('\n'))
-        if not self.fm.settings.show_hidden and self.fm.settings.hidden_filter:
-            hidden_filter = re.compile(self.fm.settings.hidden_filter)
-            search_results = filter(lambda res: hidden_filter.search(os.path.basename(res)) is None, search_results)
-        search_results = set(map(lambda res: os.path.realpath(os.path.join(self.fm.thisdir.path, res)), search_results))
-        self.FD_DEQUE.extend(sorted(search_results, key=str.lower))
-        if len(self.FD_DEQUE) > 0:
-            self.fm.notify('Found {} result{}.'.format(len(self.FD_DEQUE), ('s' if len(self.FD_DEQUE) > 1 else '')))
-            self.fm.select_file(self.FD_DEQUE[0])
-        else:
-            self.fm.notify('No results found.')
+        if fd.returncode == 0:
+            search_results = filter(None, search_results.split('\0'))
+            if not self.fm.settings.show_hidden and self.fm.settings.hidden_filter:
+                hidden_filter = re.compile(self.fm.settings.hidden_filter)
+                search_results = filter(lambda res: not hidden_filter.search(os.path.basename(res)), search_results)
+            search_results = set(map(lambda res: os.path.realpath(os.path.join(self.fm.thisdir.path, res)),
+                                     search_results))
+            self.FD_DEQUE.extend(sorted(search_results, key=str.lower))
+            if len(self.FD_DEQUE) > 0:
+                self.fm.notify('Found {} result{}.'.format(len(self.FD_DEQUE), ('s' if len(self.FD_DEQUE) > 1 else '')))
+                self.fm.select_file(self.FD_DEQUE[0])
+            else:
+                self.fm.notify('No results found.')
 
 
 class fd_next(Command):

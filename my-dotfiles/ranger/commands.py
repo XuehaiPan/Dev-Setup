@@ -115,7 +115,10 @@ class fd_search(Command):
         search_results = set(map(lambda res: os.path.realpath(os.path.join(self.fm.thisdir.path, res)), search_results))
         FD_DEQUE = deque(sorted(search_results, key=str.lower))
         if len(FD_DEQUE) > 0:
+            self.fm.notify('Found {} result{}.'.format(len(FD_DEQUE), ('s' if len(FD_DEQUE) > 1 else '')))
             self.fm.select_file(FD_DEQUE[0])
+        else:
+            self.fm.notify('No results found.')
 
 
 class fd_next(Command):

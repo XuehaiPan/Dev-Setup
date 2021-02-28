@@ -17,9 +17,6 @@ from collections import deque
 from ranger.api.commands import Command
 
 
-FD_DEQUE = deque()
-
-
 class fzf_select(Command):
     """
     :fzf_select
@@ -75,18 +72,20 @@ class fd_search(Command):
     directory.
     """
 
+    FD_DEQUE = deque()
+
     def execute(self):
         import re
         import subprocess
         from ranger.ext.get_executables import get_executables
 
-        global FD_DEQUE
-        FD_DEQUE.clear()
+        self.FD_DEQUE.clear()
 
+        command = []
         if 'fd' in get_executables():
-            command = 'fd'
+            command.append('fd')
         elif 'fdfind' in get_executables():
-            command = 'fdfind'
+            command.append('fdfind')
         else:
             self.fm.notify("Couldn't find fd in the PATH.", bad=True)
             return
@@ -101,22 +100,23 @@ class fd_search(Command):
         else:
             self.fm.notify(":fd_search needs a query.", bad=True)
             return
-        command += ' ' + depth + " --follow --no-ignore-vcs --exclude '.git'"
+        command.append(depth)
         if self.fm.settings.show_hidden:
-            command += ' --hidden'
-        command += ' ' + target
+            command.append('--hidden')
+        command.extend("--follow --no-ignore-vcs --exclude '.git'".split())
+        command.append(target)
         fd = self.fm.execute_command(command, universal_newlines=True, stdout=subprocess.PIPE)
         (search_results, _) = fd.communicate()
 
         search_results = filter(None, search_results.split('\n'))
-        if self.fm.settings.hidden_filter:
+        if not self.fm.settings.show_hidden and self.fm.settings.hidden_filter:
             hidden_filter = re.compile(self.fm.settings.hidden_filter)
             search_results = filter(lambda res: hidden_filter.search(os.path.basename(res)) is None, search_results)
         search_results = set(map(lambda res: os.path.realpath(os.path.join(self.fm.thisdir.path, res)), search_results))
-        FD_DEQUE = deque(sorted(search_results, key=str.lower))
-        if len(FD_DEQUE) > 0:
-            self.fm.notify('Found {} result{}.'.format(len(FD_DEQUE), ('s' if len(FD_DEQUE) > 1 else '')))
-            self.fm.select_file(FD_DEQUE[0])
+        self.FD_DEQUE.extend(sorted(search_results, key=str.lower))
+        if len(self.FD_DEQUE) > 0:
+            self.fm.notify('Found {} result{}.'.format(len(self.FD_DEQUE), ('s' if len(self.FD_DEQUE) > 1 else '')))
+            self.fm.select_file(self.FD_DEQUE[0])
         else:
             self.fm.notify('No results found.')
 
@@ -128,11 +128,11 @@ class fd_next(Command):
     """
 
     def execute(self):
-        if len(FD_DEQUE) > 1:
-            FD_DEQUE.rotate(-1)  # rotate left
-            self.fm.select_file(FD_DEQUE[0])
-        elif len(FD_DEQUE) == 1:
-            self.fm.select_file(FD_DEQUE[0])
+        if len(fd_search.FD_DEQUE) > 1:
+            fd_search.FD_DEQUE.rotate(-1)  # rotate left
+            self.fm.select_file(fd_search.FD_DEQUE[0])
+        elif len(fd_search.FD_DEQUE) == 1:
+            self.fm.select_file(fd_search.FD_DEQUE[0])
 
 
 class fd_prev(Command):
@@ -142,8 +142,8 @@ class fd_prev(Command):
     """
 
     def execute(self):
-        if len(FD_DEQUE) > 1:
-            FD_DEQUE.rotate(1)  # rotate right
-            self.fm.select_file(FD_DEQUE[0])
-        elif len(FD_DEQUE) == 1:
-            self.fm.select_file(FD_DEQUE[0])
+        if len(fd_search.FD_DEQUE) > 1:
+            fd_search.FD_DEQUE.rotate(1)  # rotate right
+            self.fm.select_file(fd_search.FD_DEQUE[0])
+        elif len(fd_search.FD_DEQUE) == 1:
+            self.fm.select_file(fd_search.FD_DEQUE[0])

@@ -17,6 +17,66 @@ from collections import deque
 from ranger.api.commands import Command
 
 
+class yank_content(Command):
+    """
+    :yank_content <file>
+
+    Copies the content of the file into both the primary X selection and the
+    clipboard.
+    """
+
+    def execute(self):
+        import subprocess
+        from ranger.container.file import File
+        from ranger.ext.get_executables import get_executables
+
+        clipboard_managers = {
+            'xclip': [
+                ['xclip', '-selection', 'primary'],
+                ['xclip', '-selection', 'clipboard'],
+            ],
+            'xsel': [
+                ['xsel', '--primary'],
+                ['xsel', '--clipboard'],
+            ],
+            'wl-copy': [
+                ['wl-copy'],
+            ],
+            'pbcopy': [
+                ['pbcopy'],
+            ],
+        }
+        ordered_managers = ['pbcopy', 'wl-copy', 'xclip', 'xsel']
+        executables = get_executables()
+        for manager in ordered_managers:
+            if manager in executables:
+                clipboard_commands = clipboard_managers[manager]
+                break
+        else:
+            self.fm.notify('Could not find a clipboard manager in the PATH.', bad=True)
+            return
+
+        arg = self.rest(1)
+        if arg:
+            if not os.path.isfile(arg):
+                self.fm.notify("'{}' is not a file.".format(arg), bad=True)
+                return
+            file = File(arg)
+        else:
+            file = self.fm.thisfile
+            if not file.is_file:
+                self.fm.notify("'{}' is not a file.".format(file.relative_path), bad=True)
+                return
+
+        if not file.is_binary():
+            for command in clipboard_commands:
+                with open(file.path, mode='r') as fd:
+                    self.fm.execute_command(command, universal_newlines=True, stdin=fd)
+            self.fm.notify("The content of '{}' is copied to the clipboard.".format(file.relative_path))
+        else:
+            self.fm.notify("'{}' is not a text file.".format(file.relative_path))
+
+
 class fzf_select(Command):
     """
     :fzf_select

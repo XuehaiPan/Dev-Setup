@@ -130,7 +130,7 @@ class fzf_select(Command):
                                       universal_newlines=True, stdout=subprocess.PIPE)
         stdout, _ = fzf.communicate()
         if fzf.returncode == 0:
-            selected = os.path.abspath(stdout.rstrip('\n'))
+            selected = os.path.abspath(stdout.strip())
             if os.path.isdir(selected):
                 self.fm.cd(selected)
             else:
@@ -188,7 +188,7 @@ class fd_search(Command):
             if not self.fm.settings.show_hidden and self.fm.settings.hidden_filter:
                 hidden_filter = re.compile(self.fm.settings.hidden_filter)
                 results = filter(lambda res: not hidden_filter.search(os.path.basename(res)), results)
-            results = map(lambda res: os.path.realpath(os.path.join(self.fm.thisdir.path, res)), results)
+            results = map(lambda res: os.path.abspath(os.path.join(self.fm.thisdir.path, res)), results)
             self.SEARCH_RESULTS.extend(sorted(results, key=str.lower))
             if len(self.SEARCH_RESULTS) > 0:
                 self.fm.notify('Found {} result{}.'.format(len(self.SEARCH_RESULTS),

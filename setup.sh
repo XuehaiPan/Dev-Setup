@@ -11,7 +11,7 @@ YELLOW="\033[33m"
 WHITE="\033[37m"
 
 # Start logging
-LOG_FILE="$PWD/os-setup.log"
+LOG_FILE="$PWD/dev-setup.log"
 if [[ -f "$LOG_FILE" ]]; then
 	mv -f "$LOG_FILE" "${LOG_FILE}.old"
 fi
@@ -22,11 +22,14 @@ echo -e "${BOLD}${WHITE}The script output will be logged to file ${YELLOW}\"$LOG
 OS_NAME=""
 if [[ "$(uname -s)" == "Darwin" ]]; then
 	OS_NAME="macOS"
+	PACKAGE_MANAGER="Homebrew"
 elif [[ "$(uname -s)" == "Linux" ]]; then
 	if grep -qiE 'ID.*ubuntu' /etc/*-release; then
 		OS_NAME="Ubuntu"
+		PACKAGE_MANAGER="APT"
 	elif grep -qiE 'ID.*manjaro' /etc/*-release; then
 		OS_NAME="Manjaro"
+		PACKAGE_MANAGER="Pacman"
 	fi
 fi
 
@@ -43,20 +46,25 @@ if [[ "$SET_MIRRORS" =~ (yes|Yes|YES|true|True|TRUE) ]]; then
 elif [[ "$SET_MIRRORS" =~ (no|No|NO|false|False|FALSE) ]]; then
 	SET_MIRRORS=false
 else
-	while true; do
-		read -n 1 -p "$(echo -e "${BOLD}${WHITE}Do you wish to set the source of package managers ${GREEN}(Homebrew / APT / Pacman, CPAN, Gem, Conda and Pip)${WHITE}
-to the open source mirrors at ${YELLOW}TUNA (@China) (${UNDERLINE}https://mirrors.tuna.tsinghua.edu.cn${UNDERLINEOFF})${WHITE} [y/n]: ${RESET}")" answer
-		if [[ -n "$answer" ]]; then
-			echo
-		fi
-		if [[ "$answer" == [Yy] ]]; then
-			SET_MIRRORS=true
-			break
-		elif [[ "$answer" == [Nn] ]]; then
-			SET_MIRRORS=false
-			break
-		fi
-	done
+	unset SET_MIRRORS
+	if [ -t 0 ] && [ -t 1 ]; then
+		while true; do
+			read -n 1 -p "$(echo -e "${BOLD}${WHITE}Do you wish to set the source of package managers ${GREEN}(${PACKAGE_MANAGER}, CPAN, Gem, Conda and Pip)${WHITE}
+to the open source mirrors at ${YELLOW}TUNA (@China) (${UNDERLINE}https://mirrors.tuna.tsinghua.edu.cn${UNDERLINEOFF})${WHITE} [y/N]: ${RESET}")" answer
+			if [[ -n "$answer" ]]; then
+				echo
+			else
+				answer="n"
+			fi
+			if [[ "$answer" == [Yy] ]]; then
+				SET_MIRRORS=true
+				break
+			elif [[ "$answer" == [Nn] ]]; then
+				SET_MIRRORS=false
+				break
+			fi
+		done
+	fi
 fi
 export SET_MIRRORS
 

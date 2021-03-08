@@ -13,7 +13,7 @@ mkdir -p "$BACKUP_DIR/.dotfiles"
 ln -sfn "$DATETIME" "$HOME/.dotfiles/backups/latest"
 
 # Set temporary directory
-TMP_DIR="$(mktemp -d -t os-setup.XXXXXX)"
+TMP_DIR="$(mktemp -d -t dev-setup.XXXXXX)"
 
 # Check if has sudo privileges
 IS_SUDOER=false

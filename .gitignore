@@ -1,7 +1,7 @@
 ##### Project Specific #####
 # Logs
-os-setup.log
-os-setup.log.old
+dev-setup.log
+dev-setup.log.old
 
 
 ##### macOS.gitignore #####
@@ -11,7 +11,8 @@ os-setup.log.old
 .LSOverride
 
 # Icon must end with two \r
-Icon
+Icon
+
 
 # Thumbnails
 ._*

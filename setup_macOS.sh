@@ -20,7 +20,7 @@ mkdir -p "$BACKUP_DIR/.dotfiles"
 ln -sfn "$DATETIME" "$HOME/.dotfiles/backups/latest"
 
 # Set temporary directory
-TMP_DIR="$(mktemp -d -t os-setup)"
+TMP_DIR="$(mktemp -d -t dev-setup)"
 
 # Set default Conda installation directory
 CONDA_DIR="Miniconda3"

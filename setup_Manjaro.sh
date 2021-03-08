@@ -300,12 +300,11 @@ fi
 
 ln -sf .dotfiles/.gemrc .
 
-# Update RubyGems and install Color LS
+# Install Color LS
 if [[ -x "$(command -v ruby)" && -x "$(command -v gem)" ]]; then
 	export RUBYOPT="-W0"
 	export PATH="$(ruby -r rubygems -e 'puts Gem.dir')/bin:$PATH"
 	export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
-	echo_and_eval 'gem update --user-install'
 	echo_and_eval 'gem install colorls --user-install'
 	echo_and_eval 'gem cleanup --user-install'
 fi

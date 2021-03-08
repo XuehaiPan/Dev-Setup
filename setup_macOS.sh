@@ -309,7 +309,7 @@ fi
 
 ln -sf .dotfiles/.gemrc .
 
-# Update RubyGems and install Color LS
+# Install Color LS
 echo_and_eval 'gem install colorls'
 echo_and_eval 'gem cleanup'
 

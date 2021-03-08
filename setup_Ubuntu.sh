@@ -93,14 +93,14 @@ function echo_and_eval() {
 					'"if ((double_quoted && \$i ~ /\";?\$/ && \$i !~ /\\\\\";?\$/) || (!double_quoted && \$i ~ /';?\$/))"'
 						in_string = 0;
 				}
-				if ($i ~ /;$/ || $i == "|" || $i == "||" || $i == "&&") {
+				if (($i ~ /;$/ && $i !~ /\\;$/) || $i == "|" || $i == "||" || $i == "&&") {
 					if (!in_string) {
 						idx = 0;
 						if ($i !~ /;$/)
 							style = RED;
 					}
 				}
-				if ($i ~ /;$/)
+				if ($i ~ /;$/ && $i !~ /\\;$/)
 					printf(" %s%s%s;%s", style, substr($i, 1, length($i) - 1), (in_string ? WHITE : RED), post_style);
 				else
 					printf(" %s%s%s", style, $i, post_style);
@@ -775,14 +775,14 @@ function echo_and_eval() {
 					'"if ((double_quoted && \$i ~ /\";?\$/ && \$i !~ /\\\\\";?\$/) || (!double_quoted && \$i ~ /';?\$/))"'
 						in_string = 0;
 				}
-				if ($i ~ /;$/ || $i == "|" || $i == "||" || $i == "&&") {
+				if (($i ~ /;$/ && $i !~ /\\;$/) || $i == "|" || $i == "||" || $i == "&&") {
 					if (!in_string) {
 						idx = 0;
 						if ($i !~ /;$/)
 							style = RED;
 					}
 				}
-				if ($i ~ /;$/)
+				if ($i ~ /;$/ && $i !~ /\\;$/)
 					printf(" %s%s%s;%s", style, substr($i, 1, length($i) - 1), (in_string ? WHITE : RED), post_style);
 				else
 					printf(" %s%s%s", style, $i, post_style);

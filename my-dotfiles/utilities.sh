@@ -92,7 +92,7 @@ function upgrade_homebrew() {
 }
 
 function upgrade_ohmyzsh() {
-	local REPOS repo
+	local repo
 
 	# Set oh-my-zsh installation path
 	export ZSH="${ZSH:-"$HOME/.oh-my-zsh"}"
@@ -107,15 +107,14 @@ function upgrade_ohmyzsh() {
 	echo_and_eval 'git -C "$ZSH" gc --prune=all'
 
 	# Upgrade themes and plugins
-	REPOS=($(
-		cd "$ZSH_CUSTOM" &&
-		find -L . -mindepth 3 -maxdepth 3 -not -empty -type d -name '.git' -prune |
-			cut -b3- | xargs -L 1 dirname
-	))
-	for repo in "${REPOS[@]}"; do
+	while read -r repo; do
 		echo_and_eval "git -C \"\$ZSH_CUSTOM/$repo\" pull --depth=1 --prune --ff-only"
 		echo_and_eval "git -C \"\$ZSH_CUSTOM/$repo\" gc --prune=all"
-	done
+	done < <(
+		cd "$ZSH_CUSTOM" &&
+			find -L . -mindepth 3 -maxdepth 3 -not -empty -type d -name '.git' -prune -print0 |
+			xargs -0 -L 1 dirname | cut -b3-
+	)
 }
 
 function upgrade_fzf() {
@@ -143,40 +142,40 @@ function upgrade_texlive() {
 }
 
 function upgrade_conda() {
-	local ENVS env
+	local env
 
 	# Upgrade Conda
 	echo_and_eval 'conda update conda --name base --yes'
 
 	# Upgrade Conda packages in each environment
-	ENVS=(base $(
-		cd "$(conda info --base)/envs" &&
-		find -L . -mindepth 1 -maxdepth 1 -not -empty \( -type d -or -type l \) -prune |
-			cut -b3-
-	))
-	for env in "${ENVS[@]}"; do
+	while read -r env; do
 		echo_and_eval "conda update --all --name $env --yes"
 		if conda list --full-name anaconda --name "$env" | grep -q '^anaconda[^-]'; then
 			echo_and_eval "conda update anaconda --name $env --yes"
 		fi
-	done
+	done < <(
+		echo base
+		cd "$(conda info --base)/envs" &&
+			find -L . -mindepth 1 -maxdepth 1 -not -empty \( -type d -or -type l \) -prune -print0 |
+			xargs -0 -L 1 basename
+	)
 
 	# Clean up Conda cache
 	echo_and_eval 'conda clean --all --yes'
 }
 
 function foreach_conda_env_do() {
-	local ENVS env
+	local env
 
 	# Execute in each Conda environment
-	ENVS=(base $(
-		cd "$(conda info --base)/envs" &&
-		find -L . -mindepth 1 -maxdepth 1 -not -empty \( -type d -or -type l \) -prune |
-			cut -b3-
-	))
-	for env in "${ENVS[@]}"; do
+	while read -r env; do
 		echo_and_eval "conda activate $env; ${*}; conda deactivate"
-	done
+	done < <(
+		echo base
+		cd "$(conda info --base)/envs" &&
+			find -L . -mindepth 1 -maxdepth 1 -not -empty \( -type d -or -type l \) -prune -print0 |
+			xargs -0 -L 1 basename
+	)
 }
 
 function upgrade_packages() {
@@ -276,23 +275,22 @@ function auto_reannounce_trackers() {
 }
 
 function pull_projects() {
-	local BASE_DIRS BASE_DIR PROJ_DIRS PROJ_DIR
+	local BASE_DIRS BASE_DIR PROJ_DIR
 
 	# Project directories
 	BASE_DIRS=("$HOME/VSCodeProjects" "$HOME/PycharmProjects" "$HOME/ClionProjects" "$HOME/IdeaProjects")
 
 	# Fetch and pull
 	for BASE_DIR in "${BASE_DIRS[@]}"; do
-		PROJ_DIRS=($(
-			find -L "$BASE_DIR" -not -empty -type d -name '.git' -prune |
-				xargs -L 1 dirname
-		))
-		for PROJ_DIR in "${PROJ_DIRS[@]}"; do
+		while read -r PROJ_DIR; do
 			if [[ -n "$(git -C "$PROJ_DIR" remote)" ]]; then
 				echo_and_eval "git -C \"${PROJ_DIR/#$HOME/\$HOME}\" fetch --all --prune"
 				echo_and_eval "git -C \"${PROJ_DIR/#$HOME/\$HOME}\" pull --ff-only"
 				echo_and_eval "git -C \"${PROJ_DIR/#$HOME/\$HOME}\" gc --aggressive"
 			fi
-		done
+		done < <(
+			find -L "$BASE_DIR" -not -empty -type d -name '.git' -prune -print0 |
+				xargs -0 -L 1 dirname
+		)
 	done
 }

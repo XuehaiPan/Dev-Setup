@@ -161,18 +161,17 @@ function check_binary() {
 if $IS_SUDOER; then
 	# Setup APT sources
 	if $SET_MIRRORS; then
-		SOURCES_LIST=($(find -L /etc/apt -type f -name '*.list'))
 		URL_LIST=(
 			"http://archive.ubuntu.com" "http://cn.archive.ubuntu.com"
 			"http://security.ubuntu.com" "http://mirrors.tuna.tsinghua.edu.cn"
 		)
-		for sources_list in "${SOURCES_LIST[@]}"; do
+		while read -r sources_list; do
 			for url in "${URL_LIST[@]}"; do
 				if grep -qF "$url" "${sources_list}"; then
 					echo_and_eval "sudo sed -i 's|$url|https://mirrors.tuna.tsinghua.edu.cn|g' ${sources_list}"
 				fi
 			done
-		done
+		done < <(find -L /etc/apt -type f -name '*.list')
 	fi
 
 	echo_and_eval 'sudo apt-get update'
@@ -811,7 +810,7 @@ function upgrade_ubuntu() {
 }
 
 function upgrade_ohmyzsh() {
-	local REPOS repo
+	local repo
 
 	# Set oh-my-zsh installation path
 	export ZSH="${ZSH:-"$HOME/.oh-my-zsh"}"
@@ -826,15 +825,14 @@ function upgrade_ohmyzsh() {
 	echo_and_eval 'git -C "$ZSH" gc --prune=all'
 
 	# Upgrade themes and plugins
-	REPOS=($(
-		cd "$ZSH_CUSTOM" &&
-		find -L . -mindepth 3 -maxdepth 3 -not -empty -type d -name '.git' -prune |
-			cut -b3- | xargs -L 1 dirname
-	))
-	for repo in "${REPOS[@]}"; do
+	while read -r repo; do
 		echo_and_eval "git -C \"\$ZSH_CUSTOM/$repo\" pull --depth=1 --prune --ff-only"
 		echo_and_eval "git -C \"\$ZSH_CUSTOM/$repo\" gc --prune=all"
-	done
+	done < <(
+		cd "$ZSH_CUSTOM" &&
+			find -L . -mindepth 3 -maxdepth 3 -not -empty -type d -name '.git' -prune -print0 |
+			xargs -0 -L 1 dirname | cut -b3-
+	)
 }
 
 function upgrade_fzf() {
@@ -862,26 +860,40 @@ function upgrade_cpan() {
 }
 
 function upgrade_conda() {
-	local ENVS env
+	local env
 
 	# Upgrade Conda
 	echo_and_eval 'conda update conda --name base --yes'
 
 	# Upgrade Conda packages in each environment
-	ENVS=(base $(
-		cd "$(conda info --base)/envs" &&
-		find -L . -mindepth 1 -maxdepth 1 -not -empty \( -type d -or -type l \) -prune |
-			cut -b3-
-	))
-	for env in "${ENVS[@]}"; do
+	while read -r env; do
 		echo_and_eval "conda update --all --name $env --yes"
 		if conda list --full-name anaconda --name "$env" | grep -q '^anaconda[^-]'; then
 			echo_and_eval "conda update anaconda --name $env --yes"
 		fi
-	done
+	done < <(
+		echo base
+		cd "$(conda info --base)/envs" &&
+			find -L . -mindepth 1 -maxdepth 1 -not -empty \( -type d -or -type l \) -prune -print0 |
+			xargs -0 -L 1 basename
+	)
 
 	# Clean up Conda cache
 	echo_and_eval 'conda clean --all --yes'
+}
+
+function foreach_conda_env_do() {
+	local env
+
+	# Execute in each Conda environment
+	while read -r env; do
+		echo_and_eval "conda activate $env; ${*}; conda deactivate"
+	done < <(
+		echo base
+		cd "$(conda info --base)/envs" &&
+			find -L . -mindepth 1 -maxdepth 1 -not -empty \( -type d -or -type l \) -prune -print0 |
+			xargs -0 -L 1 basename
+	)
 }
 
 function upgrade_packages() {

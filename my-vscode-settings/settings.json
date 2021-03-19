@@ -2,7 +2,7 @@
     //! Editor settings */
     //* Editor */
     "editor.fontSize": 13,
-    "editor.fontFamily": "Menlo, Monaco, Consolas, 'Courier New', monospace",
+    "editor.fontFamily": "Menlo, Monaco, Consolas, 'Courier New', monospace, 'DejaVuSansMono Nerd Font Mono'",
     "editor.fontWeight": 600,
     "editor.tabSize": 4,
     "editor.insertSpaces": true,

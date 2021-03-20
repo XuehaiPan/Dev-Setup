@@ -617,6 +617,7 @@ plugins=(
 
 ZSH_COLORIZE_STYLE="monokai"
 ZSH_DISABLE_COMPFIX=true
+ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 
 source "$ZSH/oh-my-zsh.sh"
 

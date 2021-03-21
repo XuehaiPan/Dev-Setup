@@ -854,12 +854,7 @@ function upgrade_conda() {
 		if conda list --full-name anaconda --name "$env" | grep -q '^anaconda[^-]'; then
 			echo_and_eval "conda update anaconda --name $env --yes"
 		fi
-	done < <(
-		echo base
-		cd "$(conda info --base)/envs" &&
-			find -L . -mindepth 1 -maxdepth 1 -not -empty \( -type d -or -type l \) -prune -print0 |
-			xargs -0 -L 1 basename
-	)
+	done < <(conda info --envs | awk 'NF > 0 && $0 !~ /^#.*/ { print $1 }')
 
 	# Clean up Conda cache
 	echo_and_eval 'conda clean --all --yes'
@@ -871,12 +866,7 @@ function foreach_conda_env_do() {
 	# Execute in each Conda environment
 	while read -r env; do
 		echo_and_eval "conda activate $env; ${*}; conda deactivate"
-	done < <(
-		echo base
-		cd "$(conda info --base)/envs" &&
-			find -L . -mindepth 1 -maxdepth 1 -not -empty \( -type d -or -type l \) -prune -print0 |
-			xargs -0 -L 1 basename
-	)
+	done < <(conda info --envs | awk 'NF > 0 && $0 !~ /^#.*/ { print $1 }')
 }
 
 function upgrade_packages() {

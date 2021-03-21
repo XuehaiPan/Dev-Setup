@@ -15,6 +15,7 @@ $Env:ChocolateyToolsLocation = 'C:\Tools'
 choco install powershell-core git --yes
 
 # Setup PowerShell
+Set-PSRepository -Name PSGallery -InstallationPolicy Trusted -Force
 Install-Module -Name posh-git -AcceptLicense -Force -Confirm:$false
 Install-Module -Name oh-my-posh -AcceptLicense -Force -Confirm:$false
 Install-Module -Name PSReadLine -SkipPublisherCheck -AcceptLicense -Force -Confirm:$false

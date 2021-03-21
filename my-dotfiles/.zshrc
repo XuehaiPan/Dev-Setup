@@ -60,7 +60,7 @@ else
 fi
 unset __conda_setup
 # <<< conda initialize <<<
-export CONDA_JL_HOME="$HOME/Miniconda3/envs/python37"
+export CONDA_JL_HOME="$HOME/Miniconda3/envs/python38"
 
 # CXX Compilers
 export CC="$HOMEBREW_PREFIX/bin/gcc-10"

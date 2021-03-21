@@ -821,7 +821,7 @@
     "python.analysis.useLibraryCodeForTypes": true,
     "python.autoUpdateLanguageServer": true,
     "python.condaPath": "~/Miniconda3/condabin/conda",
-    "python.pythonPath": "~/Miniconda3/envs/python37/bin/python",
+    "python.pythonPath": "~/Miniconda3/envs/python38/bin/python",
     "python.terminal.activateEnvironment": true,
     "python.terminal.activateEnvInCurrentTerminal": true,
     "python.languageServer": "Pylance",

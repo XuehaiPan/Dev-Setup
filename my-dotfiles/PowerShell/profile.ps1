@@ -8,7 +8,7 @@ if (Test-Path -Path ~\Miniconda3\shell\condabin\conda-hook.ps1) {
     & ~\Miniconda3\shell\condabin\conda-hook.ps1
 }
 
-Set-PoshPrompt -Theme AgnosterPlus -ErrorAction:Ignore
+Set-PoshPrompt -Theme ys -ErrorAction:Ignore
 Set-PSReadLineOption -EditMode Emacs
 Set-PSReadLineKeyHandler -Key UpArrow -Function HistorySearchBackward
 Set-PSReadLineKeyHandler -Key DownArrow -Function HistorySearchForward

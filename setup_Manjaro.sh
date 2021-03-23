@@ -336,14 +336,19 @@ backup_dotfiles .dotfiles/.zshrc
 
 cat >.dotfiles/.zshrc <<'EOF'
 # Source global definitions
-# Include /etc/zprofile if it exists
-if [[ -f /etc/zprofile ]]; then
-	source /etc/zprofile
+# Include /etc/profile if it exists
+if [[ -f /etc/profile ]]; then
+	source /etc/profile
 fi
 
-# Include /etc/zshrc if it exists
-if [[ -f /etc/zshrc ]]; then
-	source /etc/zshrc
+# Include /etc/zsh/zprofile if it exists
+if [[ -f /etc/zsh/zprofile ]]; then
+	source /etc/zsh/zprofile
+fi
+
+# Include /etc/zsh/zshrc if it exists
+if [[ -f /etc/zsh/zshrc ]]; then
+	source /etc/zsh/zshrc
 fi
 
 # Set PATH so it includes user's private bin if it exists

@@ -298,4 +298,4 @@ call plug#begin('~/vimfiles/plugged')
 call plug#end()
 "@ | Set-Content -Path ~\_vimrc -Encoding utf8
 
-vim -c "PlugInstall | PlugUpgrade | PlugUpdate | quitall"
+vim -c "PlugInstall | PlugUpgrade | PlugUpdate | sleep 5 | quitall"

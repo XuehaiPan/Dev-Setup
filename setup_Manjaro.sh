@@ -768,12 +768,12 @@ function upgrade_ohmyzsh() {
 	rm -f "$ZSH_CACHE_DIR/.zsh-update" 2>/dev/null
 	zsh "$ZSH/tools/check_for_upgrade.sh" 2>/dev/null
 	echo_and_eval 'zsh "$ZSH/tools/upgrade.sh"'
-	echo_and_eval 'git -C "$ZSH" fetch --depth=1 --prune'
+	echo_and_eval 'git -C "$ZSH" fetch --prune'
 	echo_and_eval 'git -C "$ZSH" gc --prune=all'
 
 	# Upgrade themes and plugins
 	while read -r repo; do
-		echo_and_eval "git -C \"\$ZSH_CUSTOM/$repo\" pull --depth=1 --prune --ff-only"
+		echo_and_eval "git -C \"\$ZSH_CUSTOM/$repo\" pull --prune --ff-only"
 		echo_and_eval "git -C \"\$ZSH_CUSTOM/$repo\" gc --prune=all"
 	done < <(
 		cd "$ZSH_CUSTOM" &&
@@ -783,13 +783,13 @@ function upgrade_ohmyzsh() {
 }
 
 function upgrade_fzf() {
-	echo_and_eval 'git -C "$HOME/.fzf" pull --depth=1 --prune --ff-only'
+	echo_and_eval 'git -C "$HOME/.fzf" pull --prune --ff-only'
 	echo_and_eval 'git -C "$HOME/.fzf" gc --prune=all'
 	echo_and_eval '"$HOME/.fzf/install" --key-bindings --completion --no-update-rc'
 }
 
 function upgrade_vim() {
-	echo_and_eval 'vim -c "PlugUpgrade | PlugUpdate | quitall"'
+	echo_and_eval 'vim -c "PlugUpgrade | PlugUpdate | sleep 5 | quitall"'
 }
 
 function upgrade_gems() {
@@ -1435,7 +1435,7 @@ fi
 
 # Install Vim plugins
 if [[ -x "$(command -v vim)" ]]; then
-	echo_and_eval 'vim -c "PlugUpgrade | PlugInstall | PlugUpdate | quitall"'
+	echo_and_eval 'vim -c "PlugUpgrade | PlugInstall | PlugUpdate | sleep 5 | quitall"'
 	if [[ ! -f "$HOME/.vim/plugged/markdown-preview.nvim/app/bin/markdown-preview-linux" ]]; then
 		echo_and_eval 'cd "$HOME/.vim/plugged/markdown-preview.nvim/app"; ./install.sh; cd "$HOME"'
 	fi

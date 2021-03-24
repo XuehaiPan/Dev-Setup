@@ -2167,6 +2167,23 @@ EOF
 
 chmod +x "$HOME/$CONDA_DIR/etc/init-envs.sh"
 
+# Setup IPython
+echo_and_eval "\"\$HOME/$CONDA_DIR/bin/ipython\" create profile"
+echo_and_eval "sed -i -E 's/^(\\s*)#?\\s*(c.InteractiveShell.colors).*$/\\1\\2 = \"Linux\"/g' \"\$HOME/.ipython/profile_default/ipython_config.py\""
+echo_and_eval "sed -i -E 's/^(\\s*)#?\\s*(c.InteractiveShell.colors).*$/\\1\\2 = \"Linux\"/g' \"\$HOME/.ipython/profile_default/ipython_kernel_config.py\""
+
+cat >"$HOME/.ipython/profile_default/startup/00-rich.py" <<'EOF'
+try:
+    from rich import print
+    import rich.pretty
+    import rich.traceback
+except ImportError:
+    pass
+else:
+    rich.pretty.install()
+    rich.traceback.install()
+EOF
+
 # Miscellaneous settings
 echo_and_eval 'defaults write -globalDomain KeyRepeat -int 2'
 echo_and_eval 'defaults write -globalDomain InitialKeyRepeat -int 45'

@@ -53,8 +53,11 @@ unset CONDA_CUDA_HOME_BACKUP
 [[ -z "$CUDA_HOME" ]] && unset CUDA_HOME
 EOS
 
+	# Exit for non-Python environment
+	[[ -x "$CONDA_PREFIX/bin/python" ]] || continue
+
 	# Create sitecustomize.py in USER_SITE directory
-	USER_SITE="$("$CONDA_PREFIX"/bin/python -c 'from __future__ import print_function; import site; print(site.getusersitepackages())')"
+	USER_SITE="$("$CONDA_PREFIX/bin/python" -c 'from __future__ import print_function; import site; print(site.getusersitepackages())')"
 	mkdir -p "$USER_SITE"
 	if [[ ! -s "$USER_SITE/sitecustomize.py" ]]; then
 		touch "$USER_SITE/sitecustomize.py"

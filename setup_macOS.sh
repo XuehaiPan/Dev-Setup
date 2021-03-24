@@ -2141,15 +2141,18 @@ unset CONDA_CUDA_HOME_BACKUP
 [[ -z "$CUDA_HOME" ]] && unset CUDA_HOME
 EOS
 
-# Create sitecustomize.py in USER_SITE directory
-USER_SITE="$("$CONDA_PREFIX"/bin/python -c 'from __future__ import print_function; import site; print(site.getusersitepackages())')"
-mkdir -p "$USER_SITE"
-if [[ ! -s "$USER_SITE/sitecustomize.py" ]]; then
-	touch "$USER_SITE/sitecustomize.py"
-fi
-if ! grep -qE '^\s*(import|from)\s+rich' "$USER_SITE/sitecustomize.py"; then
-	[[ -s "$USER_SITE/sitecustomize.py" ]] && echo >>"$USER_SITE/sitecustomize.py"
-	cat >>"$USER_SITE/sitecustomize.py" <<'EOS'
+	# Exit for non-Python environment
+	[[ -x "$CONDA_PREFIX/bin/python" ]] || continue
+
+	# Create sitecustomize.py in USER_SITE directory
+	USER_SITE="$("$CONDA_PREFIX/bin/python" -c 'from __future__ import print_function; import site; print(site.getusersitepackages())')"
+	mkdir -p "$USER_SITE"
+	if [[ ! -s "$USER_SITE/sitecustomize.py" ]]; then
+		touch "$USER_SITE/sitecustomize.py"
+	fi
+	if ! grep -qE '^\s*(import|from)\s+rich' "$USER_SITE/sitecustomize.py"; then
+		[[ -s "$USER_SITE/sitecustomize.py" ]] && echo >>"$USER_SITE/sitecustomize.py"
+		cat >>"$USER_SITE/sitecustomize.py" <<'EOS'
 try:
     from rich import print
     import rich.pretty
@@ -2168,7 +2171,7 @@ EOF
 chmod +x "$HOME/$CONDA_DIR/etc/init-envs.sh"
 
 # Setup IPython
-echo_and_eval "\"\$HOME/$CONDA_DIR/bin/ipython\" create profile"
+echo_and_eval "\"\$HOME/$CONDA_DIR/bin/ipython\" profile create"
 echo_and_eval "sed -i -E 's/^(\\s*)#?\\s*(c.InteractiveShell.colors).*$/\\1\\2 = \"Linux\"/g' \"\$HOME/.ipython/profile_default/ipython_config.py\""
 echo_and_eval "sed -i -E 's/^(\\s*)#?\\s*(c.InteractiveShell.colors).*$/\\1\\2 = \"Linux\"/g' \"\$HOME/.ipython/profile_default/ipython_kernel_config.py\""
 

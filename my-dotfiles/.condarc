@@ -37,6 +37,7 @@ create_default_packages:
   - pandas
   - seaborn
   - cython
+  - rich
   - tqdm
   - autopep8
   - pylint

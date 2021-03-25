@@ -2066,7 +2066,7 @@ if [[ ! -d "$HOME/$CONDA_DIR" ]]; then
 	else
 		echo_and_eval "wget -N -P \"$TMP_DIR\" https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh"
 	fi
-	echo_and_eval "bash \"$TMP_DIR/Miniconda3-latest-MacOSX-x86_64.sh\" -b -p \"\$HOME/$CONDA_DIR\""
+	echo_and_eval "/bin/sh \"$TMP_DIR/Miniconda3-latest-MacOSX-x86_64.sh\" -b -p \"\$HOME/$CONDA_DIR\""
 fi
 
 # Install Conda packages
@@ -2172,8 +2172,8 @@ chmod +x "$HOME/$CONDA_DIR/etc/init-envs.sh"
 
 # Setup IPython
 echo_and_eval "\"\$HOME/$CONDA_DIR/bin/ipython\" profile create"
-echo_and_eval "sed -i -E 's/^(\\s*)#?\\s*(c.InteractiveShell.colors).*$/\\1\\2 = \"Linux\"/g' \"\$HOME/.ipython/profile_default/ipython_config.py\""
-echo_and_eval "sed -i -E 's/^(\\s*)#?\\s*(c.InteractiveShell.colors).*$/\\1\\2 = \"Linux\"/g' \"\$HOME/.ipython/profile_default/ipython_kernel_config.py\""
+echo_and_eval "sed -i \"\" -E 's/^(\\s*)#?\\s*(c.InteractiveShell.colors).*$/\\1\\2 = \"Linux\"/g' \"\$HOME/.ipython/profile_default/ipython_config.py\""
+echo_and_eval "sed -i \"\" -E 's/^(\\s*)#?\\s*(c.InteractiveShell.colors).*$/\\1\\2 = \"Linux\"/g' \"\$HOME/.ipython/profile_default/ipython_kernel_config.py\""
 
 cat >"$HOME/.ipython/profile_default/startup/00-rich.py" <<'EOF'
 try:

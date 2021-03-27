@@ -17,23 +17,23 @@ fi
 
 # Set PATH so it includes user's private bin if it exists
 if [[ -d "$HOME/.local/bin" ]]; then
-	export PATH="$HOME/.local/bin:$PATH"
+	export PATH="$HOME/.local/bin${PATH:+:"$PATH"}"
 fi
 
 # Set C_INCLUDE_PATH and CPLUS_INCLUDE_PATH so it includes user's private include if it exists
 if [[ -d "$HOME/.local/include" ]]; then
-	export C_INCLUDE_PATH="$HOME/.local/include:$C_INCLUDE_PATH"
-	export CPLUS_INCLUDE_PATH="$HOME/.local/include:$CPLUS_INCLUDE_PATH"
+	export C_INCLUDE_PATH="$HOME/.local/include${C_INCLUDE_PATH:+:"$C_INCLUDE_PATH"}"
+	export CPLUS_INCLUDE_PATH="$HOME/.local/include${CPLUS_INCLUDE_PATH:+:"$CPLUS_INCLUDE_PATH"}"
 fi
 
 # Set LIBRARY_PATH and DYLD_LIBRARY_PATH so it includes user's private lib if it exists
 if [[ -d "$HOME/.local/lib" ]]; then
-	export LIBRARY_PATH="$HOME/.local/lib:$LIBRARY_PATH"
-	export DYLD_LIBRARY_PATH="$HOME/.local/lib:$DYLD_LIBRARY_PATH"
+	export LIBRARY_PATH="$HOME/.local/lib${LIBRARY_PATH:+:"$LIBRARY_PATH"}"
+	export DYLD_LIBRARY_PATH="$HOME/.local/lib${DYLD_LIBRARY_PATH:+:"$DYLD_LIBRARY_PATH"}"
 fi
 if [[ -d "$HOME/.local/lib64" ]]; then
-	export LIBRARY_PATH="$HOME/.local/lib64:$LIBRARY_PATH"
-	export DYLD_LIBRARY_PATH="$HOME/.local/lib64:$DYLD_LIBRARY_PATH"
+	export LIBRARY_PATH="$HOME/.local/lib64${LIBRARY_PATH:+:"$LIBRARY_PATH"}"
+	export DYLD_LIBRARY_PATH="$HOME/.local/lib64${DYLD_LIBRARY_PATH:+:"$DYLD_LIBRARY_PATH"}"
 fi
 
 # User specific environment
@@ -67,7 +67,7 @@ else
 	if [[ -f "$HOME/Miniconda3/etc/profile.d/conda.sh" ]]; then
 		source "$HOME/Miniconda3/etc/profile.d/conda.sh"
 	else
-		export PATH="$HOME/Miniconda3/bin:$PATH"
+		export PATH="$HOME/Miniconda3/bin${PATH:+:"$PATH"}"
 	fi
 fi
 unset __conda_setup
@@ -85,60 +85,60 @@ export OMPI_FC="$FC" MPICH_FC="$FC"
 # Java
 export JAVA_HOME="$(/usr/libexec/java_home)"
 export CLASSPATH=".:$JAVA_HOME/lib/tools.jar:$JAVA_HOME/lib/dt.jar"
-export PATH="$JAVA_HOME/bin:$PATH"
+export PATH="$JAVA_HOME/bin${PATH:+:"$PATH"}"
 
 # Go
 export GOPATH="$HOMEBREW_PREFIX/opt/go"
 export GOBIN="$GOPATH/bin"
 export GOROOT="$GOPATH/libexec"
-export PATH="$GOBIN:$PATH"
+export PATH="$GOBIN${PATH:+:"$PATH"}"
 
 # Ruby
 export RUBYOPT="-W0"
-export PATH="$HOMEBREW_PREFIX/opt/ruby/bin:$PATH"
-export PATH="$(ruby -r rubygems -e 'puts Gem.dir')/bin:$PATH"
-export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
+export PATH="$HOMEBREW_PREFIX/opt/ruby/bin${PATH:+:"$PATH"}"
+export PATH="$(ruby -r rubygems -e 'puts Gem.dir')/bin${PATH:+:"$PATH"}"
+export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin${PATH:+:"$PATH"}"
 
 # Perl
-eval "$(perl -I$HOMEBREW_PREFIX/opt/perl/lib/perl5 -Mlocal::lib=$HOMEBREW_PREFIX/opt/perl)"
+eval "$(perl -I"$HOMEBREW_PREFIX/opt/perl/lib/perl5" -Mlocal::lib="$HOMEBREW_PREFIX/opt/perl")"
 
 # Mono
 export MONO_GAC_PREFIX="$HOMEBREW_PREFIX"
 
 # Qt
-export PATH="$HOMEBREW_PREFIX/opt/qt/bin:$PATH"
+export PATH="$HOMEBREW_PREFIX/opt/qt/bin${PATH:+:"$PATH"}"
 
 # cURL
-export PATH="$HOMEBREW_PREFIX/opt/curl/bin:$PATH"
+export PATH="$HOMEBREW_PREFIX/opt/curl/bin${PATH:+:"$PATH"}"
 
 # OpenSSL
-export PATH="$HOMEBREW_PREFIX/opt/openssl/bin:$PATH"
+export PATH="$HOMEBREW_PREFIX/opt/openssl/bin${PATH:+:"$PATH"}"
 
 # gettext
-export PATH="$HOMEBREW_PREFIX/opt/gettext/bin:$PATH"
+export PATH="$HOMEBREW_PREFIX/opt/gettext/bin${PATH:+:"$PATH"}"
 
 # Bison
-export PATH="$HOMEBREW_PREFIX/opt/bison/bin:$PATH"
+export PATH="$HOMEBREW_PREFIX/opt/bison/bin${PATH:+:"$PATH"}"
 
 # NCURSES
-export PATH="$HOMEBREW_PREFIX/opt/ncurses/bin:$PATH"
-export C_INCLUDE_PATH="$HOMEBREW_PREFIX/opt/ncurses/include:$C_INCLUDE_PATH"
-export CPLUS_INCLUDE_PATH="$HOMEBREW_PREFIX/opt/ncurses/include:$CPLUS_INCLUDE_PATH"
-export LIBRARY_PATH="$HOMEBREW_PREFIX/opt/ncurses/lib:$LIBRARY_PATH"
-export DYLD_LIBRARY_PATH="$HOMEBREW_PREFIX/opt/ncurses/lib:$DYLD_LIBRARY_PATH"
+export PATH="$HOMEBREW_PREFIX/opt/ncurses/bin${PATH:+:"$PATH"}"
+export C_INCLUDE_PATH="$HOMEBREW_PREFIX/opt/ncurses/include${C_INCLUDE_PATH:+:"$C_INCLUDE_PATH"}"
+export CPLUS_INCLUDE_PATH="$HOMEBREW_PREFIX/opt/ncurses/include${CPLUS_INCLUDE_PATH:+:"$CPLUS_INCLUDE_PATH"}"
+export LIBRARY_PATH="$HOMEBREW_PREFIX/opt/ncurses/lib${LIBRARY_PATH:+:"$LIBRARY_PATH"}"
+export DYLD_LIBRARY_PATH="$HOMEBREW_PREFIX/opt/ncurses/lib${DYLD_LIBRARY_PATH:+:"$DYLD_LIBRARY_PATH"}"
 
 # SQLite
-export PATH="$HOMEBREW_PREFIX/opt/sqlite/bin:$PATH"
+export PATH="$HOMEBREW_PREFIX/opt/sqlite/bin${PATH:+:"$PATH"}"
 
 # LLVM
-export PATH="$HOMEBREW_PREFIX/opt/llvm/bin:$PATH"
+export PATH="$HOMEBREW_PREFIX/opt/llvm/bin${PATH:+:"$PATH"}"
 
 # Wine
 export WINEARCH="win32"
 export WINEPREFIX="$HOME/.wine32"
 export WINEDEBUG="-all"
-export DYLD_FALLBACK_LIBRARY_PATH="$DYLD_FALLBACK_LIBRARY_PATH:/usr/X11/lib:$HOMEBREW_PREFIX/lib"
-export DYLD_FALLBACK_LIBRARY_PATH="$DYLD_FALLBACK_LIBRARY_PATH:$HOMEBREW_PREFIX/opt/ncurses/lib"
+export DYLD_FALLBACK_LIBRARY_PATH="${DYLD_FALLBACK_LIBRARY_PATH:+"$DYLD_FALLBACK_LIBRARY_PATH":}/usr/X11/lib:$HOMEBREW_PREFIX/lib"
+export DYLD_FALLBACK_LIBRARY_PATH="${DYLD_FALLBACK_LIBRARY_PATH:+"$DYLD_FALLBACK_LIBRARY_PATH":}$HOMEBREW_PREFIX/opt/ncurses/lib"
 
 # fzf
 if [[ -f "$HOME/.fzf.bash" ]]; then
@@ -161,9 +161,9 @@ fi
 function __remove_duplicate() {
 	local SEP="$1" NAME="$2" VALUE
 	VALUE="$(
-		eval "printf \"%s\" \"\$$NAME\"" | /usr/bin/awk -v RS="$SEP" \
-			'BEGIN { idx = 0; }
-			{ if (!(exists[$0]++)) printf("%s%s", (!(idx++) ? "" : RS), $0); }'
+		eval "printf \"%s%s\" \"\$$NAME\" \"$SEP\"" |
+			/usr/bin/awk -v RS="$SEP" 'BEGIN { idx = 0; }
+				{ if (!(exists[$0]++)) printf("%s%s", (!(idx++) ? "" : RS), $0); }'
 	)"
 	if [[ -n "$VALUE" ]]; then
 		export "$NAME"="$VALUE"

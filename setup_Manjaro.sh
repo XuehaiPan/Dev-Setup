@@ -303,8 +303,8 @@ ln -sf .dotfiles/.gemrc .
 # Install Color LS
 if [[ -x "$(command -v ruby)" && -x "$(command -v gem)" ]]; then
 	export RUBYOPT="-W0"
-	export PATH="$(ruby -r rubygems -e 'puts Gem.dir')/bin:$PATH"
-	export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
+	export PATH="$(ruby -r rubygems -e 'puts Gem.dir')/bin${PATH:+:"$PATH"}"
+	export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin${PATH:+:"$PATH"}"
 	echo_and_eval 'gem install colorls --user-install'
 	echo_and_eval 'gem cleanup --user-install'
 fi
@@ -327,7 +327,7 @@ if $SET_MIRRORS; then
 	fi
 fi
 echo_and_eval "perl -MCPAN -e 'install local::lib'"
-echo_and_eval 'eval "$(perl -I$HOME/.perl/lib/perl5 -Mlocal::lib=$HOME/.perl)"'
+echo_and_eval 'eval "$(perl -I"$HOME/.perl/lib/perl5" -Mlocal::lib="$HOME/.perl")"'
 echo_and_eval "perl -MCPAN -e 'install CPAN'"
 echo_and_eval "AUTOMATED_TESTING=1 perl -MCPAN -e 'install Term::ReadLine::Perl, Term::ReadKey'"
 
@@ -353,23 +353,23 @@ fi
 
 # Set PATH so it includes user's private bin if it exists
 if [[ -d "$HOME/.local/bin" ]]; then
-	export PATH="$HOME/.local/bin:$PATH"
+	export PATH="$HOME/.local/bin${PATH:+:"$PATH"}"
 fi
 
 # Set C_INCLUDE_PATH and CPLUS_INCLUDE_PATH so it includes user's private include if it exists
 if [[ -d "$HOME/.local/include" ]]; then
-	export C_INCLUDE_PATH="$HOME/.local/include:$C_INCLUDE_PATH"
-	export CPLUS_INCLUDE_PATH="$HOME/.local/include:$CPLUS_INCLUDE_PATH"
+	export C_INCLUDE_PATH="$HOME/.local/include${C_INCLUDE_PATH:+:"$C_INCLUDE_PATH"}"
+	export CPLUS_INCLUDE_PATH="$HOME/.local/include${CPLUS_INCLUDE_PATH:+:"$CPLUS_INCLUDE_PATH"}"
 fi
 
 # Set LIBRARY_PATH and LD_LIBRARY_PATH so it includes user's private lib if it exists
 if [[ -d "$HOME/.local/lib" ]]; then
-	export LIBRARY_PATH="$HOME/.local/lib:$LIBRARY_PATH"
-	export LD_LIBRARY_PATH="$HOME/.local/lib:$LD_LIBRARY_PATH"
+	export LIBRARY_PATH="$HOME/.local/lib${LIBRARY_PATH:+:"$LIBRARY_PATH"}"
+	export LD_LIBRARY_PATH="$HOME/.local/lib${LD_LIBRARY_PATH:+:"$LD_LIBRARY_PATH"}"
 fi
 if [[ -d "$HOME/.local/lib64" ]]; then
-	export LIBRARY_PATH="$HOME/.local/lib64:$LIBRARY_PATH"
-	export LD_LIBRARY_PATH="$HOME/.local/lib64:$LD_LIBRARY_PATH"
+	export LIBRARY_PATH="$HOME/.local/lib64${LIBRARY_PATH:+:"$LIBRARY_PATH"}"
+	export LD_LIBRARY_PATH="$HOME/.local/lib64${LD_LIBRARY_PATH:+:"$LD_LIBRARY_PATH"}"
 fi
 
 # User specific environment
@@ -391,7 +391,7 @@ else
 	if [[ -f "\$HOME/$CONDA_DIR/etc/profile.d/conda.sh" ]]; then
 		source "\$HOME/$CONDA_DIR/etc/profile.d/conda.sh"
 	else
-		export PATH="\$HOME/$CONDA_DIR/bin:\$PATH"
+		export PATH="\$HOME/$CONDA_DIR/bin\${PATH:+:"\$PATH"}"
 	fi
 fi
 unset __conda_setup
@@ -410,12 +410,12 @@ export OMPI_FC="$FC" MPICH_FC="$FC"
 # Ruby
 if [[ -x "$(command -v ruby)" && -x "$(command -v gem)" ]]; then
 	export RUBYOPT="-W0"
-	export PATH="$(ruby -r rubygems -e 'puts Gem.dir')/bin:$PATH"
-	export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
+	export PATH="$(ruby -r rubygems -e 'puts Gem.dir')/bin${PATH:+:"$PATH"}"
+	export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin${PATH:+:"$PATH"}"
 fi
 
 # Perl
-eval "$(perl -I$HOME/.perl/lib/perl5 -Mlocal::lib=$HOME/.perl)"
+eval "$(perl -I"$HOME/.perl/lib/perl5" -Mlocal::lib="$HOME/.perl")"
 
 # fzf
 if [[ -f "$HOME/.fzf.zsh" ]]; then
@@ -435,9 +435,9 @@ export BAT_THEME="Monokai Extended"
 function __remove_duplicate() {
 	local SEP="$1" NAME="$2" VALUE
 	VALUE="$(
-		eval "printf \"%s\" \"\$$NAME\"" | /usr/bin/awk -v RS="$SEP" \
-			'BEGIN { idx = 0; }
-			{ if (!(exists[$0]++)) printf("%s%s", (!(idx++) ? "" : RS), $0); }'
+		eval "printf \"%s%s\" \"\$$NAME\" \"$SEP\"" |
+			/usr/bin/awk -v RS="$SEP" 'BEGIN { idx = 0; }
+				{ if (!(exists[$0]++)) printf("%s%s", (!(idx++) ? "" : RS), $0); }'
 	)"
 	if [[ -n "$VALUE" ]]; then
 		export "$NAME"="$VALUE"
@@ -580,7 +580,7 @@ source "$ZSH/oh-my-zsh.sh"
 
 # User configuration
 
-# export MANPATH="/usr/local/man:$MANPATH"
+# export MANPATH="/usr/local/man${MANPATH:+:"$MANPATH"}"
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
@@ -990,23 +990,23 @@ fi
 
 # Set PATH so it includes user's private bin if it exists
 if [[ -d "$HOME/.local/bin" ]]; then
-	export PATH="$HOME/.local/bin:$PATH"
+	export PATH="$HOME/.local/bin${PATH:+:"$PATH"}"
 fi
 
 # Set C_INCLUDE_PATH and CPLUS_INCLUDE_PATH so it includes user's private include if it exists
 if [[ -d "$HOME/.local/include" ]]; then
-	export C_INCLUDE_PATH="$HOME/.local/include:$C_INCLUDE_PATH"
-	export CPLUS_INCLUDE_PATH="$HOME/.local/include:$CPLUS_INCLUDE_PATH"
+	export C_INCLUDE_PATH="$HOME/.local/include${C_INCLUDE_PATH:+:"$C_INCLUDE_PATH"}"
+	export CPLUS_INCLUDE_PATH="$HOME/.local/include${CPLUS_INCLUDE_PATH:+:"$CPLUS_INCLUDE_PATH"}"
 fi
 
 # Set LIBRARY_PATH and LD_LIBRARY_PATH so it includes user's private lib if it exists
 if [[ -d "$HOME/.local/lib" ]]; then
-	export LIBRARY_PATH="$HOME/.local/lib:$LIBRARY_PATH"
-	export LD_LIBRARY_PATH="$HOME/.local/lib:$LD_LIBRARY_PATH"
+	export LIBRARY_PATH="$HOME/.local/lib${LIBRARY_PATH:+:"$LIBRARY_PATH"}"
+	export LD_LIBRARY_PATH="$HOME/.local/lib${LD_LIBRARY_PATH:+:"$LD_LIBRARY_PATH"}"
 fi
 if [[ -d "$HOME/.local/lib64" ]]; then
-	export LIBRARY_PATH="$HOME/.local/lib64:$LIBRARY_PATH"
-	export LD_LIBRARY_PATH="$HOME/.local/lib64:$LD_LIBRARY_PATH"
+	export LIBRARY_PATH="$HOME/.local/lib64${LIBRARY_PATH:+:"$LIBRARY_PATH"}"
+	export LD_LIBRARY_PATH="$HOME/.local/lib64${LD_LIBRARY_PATH:+:"$LD_LIBRARY_PATH"}"
 fi
 
 # User specific environment and startup programs
@@ -1033,7 +1033,7 @@ else
 	if [[ -f "\$HOME/$CONDA_DIR/etc/profile.d/conda.sh" ]]; then
 		source "\$HOME/$CONDA_DIR/etc/profile.d/conda.sh"
 	else
-		export PATH="\$HOME/$CONDA_DIR/bin:\$PATH"
+		export PATH="\$HOME/$CONDA_DIR/bin\${PATH:+:"\$PATH"}"
 	fi
 fi
 unset __conda_setup
@@ -1052,12 +1052,12 @@ export OMPI_FC="$FC" MPICH_FC="$FC"
 # Ruby
 if [[ -x "$(command -v ruby)" && -x "$(command -v gem)" ]]; then
 	export RUBYOPT="-W0"
-	export PATH="$(ruby -r rubygems -e 'puts Gem.dir')/bin:$PATH"
-	export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin:$PATH"
+	export PATH="$(ruby -r rubygems -e 'puts Gem.dir')/bin${PATH:+:"$PATH"}"
+	export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin${PATH:+:"$PATH"}"
 fi
 
 # Perl
-eval "$(perl -I$HOME/.perl/lib/perl5 -Mlocal::lib=$HOME/.perl)"
+eval "$(perl -I"$HOME/.perl/lib/perl5" -Mlocal::lib="$HOME/.perl")"
 
 # fzf
 if [[ -f "$HOME/.fzf.bash" ]]; then
@@ -1077,9 +1077,9 @@ export BAT_THEME="Monokai Extended"
 function __remove_duplicate() {
 	local SEP="$1" NAME="$2" VALUE
 	VALUE="$(
-		eval "printf \"%s\" \"\$$NAME\"" | /usr/bin/awk -v RS="$SEP" \
-			'BEGIN { idx = 0; }
-			{ if (!(exists[$0]++)) printf("%s%s", (!(idx++) ? "" : RS), $0); }'
+		eval "printf \"%s%s\" \"\$$NAME\" \"$SEP\"" |
+			/usr/bin/awk -v RS="$SEP" 'BEGIN { idx = 0; }
+				{ if (!(exists[$0]++)) printf("%s%s", (!(idx++) ? "" : RS), $0); }'
 	)"
 	if [[ -n "$VALUE" ]]; then
 		export "$NAME"="$VALUE"
@@ -1875,7 +1875,7 @@ if [[ ! -d "$HOME/$CONDA_DIR" ]]; then
 fi
 
 # Install Conda packages
-export PATH="$PATH:$HOME/$CONDA_DIR/condabin"
+export PATH="${PATH:+"$PATH":}$HOME/$CONDA_DIR/condabin"
 echo_and_eval 'conda update conda --yes'
 echo_and_eval 'conda install pip ipython ipdb \
 	jupyter notebook jupyterlab jupyter_contrib_nbextensions \

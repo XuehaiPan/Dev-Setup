@@ -67,11 +67,11 @@ function echo_and_eval() {
 						style = UNDERLINE GREEN;
 						post_style = UNDERLINEOFF WHITE;
 					}
-					else if ($i ~ "^" IDENTIFIER "+=" && idx == 0) {
+					else if ($i ~ "^" IDENTIFIER "=" && idx == 0) {
 						style = GRAY;
-						'"if (\$i ~ \"^\" IDENTIFIER \"+=[\\\"']\") {"'
+						'"if (\$i ~ \"^\" IDENTIFIER \"=[\\\"']\") {"'
 							in_string = 1;
-							double_quoted = ($i ~ "^" IDENTIFIER "+=\"");
+							double_quoted = ($i ~ "^" IDENTIFIER "=\"");
 						}
 					}
 					else if ($i ~ /^[12&]?>>?/ || $i == "\\")
@@ -702,11 +702,11 @@ function echo_and_eval() {
 						style = UNDERLINE GREEN;
 						post_style = UNDERLINEOFF WHITE;
 					}
-					else if ($i ~ "^" IDENTIFIER "+=" && idx == 0) {
+					else if ($i ~ "^" IDENTIFIER "=" && idx == 0) {
 						style = GRAY;
-						'"if (\$i ~ \"^\" IDENTIFIER \"+=[\\\"']\") {"'
+						'"if (\$i ~ \"^\" IDENTIFIER \"=[\\\"']\") {"'
 							in_string = 1;
-							double_quoted = ($i ~ "^" IDENTIFIER "+=\"");
+							double_quoted = ($i ~ "^" IDENTIFIER "=\"");
 						}
 					}
 					else if ($i ~ /^[12&]?>>?/ || $i == "\\")

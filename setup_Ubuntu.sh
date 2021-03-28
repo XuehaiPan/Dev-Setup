@@ -369,7 +369,7 @@ if $SET_MIRRORS; then
 	fi
 fi
 echo_and_eval "perl -MCPAN -e 'install local::lib'"
-echo_and_eval 'eval "$(perl -I"$HOME/.perl/lib/perl5" -Mlocal::lib="$HOME/.perl")"'
+echo_and_eval 'eval "$(perl -I$HOME/.perl/lib/perl5 -Mlocal::lib=$HOME/.perl)"'
 echo_and_eval "perl -MCPAN -e 'install CPAN'"
 echo_and_eval "AUTOMATED_TESTING=1 perl -MCPAN -e 'install Term::ReadLine::Perl, Term::ReadKey'"
 

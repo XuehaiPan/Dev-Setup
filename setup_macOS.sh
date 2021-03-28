@@ -4,9 +4,9 @@
 export SET_MIRRORS="${SET_MIRRORS:-false}"
 
 # Set PATH
-HOMEBREW_PREFIX="/usr/local"
+export HOMEBREW_PREFIX="/usr/local"
 if [[ "$(uname -m)" == "arm64" ]]; then
-	HOMEBREW_PREFIX="/opt/homebrew"
+	export HOMEBREW_PREFIX="/opt/homebrew"
 fi
 export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin:/Library/Apple/bin:$HOMEBREW_PREFIX/bin${PATH:+:"$PATH"}"
 
@@ -331,7 +331,7 @@ if $SET_MIRRORS; then
 	fi
 fi
 echo_and_eval "perl -MCPAN -e 'install local::lib'"
-echo_and_eval "eval \"\$(perl -I\"\$HOMEBREW_PREFIX/opt/perl/lib/perl5\" -Mlocal::lib=\"\$HOMEBREW_PREFIX/opt/perl\")\""
+echo_and_eval 'eval "$(perl -I$HOMEBREW_PREFIX/opt/perl/lib/perl5 -Mlocal::lib=$HOMEBREW_PREFIX/opt/perl)"'
 echo_and_eval "perl -MCPAN -e 'install CPAN'"
 echo_and_eval "AUTOMATED_TESTING=1 perl -MCPAN -e 'install Term::ReadLine::Perl, Term::ReadKey'"
 
@@ -428,7 +428,7 @@ export PATH="$(ruby -r rubygems -e 'puts Gem.dir')/bin${PATH:+:"$PATH"}"
 export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin${PATH:+:"$PATH"}"
 
 # Perl
-eval "$(perl -I\"$HOMEBREW_PREFIX/opt/perl/lib/perl5\" -Mlocal::lib=\"$HOMEBREW_PREFIX/opt/perl\")"
+eval "$(perl -I"$HOMEBREW_PREFIX/opt/perl/lib/perl5" -Mlocal::lib="$HOMEBREW_PREFIX/opt/perl")"
 
 # cURL
 export PATH="$HOMEBREW_PREFIX/opt/curl/bin${PATH:+:"$PATH"}"
@@ -1109,7 +1109,7 @@ export PATH="$(ruby -r rubygems -e 'puts Gem.dir')/bin${PATH:+:"$PATH"}"
 export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin${PATH:+:"$PATH"}"
 
 # Perl
-eval "$(perl -I$HOMEBREW_PREFIX/opt/perl/lib/perl5 -Mlocal::lib=$HOMEBREW_PREFIX/opt/perl)"
+eval "$(perl -I"$HOMEBREW_PREFIX/opt/perl/lib/perl5" -Mlocal::lib="$HOMEBREW_PREFIX/opt/perl")"
 
 # cURL
 export PATH="$HOMEBREW_PREFIX/opt/curl/bin${PATH:+:"$PATH"}"

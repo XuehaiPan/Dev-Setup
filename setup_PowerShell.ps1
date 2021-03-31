@@ -32,7 +32,7 @@ Import-Module -Name posh-git -ErrorAction:Ignore
 Import-Module -Name oh-my-posh -ErrorAction:Ignore
 Import-Module -Name Get-ChildItemColor -ErrorAction:Ignore
 if (Test-Path -Path ~\Miniconda3\shell\condabin\conda-hook.ps1) {
-    & ~\Miniconda3\shell\condabin\conda-hook.ps1
+    . ~\Miniconda3\shell\condabin\conda-hook.ps1
 }
 
 Set-PoshPrompt -Theme ys -ErrorAction:Ignore
@@ -85,7 +85,7 @@ Function Reset-Proxy() {
 "@ | Set-Content -Path $PROFILE.CurrentUserAllHosts -Encoding utf8
 
 Update-SessionEnvironment
-& $PROFILE.CurrentUserAllHosts
+. $PROFILE.CurrentUserAllHosts
 
 # Install Chocolatey packages
 choco install vim --params="'/InstallDir:$Env:ChocolateyToolsLocation\Vim /NoDesktopShortcuts'" --yes

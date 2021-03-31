@@ -5,7 +5,7 @@ Import-Module -Name posh-git -ErrorAction:Ignore
 Import-Module -Name oh-my-posh -ErrorAction:Ignore
 Import-Module -Name Get-ChildItemColor -ErrorAction:Ignore
 if (Test-Path -Path ~\Miniconda3\shell\condabin\conda-hook.ps1) {
-    & ~\Miniconda3\shell\condabin\conda-hook.ps1
+    . ~\Miniconda3\shell\condabin\conda-hook.ps1
 }
 
 Set-PoshPrompt -Theme ys -ErrorAction:Ignore

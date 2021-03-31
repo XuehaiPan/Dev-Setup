@@ -2172,8 +2172,8 @@ chmod +x "$HOME/$CONDA_DIR/etc/init-envs.sh"
 
 # Setup IPython
 echo_and_eval "\"\$HOME/$CONDA_DIR/bin/ipython\" profile create"
-echo_and_eval "sed -i \"\" -E 's/^(\\s*)#?\\s*(c.InteractiveShell.colors).*$/\\1\\2 = \"Linux\"/g' \"\$HOME/.ipython/profile_default/ipython_config.py\""
-echo_and_eval "sed -i \"\" -E 's/^(\\s*)#?\\s*(c.InteractiveShell.colors).*$/\\1\\2 = \"Linux\"/g' \"\$HOME/.ipython/profile_default/ipython_kernel_config.py\""
+echo_and_eval "sed -i \"\" -E 's/^ *#? *(c.InteractiveShell.colors).*\$/\\1 = \"Linux\"/g' \"\$HOME/.ipython/profile_default/ipython_config.py\""
+echo_and_eval "sed -i \"\" -E 's/^ *#? *(c.InteractiveShell.colors).*\$/\\1 = \"Linux\"/g' \"\$HOME/.ipython/profile_default/ipython_kernel_config.py\""
 
 cat >"$HOME/.ipython/profile_default/startup/00-rich.py" <<'EOF'
 try:

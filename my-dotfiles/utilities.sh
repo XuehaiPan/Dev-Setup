@@ -265,7 +265,7 @@ function auto_reannounce_trackers() {
 }
 
 function pull_projects() {
-	local BASE_DIRS BASE_DIR PROJ_DIR
+	local BASE_DIRS BASE_DIR PROJ_DIR HEAD_HASH
 
 	# Project directories
 	BASE_DIRS=("$HOME/VSCodeProjects" "$HOME/PycharmProjects" "$HOME/ClionProjects" "$HOME/IdeaProjects")
@@ -275,8 +275,11 @@ function pull_projects() {
 		while read -r PROJ_DIR; do
 			if [[ -n "$(git -C "$PROJ_DIR" remote)" ]]; then
 				echo_and_eval "git -C \"${PROJ_DIR/#$HOME/\$HOME}\" fetch --all --prune"
+				HEAD_HASH="$(git -C "$PROJ_DIR" rev-parse HEAD)"
 				echo_and_eval "git -C \"${PROJ_DIR/#$HOME/\$HOME}\" pull --ff-only"
-				echo_and_eval "git -C \"${PROJ_DIR/#$HOME/\$HOME}\" gc --aggressive"
+				if [[ "$HEAD_HASH" != "$(git -C "$PROJ_DIR" rev-parse HEAD)" ]]; then
+					echo_and_eval "git -C \"${PROJ_DIR/#$HOME/\$HOME}\" gc --aggressive"
+				fi
 			fi
 		done < <(
 			find -L "$BASE_DIR" -not -empty -type d -name '.git' -prune -print0 |

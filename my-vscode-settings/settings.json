@@ -206,6 +206,13 @@
             "!Module"
         ]
     },
+    "[restructuredtext]": {
+        "editor.tabSize": 4,
+        "editor.wordWrap": "on",
+        "editor.renderWhitespace": "all",
+        "editor.quickSuggestions": true,
+        "editor.acceptSuggestionOnEnter": "off"
+    },
     "[shellscript]": {
         "editor.insertSpaces": false
     },

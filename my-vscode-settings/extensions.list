@@ -1,6 +1,7 @@
 ms-vscode.azure-account
 rogalmic.bash-debug
 aaron-bond.better-comments
+jeff-hykin.better-cpp-syntax
 jeff-hykin.better-shellscript-syntax
 CoenraadS.bracket-pair-colorizer-2
 twxs.cmake
@@ -23,6 +24,7 @@ redhat.java
 ms-toolsai.jupyter
 julialang.language-julia
 James-Yu.latex-workshop
+ritwickdey.LiveServer
 xyz.local-history
 yzhang.markdown-all-in-one
 PKief.material-icon-theme
@@ -42,6 +44,8 @@ ms-vscode-remote.remote-containers
 ms-vscode-remote.remote-ssh
 ms-vscode-remote.remote-ssh-edit
 ms-vscode-remote.remote-wsl
+lextudio.restructuredtext
+trond-snekvik.simple-rst
 stkb.rewrap
 rebornix.ruby
 liximomo.sftp

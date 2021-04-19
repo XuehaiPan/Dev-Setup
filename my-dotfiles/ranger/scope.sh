@@ -227,7 +227,7 @@ handle_image() {
             { [ "$rar" ] && fn=$( unrar lb -p- -- "${FILE_PATH}" ); } ||
             { [ "$zip" ] && fn=$( zipinfo -1 -- "${FILE_PATH}" ); } || return
 
-            fn=$( echo "$fn" | python -c "from __future__ import print_function \
+            fn=$( echo "$fn" | python -c "from __future__ import print_function; \
                     import sys; import mimetypes as m; \
                     [ print(l, end='') for l in sys.stdin \
                       if (m.guess_type(l[:-1])[0] or '').startswith('image/') ]" |

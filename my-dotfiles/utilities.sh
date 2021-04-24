@@ -268,7 +268,11 @@ function pull_projects() {
 	local BASE_DIRS BASE_DIR PROJ_DIR HEAD_HASH
 
 	# Project directories
-	BASE_DIRS=("$HOME/VSCodeProjects" "$HOME/PycharmProjects" "$HOME/ClionProjects" "$HOME/IdeaProjects")
+	if [ "$#" -gt 0 ]; then
+		BASE_DIRS=("$@")
+	else
+		BASE_DIRS=("$HOME/VSCodeProjects" "$HOME/PycharmProjects" "$HOME/ClionProjects" "$HOME/IdeaProjects")
+	fi
 
 	# Fetch and pull
 	for BASE_DIR in "${BASE_DIRS[@]}"; do
@@ -282,7 +286,7 @@ function pull_projects() {
 				fi
 			fi
 		done < <(
-			find -L "$BASE_DIR" -not -empty -type d -name '.git' -prune -print0 |
+			find "$BASE_DIR" -maxdepth 5 -not -empty -type d -name '.git' -prune -print0 |
 				xargs -0 -L 1 dirname
 		)
 	done

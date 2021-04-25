@@ -1435,7 +1435,7 @@ EOF
 # Install Vim-Plug plugin manager
 if [[ ! -f "$HOME/.vim/autoload/plug.vim" ]]; then
 	echo_and_eval 'curl -fL#o "$HOME/.vim/autoload/plug.vim" --create-dirs \
-		https://github.com/junegunn/vim-plug/raw/master/plug.vim'
+		https://github.com/junegunn/vim-plug/raw/HEAD/plug.vim'
 fi
 
 # Install Vim plugins
@@ -1535,7 +1535,7 @@ bind-key -n S-Right next-window
 bind-key r source-file ~/.tmux.conf \; display-message "tmux.conf reloaded"
 EOF
 
-echo_and_eval 'wget -N -P "$HOME/.dotfiles" https://github.com/gpakosz/.tmux/raw/master/.tmux.conf{,.local}'
+echo_and_eval 'wget -N -P "$HOME/.dotfiles" https://github.com/gpakosz/.tmux/raw/HEAD/.tmux.conf{,.local}'
 ln -sf .dotfiles/.tmux.conf .
 ln -sf .dotfiles/.tmux.conf.local .
 
@@ -2005,7 +2005,7 @@ URL_LIST=(
 	"https://github.com/ryanoasis/nerd-fonts/releases/latest/download/DejaVuSansMono.zip"
 	"https://github.com/microsoft/cascadia-code/releases/latest/download/CascadiaCode-${LATEST_CASCADIA_VERSION#v}.zip"
 )
-echo_and_eval "wget -N -P \"$TMP_DIR/fonts\" https://github.com/XuehaiPan/Dev-Setup/raw/master/Menlo.ttc"
+echo_and_eval "wget -N -P \"$TMP_DIR/fonts\" https://github.com/XuehaiPan/Dev-Setup/raw/HEAD/Menlo.ttc"
 for url in "${URL_LIST[@]}"; do
 	echo_and_eval "wget -N -P \"$TMP_DIR\" $url"
 	echo_and_eval "unzip -o \"$TMP_DIR/$(basename "$url")\" -d \"$TMP_DIR/fonts\""

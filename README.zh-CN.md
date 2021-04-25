@@ -19,20 +19,20 @@
 
 ### 安装
 
-使用 [wget](https://www.gnu.org/software/wget) / [curl](https://curl.haxx.se) / [git](https://git-scm.com) 或浏览器（[点此下载 zip](https://codeload.github.com/XuehaiPan/Dev-Setup/zip/master)）下载本脚本。打开 `终端` 运行如下命令：
+使用 [wget](https://www.gnu.org/software/wget) / [curl](https://curl.haxx.se) / [git](https://git-scm.com) 或浏览器（[点此下载 zip](https://codeload.github.com/XuehaiPan/Dev-Setup/zip/HEAD)）下载本脚本。打开 `终端` 运行如下命令：
 
 **via wget**
 
 ```bash
 # Download and run via wget
-/bin/bash -c "$(wget -O - https://github.com/XuehaiPan/Dev-Setup/raw/master/setup.sh)"
+/bin/bash -c "$(wget -O - https://github.com/XuehaiPan/Dev-Setup/raw/HEAD/setup.sh)"
 ```
 
 **via curl**
 
 ```bash
 # Download and run via curl
-/bin/bash -c "$(curl -fL https://github.com/XuehaiPan/Dev-Setup/raw/master/setup.sh)"
+/bin/bash -c "$(curl -fL https://github.com/XuehaiPan/Dev-Setup/raw/HEAD/setup.sh)"
 ```
 
 **via git or browser**
@@ -109,7 +109,7 @@ upgrade_packages; upgrade_conda
 
 ### 字体设置
 
-当前用户的默认 Shell 将被设置为 **`zsh`**。为了获得更好的终端体验，请将你的终端字体设置为 [**Nerd Font**](https://github.com/ryanoasis/nerd-fonts)。你可以从 [nerdfonts.com](https://www.nerdfonts.com) 手动下载你喜欢的字体。本脚本将为 **macOS**、**Linux** 和 **Windows** 用户自动下载安装 [**`DejaVu Sans Mono Nerd Font`**](https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/DejaVuSansMono)。（Windows 下安装字体需要 **管理员权限**）
+当前用户的默认 Shell 将被设置为 **`zsh`**。为了获得更好的终端体验，请将你的终端字体设置为 [**Nerd Font**](https://github.com/ryanoasis/nerd-fonts)。你可以从 [nerdfonts.com](https://www.nerdfonts.com) 手动下载你喜欢的字体。本脚本将为 **macOS**、**Linux** 和 **Windows** 用户自动下载安装 [**`DejaVu Sans Mono Nerd Font`**](https://github.com/ryanoasis/nerd-fonts/blob/HEAD/patched-fonts/DejaVuSansMono)。（Windows 下安装字体需要 **管理员权限**）
 
 将的终端字体设置为 nerd font：
 
@@ -170,7 +170,7 @@ ln -sf .dotfiles/<CFG_FILE> .
 
 | Package                                                                                                                          | macOS | Ubuntu Linux | Manjaro Linux |
 | :------------------------------------------------------------------------------------------------------------------------------- | :---: | :----------: | :-----------: |
-| [Mirrors at TUNA (@China)](https://mirrors.tuna.tsinghua.edu.cn)                                                                  |   ✔   |      ✔       |       ✔       |
+| [Mirrors at TUNA (@China)](https://mirrors.tuna.tsinghua.edu.cn)                                                                 |   ✔   |      ✔       |       ✔       |
 | [Homebrew (macOS)](https://brew.sh)                                                                                              |   ✔   |      ✘       |       ✘       |
 |                                                                                                                                  |       |              |               |
 | [bash](https://www.gnu.org/software/bash)                                                                                        |   ✔   |      ✔       |       ✔       |
@@ -220,9 +220,9 @@ ln -sf .dotfiles/<CFG_FILE> .
 | [automake](https://www.gnu.org/software/automake)                                                                                |   ✔   |      ✔       |       ✔       |
 | [autoconf](https://www.gnu.org/software/autoconf)                                                                                |   ✔   |      ✔       |       ✔       |
 |                                                                                                                                  |       |              |               |
-| [DejaVu Sans Mono Nerd Font](https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/DejaVuSansMono)                   |   ✔   |      ✔       |       ✔       |
+| [DejaVu Sans Mono Nerd Font](https://github.com/ryanoasis/nerd-fonts/blob/HEAD/patched-fonts/DejaVuSansMono)                     |   ✔   |      ✔       |       ✔       |
 | [Cascadia Code Font](https://github.com/microsoft/cascadia-code)                                                                 |   ✔   |      ✔       |       ✔       |
-| [Menlo Font](https://github.com/XuehaiPan/Dev-Setup/blob/master/Menlo.zip)                                                        |   ✔   |      ✔       |       ✔       |
+| [Menlo Font](https://github.com/XuehaiPan/Dev-Setup/blob/HEAD/Menlo.zip)                                                         |   ✔   |      ✔       |       ✔       |
 
 仅在 macOS 上由 Homebrew 安装的 App：
 

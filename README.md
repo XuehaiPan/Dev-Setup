@@ -19,20 +19,20 @@ Automation scripts for setting up basic development environment. ([screenshots](
 
 ### Installation
 
-Download the script file using [wget](https://www.gnu.org/software/wget) / [curl](https://curl.haxx.se) / [git](https://git-scm.com) or any browser ([click here to download zip](https://codeload.github.com/XuehaiPan/Dev-Setup/zip/master)). Open `Terminal` and run:
+Download the script file using [wget](https://www.gnu.org/software/wget) / [curl](https://curl.haxx.se) / [git](https://git-scm.com) or any browser ([click here to download zip](https://codeload.github.com/XuehaiPan/Dev-Setup/zip/HEAD)). Open `Terminal` and run:
 
 **via wget**
 
 ```bash
 # Download and run via wget
-/bin/bash -c "$(wget -O - https://github.com/XuehaiPan/Dev-Setup/raw/master/setup.sh)"
+/bin/bash -c "$(wget -O - https://github.com/XuehaiPan/Dev-Setup/raw/HEAD/setup.sh)"
 ```
 
 **via curl**
 
 ```bash
 # Download and run via curl
-/bin/bash -c "$(curl -fL https://github.com/XuehaiPan/Dev-Setup/raw/master/setup.sh)"
+/bin/bash -c "$(curl -fL https://github.com/XuehaiPan/Dev-Setup/raw/HEAD/setup.sh)"
 ```
 
 **via git or browser**
@@ -109,7 +109,7 @@ upgrade_packages; upgrade_conda
 
 ### Font Settings
 
-The login shell for the current user will be set to **`zsh`**. In order to get a wonderful and enjoyable terminal experience, please change your terminal font to a [**Nerd Font**](https://github.com/ryanoasis/nerd-fonts). You can download any nerd font you like from [nerdfonts.com](https://www.nerdfonts.com) manually. The script will download and install [**`DejaVu Sans Mono Nerd Font`**](https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/DejaVuSansMono) for **macOS**, **Linux** and **Windows** (**administrator privilege** is required to install fonts on Windows).
+The login shell for the current user will be set to **`zsh`**. In order to get a wonderful and enjoyable terminal experience, please change your terminal font to a [**Nerd Font**](https://github.com/ryanoasis/nerd-fonts). You can download any nerd font you like from [nerdfonts.com](https://www.nerdfonts.com) manually. The script will download and install [**`DejaVu Sans Mono Nerd Font`**](https://github.com/ryanoasis/nerd-fonts/blob/HEAD/patched-fonts/DejaVuSansMono) for **macOS**, **Linux** and **Windows** (**administrator privilege** is required to install fonts on Windows).
 
 Configure your terminal to use nerd fonts:
 
@@ -170,7 +170,7 @@ The following packages will be setup:
 
 | Package                                                                                                                          | macOS | Ubuntu Linux | Manjaro Linux |
 | :------------------------------------------------------------------------------------------------------------------------------- | :---: | :----------: | :-----------: |
-| [Mirrors at TUNA (@China)](https://mirrors.tuna.tsinghua.edu.cn)                                                                  |   ✔   |      ✔       |       ✔       |
+| [Mirrors at TUNA (@China)](https://mirrors.tuna.tsinghua.edu.cn)                                                                 |   ✔   |      ✔       |       ✔       |
 | [Homebrew (macOS)](https://brew.sh)                                                                                              |   ✔   |      ✘       |       ✘       |
 |                                                                                                                                  |       |              |               |
 | [bash](https://www.gnu.org/software/bash)                                                                                        |   ✔   |      ✔       |       ✔       |
@@ -220,9 +220,9 @@ The following packages will be setup:
 | [automake](https://www.gnu.org/software/automake)                                                                                |   ✔   |      ✔       |       ✔       |
 | [autoconf](https://www.gnu.org/software/autoconf)                                                                                |   ✔   |      ✔       |       ✔       |
 |                                                                                                                                  |       |              |               |
-| [DejaVu Sans Mono Nerd Font](https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/DejaVuSansMono)                   |   ✔   |      ✔       |       ✔       |
+| [DejaVu Sans Mono Nerd Font](https://github.com/ryanoasis/nerd-fonts/blob/HEAD/patched-fonts/DejaVuSansMono)                     |   ✔   |      ✔       |       ✔       |
 | [Cascadia Code Font](https://github.com/microsoft/cascadia-code)                                                                 |   ✔   |      ✔       |       ✔       |
-| [Menlo Font](https://github.com/XuehaiPan/Dev-Setup/blob/master/Menlo.zip)                                                       |   ✔   |      ✔       |       ✔       |
+| [Menlo Font](https://github.com/XuehaiPan/Dev-Setup/blob/HEAD/Menlo.zip)                                                         |   ✔   |      ✔       |       ✔       |
 
 Currently macOS only casks installed by Homebrew:
 

@@ -142,7 +142,7 @@ if [[ ! -x "$(command -v brew)" ]]; then
 		echo_and_eval "/bin/bash -c \"\$(sed -E 's#^(\\s*)(HOMEBREW_(BREW|CORE)_GIT_REMOTE)=(.*)\$#\\1\\2=\"\${\\2:-\\4}\"#' \"$TMP_DIR/brew-install/install.sh\")\""
 		echo_and_eval 'unset HOMEBREW_{BREW,CORE}_GIT_REMOTE'
 	else
-		echo_and_eval '/bin/bash -c "$(curl -fsSL https://github.com/Homebrew/install/raw/master/install.sh)"'
+		echo_and_eval '/bin/bash -c "$(curl -fsSL https://github.com/Homebrew/install/raw/HEAD/install.sh)"'
 	fi
 fi
 
@@ -1192,7 +1192,7 @@ ln -sf .dotfiles/.bash_profile .
 if [[ ! -s "$HOME/Library/Preferences/com.googlecode.iterm2.plist" ]]; then
 	# Download the default iTerm configuration file if not exists
 	echo_and_eval "wget -O \"\$HOME/Library/Preferences/com.googlecode.iterm2.plist\" \\
-		https://github.com/gnachman/iTerm2/raw/master/plists/iTerm2.plist"
+		https://github.com/gnachman/iTerm2/raw/HEAD/plists/iTerm2.plist"
 fi
 if ! /usr/libexec/PlistBuddy -c 'Print "Custom Color Presets"' \
 	"$HOME/Library/Preferences/com.googlecode.iterm2.plist" &>/dev/null; then
@@ -1202,7 +1202,7 @@ if ! /usr/libexec/PlistBuddy -c 'Print "Custom Color Presets"' \
 		\"\$HOME/Library/Preferences/com.googlecode.iterm2.plist\""
 fi
 echo_and_eval "plutil -replace 'Custom Color Presets.SpaceGray Eighties' \\
-	-xml \"\$(wget -O - https://github.com/mbadolato/iTerm2-Color-Schemes/raw/master/schemes/SpaceGray%20Eighties.itermcolors)\" \\
+	-xml \"\$(wget -O - https://github.com/mbadolato/iTerm2-Color-Schemes/raw/HEAD/schemes/SpaceGray%20Eighties.itermcolors)\" \\
 	\"\$HOME/Library/Preferences/com.googlecode.iterm2.plist\""
 
 # iTerm2 shell integration and utilities
@@ -1620,7 +1620,7 @@ EOF
 # Install Vim-Plug plugin manager
 if [[ ! -f "$HOME/.vim/autoload/plug.vim" ]]; then
 	echo_and_eval 'curl -fL#o "$HOME/.vim/autoload/plug.vim" --create-dirs \
-		https://github.com/junegunn/vim-plug/raw/master/plug.vim'
+		https://github.com/junegunn/vim-plug/raw/HEAD/plug.vim'
 fi
 
 # Install Vim plugins
@@ -1718,7 +1718,7 @@ bind-key -n S-Right next-window
 bind-key r source-file ~/.tmux.conf \; display-message "tmux.conf reloaded"
 EOF
 
-echo_and_eval 'wget -N -P "$HOME/.dotfiles" https://github.com/gpakosz/.tmux/raw/master/.tmux.conf{,.local}'
+echo_and_eval 'wget -N -P "$HOME/.dotfiles" https://github.com/gpakosz/.tmux/raw/HEAD/.tmux.conf{,.local}'
 ln -sf .dotfiles/.tmux.conf .
 ln -sf .dotfiles/.tmux.conf.local .
 

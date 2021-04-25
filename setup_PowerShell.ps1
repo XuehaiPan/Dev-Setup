@@ -97,7 +97,7 @@ choco install fzf bat ripgrep shellcheck wget mingw --yes
 # Setup Vim
 New-Item -Path "~\vimfiles\autoload" -Type Directory -Force
 (New-Object -TypeName System.Net.WebClient).DownloadFile(
-    'https://github.com/junegunn/vim-plug/raw/master/plug.vim',
+    'https://github.com/junegunn/vim-plug/raw/HEAD/plug.vim',
     $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath(
         "~\vimfiles\autoload\plug.vim"
     )

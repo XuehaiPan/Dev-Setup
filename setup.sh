@@ -71,20 +71,18 @@ export SET_MIRRORS
 # Run script if it exists
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 if [[ -x "$SCRIPT_DIR/setup_${OS_NAME}.sh" && "$(basename "$0")" == "setup.sh" ]]; then
-	if [[ -d "$SCRIPT_DIR/.git" || "$(basename "$SCRIPT_DIR")" == "Dev-Setup-master" ]]; then
-		echo -e "${BOLD}${WHITE}Run existing script ${GREEN}\"$SCRIPT_DIR/setup_${OS_NAME}.sh\"${WHITE}.${RESET}" >&2
-		/bin/bash "$SCRIPT_DIR/setup_${OS_NAME}.sh"
-		exit
-	fi
+	echo -e "${BOLD}${WHITE}Run existing script ${GREEN}\"$SCRIPT_DIR/setup_${OS_NAME}.sh\"${WHITE}.${RESET}" >&2
+	/bin/bash "$SCRIPT_DIR/setup_${OS_NAME}.sh"
+	exit
 fi
 
 # Download and run
 if [[ -x "$(command -v wget)" ]]; then
 	echo -e "${BOLD}${WHITE}Download and run script via ${GREEN}wget${WHITE}.${RESET}" >&2
-	/bin/bash -c "$(wget --progress=bar:force:noscroll -O - https://github.com/XuehaiPan/Dev-Setup/raw/master/setup_${OS_NAME}.sh)"
+	/bin/bash -c "$(wget --progress=bar:force:noscroll -O - https://github.com/XuehaiPan/Dev-Setup/raw/HEAD/setup_${OS_NAME}.sh)"
 elif [[ -x "$(command -v curl)" ]]; then
 	echo -e "${BOLD}${WHITE}Download and run script via ${GREEN}curl${WHITE}.${RESET}" >&2
-	/bin/bash -c "$(curl -fL# https://github.com/XuehaiPan/Dev-Setup/raw/master/setup_${OS_NAME}.sh)"
+	/bin/bash -c "$(curl -fL# https://github.com/XuehaiPan/Dev-Setup/raw/HEAD/setup_${OS_NAME}.sh)"
 elif [[ -x "$(command -v git)" ]]; then
 	echo -e "${BOLD}${WHITE}Download and run script via ${GREEN}git${WHITE}.${RESET}" >&2
 	git clone --depth=1 https://github.com/XuehaiPan/Dev-Setup.git 2>&1

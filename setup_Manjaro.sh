@@ -183,7 +183,7 @@ if $IS_SUDOER; then
 
 	# Install packages
 	echo_and_eval "yes '' | sudo pacman -S bash-completion wget curl git git-lfs gvim tmux --needed"
-	echo_and_eval "yes '' | sudo pacman -S ranger fd bat highlight ripgrep git-extras shfmt shellcheck --needed"
+	echo_and_eval "yes '' | sudo pacman -S ranger fd bat highlight ripgrep git-extras jq shfmt shellcheck --needed"
 	echo_and_eval "yes '' | sudo pacman -S htop openssh net-tools exfat-utils tree colordiff diff-so-fancy xclip --needed"
 	echo_and_eval "yes '' | sudo pacman -S gcc gdb clang llvm lldb make cmake automake autoconf ruby --needed"
 	echo_and_eval 'yes | sudo pacman -Scc'

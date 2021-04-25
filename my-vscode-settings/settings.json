@@ -852,6 +852,13 @@
     "jupyter.allowImportFromNotebook": true,
     "jupyter.defaultCellMarker": "# %%",
     "jupyter.allowInput": true,
+    "jupyter.jupyterServerType": "remote",
+    "workbench.editorAssociations": [
+        {
+            "viewType": "jupyter.notebook.ipynb",
+            "filenamePattern": "*.ipynb"
+        }
+    ],
 
     //* Remote */
     "remote.extensionKind": {
@@ -908,6 +915,18 @@
 
     //* TabNine */
     "tabnine.experimentalAutoImports": true,
+
+    //* Todo Tree */
+    "todo-tree.general.tags": [
+        "BUG",
+        "HACK",
+        "FIXME",
+        "TODO",
+        "XXX",
+        "[ ]",
+        "[x]"
+    ],
+    "todo-tree.regex.regex": "(//|#|<!--|;|/\\*|^|^\\s*(-|\\d+.))\\s*($TAGS)",
 
     //* Visual Studio IntelliCode */
     "vsintellicode.features.python.deepLearning": "enabled",

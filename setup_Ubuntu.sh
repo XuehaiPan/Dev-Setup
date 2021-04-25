@@ -836,8 +836,8 @@ function upgrade_ohmyzsh() {
 		echo_and_eval "git -C \"\$ZSH_CUSTOM/$repo\" gc --prune=all"
 	done < <(
 		cd "$ZSH_CUSTOM" &&
-			find -L . -mindepth 3 -maxdepth 3 -not -empty -type d -name '.git' -prune -print0 |
-			xargs -0 -L 1 dirname | cut -b3-
+			find -L . -mindepth 3 -maxdepth 3 -not -empty -type d -name '.git' -prune -exec dirname {} \; |
+			cut -b3-
 	)
 }
 

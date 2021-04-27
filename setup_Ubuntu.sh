@@ -866,17 +866,18 @@ function upgrade_cpan() {
 }
 
 function upgrade_conda() {
-	local env
+	local env cmds
 
 	# Upgrade Conda
 	echo_and_eval 'conda update conda --name base --yes'
 
 	# Upgrade Conda packages in each environment
 	while read -r env; do
-		echo_and_eval "conda update --all --name $env --yes"
+		cmds="conda update --all --yes"
 		if conda list --full-name anaconda --name "$env" | grep -q '^anaconda[^-]'; then
-			echo_and_eval "conda update anaconda --name $env --yes"
+			cmds="$cmds; conda update anaconda --yes"
 		fi
+		echo_and_eval "conda activate $env; $cmds; conda deactivate"
 	done < <(conda info --envs | awk 'NF > 0 && $0 !~ /^#.*/ { print $1 }')
 
 	# Clean up Conda cache

@@ -161,16 +161,23 @@ function check_binary() {
 if $IS_SUDOER; then
 	# Setup APT sources
 	if $SET_MIRRORS; then
-		URL_LIST=(
-			"http://archive.ubuntu.com" "http://cn.archive.ubuntu.com"
-			"http://security.ubuntu.com" "http://mirrors.tuna.tsinghua.edu.cn"
-		)
 		while read -r sources_list; do
-			for url in "${URL_LIST[@]}"; do
+			unbackup=true
+			while read -r url target_url; do
 				if grep -qF "$url" "${sources_list}"; then
-					echo_and_eval "sudo sed -i 's|$url|https://mirrors.tuna.tsinghua.edu.cn|g' ${sources_list}"
+					if $unbackup; then
+						echo_and_eval "sudo cp -f ${sources_list} ${sources_list}.bak"
+						unbackup=false
+					fi
+					echo_and_eval "sudo sed -i 's|${url}|${target_url}|g' ${sources_list}"
 				fi
-			done
+			done <<EOS
+	archive.ubuntu.com                  mirrors.tuna.tsinghua.edu.cn
+	cn.archive.ubuntu.com               mirrors.tuna.tsinghua.edu.cn
+	security.ubuntu.com                 mirrors.tuna.tsinghua.edu.cn
+	packages.linuxmint.com              mirrors.tuna.tsinghua.edu.cn/linuxmint
+	http://mirrors.tuna.tsinghua.edu.cn https://mirrors.tuna.tsinghua.edu.cn
+EOS
 		done < <(find -L /etc/apt -type f -name '*.list')
 	fi
 

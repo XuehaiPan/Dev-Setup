@@ -236,7 +236,7 @@ EOS
 	echo_and_eval 'sudo chown root:root /usr/local/bin/diff-so-fancy'
 	echo_and_eval 'sudo apt-get install htop ssh net-tools exfat-utils tree colordiff xclip --yes'
 	echo_and_eval 'sudo apt-get install make cmake automake autoconf build-essential gcc g++ gdb --yes'
-	echo_and_eval 'sudo apt-get install clang clang-format llvm lldb ruby-full --yes'
+	echo_and_eval 'sudo apt-get install clang clang-format llvm lldb ruby-full libssl-dev libreadline-dev --yes'
 	echo_and_eval 'sudo apt-get autoremove --yes'
 	echo_and_eval 'sudo apt-get autoclean'
 fi

@@ -195,25 +195,28 @@ EOS
 	echo_and_eval 'sudo apt-get install ranger highlight shellcheck git-extras jq --yes'
 	if [[ -n "$(apt-cache search '^fd-find$' --names-only)" ]]; then
 		echo_and_eval 'sudo apt-get install fd-find --yes'
-	else
+	fi
+	if [[ $? -ne 0 || -z "$(apt-cache search '^fd-find$' --names-only)" ]]; then
 		LATEST_FD_VERSION="$(get_latest_version "sharkdp/fd")"
-		if [[ -n "$LATEST_FD_VERSION" ]] && ! check_binary fd "$LATEST_FD_VERSION"; then
+		if [[ -n "$LATEST_FD_VERSION" ]] && ! check_binary fd "$LATEST_FD_VERSION" && ! check_binary fdfind "$LATEST_FD_VERSION"; then
 			echo_and_eval "wget -N -P \"$TMP_DIR\" https://github.com/sharkdp/fd/releases/download/${LATEST_FD_VERSION}/fd_${LATEST_FD_VERSION#v}_amd64.deb"
 			echo_and_eval "sudo dpkg -i \"$TMP_DIR/fd_${LATEST_FD_VERSION#v}_amd64.deb\""
 		fi
 	fi
 	if [[ -n "$(apt-cache search '^bat$' --names-only)" ]]; then
 		echo_and_eval 'sudo apt-get install bat --yes'
-	else
+	fi
+	if [[ $? -ne 0 || -z "$(apt-cache search '^bat$' --names-only)" ]]; then
 		LATEST_BAT_VERSION="$(get_latest_version "sharkdp/bat")"
-		if [[ -n "$LATEST_BAT_VERSION" ]] && ! check_binary bat "$LATEST_BAT_VERSION"; then
+		if [[ -n "$LATEST_BAT_VERSION" ]] && ! check_binary bat "$LATEST_BAT_VERSION" && ! check_binary batcat "$LATEST_BAT_VERSION"; then
 			echo_and_eval "wget -N -P \"$TMP_DIR\" https://github.com/sharkdp/bat/releases/download/${LATEST_BAT_VERSION}/bat_${LATEST_BAT_VERSION#v}_amd64.deb"
 			echo_and_eval "sudo dpkg -i \"$TMP_DIR/bat_${LATEST_BAT_VERSION#v}_amd64.deb\""
 		fi
 	fi
 	if [[ -n "$(apt-cache search '^ripgrep$' --names-only)" ]]; then
 		echo_and_eval 'sudo apt-get install ripgrep --yes'
-	else
+	fi
+	if [[ $? -ne 0 || -z "$(apt-cache search '^ripgrep$' --names-only)" ]]; then
 		LATEST_RIPGREP_VERSION="$(get_latest_version "BurntSushi/ripgrep")"
 		if [[ -n "$LATEST_RIPGREP_VERSION" ]] && ! check_binary ripgrep "$LATEST_RIPGREP_VERSION"; then
 			echo_and_eval "wget -N -P \"$TMP_DIR\" https://github.com/BurntSushi/ripgrep/releases/download/${LATEST_RIPGREP_VERSION}/ripgrep_${LATEST_RIPGREP_VERSION}_amd64.deb"

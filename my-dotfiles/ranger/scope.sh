@@ -345,6 +345,12 @@ handle_mime() {
             fi
             exit 5;;
 
+        ## JSON
+        application/json)
+            jq --color-output . "${FILE_PATH}" && exit 5
+            python3 -m json.tool --indent 2 -- "${FILE_PATH}" && exit 5
+            exit 2;;
+
         ## Text
         text/* | */xml)
             ## Syntax highlight

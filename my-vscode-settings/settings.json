@@ -141,19 +141,19 @@
     "debug.openExplorerOnEnd": true,
 
     //* Integrated Terminal */
+    "terminal.explorerKind": "integrated",
     "terminal.integrated.fontSize": 14,
     "terminal.integrated.fontFamily": "'DejaVuSansMono Nerd Font', Menlo",
     "terminal.integrated.showExitAlert": true,
     "terminal.integrated.confirmOnExit": true,
     "terminal.integrated.scrollback": 10000,
     "terminal.integrated.detectLocale": "auto",
-    "terminal.integrated.shell.linux": "/usr/bin/zsh",
-    "terminal.integrated.shell.osx": "/usr/local/bin/zsh",
-    "terminal.integrated.shell.windows": "C:\\Program Files\\PowerShell\\7\\pwsh.exe",
+    "terminal.integrated.defaultProfile.linux": "zsh",
+    "terminal.integrated.defaultProfile.osx": "zsh",
+    "terminal.integrated.defaultProfile.windows": "PowerShell",
 
     //* External Terminal */
-    "terminal.explorerKind": "integrated",
-    "terminal.external.linuxExec": "xterm",
+    "terminal.external.linuxExec": "x-terminal-emulator",
     "terminal.external.osxExec": "iTerm.app",
     "terminal.external.windowsExec": "C:\\Program Files\\PowerShell\\7\\pwsh.exe",
 
@@ -852,7 +852,7 @@
     "jupyter.allowImportFromNotebook": true,
     "jupyter.defaultCellMarker": "# %%",
     "jupyter.allowInput": true,
-    "jupyter.jupyterServerType": "remote",
+    "jupyter.jupyterServerType": "local",
     "workbench.editorAssociations": [
         {
             "viewType": "jupyter.notebook.ipynb",

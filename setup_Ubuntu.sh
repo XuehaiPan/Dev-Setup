@@ -172,10 +172,10 @@ if $IS_SUDOER; then
 					echo_and_eval "sudo sed -i 's|${url}|${target_url}|g' ${sources_list}"
 				fi
 			done <<EOS
-	archive.ubuntu.com                  mirrors.tuna.tsinghua.edu.cn
-	cn.archive.ubuntu.com               mirrors.tuna.tsinghua.edu.cn
-	security.ubuntu.com                 mirrors.tuna.tsinghua.edu.cn
-	packages.linuxmint.com              mirrors.tuna.tsinghua.edu.cn/linuxmint
+	     //cn.archive.ubuntu.com              //mirrors.tuna.tsinghua.edu.cn
+	     //archive.ubuntu.com                 //mirrors.tuna.tsinghua.edu.cn
+	     //security.ubuntu.com                //mirrors.tuna.tsinghua.edu.cn
+	     //packages.linuxmint.com             //mirrors.tuna.tsinghua.edu.cn/linuxmint
 	http://mirrors.tuna.tsinghua.edu.cn https://mirrors.tuna.tsinghua.edu.cn
 EOS
 		done < <(find -L /etc/apt -type f -name '*.list')

@@ -197,7 +197,8 @@
         "editor.wordWrap": "on",
         "editor.renderWhitespace": "all",
         "editor.quickSuggestions": true,
-        "editor.acceptSuggestionOnEnter": "off"
+        "editor.acceptSuggestionOnEnter": "off",
+        "editor.defaultFormatter": "yzhang.markdown-all-in-one"
     },
     "[python]": {
         "editor.formatOnSave": false,

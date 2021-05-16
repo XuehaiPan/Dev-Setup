@@ -166,7 +166,7 @@ if $IS_SUDOER; then
 			while read -r url target_url; do
 				if grep -qF "$url" "${sources_list}"; then
 					if $unbackup; then
-						echo_and_eval "sudo cp -f ${sources_list} ${sources_list}.bak"
+						echo_and_eval "sudo cp -f ${sources_list} ${sources_list}.save"
 						unbackup=false
 					fi
 					echo_and_eval "sudo sed -i 's|${url}|${target_url}|g' ${sources_list}"

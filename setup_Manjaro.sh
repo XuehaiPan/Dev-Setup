@@ -802,7 +802,9 @@ function upgrade_vim() {
 
 function upgrade_gems() {
 	if groups | grep -qE '(wheel|root)'; then
-		echo_and_eval 'sudo gem update --system --config-file "$HOME/.gemrc"'
+		if [[ "$(command -v gem)" != /usr/bin/gem && "$(command -v gem)" != /bin/gem ]]; then
+			echo_and_eval 'sudo gem update --system --config-file "$HOME/.gemrc"'
+		fi
 		echo_and_eval 'sudo gem update --config-file "$HOME/.gemrc"'
 		echo_and_eval 'sudo gem cleanup --config-file "$HOME/.gemrc"'
 	fi

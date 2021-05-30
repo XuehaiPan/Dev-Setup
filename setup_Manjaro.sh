@@ -246,36 +246,23 @@ if [[ ! -x "$(command -v brew)" ]]; then
 		exec_cmd 'export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/linuxbrew-core.git"'
 		exec_cmd 'export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/linuxbrew-bottles"'
 		exec_cmd "git clone --depth=1 https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/install.git \"$TMP_DIR/brew-install\""
-		exec_cmd "NONINTERACTIVE=1 /bin/bash -c \"\$(sed -E 's#^(\\s*)(HOMEBREW_PREFIX_DEFAULT)=(.*)\$#\\1\\2=\"\$HOME/.linuxbrew\"#' \"$TMP_DIR/brew-install/install.sh\")\""
+		exec_cmd "NONINTERACTIVE=1 HAVE_SUDO_ACCESS=1 /bin/bash -c \"\$(sed -E 's#^(\\s*)(HOMEBREW_PREFIX_DEFAULT)=(.*)\$#\\1\\2=\"\$HOME/.linuxbrew\"#' \"$TMP_DIR/brew-install/install.sh\")\""
 		exec_cmd 'unset HOMEBREW_{BREW,CORE}_GIT_REMOTE'
 	else
-		exec_cmd "NONINTERACTIVE=1 /bin/bash -c \"\$(curl -fsSL https://github.com/Homebrew/install/raw/HEAD/install.sh | sed -E 's#^(\\s*)(HOMEBREW_PREFIX_DEFAULT)=(.*)\$#\\1\\2=\"\$HOME/.linuxbrew\"#')\""
+		exec_cmd "NONINTERACTIVE=1 HAVE_SUDO_ACCESS=1 /bin/bash -c \"\$(curl -fsSL https://github.com/Homebrew/install/raw/HEAD/install.sh | sed -E 's#^(\\s*)(HOMEBREW_PREFIX_DEFAULT)=(.*)\$#\\1\\2=\"\$HOME/.linuxbrew\"#')\""
 	fi
 else
 	HOMEBREW_PREFIX="$(brew --prefix)"
 fi
 
+HOMEBREW_PREFIX="${HOMEBREW_PREFIX/#$HOME/\$HOME}"
 exec_cmd "eval \"\$($HOMEBREW_PREFIX/bin/brew shellenv)\""
 
 if $SET_MIRRORS; then
 	exec_cmd 'git -C "$(brew --repo)" remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git'
-	BREW_TAPS="$(brew tap)"
-	for tap in core cask{,-fonts,-drivers}; do
-		if echo "$BREW_TAPS" | grep -qE "^homebrew/${tap}\$"; then
-			exec_cmd "git -C \"\$(brew --repo homebrew/${tap})\" remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-${tap}.git"
-			exec_cmd "git -C \"\$(brew --repo homebrew/${tap})\" config homebrew.forceautoupdate true"
-		else
-			exec_cmd "brew tap --force-auto-update homebrew/${tap} https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-${tap}.git"
-		fi
-	done
+	exec_cmd "git -C \"\$(brew --repo homebrew/core)\" remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/linuxbrew-core.git"
+	exec_cmd "git -C \"\$(brew --repo homebrew/core)\" config homebrew.forceautoupdate true"
 	exec_cmd 'brew update-reset'
-else
-	BREW_TAPS="$(brew tap)"
-	for tap in core cask{,-fonts,-drivers}; do
-		if ! (echo "$BREW_TAPS" | grep -qE "^homebrew/${tap}\$"); then
-			exec_cmd "brew tap --force-auto-update homebrew/${tap}"
-		fi
-	done
 fi
 exec_cmd 'brew update --verbose'
 
@@ -375,7 +362,6 @@ exec_cmd "AUTOMATED_TESTING=1 perl -MCPAN -e 'install Term::ReadLine::Perl, Term
 # Configurations for Zsh
 backup_dotfiles .dotfiles/.zshrc
 
-HOMEBREW_PREFIX="${HOMEBREW_PREFIX/#$HOME/\$HOME}"
 HOMEBREW_SETTINGS='# Linuxbrew
 '"eval \"\$($HOMEBREW_PREFIX/bin/brew shellenv)\""'
 export HOMEBREW_EDITOR="vim"

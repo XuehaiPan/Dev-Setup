@@ -33,7 +33,7 @@ elif [[ -d "$HOME/anaconda3" ]]; then
 fi
 
 # Common functions
-function echo_and_eval() {
+function exec_cmd() {
 	printf "%s" "$@" | awk \
 		'BEGIN {
 			RESET = "\033[0m";
@@ -133,84 +133,84 @@ function wget() {
 
 # Install and setup Homebrew
 if [[ ! -x "$(command -v brew)" ]]; then
-	echo_and_eval 'xcode-select --install'
+	exec_cmd 'xcode-select --install'
 	if $SET_MIRRORS; then
-		echo_and_eval 'export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"'
-		echo_and_eval 'export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git"'
-		echo_and_eval 'export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles"'
-		echo_and_eval "git clone --depth=1 https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/install.git \"$TMP_DIR/brew-install\""
-		echo_and_eval "/bin/bash \"$TMP_DIR/brew-install/install.sh\""
-		echo_and_eval 'unset HOMEBREW_{BREW,CORE}_GIT_REMOTE'
+		exec_cmd 'export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"'
+		exec_cmd 'export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git"'
+		exec_cmd 'export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles"'
+		exec_cmd "git clone --depth=1 https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/install.git \"$TMP_DIR/brew-install\""
+		exec_cmd "/bin/bash \"$TMP_DIR/brew-install/install.sh\""
+		exec_cmd 'unset HOMEBREW_{BREW,CORE}_GIT_REMOTE'
 	else
-		echo_and_eval '/bin/bash -c "$(curl -fsSL https://github.com/Homebrew/install/raw/HEAD/install.sh)"'
+		exec_cmd '/bin/bash -c "$(curl -fsSL https://github.com/Homebrew/install/raw/HEAD/install.sh)"'
 	fi
 fi
 
-echo_and_eval "eval \"\$($HOMEBREW_PREFIX/bin/brew shellenv)\""
+exec_cmd "eval \"\$($HOMEBREW_PREFIX/bin/brew shellenv)\""
 
 if $SET_MIRRORS; then
-	echo_and_eval 'git -C "$(brew --repo)" remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git'
+	exec_cmd 'git -C "$(brew --repo)" remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git'
 	BREW_TAPS="$(brew tap)"
 	for tap in core cask{,-fonts,-drivers}; do
 		if echo "$BREW_TAPS" | grep -qE "^homebrew/${tap}\$"; then
-			echo_and_eval "git -C \"\$(brew --repo homebrew/${tap})\" remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-${tap}.git"
-			echo_and_eval "git -C \"\$(brew --repo homebrew/${tap})\" config homebrew.forceautoupdate true"
+			exec_cmd "git -C \"\$(brew --repo homebrew/${tap})\" remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-${tap}.git"
+			exec_cmd "git -C \"\$(brew --repo homebrew/${tap})\" config homebrew.forceautoupdate true"
 		else
-			echo_and_eval "brew tap --force-auto-update homebrew/${tap} https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-${tap}.git"
+			exec_cmd "brew tap --force-auto-update homebrew/${tap} https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-${tap}.git"
 		fi
 	done
-	echo_and_eval 'brew update-reset'
+	exec_cmd 'brew update-reset'
 else
 	BREW_TAPS="$(brew tap)"
 	for tap in core cask{,-fonts,-drivers}; do
 		if ! (echo "$BREW_TAPS" | grep -qE "^homebrew/${tap}\$"); then
-			echo_and_eval "brew tap --force-auto-update homebrew/${tap}"
+			exec_cmd "brew tap --force-auto-update homebrew/${tap}"
 		fi
 	done
 fi
-echo_and_eval 'brew update --verbose'
+exec_cmd 'brew update --verbose'
 
 # Install and setup shells
-echo_and_eval 'brew install zsh bash'
+exec_cmd 'brew install zsh bash'
 
 if ! grep -qF '/usr/local/bin/bash' /etc/shells; then
-	echo_and_eval 'echo "/usr/local/bin/bash" | sudo tee -a /etc/shells'
+	exec_cmd 'echo "/usr/local/bin/bash" | sudo tee -a /etc/shells'
 fi
 
 if ! grep -qF '/usr/local/bin/zsh' /etc/shells; then
-	echo_and_eval 'echo "/usr/local/bin/zsh" | sudo tee -a /etc/shells'
+	exec_cmd 'echo "/usr/local/bin/zsh" | sudo tee -a /etc/shells'
 fi
 
 # Install packages
-echo_and_eval 'brew install gcc gdb llvm make cmake automake autoconf'
-echo_and_eval 'brew install bash-completion wget curl git git-lfs macvim tmux'
-echo_and_eval 'brew install coreutils ranger fd bat highlight ripgrep git-extras'
-echo_and_eval 'brew install jq shfmt shellcheck diffutils colordiff diff-so-fancy'
-echo_and_eval 'brew install htop openssh tree reattach-to-user-namespace'
+exec_cmd 'brew install gcc gdb llvm make cmake automake autoconf'
+exec_cmd 'brew install bash-completion wget curl git git-lfs macvim tmux'
+exec_cmd 'brew install coreutils ranger fd bat highlight ripgrep git-extras'
+exec_cmd 'brew install jq shfmt shellcheck diffutils colordiff diff-so-fancy'
+exec_cmd 'brew install htop openssh tree reattach-to-user-namespace'
 
-echo_and_eval 'brew install ruby perl'
+exec_cmd 'brew install ruby perl'
 export PATH="$HOMEBREW_PREFIX/opt/ruby/bin${PATH:+:"$PATH"}"
 export PATH="$(ruby -r rubygems -e 'puts Gem.dir')/bin${PATH:+:"$PATH"}"
 export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin${PATH:+:"$PATH"}"
 
 # Install casks and fonts
-echo_and_eval 'brew install --cask iterm2 xquartz'
-echo_and_eval 'brew install --cask font-dejavu-sans-mono-nerd-font font-cascadia{-code,-mono}{,-pl}'
-echo_and_eval 'brew install --cask visual-studio-code'
-echo_and_eval 'brew install --cask keka typora iina google-chrome'
+exec_cmd 'brew install --cask iterm2 xquartz'
+exec_cmd 'brew install --cask font-dejavu-sans-mono-nerd-font font-cascadia{-code,-mono}{,-pl}'
+exec_cmd 'brew install --cask visual-studio-code'
+exec_cmd 'brew install --cask keka typora iina google-chrome'
 
-echo_and_eval 'brew cleanup -s --prune 7'
+exec_cmd 'brew cleanup -s --prune 7'
 
 # Change the login shell to Zsh
 if [[ "$(basename "$SHELL")" != "zsh" ]]; then
 	if grep -qF '/usr/local/bin/zsh' /etc/shells; then
-		echo_and_eval 'chsh -s /usr/local/bin/zsh'
+		exec_cmd 'chsh -s /usr/local/bin/zsh'
 	elif grep -qF '/bin/zsh' /etc/shells; then
-		echo_and_eval 'chsh -s /bin/zsh'
+		exec_cmd 'chsh -s /bin/zsh'
 	fi
 fi
 
-echo_and_eval 'cd "$HOME"'
+exec_cmd 'cd "$HOME"'
 
 # Configurations for Git
 export GIT_HTTP_LOW_SPEED_LIMIT=0
@@ -255,9 +255,9 @@ export ZSH_CACHE_DIR="${ZSH_CACHE_DIR:-"$ZSH/cahce"}"
 if [[ -d "$ZSH/.git" && -f "$ZSH/tools/upgrade.sh" ]]; then
 	rm -f "$ZSH_CACHE_DIR/.zsh-update" 2>/dev/null
 	zsh "$ZSH/tools/check_for_upgrade.sh" 2>/dev/null
-	echo_and_eval 'zsh "$ZSH/tools/upgrade.sh" 2>&1'
+	exec_cmd 'zsh "$ZSH/tools/upgrade.sh" 2>&1'
 else
-	echo_and_eval 'git clone -c core.eol=lf -c core.autocrlf=false \
+	exec_cmd 'git clone -c core.eol=lf -c core.autocrlf=false \
 		-c fsck.zeroPaddedFilemode=ignore \
 		-c fetch.fsck.zeroPaddedFilemode=ignore \
 		-c receive.fsck.zeroPaddedFilemode=ignore \
@@ -267,27 +267,27 @@ fi
 
 # Install Powerlevel10k theme
 if [[ ! -d "$ZSH_CUSTOM/themes/powerlevel10k/.git" ]]; then
-	echo_and_eval 'git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "$ZSH_CUSTOM/themes/powerlevel10k" 2>&1'
+	exec_cmd 'git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "$ZSH_CUSTOM/themes/powerlevel10k" 2>&1'
 else
-	echo_and_eval 'git -C "$ZSH_CUSTOM/themes/powerlevel10k" pull --ff-only 2>&1'
+	exec_cmd 'git -C "$ZSH_CUSTOM/themes/powerlevel10k" pull --ff-only 2>&1'
 fi
 
 # Install Zsh plugins
 for plugin in zsh-{syntax-highlighting,autosuggestions,completions}; do
 	if [[ ! -d "$ZSH_CUSTOM/plugins/$plugin/.git" ]]; then
-		echo_and_eval "git clone --depth=1 https://github.com/zsh-users/${plugin}.git \"\$ZSH_CUSTOM/plugins/$plugin\" 2>&1"
+		exec_cmd "git clone --depth=1 https://github.com/zsh-users/${plugin}.git \"\$ZSH_CUSTOM/plugins/$plugin\" 2>&1"
 	else
-		echo_and_eval "git -C \"\$ZSH_CUSTOM/plugins/$plugin\" pull --ff-only 2>&1"
+		exec_cmd "git -C \"\$ZSH_CUSTOM/plugins/$plugin\" pull --ff-only 2>&1"
 	fi
 done
 
 # Install fzf
 if [[ ! -d "$HOME/.fzf" ]]; then
-	echo_and_eval 'git clone --depth=1 https://github.com/junegunn/fzf.git "$HOME/.fzf" 2>&1'
+	exec_cmd 'git clone --depth=1 https://github.com/junegunn/fzf.git "$HOME/.fzf" 2>&1'
 else
-	echo_and_eval 'git -C "$HOME/.fzf" pull --ff-only 2>&1'
+	exec_cmd 'git -C "$HOME/.fzf" pull --ff-only 2>&1'
 fi
-echo_and_eval '"$HOME/.fzf/install" --key-bindings --completion --no-update-rc'
+exec_cmd '"$HOME/.fzf/install" --key-bindings --completion --no-update-rc'
 
 # Configurations for RubyGems
 backup_dotfiles .gemrc .dotfiles/.gemrc
@@ -310,14 +310,14 @@ fi
 ln -sf .dotfiles/.gemrc .
 
 # Install Color LS
-echo_and_eval 'gem install colorls'
-echo_and_eval 'gem cleanup'
+exec_cmd 'gem install colorls'
+exec_cmd 'gem cleanup'
 
 # Configurations for Perl
 export PERL_MB_OPT="--install_base \"\$HOMEBREW_PREFIX/opt/perl\""
 export PERL_MM_OPT="INSTALL_BASE=\"\$HOMEBREW_PREFIX/opt/perl\""
-echo_and_eval "PERL_MM_USE_DEFAULT=1 http_proxy=\"\" ftp_proxy=\"\" perl -MCPAN -e 'mkmyconfig'"
-echo_and_eval "perl -MCPAN -e 'CPAN::HandleConfig->load();' \\
+exec_cmd "PERL_MM_USE_DEFAULT=1 http_proxy=\"\" ftp_proxy=\"\" perl -MCPAN -e 'mkmyconfig'"
+exec_cmd "perl -MCPAN -e 'CPAN::HandleConfig->load();' \\
 	-e 'CPAN::HandleConfig->edit(\"cleanup_after_install\", \"1\");' \\
 	-e 'CPAN::HandleConfig->commit()'"
 if $SET_MIRRORS; then
@@ -325,15 +325,15 @@ if $SET_MIRRORS; then
 		perl -MCPAN -e 'CPAN::HandleConfig->load();' -e 'CPAN::HandleConfig->prettyprint("urllist")' |
 			grep -qF 'https://mirrors.tuna.tsinghua.edu.cn/CPAN/'
 	); then
-		echo_and_eval "perl -MCPAN -e 'CPAN::HandleConfig->load();' \\
+		exec_cmd "perl -MCPAN -e 'CPAN::HandleConfig->load();' \\
 			-e 'CPAN::HandleConfig->edit(\"urllist\", \"unshift\", \"https://mirrors.tuna.tsinghua.edu.cn/CPAN/\");' \\
 			-e 'CPAN::HandleConfig->commit()'"
 	fi
 fi
-echo_and_eval "perl -MCPAN -e 'install local::lib'"
-echo_and_eval 'eval "$(perl -I$HOMEBREW_PREFIX/opt/perl/lib/perl5 -Mlocal::lib=$HOMEBREW_PREFIX/opt/perl)"'
-echo_and_eval "perl -MCPAN -e 'install CPAN'"
-echo_and_eval "AUTOMATED_TESTING=1 perl -MCPAN -e 'install Term::ReadLine::Perl, Term::ReadKey'"
+exec_cmd "perl -MCPAN -e 'install local::lib'"
+exec_cmd 'eval "$(perl -I$HOMEBREW_PREFIX/opt/perl/lib/perl5 -Mlocal::lib=$HOMEBREW_PREFIX/opt/perl)"'
+exec_cmd "perl -MCPAN -e 'install CPAN'"
+exec_cmd "AUTOMATED_TESTING=1 perl -MCPAN -e 'install Term::ReadLine::Perl, Term::ReadKey'"
 
 # Configurations for Zsh
 backup_dotfiles .dotfiles/.zshrc
@@ -690,13 +690,13 @@ EOF
 if [[ ! -x "/usr/local/bin/zsh-lean" || -L "/usr/local/bin/zsh-lean" ]] ||
 	! diff -EB "/usr/local/bin/zsh-lean" "$TMP_DIR/zsh-lean" &>/dev/null; then
 	if [[ -f "/usr/local/bin/zsh-lean" ]]; then
-		echo_and_eval 'sudo rm -f /usr/local/bin/zsh-lean'
+		exec_cmd 'sudo rm -f /usr/local/bin/zsh-lean'
 	fi
-	echo_and_eval "printf \"%s\\n\" '$SHEBANG' '$COMMAND' | sudo tee /usr/local/bin/zsh-lean"
-	echo_and_eval 'sudo chmod a+x /usr/local/bin/zsh-lean'
+	exec_cmd "printf \"%s\\n\" '$SHEBANG' '$COMMAND' | sudo tee /usr/local/bin/zsh-lean"
+	exec_cmd 'sudo chmod a+x /usr/local/bin/zsh-lean'
 fi
 if ! grep -qF '/usr/local/bin/zsh-lean' /etc/shells; then
-	echo_and_eval 'echo "/usr/local/bin/zsh-lean" | sudo tee -a /etc/shells'
+	exec_cmd 'echo "/usr/local/bin/zsh-lean" | sudo tee -a /etc/shells'
 fi
 
 # Add utility script file
@@ -705,7 +705,7 @@ backup_dotfiles .dotfiles/utilities.sh
 cat >.dotfiles/utilities.sh <<'EOF'
 #!/usr/bin/env bash
 
-function echo_and_eval() {
+function exec_cmd() {
 	printf "%s" "$@" | awk \
 		'BEGIN {
 			RESET = "\033[0m";
@@ -783,17 +783,17 @@ function echo_and_eval() {
 
 function upgrade_homebrew() {
 	# Upgrade Homebrew
-	echo_and_eval 'brew update --verbose'
-	echo_and_eval 'brew outdated'
+	exec_cmd 'brew update --verbose'
+	exec_cmd 'brew outdated'
 
 	# Upgrade Homebrew formulae and casks
-	echo_and_eval 'brew upgrade'
+	exec_cmd 'brew upgrade'
 
 	# Uninstall formulae that no longer needed
-	echo_and_eval 'brew autoremove --verbose'
+	exec_cmd 'brew autoremove --verbose'
 
 	# Clean up Homebrew cache
-	echo_and_eval 'brew cleanup -s --prune 7'
+	exec_cmd 'brew cleanup -s --prune 7'
 }
 
 function upgrade_ohmyzsh() {
@@ -807,14 +807,14 @@ function upgrade_ohmyzsh() {
 	# Upgrade oh my zsh
 	rm -f "$ZSH_CACHE_DIR/.zsh-update" 2>/dev/null
 	zsh "$ZSH/tools/check_for_upgrade.sh" 2>/dev/null
-	echo_and_eval 'zsh "$ZSH/tools/upgrade.sh"'
-	echo_and_eval 'git -C "$ZSH" fetch --prune'
-	echo_and_eval 'git -C "$ZSH" gc --prune=all'
+	exec_cmd 'zsh "$ZSH/tools/upgrade.sh"'
+	exec_cmd 'git -C "$ZSH" fetch --prune'
+	exec_cmd 'git -C "$ZSH" gc --prune=all'
 
 	# Upgrade themes and plugins
 	while read -r repo; do
-		echo_and_eval "git -C \"\$ZSH_CUSTOM/$repo\" pull --prune --ff-only"
-		echo_and_eval "git -C \"\$ZSH_CUSTOM/$repo\" gc --prune=all"
+		exec_cmd "git -C \"\$ZSH_CUSTOM/$repo\" pull --prune --ff-only"
+		exec_cmd "git -C \"\$ZSH_CUSTOM/$repo\" gc --prune=all"
 	done < <(
 		cd "$ZSH_CUSTOM" &&
 			find -L . -mindepth 3 -maxdepth 3 -not -empty -type d -name '.git' -prune -exec dirname {} \; |
@@ -826,30 +826,30 @@ function upgrade_ohmyzsh() {
 }
 
 function upgrade_fzf() {
-	echo_and_eval 'git -C "$HOME/.fzf" pull --prune --ff-only'
-	echo_and_eval 'git -C "$HOME/.fzf" gc --prune=all'
-	echo_and_eval '"$HOME/.fzf/install" --key-bindings --completion --no-update-rc'
+	exec_cmd 'git -C "$HOME/.fzf" pull --prune --ff-only'
+	exec_cmd 'git -C "$HOME/.fzf" gc --prune=all'
+	exec_cmd '"$HOME/.fzf/install" --key-bindings --completion --no-update-rc'
 }
 
 function upgrade_vim() {
-	echo_and_eval 'vim -c "PlugUpgrade | PlugUpdate | sleep 5 | quitall"'
+	exec_cmd 'vim -c "PlugUpgrade | PlugUpdate | sleep 5 | quitall"'
 }
 
 function upgrade_gems() {
-	echo_and_eval 'gem update --system'
-	echo_and_eval 'gem update'
-	echo_and_eval 'gem cleanup'
+	exec_cmd 'gem update --system'
+	exec_cmd 'gem update'
+	exec_cmd 'gem cleanup'
 }
 
 function upgrade_cpan() {
-	echo_and_eval 'cpan -u'
+	exec_cmd 'cpan -u'
 }
 
 function upgrade_conda() {
 	local env cmds
 
 	# Upgrade Conda
-	echo_and_eval 'conda update conda --name base --yes'
+	exec_cmd 'conda update conda --name base --yes'
 
 	# Upgrade Conda packages in each environment
 	while read -r env; do
@@ -857,11 +857,11 @@ function upgrade_conda() {
 		if conda list --full-name anaconda --name "$env" | grep -q '^anaconda[^-]'; then
 			cmds="$cmds; conda update anaconda --yes"
 		fi
-		echo_and_eval "conda activate $env; $cmds; conda deactivate"
+		exec_cmd "conda activate $env; $cmds; conda deactivate"
 	done < <(conda info --envs | awk 'NF > 0 && $0 !~ /^#.*/ { print $1 }')
 
 	# Clean up Conda cache
-	echo_and_eval 'conda clean --all --yes'
+	exec_cmd 'conda clean --all --yes'
 }
 
 function foreach_conda_env_do() {
@@ -869,7 +869,7 @@ function foreach_conda_env_do() {
 
 	# Execute in each Conda environment
 	while read -r env; do
-		echo_and_eval "conda activate $env; ${*}; conda deactivate"
+		exec_cmd "conda activate $env; ${*}; conda deactivate"
 	done < <(conda info --envs | awk 'NF > 0 && $0 !~ /^#.*/ { print $1 }')
 }
 
@@ -1196,17 +1196,17 @@ ln -sf .dotfiles/.bash_profile .
 # Add 'SpaceGray Eighties' color scheme for iTerm
 if [[ ! -s "$HOME/Library/Preferences/com.googlecode.iterm2.plist" ]]; then
 	# Download the default iTerm configuration file if not exists
-	echo_and_eval "wget -O \"\$HOME/Library/Preferences/com.googlecode.iterm2.plist\" \\
+	exec_cmd "wget -O \"\$HOME/Library/Preferences/com.googlecode.iterm2.plist\" \\
 		https://github.com/gnachman/iTerm2/raw/HEAD/plists/iTerm2.plist"
 fi
 if ! /usr/libexec/PlistBuddy -c 'Print "Custom Color Presets"' \
 	"$HOME/Library/Preferences/com.googlecode.iterm2.plist" &>/dev/null; then
 	# Create 'Custom Color Presets' entry if not exists
-	echo_and_eval "plutil -insert 'Custom Color Presets' \\
+	exec_cmd "plutil -insert 'Custom Color Presets' \\
 		-json \"{}\" \\
 		\"\$HOME/Library/Preferences/com.googlecode.iterm2.plist\""
 fi
-echo_and_eval "plutil -replace 'Custom Color Presets.SpaceGray Eighties' \\
+exec_cmd "plutil -replace 'Custom Color Presets.SpaceGray Eighties' \\
 	-xml \"\$(wget -O - https://github.com/mbadolato/iTerm2-Color-Schemes/raw/HEAD/schemes/SpaceGray%20Eighties.itermcolors)\" \\
 	\"\$HOME/Library/Preferences/com.googlecode.iterm2.plist\""
 
@@ -1234,12 +1234,12 @@ done
 ALIASES="$(join_by '; ' "${ALIASES_ARRAY[@]}")"
 ITERM_UTILITIES_ARRAY="$(join_by ',' "${ITERM_UTILITIES[@]}")"
 
-echo_and_eval "wget -N -P \"\$HOME/.iterm2/bin\" https://iterm2.com/utilities/{$ITERM_UTILITIES_ARRAY}"
-echo_and_eval "chmod +x \"\$HOME/.iterm2/bin\"/{$ITERM_UTILITIES_ARRAY}"
+exec_cmd "wget -N -P \"\$HOME/.iterm2/bin\" https://iterm2.com/utilities/{$ITERM_UTILITIES_ARRAY}"
+exec_cmd "chmod +x \"\$HOME/.iterm2/bin\"/{$ITERM_UTILITIES_ARRAY}"
 for shell in "bash" "zsh"; do
-	echo_and_eval "wget -O \"\$HOME/.iterm2/.iterm2_shell_integration.$shell\" \"https://iterm2.com/shell_integration/$shell\" && chmod +x \"\$HOME/.iterm2/.iterm2_shell_integration.$shell\""
+	exec_cmd "wget -O \"\$HOME/.iterm2/.iterm2_shell_integration.$shell\" \"https://iterm2.com/shell_integration/$shell\" && chmod +x \"\$HOME/.iterm2/.iterm2_shell_integration.$shell\""
 	printf "\n# Utilities\n" >>"$HOME/.iterm2/.iterm2_shell_integration.$shell"
-	echo_and_eval "echo \"$ALIASES\" >> \"\$HOME/.iterm2/.iterm2_shell_integration.$shell\""
+	exec_cmd "echo \"$ALIASES\" >> \"\$HOME/.iterm2/.iterm2_shell_integration.$shell\""
 done
 
 # Configurations for X11
@@ -1624,14 +1624,14 @@ EOF
 
 # Install Vim-Plug plugin manager
 if [[ ! -f "$HOME/.vim/autoload/plug.vim" ]]; then
-	echo_and_eval 'curl -fL#o "$HOME/.vim/autoload/plug.vim" --create-dirs \
+	exec_cmd 'curl -fL#o "$HOME/.vim/autoload/plug.vim" --create-dirs \
 		https://github.com/junegunn/vim-plug/raw/HEAD/plug.vim'
 fi
 
 # Install Vim plugins
-echo_and_eval 'vim -c "PlugUpgrade | PlugInstall | PlugUpdate | sleep 5 | quitall"'
+exec_cmd 'vim -c "PlugUpgrade | PlugInstall | PlugUpdate | sleep 5 | quitall"'
 if [[ ! -f "$HOME/.vim/plugged/markdown-preview.nvim/app/bin/markdown-preview-macos" ]]; then
-	echo_and_eval 'cd "$HOME/.vim/plugged/markdown-preview.nvim/app"; ./install.sh; cd "$HOME"'
+	exec_cmd 'cd "$HOME/.vim/plugged/markdown-preview.nvim/app"; ./install.sh; cd "$HOME"'
 fi
 
 # Configurations for tmux
@@ -1723,7 +1723,7 @@ bind-key -n S-Right next-window
 bind-key r source-file ~/.tmux.conf \; display-message "tmux.conf reloaded"
 EOF
 
-echo_and_eval 'wget -N -P "$HOME/.dotfiles" https://github.com/gpakosz/.tmux/raw/HEAD/.tmux.conf{,.local}'
+exec_cmd 'wget -N -P "$HOME/.dotfiles" https://github.com/gpakosz/.tmux/raw/HEAD/.tmux.conf{,.local}'
 ln -sf .dotfiles/.tmux.conf .
 ln -sf .dotfiles/.tmux.conf.local .
 
@@ -2067,24 +2067,24 @@ ln -sf .dotfiles/.condarc .
 # Install Miniconda
 if [[ ! -d "$HOME/$CONDA_DIR" ]]; then
 	if $SET_MIRRORS; then
-		echo_and_eval "wget -N -P \"$TMP_DIR\" https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-latest-MacOSX-x86_64.sh"
+		exec_cmd "wget -N -P \"$TMP_DIR\" https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-latest-MacOSX-x86_64.sh"
 	else
-		echo_and_eval "wget -N -P \"$TMP_DIR\" https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh"
+		exec_cmd "wget -N -P \"$TMP_DIR\" https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh"
 	fi
-	echo_and_eval "/bin/sh \"$TMP_DIR/Miniconda3-latest-MacOSX-x86_64.sh\" -b -p \"\$HOME/$CONDA_DIR\""
+	exec_cmd "/bin/sh \"$TMP_DIR/Miniconda3-latest-MacOSX-x86_64.sh\" -b -p \"\$HOME/$CONDA_DIR\""
 fi
 
 # Install Conda packages
 export PATH="${PATH:+"$PATH":}$HOME/$CONDA_DIR/condabin"
-echo_and_eval 'conda update conda --yes'
-echo_and_eval 'conda install pip ipython ipdb \
+exec_cmd 'conda update conda --yes'
+exec_cmd 'conda install pip ipython ipdb \
 	jupyter notebook jupyterlab jupyter_contrib_nbextensions \
 	numpy numba matplotlib pandas seaborn \
 	cython rich tqdm autopep8 pylint --yes'
-echo_and_eval 'conda clean --all --yes'
-echo_and_eval "\"\$HOME/$CONDA_DIR/bin/jupyter\" contrib nbextension install --user &>/dev/null"
+exec_cmd 'conda clean --all --yes'
+exec_cmd "\"\$HOME/$CONDA_DIR/bin/jupyter\" contrib nbextension install --user &>/dev/null"
 if $SET_MIRRORS; then
-	echo_and_eval "\"\$HOME/$CONDA_DIR/bin/pip\" config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple"
+	exec_cmd "\"\$HOME/$CONDA_DIR/bin/pip\" config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple"
 fi
 
 # Add Conda Environment Initialization Script
@@ -2176,9 +2176,9 @@ EOF
 chmod +x "$HOME/$CONDA_DIR/etc/init-envs.sh"
 
 # Setup IPython
-echo_and_eval "\"\$HOME/$CONDA_DIR/bin/ipython\" profile create"
-echo_and_eval "sed -i \"\" -E 's/^ *#? *(c.InteractiveShell.colors).*\$/\\1 = \"Linux\"/g' \"\$HOME/.ipython/profile_default/ipython_config.py\""
-echo_and_eval "sed -i \"\" -E 's/^ *#? *(c.InteractiveShell.colors).*\$/\\1 = \"Linux\"/g' \"\$HOME/.ipython/profile_default/ipython_kernel_config.py\""
+exec_cmd "\"\$HOME/$CONDA_DIR/bin/ipython\" profile create"
+exec_cmd "sed -i \"\" -E 's/^ *#? *(c.InteractiveShell.colors).*\$/\\1 = \"Linux\"/g' \"\$HOME/.ipython/profile_default/ipython_config.py\""
+exec_cmd "sed -i \"\" -E 's/^ *#? *(c.InteractiveShell.colors).*\$/\\1 = \"Linux\"/g' \"\$HOME/.ipython/profile_default/ipython_kernel_config.py\""
 
 cat >"$HOME/.ipython/profile_default/startup/00-rich.py" <<'EOF'
 try:
@@ -2193,7 +2193,7 @@ else:
 EOF
 
 # Miscellaneous settings
-echo_and_eval 'defaults write -globalDomain KeyRepeat -int 2'
-echo_and_eval 'defaults write -globalDomain InitialKeyRepeat -int 45'
-echo_and_eval 'defaults write com.apple.screencapture disable-shadow -boolean true'
-echo_and_eval 'killall SystemUIServer'
+exec_cmd 'defaults write -globalDomain KeyRepeat -int 2'
+exec_cmd 'defaults write -globalDomain InitialKeyRepeat -int 45'
+exec_cmd 'defaults write com.apple.screencapture disable-shadow -boolean true'
+exec_cmd 'killall SystemUIServer'

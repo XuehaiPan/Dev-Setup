@@ -38,7 +38,7 @@ elif [[ -d "$HOME/anaconda3" ]]; then
 fi
 
 # Common functions
-function echo_and_eval() {
+function exec_cmd() {
 	printf "%s" "$@" | awk \
 		'BEGIN {
 			RESET = "\033[0m";
@@ -166,10 +166,10 @@ if $IS_SUDOER; then
 			while read -r url target_url; do
 				if grep -qF "$url" "${sources_list}"; then
 					if $unbackup; then
-						echo_and_eval "sudo cp -f ${sources_list} ${sources_list}.save"
+						exec_cmd "sudo cp -f ${sources_list} ${sources_list}.save"
 						unbackup=false
 					fi
-					echo_and_eval "sudo sed -i 's|${url}|${target_url}|g' ${sources_list}"
+					exec_cmd "sudo sed -i 's|${url}|${target_url}|g' ${sources_list}"
 				fi
 			done <<EOS
 	     //cn.archive.ubuntu.com              //mirrors.tuna.tsinghua.edu.cn
@@ -181,89 +181,89 @@ EOS
 		done < <(find -L /etc/apt -type f -name '*.list')
 	fi
 
-	echo_and_eval 'sudo apt-get update'
-	echo_and_eval 'sudo apt install software-properties-common apt-transport-https wget'
-	echo_and_eval 'sudo add-apt-repository ppa:jonathonf/vim --yes'
-	echo_and_eval 'wget -qO - https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -'
+	exec_cmd 'sudo apt-get update'
+	exec_cmd 'sudo apt install software-properties-common apt-transport-https wget'
+	exec_cmd 'sudo add-apt-repository ppa:jonathonf/vim --yes'
+	exec_cmd 'wget -qO - https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -'
 	if ! grep -qF 'packages.microsoft.com/repos/vscode' /etc/apt/source.list; then
 		if [ -f /etc/apt/sources.list.d/vscode.list ]; then
-			echo_and_eval "sudo cp -f /etc/apt/sources.list.d/vscode.list /etc/apt/sources.list.d/vscode.list.save"
+			exec_cmd "sudo cp -f /etc/apt/sources.list.d/vscode.list /etc/apt/sources.list.d/vscode.list.save"
 		fi
-		echo_and_eval 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" | sudo tee /etc/apt/sources.list.d/vscode.list'
+		exec_cmd 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" | sudo tee /etc/apt/sources.list.d/vscode.list'
 	fi
-	echo_and_eval 'wget -qO - https://deb.nodesource.com/setup_lts.x | sudo -E bash -'
+	exec_cmd 'wget -qO - https://deb.nodesource.com/setup_lts.x | sudo -E bash -'
 
 	# Install and setup shells
-	echo_and_eval 'sudo apt-get install zsh --yes'
+	exec_cmd 'sudo apt-get install zsh --yes'
 
 	if ! grep -qF '/usr/bin/zsh' /etc/shells; then
-		echo_and_eval 'echo "/usr/bin/zsh" | sudo tee -a /etc/shells'
+		exec_cmd 'echo "/usr/bin/zsh" | sudo tee -a /etc/shells'
 	fi
 
 	# Install packages
-	echo_and_eval 'sudo apt-get install bash-completion curl git git-lfs vim tmux --yes'
-	echo_and_eval 'sudo apt-get install ranger highlight shellcheck git-extras jq --yes'
+	exec_cmd 'sudo apt-get install bash-completion curl git git-lfs vim tmux --yes'
+	exec_cmd 'sudo apt-get install ranger highlight shellcheck git-extras jq --yes'
 	if [[ -n "$(apt-cache search '^fd-find$' --names-only)" ]]; then
-		echo_and_eval 'sudo apt-get install fd-find --yes'
+		exec_cmd 'sudo apt-get install fd-find --yes'
 	fi
 	if [[ $? -ne 0 || -z "$(apt-cache search '^fd-find$' --names-only)" ]]; then
 		LATEST_FD_VERSION="$(get_latest_version "sharkdp/fd")"
 		if [[ -n "$LATEST_FD_VERSION" ]] && ! check_binary fd "$LATEST_FD_VERSION" && ! check_binary fdfind "$LATEST_FD_VERSION"; then
-			echo_and_eval "wget -N -P \"$TMP_DIR\" https://github.com/sharkdp/fd/releases/download/${LATEST_FD_VERSION}/fd_${LATEST_FD_VERSION#v}_amd64.deb"
-			echo_and_eval "sudo dpkg -i \"$TMP_DIR/fd_${LATEST_FD_VERSION#v}_amd64.deb\""
+			exec_cmd "wget -N -P \"$TMP_DIR\" https://github.com/sharkdp/fd/releases/download/${LATEST_FD_VERSION}/fd_${LATEST_FD_VERSION#v}_amd64.deb"
+			exec_cmd "sudo dpkg -i \"$TMP_DIR/fd_${LATEST_FD_VERSION#v}_amd64.deb\""
 		fi
 	fi
 	if [[ -n "$(apt-cache search '^bat$' --names-only)" ]]; then
-		echo_and_eval 'sudo apt-get install bat --yes'
+		exec_cmd 'sudo apt-get install bat --yes'
 	fi
 	if [[ $? -ne 0 || -z "$(apt-cache search '^bat$' --names-only)" ]]; then
 		LATEST_BAT_VERSION="$(get_latest_version "sharkdp/bat")"
 		if [[ -n "$LATEST_BAT_VERSION" ]] && ! check_binary bat "$LATEST_BAT_VERSION" && ! check_binary batcat "$LATEST_BAT_VERSION"; then
-			echo_and_eval "wget -N -P \"$TMP_DIR\" https://github.com/sharkdp/bat/releases/download/${LATEST_BAT_VERSION}/bat_${LATEST_BAT_VERSION#v}_amd64.deb"
-			echo_and_eval "sudo dpkg -i \"$TMP_DIR/bat_${LATEST_BAT_VERSION#v}_amd64.deb\""
+			exec_cmd "wget -N -P \"$TMP_DIR\" https://github.com/sharkdp/bat/releases/download/${LATEST_BAT_VERSION}/bat_${LATEST_BAT_VERSION#v}_amd64.deb"
+			exec_cmd "sudo dpkg -i \"$TMP_DIR/bat_${LATEST_BAT_VERSION#v}_amd64.deb\""
 		fi
 	fi
 	if [[ -n "$(apt-cache search '^ripgrep$' --names-only)" ]]; then
-		echo_and_eval 'sudo apt-get install ripgrep --yes'
+		exec_cmd 'sudo apt-get install ripgrep --yes'
 	fi
 	if [[ $? -ne 0 || -z "$(apt-cache search '^ripgrep$' --names-only)" ]]; then
 		LATEST_RIPGREP_VERSION="$(get_latest_version "BurntSushi/ripgrep")"
 		if [[ -n "$LATEST_RIPGREP_VERSION" ]] && ! check_binary ripgrep "$LATEST_RIPGREP_VERSION"; then
-			echo_and_eval "wget -N -P \"$TMP_DIR\" https://github.com/BurntSushi/ripgrep/releases/download/${LATEST_RIPGREP_VERSION}/ripgrep_${LATEST_RIPGREP_VERSION}_amd64.deb"
-			echo_and_eval "sudo dpkg -i \"$TMP_DIR/ripgrep_${LATEST_RIPGREP_VERSION}_amd64.deb\""
+			exec_cmd "wget -N -P \"$TMP_DIR\" https://github.com/BurntSushi/ripgrep/releases/download/${LATEST_RIPGREP_VERSION}/ripgrep_${LATEST_RIPGREP_VERSION}_amd64.deb"
+			exec_cmd "sudo dpkg -i \"$TMP_DIR/ripgrep_${LATEST_RIPGREP_VERSION}_amd64.deb\""
 		fi
 	fi
 	LATEST_SHFMT_VERSION="$(get_latest_version "mvdan/sh")"
 	if [[ ! -d "/usr/local/bin" ]]; then
-		echo_and_eval 'sudo mkdir -p "/usr/local/bin"'
+		exec_cmd 'sudo mkdir -p "/usr/local/bin"'
 	fi
 	if [[ -n "$LATEST_SHFMT_VERSION" ]] && ! check_binary shfmt "$LATEST_SHFMT_VERSION"; then
-		echo_and_eval "wget -N -P \"$TMP_DIR\" https://github.com/mvdan/sh/releases/download/${LATEST_SHFMT_VERSION}/shfmt_${LATEST_SHFMT_VERSION}_linux_amd64"
-		echo_and_eval "sudo mv -f \"$TMP_DIR/shfmt_${LATEST_SHFMT_VERSION}_linux_amd64\" /usr/local/bin/shfmt"
-		echo_and_eval 'sudo chmod a+x /usr/local/bin/shfmt'
-		echo_and_eval 'sudo chown root:root /usr/local/bin/shfmt'
+		exec_cmd "wget -N -P \"$TMP_DIR\" https://github.com/mvdan/sh/releases/download/${LATEST_SHFMT_VERSION}/shfmt_${LATEST_SHFMT_VERSION}_linux_amd64"
+		exec_cmd "sudo mv -f \"$TMP_DIR/shfmt_${LATEST_SHFMT_VERSION}_linux_amd64\" /usr/local/bin/shfmt"
+		exec_cmd 'sudo chmod a+x /usr/local/bin/shfmt'
+		exec_cmd 'sudo chown root:root /usr/local/bin/shfmt'
 	fi
-	echo_and_eval "wget -N -P \"$TMP_DIR\" https://github.com/so-fancy/diff-so-fancy/raw/HEAD/third_party/build_fatpack/diff-so-fancy"
-	echo_and_eval "sudo mv -f \"$TMP_DIR/diff-so-fancy\" /usr/local/bin/diff-so-fancy"
-	echo_and_eval 'sudo chmod a+x /usr/local/bin/diff-so-fancy'
-	echo_and_eval 'sudo chown root:root /usr/local/bin/diff-so-fancy'
-	echo_and_eval 'sudo apt-get install htop ssh net-tools exfat-utils tree colordiff xclip --yes'
-	echo_and_eval 'sudo apt-get install make cmake automake autoconf build-essential gcc g++ gdb --yes'
-	echo_and_eval 'sudo apt-get install clang clang-format llvm lldb ruby-full libssl-dev libreadline-dev --yes'
-	echo_and_eval 'sudo apt-get autoremove --yes'
-	echo_and_eval 'sudo apt-get autoclean'
+	exec_cmd "wget -N -P \"$TMP_DIR\" https://github.com/so-fancy/diff-so-fancy/raw/HEAD/third_party/build_fatpack/diff-so-fancy"
+	exec_cmd "sudo mv -f \"$TMP_DIR/diff-so-fancy\" /usr/local/bin/diff-so-fancy"
+	exec_cmd 'sudo chmod a+x /usr/local/bin/diff-so-fancy'
+	exec_cmd 'sudo chown root:root /usr/local/bin/diff-so-fancy'
+	exec_cmd 'sudo apt-get install htop ssh net-tools exfat-utils tree colordiff xclip --yes'
+	exec_cmd 'sudo apt-get install make cmake automake autoconf build-essential gcc g++ gdb --yes'
+	exec_cmd 'sudo apt-get install clang clang-format llvm lldb ruby-full libssl-dev libreadline-dev --yes'
+	exec_cmd 'sudo apt-get autoremove --yes'
+	exec_cmd 'sudo apt-get autoclean'
 fi
 
 # Change the login shell to Zsh
 if [[ "$(basename "$SHELL")" != "zsh" ]]; then
 	if grep -qF '/usr/bin/zsh' /etc/shells; then
-		echo_and_eval 'chsh -s /usr/bin/zsh'
+		exec_cmd 'chsh -s /usr/bin/zsh'
 	elif grep -qF '/bin/zsh' /etc/shells; then
-		echo_and_eval 'chsh -s /bin/zsh'
+		exec_cmd 'chsh -s /bin/zsh'
 	fi
 fi
 
-echo_and_eval 'cd "$HOME"'
+exec_cmd 'cd "$HOME"'
 
 # Configurations for Git
 export GIT_HTTP_LOW_SPEED_LIMIT=0
@@ -304,42 +304,42 @@ ln -sf .dotfiles/.gitconfig .
 if [[ ! -x "$(command -v brew)" ]]; then
 	HOMEBREW_PREFIX="$HOME/.linuxbrew"
 	if $SET_MIRRORS; then
-		echo_and_eval 'export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"'
-		echo_and_eval 'export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/linuxbrew-core.git"'
-		echo_and_eval 'export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/linuxbrew-bottles"'
-		echo_and_eval "git clone --depth=1 https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/install.git \"$TMP_DIR/brew-install\""
-		echo_and_eval "NONINTERACTIVE=1 /bin/bash -c \"\$(sed -E 's#^(\\s*)(HOMEBREW_PREFIX_DEFAULT)=(.*)\$#\\1\\2=\"\$HOME/.linuxbrew\"#' \"$TMP_DIR/brew-install/install.sh\")\""
-		echo_and_eval 'unset HOMEBREW_{BREW,CORE}_GIT_REMOTE'
+		exec_cmd 'export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"'
+		exec_cmd 'export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/linuxbrew-core.git"'
+		exec_cmd 'export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/linuxbrew-bottles"'
+		exec_cmd "git clone --depth=1 https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/install.git \"$TMP_DIR/brew-install\""
+		exec_cmd "NONINTERACTIVE=1 /bin/bash -c \"\$(sed -E 's#^(\\s*)(HOMEBREW_PREFIX_DEFAULT)=(.*)\$#\\1\\2=\"\$HOME/.linuxbrew\"#' \"$TMP_DIR/brew-install/install.sh\")\""
+		exec_cmd 'unset HOMEBREW_{BREW,CORE}_GIT_REMOTE'
 	else
-		echo_and_eval "NONINTERACTIVE=1 /bin/bash -c \"\$(curl -fsSL https://github.com/Homebrew/install/raw/HEAD/install.sh | sed -E 's#^(\\s*)(HOMEBREW_PREFIX_DEFAULT)=(.*)\$#\\1\\2=\"\$HOME/.linuxbrew\"#')\""
+		exec_cmd "NONINTERACTIVE=1 /bin/bash -c \"\$(curl -fsSL https://github.com/Homebrew/install/raw/HEAD/install.sh | sed -E 's#^(\\s*)(HOMEBREW_PREFIX_DEFAULT)=(.*)\$#\\1\\2=\"\$HOME/.linuxbrew\"#')\""
 	fi
 else
 	HOMEBREW_PREFIX="$(brew --prefix)"
 fi
 
-echo_and_eval "eval \"\$($HOMEBREW_PREFIX/bin/brew shellenv)\""
+exec_cmd "eval \"\$($HOMEBREW_PREFIX/bin/brew shellenv)\""
 
 if $SET_MIRRORS; then
-	echo_and_eval 'git -C "$(brew --repo)" remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git'
+	exec_cmd 'git -C "$(brew --repo)" remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git'
 	BREW_TAPS="$(brew tap)"
 	for tap in core cask{,-fonts,-drivers}; do
 		if echo "$BREW_TAPS" | grep -qE "^homebrew/${tap}\$"; then
-			echo_and_eval "git -C \"\$(brew --repo homebrew/${tap})\" remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-${tap}.git"
-			echo_and_eval "git -C \"\$(brew --repo homebrew/${tap})\" config homebrew.forceautoupdate true"
+			exec_cmd "git -C \"\$(brew --repo homebrew/${tap})\" remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-${tap}.git"
+			exec_cmd "git -C \"\$(brew --repo homebrew/${tap})\" config homebrew.forceautoupdate true"
 		else
-			echo_and_eval "brew tap --force-auto-update homebrew/${tap} https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-${tap}.git"
+			exec_cmd "brew tap --force-auto-update homebrew/${tap} https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-${tap}.git"
 		fi
 	done
-	echo_and_eval 'brew update-reset'
+	exec_cmd 'brew update-reset'
 else
 	BREW_TAPS="$(brew tap)"
 	for tap in core cask{,-fonts,-drivers}; do
 		if ! (echo "$BREW_TAPS" | grep -qE "^homebrew/${tap}\$"); then
-			echo_and_eval "brew tap --force-auto-update homebrew/${tap}"
+			exec_cmd "brew tap --force-auto-update homebrew/${tap}"
 		fi
 	done
 fi
-echo_and_eval 'brew update --verbose'
+exec_cmd 'brew update --verbose'
 
 # Install Oh-My-Zsh
 export ZSH="${ZSH:-"$HOME/.oh-my-zsh"}"
@@ -349,9 +349,9 @@ export ZSH_CACHE_DIR="${ZSH_CACHE_DIR:-"$ZSH/cahce"}"
 if [[ -d "$ZSH/.git" && -f "$ZSH/tools/upgrade.sh" ]]; then
 	rm -f "$ZSH_CACHE_DIR/.zsh-update" 2>/dev/null
 	zsh "$ZSH/tools/check_for_upgrade.sh" 2>/dev/null
-	echo_and_eval 'zsh "$ZSH/tools/upgrade.sh" 2>&1'
+	exec_cmd 'zsh "$ZSH/tools/upgrade.sh" 2>&1'
 else
-	echo_and_eval 'git clone -c core.eol=lf -c core.autocrlf=false \
+	exec_cmd 'git clone -c core.eol=lf -c core.autocrlf=false \
 		-c fsck.zeroPaddedFilemode=ignore \
 		-c fetch.fsck.zeroPaddedFilemode=ignore \
 		-c receive.fsck.zeroPaddedFilemode=ignore \
@@ -361,27 +361,27 @@ fi
 
 # Install Powerlevel10k theme
 if [[ ! -d "$ZSH_CUSTOM/themes/powerlevel10k/.git" ]]; then
-	echo_and_eval 'git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "$ZSH_CUSTOM/themes/powerlevel10k" 2>&1'
+	exec_cmd 'git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "$ZSH_CUSTOM/themes/powerlevel10k" 2>&1'
 else
-	echo_and_eval 'git -C "$ZSH_CUSTOM/themes/powerlevel10k" pull --ff-only 2>&1'
+	exec_cmd 'git -C "$ZSH_CUSTOM/themes/powerlevel10k" pull --ff-only 2>&1'
 fi
 
 # Install Zsh plugins
 for plugin in zsh-{syntax-highlighting,autosuggestions,completions}; do
 	if [[ ! -d "$ZSH_CUSTOM/plugins/$plugin/.git" ]]; then
-		echo_and_eval "git clone --depth=1 https://github.com/zsh-users/${plugin}.git \"\$ZSH_CUSTOM/plugins/$plugin\" 2>&1"
+		exec_cmd "git clone --depth=1 https://github.com/zsh-users/${plugin}.git \"\$ZSH_CUSTOM/plugins/$plugin\" 2>&1"
 	else
-		echo_and_eval "git -C \"\$ZSH_CUSTOM/plugins/$plugin\" pull --ff-only 2>&1"
+		exec_cmd "git -C \"\$ZSH_CUSTOM/plugins/$plugin\" pull --ff-only 2>&1"
 	fi
 done
 
 # Install fzf
 if [[ ! -d "$HOME/.fzf" ]]; then
-	echo_and_eval 'git clone --depth=1 https://github.com/junegunn/fzf.git "$HOME/.fzf" 2>&1'
+	exec_cmd 'git clone --depth=1 https://github.com/junegunn/fzf.git "$HOME/.fzf" 2>&1'
 else
-	echo_and_eval 'git -C "$HOME/.fzf" pull --ff-only 2>&1'
+	exec_cmd 'git -C "$HOME/.fzf" pull --ff-only 2>&1'
 fi
-echo_and_eval '"$HOME/.fzf/install" --key-bindings --completion --no-update-rc'
+exec_cmd '"$HOME/.fzf/install" --key-bindings --completion --no-update-rc'
 
 # Configurations for RubyGems
 backup_dotfiles .gemrc .dotfiles/.gemrc
@@ -408,15 +408,15 @@ if [[ -x "$(command -v ruby)" && -x "$(command -v gem)" ]]; then
 	export RUBYOPT="-W0"
 	export PATH="$(ruby -r rubygems -e 'puts Gem.dir')/bin${PATH:+:"$PATH"}"
 	export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin${PATH:+:"$PATH"}"
-	echo_and_eval 'gem install colorls --user-install'
-	echo_and_eval 'gem cleanup --user-install'
+	exec_cmd 'gem install colorls --user-install'
+	exec_cmd 'gem cleanup --user-install'
 fi
 
 # Configurations for Perl
 export PERL_MB_OPT="--install_base \"$HOME/.perl\""
 export PERL_MM_OPT="INSTALL_BASE=\"$HOME/.perl\""
-echo_and_eval "PERL_MM_USE_DEFAULT=1 http_proxy=\"\" ftp_proxy=\"\" perl -MCPAN -e 'mkmyconfig'"
-echo_and_eval "perl -MCPAN -e 'CPAN::HandleConfig->load();' \\
+exec_cmd "PERL_MM_USE_DEFAULT=1 http_proxy=\"\" ftp_proxy=\"\" perl -MCPAN -e 'mkmyconfig'"
+exec_cmd "perl -MCPAN -e 'CPAN::HandleConfig->load();' \\
 	-e 'CPAN::HandleConfig->edit(\"cleanup_after_install\", \"1\");' \\
 	-e 'CPAN::HandleConfig->commit()'"
 if $SET_MIRRORS; then
@@ -424,15 +424,15 @@ if $SET_MIRRORS; then
 		perl -MCPAN -e 'CPAN::HandleConfig->load();' -e 'CPAN::HandleConfig->prettyprint("urllist")' |
 			grep -qF 'https://mirrors.tuna.tsinghua.edu.cn/CPAN/'
 	); then
-		echo_and_eval "perl -MCPAN -e 'CPAN::HandleConfig->load();' \\
+		exec_cmd "perl -MCPAN -e 'CPAN::HandleConfig->load();' \\
 			-e 'CPAN::HandleConfig->edit(\"urllist\", \"unshift\", \"https://mirrors.tuna.tsinghua.edu.cn/CPAN/\");' \\
 			-e 'CPAN::HandleConfig->commit()'"
 	fi
 fi
-echo_and_eval "perl -MCPAN -e 'install local::lib'"
-echo_and_eval 'eval "$(perl -I$HOME/.perl/lib/perl5 -Mlocal::lib=$HOME/.perl)"'
-echo_and_eval "perl -MCPAN -e 'install CPAN'"
-echo_and_eval "AUTOMATED_TESTING=1 perl -MCPAN -e 'install Term::ReadLine::Perl, Term::ReadKey'"
+exec_cmd "perl -MCPAN -e 'install local::lib'"
+exec_cmd 'eval "$(perl -I$HOME/.perl/lib/perl5 -Mlocal::lib=$HOME/.perl)"'
+exec_cmd "perl -MCPAN -e 'install CPAN'"
+exec_cmd "AUTOMATED_TESTING=1 perl -MCPAN -e 'install Term::ReadLine::Perl, Term::ReadKey'"
 
 # Configurations for Zsh
 backup_dotfiles .dotfiles/.zshrc
@@ -778,22 +778,22 @@ ${COMMAND}
 EOF
 if $IS_SUDOER; then
 	if [[ ! -d "/usr/local/bin" ]]; then
-		echo_and_eval 'sudo mkdir -p "/usr/local/bin"'
+		exec_cmd 'sudo mkdir -p "/usr/local/bin"'
 	fi
 	if [[ ! -x "/usr/local/bin/zsh-lean" || -L "/usr/local/bin/zsh-lean" ]] ||
 		! diff -EB "/usr/local/bin/zsh-lean" "$TMP_DIR/zsh-lean" &>/dev/null; then
 		if [[ -f "/usr/local/bin/zsh-lean" ]]; then
-			echo_and_eval 'sudo rm -f /usr/local/bin/zsh-lean'
+			exec_cmd 'sudo rm -f /usr/local/bin/zsh-lean'
 		fi
-		echo_and_eval "printf \"%s\\n\" '$SHEBANG' '$COMMAND' | sudo tee /usr/local/bin/zsh-lean"
-		echo_and_eval 'sudo chmod a+x /usr/local/bin/zsh-lean'
+		exec_cmd "printf \"%s\\n\" '$SHEBANG' '$COMMAND' | sudo tee /usr/local/bin/zsh-lean"
+		exec_cmd 'sudo chmod a+x /usr/local/bin/zsh-lean'
 	fi
 	if ! grep -qF '/usr/local/bin/zsh-lean' /etc/shells; then
-		echo_and_eval 'echo "/usr/local/bin/zsh-lean" | sudo tee -a /etc/shells'
+		exec_cmd 'echo "/usr/local/bin/zsh-lean" | sudo tee -a /etc/shells'
 	fi
 else
 	mkdir -p "$HOME/.local/bin"
-	echo_and_eval "cp -f \"$TMP_DIR/zsh-lean\" \"\$HOME/.local/bin/zsh-lean\""
+	exec_cmd "cp -f \"$TMP_DIR/zsh-lean\" \"\$HOME/.local/bin/zsh-lean\""
 	chmod +x "$HOME/.local/bin/zsh-lean"
 fi
 
@@ -803,7 +803,7 @@ backup_dotfiles .dotfiles/utilities.sh
 cat >.dotfiles/utilities.sh <<'EOF'
 #!/usr/bin/env bash
 
-function echo_and_eval() {
+function exec_cmd() {
 	printf "%s" "$@" | awk \
 		'BEGIN {
 			RESET = "\033[0m";
@@ -881,31 +881,31 @@ function echo_and_eval() {
 
 function upgrade_ubuntu() {
 	# Upgrade packages
-	echo_and_eval 'sudo apt-get update'
-	echo_and_eval 'sudo apt-get dist-upgrade --yes'
-	echo_and_eval 'sudo apt-get full-upgrade --yes'
-	echo_and_eval 'sudo apt-get upgrade --yes'
+	exec_cmd 'sudo apt-get update'
+	exec_cmd 'sudo apt-get dist-upgrade --yes'
+	exec_cmd 'sudo apt-get full-upgrade --yes'
+	exec_cmd 'sudo apt-get upgrade --yes'
 
 	# Remove unused packages
-	echo_and_eval 'sudo apt-get autoremove --yes'
+	exec_cmd 'sudo apt-get autoremove --yes'
 
 	# Clean up cache
-	echo_and_eval 'sudo apt-get autoclean'
+	exec_cmd 'sudo apt-get autoclean'
 }
 
 function upgrade_linuxbrew() {
 	# Upgrade Linuxbrew
-	echo_and_eval 'brew update --verbose'
-	echo_and_eval 'brew outdated'
+	exec_cmd 'brew update --verbose'
+	exec_cmd 'brew outdated'
 
 	# Upgrade Linuxbrew formulae
-	echo_and_eval 'brew upgrade'
+	exec_cmd 'brew upgrade'
 
 	# Uninstall formulae that no longer needed
-	echo_and_eval 'brew autoremove --verbose'
+	exec_cmd 'brew autoremove --verbose'
 
 	# Clean up Linuxbrew cache
-	echo_and_eval 'brew cleanup -s --prune 7'
+	exec_cmd 'brew cleanup -s --prune 7'
 }
 
 function upgrade_ohmyzsh() {
@@ -919,14 +919,14 @@ function upgrade_ohmyzsh() {
 	# Upgrade oh my zsh
 	rm -f "$ZSH_CACHE_DIR/.zsh-update" 2>/dev/null
 	zsh "$ZSH/tools/check_for_upgrade.sh" 2>/dev/null
-	echo_and_eval 'zsh "$ZSH/tools/upgrade.sh"'
-	echo_and_eval 'git -C "$ZSH" fetch --prune'
-	echo_and_eval 'git -C "$ZSH" gc --prune=all'
+	exec_cmd 'zsh "$ZSH/tools/upgrade.sh"'
+	exec_cmd 'git -C "$ZSH" fetch --prune'
+	exec_cmd 'git -C "$ZSH" gc --prune=all'
 
 	# Upgrade themes and plugins
 	while read -r repo; do
-		echo_and_eval "git -C \"\$ZSH_CUSTOM/$repo\" pull --prune --ff-only"
-		echo_and_eval "git -C \"\$ZSH_CUSTOM/$repo\" gc --prune=all"
+		exec_cmd "git -C \"\$ZSH_CUSTOM/$repo\" pull --prune --ff-only"
+		exec_cmd "git -C \"\$ZSH_CUSTOM/$repo\" gc --prune=all"
 	done < <(
 		cd "$ZSH_CUSTOM" &&
 			find -L . -mindepth 3 -maxdepth 3 -not -empty -type d -name '.git' -prune -exec dirname {} \; |
@@ -938,36 +938,36 @@ function upgrade_ohmyzsh() {
 }
 
 function upgrade_fzf() {
-	echo_and_eval 'git -C "$HOME/.fzf" pull --prune --ff-only'
-	echo_and_eval 'git -C "$HOME/.fzf" gc --prune=all'
-	echo_and_eval '"$HOME/.fzf/install" --key-bindings --completion --no-update-rc'
+	exec_cmd 'git -C "$HOME/.fzf" pull --prune --ff-only'
+	exec_cmd 'git -C "$HOME/.fzf" gc --prune=all'
+	exec_cmd '"$HOME/.fzf/install" --key-bindings --completion --no-update-rc'
 }
 
 function upgrade_vim() {
-	echo_and_eval 'vim -c "PlugUpgrade | PlugUpdate | sleep 5 | quitall"'
+	exec_cmd 'vim -c "PlugUpgrade | PlugUpdate | sleep 5 | quitall"'
 }
 
 function upgrade_gems() {
 	if groups | grep -qE '(sudo|root)'; then
 		if [[ "$(command -v gem)" != /usr/bin/gem && "$(command -v gem)" != /bin/gem ]]; then
-			echo_and_eval 'sudo gem update --system --config-file "$HOME/.gemrc"'
+			exec_cmd 'sudo gem update --system --config-file "$HOME/.gemrc"'
 		fi
-		echo_and_eval 'sudo gem update --config-file "$HOME/.gemrc"'
-		echo_and_eval 'sudo gem cleanup --config-file "$HOME/.gemrc"'
+		exec_cmd 'sudo gem update --config-file "$HOME/.gemrc"'
+		exec_cmd 'sudo gem cleanup --config-file "$HOME/.gemrc"'
 	fi
-	echo_and_eval 'gem update --user-install'
-	echo_and_eval 'gem cleanup --user-install'
+	exec_cmd 'gem update --user-install'
+	exec_cmd 'gem cleanup --user-install'
 }
 
 function upgrade_cpan() {
-	echo_and_eval 'cpan -u'
+	exec_cmd 'cpan -u'
 }
 
 function upgrade_conda() {
 	local env cmds
 
 	# Upgrade Conda
-	echo_and_eval 'conda update conda --name base --yes'
+	exec_cmd 'conda update conda --name base --yes'
 
 	# Upgrade Conda packages in each environment
 	while read -r env; do
@@ -975,11 +975,11 @@ function upgrade_conda() {
 		if conda list --full-name anaconda --name "$env" | grep -q '^anaconda[^-]'; then
 			cmds="$cmds; conda update anaconda --yes"
 		fi
-		echo_and_eval "conda activate $env; $cmds; conda deactivate"
+		exec_cmd "conda activate $env; $cmds; conda deactivate"
 	done < <(conda info --envs | awk 'NF > 0 && $0 !~ /^#.*/ { print $1 }')
 
 	# Clean up Conda cache
-	echo_and_eval 'conda clean --all --yes'
+	exec_cmd 'conda clean --all --yes'
 }
 
 function foreach_conda_env_do() {
@@ -987,7 +987,7 @@ function foreach_conda_env_do() {
 
 	# Execute in each Conda environment
 	while read -r env; do
-		echo_and_eval "conda activate $env; ${*}; conda deactivate"
+		exec_cmd "conda activate $env; ${*}; conda deactivate"
 	done < <(conda info --envs | awk 'NF > 0 && $0 !~ /^#.*/ { print $1 }')
 }
 
@@ -1601,15 +1601,15 @@ EOF
 
 # Install Vim-Plug plugin manager
 if [[ ! -f "$HOME/.vim/autoload/plug.vim" ]]; then
-	echo_and_eval 'curl -fL#o "$HOME/.vim/autoload/plug.vim" --create-dirs \
+	exec_cmd 'curl -fL#o "$HOME/.vim/autoload/plug.vim" --create-dirs \
 		https://github.com/junegunn/vim-plug/raw/HEAD/plug.vim'
 fi
 
 # Install Vim plugins
 if [[ -x "$(command -v vim)" ]]; then
-	echo_and_eval 'vim -c "PlugUpgrade | PlugInstall | PlugUpdate | sleep 5 | quitall"'
+	exec_cmd 'vim -c "PlugUpgrade | PlugInstall | PlugUpdate | sleep 5 | quitall"'
 	if [[ ! -f "$HOME/.vim/plugged/markdown-preview.nvim/app/bin/markdown-preview-linux" ]]; then
-		echo_and_eval 'cd "$HOME/.vim/plugged/markdown-preview.nvim/app"; ./install.sh; cd "$HOME"'
+		exec_cmd 'cd "$HOME/.vim/plugged/markdown-preview.nvim/app"; ./install.sh; cd "$HOME"'
 	fi
 fi
 
@@ -1702,7 +1702,7 @@ bind-key -n S-Right next-window
 bind-key r source-file ~/.tmux.conf \; display-message "tmux.conf reloaded"
 EOF
 
-echo_and_eval 'wget -N -P "$HOME/.dotfiles" https://github.com/gpakosz/.tmux/raw/HEAD/.tmux.conf{,.local}'
+exec_cmd 'wget -N -P "$HOME/.dotfiles" https://github.com/gpakosz/.tmux/raw/HEAD/.tmux.conf{,.local}'
 ln -sf .dotfiles/.tmux.conf .
 ln -sf .dotfiles/.tmux.conf.local .
 
@@ -2034,24 +2034,24 @@ ln -sf .dotfiles/.condarc .
 # Install Miniconda
 if [[ ! -d "$HOME/$CONDA_DIR" ]]; then
 	if $SET_MIRRORS; then
-		echo_and_eval "wget -N -P \"$TMP_DIR\" https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-latest-Linux-x86_64.sh"
+		exec_cmd "wget -N -P \"$TMP_DIR\" https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-latest-Linux-x86_64.sh"
 	else
-		echo_and_eval "wget -N -P \"$TMP_DIR\" https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh"
+		exec_cmd "wget -N -P \"$TMP_DIR\" https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh"
 	fi
-	echo_and_eval "/bin/sh \"$TMP_DIR/Miniconda3-latest-Linux-x86_64.sh\" -b -p \"\$HOME/$CONDA_DIR\""
+	exec_cmd "/bin/sh \"$TMP_DIR/Miniconda3-latest-Linux-x86_64.sh\" -b -p \"\$HOME/$CONDA_DIR\""
 fi
 
 # Install Conda packages
 export PATH="${PATH:+"$PATH":}$HOME/$CONDA_DIR/condabin"
-echo_and_eval 'conda update conda --yes'
-echo_and_eval 'conda install pip ipython ipdb \
+exec_cmd 'conda update conda --yes'
+exec_cmd 'conda install pip ipython ipdb \
 	jupyter notebook jupyterlab jupyter_contrib_nbextensions \
 	numpy numba matplotlib pandas seaborn \
 	cython rich tqdm autopep8 pylint --yes'
-echo_and_eval 'conda clean --all --yes'
-echo_and_eval "\"\$HOME/$CONDA_DIR/bin/jupyter\" contrib nbextension install --user &>/dev/null"
+exec_cmd 'conda clean --all --yes'
+exec_cmd "\"\$HOME/$CONDA_DIR/bin/jupyter\" contrib nbextension install --user &>/dev/null"
 if $SET_MIRRORS; then
-	echo_and_eval "\"\$HOME/$CONDA_DIR/bin/pip\" config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple"
+	exec_cmd "\"\$HOME/$CONDA_DIR/bin/pip\" config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple"
 fi
 
 # Add Conda Environment Initialization Script
@@ -2143,9 +2143,9 @@ EOF
 chmod +x "$HOME/$CONDA_DIR/etc/init-envs.sh"
 
 # Setup IPython
-echo_and_eval "\"\$HOME/$CONDA_DIR/bin/ipython\" profile create"
-echo_and_eval "sed -i -E 's/^\\s*#?\\s*(c.InteractiveShell.colors).*\$/\\1 = \"Linux\"/g' \"\$HOME/.ipython/profile_default/ipython_config.py\""
-echo_and_eval "sed -i -E 's/^\\s*#?\\s*(c.InteractiveShell.colors).*\$/\\1 = \"Linux\"/g' \"\$HOME/.ipython/profile_default/ipython_kernel_config.py\""
+exec_cmd "\"\$HOME/$CONDA_DIR/bin/ipython\" profile create"
+exec_cmd "sed -i -E 's/^\\s*#?\\s*(c.InteractiveShell.colors).*\$/\\1 = \"Linux\"/g' \"\$HOME/.ipython/profile_default/ipython_config.py\""
+exec_cmd "sed -i -E 's/^\\s*#?\\s*(c.InteractiveShell.colors).*\$/\\1 = \"Linux\"/g' \"\$HOME/.ipython/profile_default/ipython_kernel_config.py\""
 
 mkdir -p "$HOME/.ipython/profile_default/startup"
 
@@ -2172,19 +2172,19 @@ URL_LIST=(
 	"https://github.com/ryanoasis/nerd-fonts/releases/latest/download/DejaVuSansMono.zip"
 	"https://github.com/microsoft/cascadia-code/releases/latest/download/CascadiaCode-${LATEST_CASCADIA_VERSION#v}.zip"
 )
-echo_and_eval "wget -N -P \"$TMP_DIR/fonts\" https://github.com/XuehaiPan/Dev-Setup/raw/HEAD/Menlo.ttc"
+exec_cmd "wget -N -P \"$TMP_DIR/fonts\" https://github.com/XuehaiPan/Dev-Setup/raw/HEAD/Menlo.ttc"
 for url in "${URL_LIST[@]}"; do
-	echo_and_eval "wget -N -P \"$TMP_DIR\" $url"
-	echo_and_eval "unzip -o \"$TMP_DIR/$(basename "$url")\" -d \"$TMP_DIR/fonts\""
+	exec_cmd "wget -N -P \"$TMP_DIR\" $url"
+	exec_cmd "unzip -o \"$TMP_DIR/$(basename "$url")\" -d \"$TMP_DIR/fonts\""
 done
 for font_dir in "${FONT_DIR_LIST[@]}"; do
-	echo_and_eval "find -L \"$TMP_DIR/fonts\" -not -empty -type f -name '*.[ot]t[fc]' \\
+	exec_cmd "find -L \"$TMP_DIR/fonts\" -not -empty -type f -name '*.[ot]t[fc]' \\
 		-printf '==> cp -f \"%p\" \"$font_dir\"\n' \\
 		-exec cp -f '{}' \"$font_dir\" \\;"
 done
 if [[ -x "$(command -v fc-cache)" ]]; then
-	echo_and_eval 'fc-cache --force'
+	exec_cmd 'fc-cache --force'
 fi
 
 # Select default editor
-echo_and_eval 'select-editor'
+exec_cmd 'select-editor'

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-function echo_and_eval() {
+function exec_cmd() {
 	printf "%s" "$@" | awk \
 		'BEGIN {
 			RESET = "\033[0m";
@@ -78,17 +78,17 @@ function echo_and_eval() {
 
 function upgrade_homebrew() {
 	# Upgrade Homebrew
-	echo_and_eval 'brew update --verbose'
-	echo_and_eval 'brew outdated'
+	exec_cmd 'brew update --verbose'
+	exec_cmd 'brew outdated'
 
 	# Upgrade Homebrew formulae and casks
-	echo_and_eval 'brew upgrade'
+	exec_cmd 'brew upgrade'
 
 	# Uninstall formulae that no longer needed
-	echo_and_eval 'brew autoremove --verbose'
+	exec_cmd 'brew autoremove --verbose'
 
 	# Clean up Homebrew cache
-	echo_and_eval 'brew cleanup -s --prune 7'
+	exec_cmd 'brew cleanup -s --prune 7'
 }
 
 function upgrade_ohmyzsh() {
@@ -102,14 +102,14 @@ function upgrade_ohmyzsh() {
 	# Upgrade oh my zsh
 	rm -f "$ZSH_CACHE_DIR/.zsh-update" 2>/dev/null
 	zsh "$ZSH/tools/check_for_upgrade.sh" 2>/dev/null
-	echo_and_eval 'zsh "$ZSH/tools/upgrade.sh"'
-	echo_and_eval 'git -C "$ZSH" fetch --prune'
-	echo_and_eval 'git -C "$ZSH" gc --prune=all'
+	exec_cmd 'zsh "$ZSH/tools/upgrade.sh"'
+	exec_cmd 'git -C "$ZSH" fetch --prune'
+	exec_cmd 'git -C "$ZSH" gc --prune=all'
 
 	# Upgrade themes and plugins
 	while read -r repo; do
-		echo_and_eval "git -C \"\$ZSH_CUSTOM/$repo\" pull --prune --ff-only"
-		echo_and_eval "git -C \"\$ZSH_CUSTOM/$repo\" gc --prune=all"
+		exec_cmd "git -C \"\$ZSH_CUSTOM/$repo\" pull --prune --ff-only"
+		exec_cmd "git -C \"\$ZSH_CUSTOM/$repo\" gc --prune=all"
 	done < <(
 		cd "$ZSH_CUSTOM" &&
 			find -L . -mindepth 3 -maxdepth 3 -not -empty -type d -name '.git' -prune -exec dirname {} \; |
@@ -121,34 +121,34 @@ function upgrade_ohmyzsh() {
 }
 
 function upgrade_fzf() {
-	echo_and_eval 'git -C "$HOME/.fzf" pull --prune --ff-only'
-	echo_and_eval 'git -C "$HOME/.fzf" gc --prune=all'
-	echo_and_eval '"$HOME/.fzf/install" --key-bindings --completion --no-update-rc'
+	exec_cmd 'git -C "$HOME/.fzf" pull --prune --ff-only'
+	exec_cmd 'git -C "$HOME/.fzf" gc --prune=all'
+	exec_cmd '"$HOME/.fzf/install" --key-bindings --completion --no-update-rc'
 }
 
 function upgrade_vim() {
-	echo_and_eval 'vim -c "PlugUpgrade | PlugUpdate | sleep 5 | quitall"'
+	exec_cmd 'vim -c "PlugUpgrade | PlugUpdate | sleep 5 | quitall"'
 }
 
 function upgrade_gems() {
-	echo_and_eval 'gem update --system'
-	echo_and_eval 'gem update'
-	echo_and_eval 'gem cleanup'
+	exec_cmd 'gem update --system'
+	exec_cmd 'gem update'
+	exec_cmd 'gem cleanup'
 }
 
 function upgrade_cpan() {
-	echo_and_eval 'cpan -u'
+	exec_cmd 'cpan -u'
 }
 
 function upgrade_texlive() {
-	echo_and_eval 'sudo tlmgr update --self --all'
+	exec_cmd 'sudo tlmgr update --self --all'
 }
 
 function upgrade_conda() {
 	local env cmds
 
 	# Upgrade Conda
-	echo_and_eval 'conda update conda --name base --yes'
+	exec_cmd 'conda update conda --name base --yes'
 
 	# Upgrade Conda packages in each environment
 	while read -r env; do
@@ -156,11 +156,11 @@ function upgrade_conda() {
 		if conda list --full-name anaconda --name "$env" | grep -q '^anaconda[^-]'; then
 			cmds="$cmds; conda update anaconda --yes"
 		fi
-		echo_and_eval "conda activate $env; $cmds; conda deactivate"
+		exec_cmd "conda activate $env; $cmds; conda deactivate"
 	done < <(conda info --envs | awk 'NF > 0 && $0 !~ /^#.*/ { print $1 }')
 
 	# Clean up Conda cache
-	echo_and_eval 'conda clean --all --yes'
+	exec_cmd 'conda clean --all --yes'
 }
 
 function foreach_conda_env_do() {
@@ -168,7 +168,7 @@ function foreach_conda_env_do() {
 
 	# Execute in each Conda environment
 	while read -r env; do
-		echo_and_eval "conda activate $env; ${*}; conda deactivate"
+		exec_cmd "conda activate $env; ${*}; conda deactivate"
 	done < <(conda info --envs | awk 'NF > 0 && $0 !~ /^#.*/ { print $1 }')
 }
 
@@ -283,11 +283,11 @@ function pull_projects() {
 	for BASE_DIR in "${BASE_DIRS[@]}"; do
 		while read -r PROJ_DIR; do
 			if [[ -n "$(git -C "$PROJ_DIR" remote)" ]]; then
-				echo_and_eval "git -C \"${PROJ_DIR/#$HOME/\$HOME}\" fetch --all --prune"
+				exec_cmd "git -C \"${PROJ_DIR/#$HOME/\$HOME}\" fetch --all --prune"
 				HEAD_HASH="$(git -C "$PROJ_DIR" rev-parse HEAD)"
-				echo_and_eval "git -C \"${PROJ_DIR/#$HOME/\$HOME}\" pull --ff-only"
+				exec_cmd "git -C \"${PROJ_DIR/#$HOME/\$HOME}\" pull --ff-only"
 				if [[ "$HEAD_HASH" != "$(git -C "$PROJ_DIR" rev-parse HEAD)" ]]; then
-					echo_and_eval "git -C \"${PROJ_DIR/#$HOME/\$HOME}\" gc --aggressive"
+					exec_cmd "git -C \"${PROJ_DIR/#$HOME/\$HOME}\" gc --aggressive"
 				fi
 			fi
 		done < <(

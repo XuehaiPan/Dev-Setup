@@ -183,6 +183,7 @@ function upgrade_packages() {
 	# upgrade_conda
 
 	if [[ -n "$ZSH_VERSION" ]]; then
+		rm -f "${ZSH_COMPDUMP:-"${ZDOTDIR:-"$HOME"}"/.zcompdump}" &>/dev/null
 		if [[ -f "${ZDOTDIR:-"$HOME"}/.zshrc" ]]; then
 			source "${ZDOTDIR:-"$HOME"}/.zshrc"
 		fi

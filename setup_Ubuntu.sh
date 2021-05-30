@@ -290,6 +290,47 @@ fi
 mv -f .gitconfig .dotfiles/.gitconfig
 ln -sf .dotfiles/.gitconfig .
 
+# Install and setup Linuxbrew
+if [[ ! -x "$(command -v brew)" ]]; then
+	HOMEBREW_PREFIX="$HOME/.linuxbrew"
+	if $SET_MIRRORS; then
+		echo_and_eval 'export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"'
+		echo_and_eval 'export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/linuxbrew-core.git"'
+		echo_and_eval 'export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/linuxbrew-bottles"'
+		echo_and_eval "git clone --depth=1 https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/install.git \"$TMP_DIR/brew-install\""
+		echo_and_eval "NONINTERACTIVE=1 /bin/bash -c \"\$(sed -E 's#^(\\s*)(HOMEBREW_PREFIX_DEFAULT)=(.*)\$#\\1\\2=\"\$HOME/.linuxbrew\"#' \"$TMP_DIR/brew-install/install.sh\")\""
+		echo_and_eval 'unset HOMEBREW_{BREW,CORE}_GIT_REMOTE'
+	else
+		echo_and_eval "NONINTERACTIVE=1 /bin/bash -c \"\$(curl -fsSL https://github.com/Homebrew/install/raw/HEAD/install.sh | sed -E 's#^(\\s*)(HOMEBREW_PREFIX_DEFAULT)=(.*)\$#\\1\\2=\"\$HOME/.linuxbrew\"#')\""
+	fi
+else
+	HOMEBREW_PREFIX="$(brew --prefix)"
+fi
+
+echo_and_eval "eval \"\$($HOMEBREW_PREFIX/bin/brew shellenv)\""
+
+if $SET_MIRRORS; then
+	echo_and_eval 'git -C "$(brew --repo)" remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git'
+	BREW_TAPS="$(brew tap)"
+	for tap in core cask{,-fonts,-drivers}; do
+		if echo "$BREW_TAPS" | grep -qE "^homebrew/${tap}\$"; then
+			echo_and_eval "git -C \"\$(brew --repo homebrew/${tap})\" remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-${tap}.git"
+			echo_and_eval "git -C \"\$(brew --repo homebrew/${tap})\" config homebrew.forceautoupdate true"
+		else
+			echo_and_eval "brew tap --force-auto-update homebrew/${tap} https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-${tap}.git"
+		fi
+	done
+	echo_and_eval 'brew update-reset'
+else
+	BREW_TAPS="$(brew tap)"
+	for tap in core cask{,-fonts,-drivers}; do
+		if ! (echo "$BREW_TAPS" | grep -qE "^homebrew/${tap}\$"); then
+			echo_and_eval "brew tap --force-auto-update homebrew/${tap}"
+		fi
+	done
+fi
+echo_and_eval 'brew update --verbose'
+
 # Install Oh-My-Zsh
 export ZSH="${ZSH:-"$HOME/.oh-my-zsh"}"
 export ZSH_CUSTOM="${ZSH_CUSTOM:-"$ZSH/custom"}"
@@ -386,6 +427,18 @@ echo_and_eval "AUTOMATED_TESTING=1 perl -MCPAN -e 'install Term::ReadLine::Perl,
 # Configurations for Zsh
 backup_dotfiles .dotfiles/.zshrc
 
+HOMEBREW_PREFIX="${HOMEBREW_PREFIX/#$HOME/\$HOME}"
+HOMEBREW_SETTINGS='# Linuxbrew
+'"eval \"\$($HOMEBREW_PREFIX/bin/brew shellenv)\""'
+export HOMEBREW_EDITOR="vim"
+export HOMEBREW_BAT=true'
+if $SET_MIRRORS; then
+	HOMEBREW_SETTINGS='# Linuxbrew
+'"eval \"\$($HOMEBREW_PREFIX/bin/brew shellenv)\""'
+export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/linuxbrew-bottles"
+export HOMEBREW_EDITOR="vim"
+export HOMEBREW_BAT=true'
+fi
 cat >.dotfiles/.zshrc <<'EOF'
 # Source global definitions
 # Include /etc/profile if it exists
@@ -433,6 +486,8 @@ export LC_ALL="en_US.utf8"
 
 EOF
 cat >>.dotfiles/.zshrc <<EOF
+${HOMEBREW_SETTINGS}
+
 # Anaconda
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
@@ -631,6 +686,7 @@ plugins=(
 	pylint
 	docker
 	tmux
+	brew
 	vscode
 )
 
@@ -670,6 +726,8 @@ source "$ZSH/oh-my-zsh.sh"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 # Set personal aliases
+alias bubo='brew update --verbose && brew outdated'
+alias bubc='brew upgrade && brew cleanup -s --prune 7'
 alias lsa='ls -A'
 alias l='ls -alh'
 alias ll='ls -lh'
@@ -825,6 +883,21 @@ function upgrade_ubuntu() {
 	echo_and_eval 'sudo apt-get autoclean'
 }
 
+function upgrade_linuxbrew() {
+	# Upgrade Linuxbrew
+	echo_and_eval 'brew update --verbose'
+	echo_and_eval 'brew outdated'
+
+	# Upgrade Linuxbrew formulae
+	echo_and_eval 'brew upgrade'
+
+	# Uninstall formulae that no longer needed
+	echo_and_eval 'brew autoremove --verbose'
+
+	# Clean up Linuxbrew cache
+	echo_and_eval 'brew cleanup -s --prune 7'
+}
+
 function upgrade_ohmyzsh() {
 	local repo
 
@@ -912,6 +985,7 @@ function upgrade_packages() {
 	if groups | grep -qE '(sudo|root)'; then
 		upgrade_ubuntu
 	fi
+	upgrade_linuxbrew
 	upgrade_ohmyzsh
 	upgrade_fzf
 	if [[ -x "$(command -v vim)" ]]; then
@@ -924,6 +998,7 @@ function upgrade_packages() {
 	# upgrade_conda
 
 	if [[ -n "$ZSH_VERSION" ]]; then
+		rm -f "${ZSH_COMPDUMP:-"${ZDOTDIR:-"$HOME"}"/.zcompdump}" &>/dev/null
 		if [[ -f "${ZDOTDIR:-"$HOME"}/.zshrc" ]]; then
 			source "${ZDOTDIR:-"$HOME"}/.zshrc"
 		fi
@@ -1093,6 +1168,8 @@ export LC_ALL="en_US.utf8"
 
 EOF
 cat >>.dotfiles/.profile <<EOF
+${HOMEBREW_SETTINGS}
+
 # Anaconda
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!

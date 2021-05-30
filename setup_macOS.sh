@@ -139,7 +139,7 @@ if [[ ! -x "$(command -v brew)" ]]; then
 		echo_and_eval 'export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git"'
 		echo_and_eval 'export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles"'
 		echo_and_eval "git clone --depth=1 https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/install.git \"$TMP_DIR/brew-install\""
-		echo_and_eval "/bin/bash -c \"\$(sed -E 's#^(\\s*)(HOMEBREW_(BREW|CORE)_GIT_REMOTE)=(.*)\$#\\1\\2=\"\${\\2:-\\4}\"#' \"$TMP_DIR/brew-install/install.sh\")\""
+		echo_and_eval "/bin/bash \"$TMP_DIR/brew-install/install.sh\""
 		echo_and_eval 'unset HOMEBREW_{BREW,CORE}_GIT_REMOTE'
 	else
 		echo_and_eval '/bin/bash -c "$(curl -fsSL https://github.com/Homebrew/install/raw/HEAD/install.sh)"'
@@ -883,6 +883,7 @@ function upgrade_packages() {
 	# upgrade_conda
 
 	if [[ -n "$ZSH_VERSION" ]]; then
+		rm -f "${ZSH_COMPDUMP:-"${ZDOTDIR:-"$HOME"}"/.zcompdump}" &>/dev/null
 		if [[ -f "${ZDOTDIR:-"$HOME"}/.zshrc" ]]; then
 			source "${ZDOTDIR:-"$HOME"}/.zshrc"
 		fi

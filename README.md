@@ -171,7 +171,7 @@ The following packages will be setup:
 | Package                                                                                                                          | macOS | Ubuntu Linux | Manjaro Linux |
 | :------------------------------------------------------------------------------------------------------------------------------- | :---: | :----------: | :-----------: |
 | [Mirrors at TUNA (@China)](https://mirrors.tuna.tsinghua.edu.cn)                                                                 |   ✔   |      ✔       |       ✔       |
-| [Homebrew (macOS)](https://brew.sh)                                                                                              |   ✔   |      ✘       |       ✘       |
+| [Homebrew / Linuxbrew](https://brew.sh)                                                                                          |   ✔   |      ✔       |       ✔       |
 |                                                                                                                                  |       |              |               |
 | [bash](https://www.gnu.org/software/bash)                                                                                        |   ✔   |      ✔       |       ✔       |
 | [bash-completion](https://salsa.debian.org/debian/bash-completion)                                                               |   ✔   |      ✔       |       ✔       |

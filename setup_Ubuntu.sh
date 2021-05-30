@@ -182,6 +182,16 @@ EOS
 	fi
 
 	echo_and_eval 'sudo apt-get update'
+	echo_and_eval 'sudo apt install software-properties-common apt-transport-https wget'
+	echo_and_eval 'sudo add-apt-repository ppa:jonathonf/vim --yes'
+	echo_and_eval 'wget -qO - https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -'
+	if ! grep -qF 'packages.microsoft.com/repos/vscode' /etc/apt/source.list; then
+		if [ -f /etc/apt/sources.list.d/vscode.list ]; then
+			echo_and_eval "sudo cp -f /etc/apt/sources.list.d/vscode.list /etc/apt/sources.list.d/vscode.list.save"
+		fi
+		echo_and_eval 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" | sudo tee /etc/apt/sources.list.d/vscode.list'
+	fi
+	echo_and_eval 'wget -qO - https://deb.nodesource.com/setup_lts.x | sudo -E bash -'
 
 	# Install and setup shells
 	echo_and_eval 'sudo apt-get install zsh --yes'
@@ -191,7 +201,7 @@ EOS
 	fi
 
 	# Install packages
-	echo_and_eval 'sudo apt-get install bash-completion wget curl git git-lfs vim tmux --yes'
+	echo_and_eval 'sudo apt-get install bash-completion curl git git-lfs vim tmux --yes'
 	echo_and_eval 'sudo apt-get install ranger highlight shellcheck git-extras jq --yes'
 	if [[ -n "$(apt-cache search '^fd-find$' --names-only)" ]]; then
 		echo_and_eval 'sudo apt-get install fd-find --yes'

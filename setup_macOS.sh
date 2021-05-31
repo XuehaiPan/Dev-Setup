@@ -1243,71 +1243,77 @@ for shell in "bash" "zsh"; do
 done
 
 # Configurations for X11
-backup_dotfiles .Xdefaults .dotfiles/.Xdefaults
+backup_dotfiles .Xresources .dotfiles/.Xresources
 
-cat >.dotfiles/.Xdefaults <<'EOF'
+cat >.dotfiles/.Xresources <<'EOF'
 ! Use a nice truetype font and size by default...
-*faceName: DejaVuSansMono Nerd Font
-*faceSize: 11
-*geometry: 120x40
+*.locale: UTF-8
+*.utf8: always
+xterm.*.faceName: DejaVuSansMono Nerd Font:style=Book
+xterm.*.faceSize: 11
+
+xterm.*.geometry:  128x40
+xcalc.*.geometry:  500x600
+xclock.*.geometry: 300x300
+xeyes.*.geometry:  400x300
 
 ! Every shell is a login shell by default (for inclusion of all necessary environment variables)
-*loginShell: true
+xterm.*.loginShell: true
 
 ! Scrollback...
-*saveLines: 10000
-
-! SpaceGray Eighties color theme...
-*.foreground:  #BDBAAE
-*.background:  #222222
-*.cursorColor: #BBBBBB
-!
-! Black
-*.color0:      #15171C
-*.color8:      #555555
-!
-! Red
-*.color1:      #EC5F67
-*.color9:      #FF6973
-!
-! Green
-*.color2:      #81A764
-*.color10:     #93D493
-!
-! Yellow
-*.color3:      #FEC254
-*.color11:     #FFD256
-!
-! Blue
-*.color4:      #5486C0
-*.color12:     #4D84D1
-!
-! Magenta
-*.color5:      #BF83C1
-*.color13:     #FF55FF
-!
-! Cyan
-*.color6:      #57C2C1
-*.color14:     #83E9E4
-!
-! White
-*.color7:      #EFECE7
-*.color15:     #FFFFFF
-!
-! Bold, Italic, Underline
-*.colorBD:     #FFFFFF
-!*.colorIT:
-!*.colorUL:
+xterm.*.saveLines: 10000
 
 ! Right hand side scrollbar...
-*rightScrollBar: true
-*ScrollBar: true
+xterm.*.rightScrollBar: true
+xterm.*.scrollBar: true
 
 ! Stop output to terminal from jumping down to bottom of scroll again
-*scrollTtyOutput: false
+xterm.*.scrollTtyOutput: false
+
+! SpaceGray Eighties color theme...
+xterm.*.foreground:  #BDBAAE
+xterm.*.background:  #222222
+xterm.*.cursorColor: #BBBBBB
+!
+! Black
+xterm.*.color0:      #15171C
+xterm.*.color8:      #555555
+!
+! Red
+xterm.*.color1:      #EC5F67
+xterm.*.color9:      #FF6973
+!
+! Green
+xterm.*.color2:      #81A764
+xterm.*.color10:     #93D493
+!
+! Yellow
+xterm.*.color3:      #FEC254
+xterm.*.color11:     #FFD256
+!
+! Blue
+xterm.*.color4:      #5486C0
+xterm.*.color12:     #4D84D1
+!
+! Magenta
+xterm.*.color5:      #BF83C1
+xterm.*.color13:     #FF55FF
+!
+! Cyan
+xterm.*.color6:      #57C2C1
+xterm.*.color14:     #83E9E4
+!
+! White
+xterm.*.color7:      #EFECE7
+xterm.*.color15:     #FFFFFF
+!
+! Bold, Italic, Underline
+xterm.*.colorBD:     #FFFFFF
+!xterm.*.colorIT:
+!xterm.*.colorUL:
 EOF
 
-ln -sf .dotfiles/.Xdefaults .
+ln -sf .dotfiles/.Xresources .
 
 # Configurations for Vim
 backup_dotfiles .vimrc .dotfiles/.vimrc

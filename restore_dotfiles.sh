@@ -23,7 +23,7 @@ DOTFILES=(
 	.gitignore_global	.dotfiles/.gitignore_global
 	.condarc			.dotfiles/.condarc
 	.gdbinit			.dotfiles/.gdbinit
-	.Xdefaults			.dotfiles/.Xdefaults
+	.Xresources			.dotfiles/.Xresources
 						.dotfiles/utilities.sh
 )
 

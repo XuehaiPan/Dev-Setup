@@ -53,7 +53,7 @@ export LC_ALL="en_US.UTF-8"
 
 # Homebrew
 eval "$(/usr/local/bin/brew shellenv)"
-export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles"
+export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/bottles"
 export HOMEBREW_EDITOR="vim"
 export HOMEBREW_BAT=true
 

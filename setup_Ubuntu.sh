@@ -306,7 +306,7 @@ if [[ ! -x "$(command -v brew)" ]]; then
 	if $SET_MIRRORS; then
 		exec_cmd 'export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"'
 		exec_cmd 'export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/linuxbrew-core.git"'
-		exec_cmd 'export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/linuxbrew-bottles"'
+		exec_cmd 'export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/linuxbrew-bottles/bottles"'
 		exec_cmd "git clone --depth=1 https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/install.git \"$TMP_DIR/brew-install\""
 		exec_cmd "NONINTERACTIVE=1 HAVE_SUDO_ACCESS=1 /bin/bash -c \"\$(sed -E 's#^(\\s*)(HOMEBREW_PREFIX_DEFAULT)=(.*)\$#\\1\\2=\"\$HOME/.linuxbrew\"#' \"$TMP_DIR/brew-install/install.sh\")\""
 		exec_cmd 'unset HOMEBREW_{BREW,CORE}_GIT_REMOTE'
@@ -431,7 +431,7 @@ export HOMEBREW_BAT=true'
 if $SET_MIRRORS; then
 	HOMEBREW_SETTINGS='# Linuxbrew
 '"eval \"\$($HOMEBREW_PREFIX/bin/brew shellenv)\""'
-export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/linuxbrew-bottles"
+export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/linuxbrew-bottles/bottles"
 export HOMEBREW_EDITOR="vim"
 export HOMEBREW_BAT=true'
 fi

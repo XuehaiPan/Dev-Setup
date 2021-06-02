@@ -239,15 +239,16 @@ mv -f .gitconfig .dotfiles/.gitconfig
 ln -sf .dotfiles/.gitconfig .
 
 # Install and setup Linuxbrew
+if $SET_MIRRORS; then
+	exec_cmd 'export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"'
+	exec_cmd 'export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/linuxbrew-core.git"'
+	exec_cmd 'export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/linuxbrew-bottles/bottles"'
+fi
 if [[ ! -x "$(command -v brew)" ]]; then
 	HOMEBREW_PREFIX="$HOME/.linuxbrew"
 	if $SET_MIRRORS; then
-		exec_cmd 'export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"'
-		exec_cmd 'export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/linuxbrew-core.git"'
-		exec_cmd 'export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/linuxbrew-bottles/bottles"'
 		exec_cmd "git clone --depth=1 https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/install.git \"$TMP_DIR/brew-install\""
 		exec_cmd "NONINTERACTIVE=1 HAVE_SUDO_ACCESS=1 /bin/bash -c \"\$(sed -E 's#^(\\s*)(HOMEBREW_PREFIX_DEFAULT)=(.*)\$#\\1\\2=\"\$HOME/.linuxbrew\"#' \"$TMP_DIR/brew-install/install.sh\")\""
-		exec_cmd 'unset HOMEBREW_{BREW,CORE}_GIT_REMOTE'
 	else
 		exec_cmd "NONINTERACTIVE=1 HAVE_SUDO_ACCESS=1 /bin/bash -c \"\$(curl -fsSL https://github.com/Homebrew/install/raw/HEAD/install.sh | sed -E 's#^(\\s*)(HOMEBREW_PREFIX_DEFAULT)=(.*)\$#\\1\\2=\"\$HOME/.linuxbrew\"#')\""
 	fi
@@ -258,13 +259,7 @@ fi
 HOMEBREW_PREFIX="${HOMEBREW_PREFIX/#$HOME/\$HOME}"
 exec_cmd "eval \"\$($HOMEBREW_PREFIX/bin/brew shellenv)\""
 
-if $SET_MIRRORS; then
-	exec_cmd 'git -C "$(brew --repo)" remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git'
-	exec_cmd "git -C \"\$(brew --repo homebrew/core)\" remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/linuxbrew-core.git"
-	exec_cmd "git -C \"\$(brew --repo homebrew/core)\" config homebrew.forceautoupdate true"
-	exec_cmd 'brew update-reset'
-fi
-exec_cmd 'brew update --verbose'
+exec_cmd 'brew update --force --verbose'
 
 # Install Oh-My-Zsh
 export ZSH="${ZSH:-"$HOME/.oh-my-zsh"}"

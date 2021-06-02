@@ -159,7 +159,6 @@ if $SET_MIRRORS; then
 			exec_cmd "brew tap --force-auto-update homebrew/${tap} https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-${tap}.git"
 		fi
 	done
-	exec_cmd 'brew update-reset'
 else
 	BREW_TAPS="$(brew tap)"
 	for tap in core cask{,-fonts,-drivers}; do
@@ -168,7 +167,7 @@ else
 		fi
 	done
 fi
-exec_cmd 'brew update --verbose'
+exec_cmd 'brew update --force --verbose'
 
 # Install and setup shells
 exec_cmd 'brew install zsh bash'

@@ -26,7 +26,8 @@ set foldlevel=10
 set scrolloff=3
 set sidescroll=10
 set linebreak
-set wrap
+set nowrap
+set whichwrap=b,s,<,>,[,]
 set showmatch
 set hlsearch
 execute "nohlsearch"
@@ -59,7 +60,10 @@ autocmd GUIEnter * set spell spelllang=en_us
 
 autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | execute "normal! g'\"" | endif
 autocmd BufWritePre,FileWritePre * RemoveTrailingSpaces
+
+let g:tex_flavor = 'latex'
 autocmd Filetype sh,zsh,gitconfig,c,cpp,make,go set noexpandtab
+autocmd Filetype text,markdown,rst,asciidoc,tex set wrap
 autocmd FileType vim,tex let b:autoformat_autoindent = 0
 
 let g:NERDTreeMouseMode = 2
@@ -146,8 +150,6 @@ let g:ycm_key_list_stop_completion = ['<C-y>']
 let g:ycm_key_list_select_completion = ['<Down>']
 let g:ycm_key_list_previous_completion = ['<Up>']
 
-let g:tex_flavor = 'latex'
-
 if !exists('$SSH_CONNECTION')
     let g:mkdp_auto_start = 1
 endif
@@ -155,8 +157,8 @@ endif
 call plug#begin('~/.vim/plugged')
     Plug 'flazz/vim-colorschemes'
     Plug 'mhinz/vim-startify'
-    Plug 'scrooloose/nerdtree'
-    Plug 'scrooloose/nerdcommenter'
+    Plug 'preservim/nerdtree'
+    Plug 'preservim/nerdcommenter'
     Plug 'Xuyuanp/nerdtree-git-plugin'
     Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
     Plug 'ryanoasis/vim-devicons'
@@ -178,7 +180,7 @@ call plug#begin('~/.vim/plugged')
     Plug 'liuchengxu/vista.vim'
     Plug 'junegunn/fzf', { 'dir': '~/.fzf' }
     Plug 'junegunn/fzf.vim'
-    Plug 'Chiel92/vim-autoformat'
+    Plug 'vim-autoformat/vim-autoformat'
     Plug 'vim-syntastic/syntastic'
     Plug 'codota/tabnine-vim'
     Plug 'SirVer/ultisnips'

@@ -747,6 +747,14 @@
         "_minted-*/"
     ],
 
+    //* LaTeX Utilities */
+    "latex-utilities.countWord.format": "${words} Words (${wordsBody} in Body)",
+    "latex-utilities.countWord.args": ["-merge", "%DOC%"],
+    "latex-utilities.formattedPaste.tableBooktabsStyle": true,
+    "latex-utilities.formattedPaste.image.template": "\\includegraphics[width=\\linewidth]{${imageFilePath}}",
+    "latex-utilities.tikzpreview.enabled": true,
+    "latex-utilities.tikzpreview.parseTeXFile": true,
+
     //* Live Share */
     "liveshare.alwaysFollowHost": false,
     "liveshare.connectionMode": "auto",

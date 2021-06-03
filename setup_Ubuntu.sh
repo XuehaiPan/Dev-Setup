@@ -1299,7 +1299,7 @@ set nowrap
 set whichwrap=b,s,<,>,[,]
 set showmatch
 set hlsearch
-execute "nohlsearch"
+execute 'nohlsearch'
 set incsearch
 set ignorecase
 set smartcase
@@ -1320,7 +1320,10 @@ EOF
 cat >>.dotfiles/.vimrc <<'EOF'
 colorscheme monokai
 
-if &term =~ "xterm"
+if has('mouse')
+    set mouse=a
+endif
+if &term =~ 'xterm'
     let &t_SI = "\<Esc>]50;CursorShape=1\x7"
     let &t_SR = "\<Esc>]50;CursorShape=2\x7"
     let &t_EI = "\<Esc>]50;CursorShape=0\x7"

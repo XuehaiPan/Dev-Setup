@@ -2035,13 +2035,13 @@ cat >.dotfiles/.condarc <<'EOF'
 auto_activate_base: false
 auto_update_conda: true
 
-EOF
-if $SET_MIRRORS; then
-	cat >>.dotfiles/.condarc <<'EOF'
 channels:
   - defaults
   - conda-forge
   - pytorch
+EOF
+if $SET_MIRRORS; then
+	cat >>.dotfiles/.condarc <<'EOF'
 default_channels:
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r
@@ -2053,11 +2053,11 @@ custom_channels:
   bioconda: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
   menpo: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
   simpleitk: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
-channel_priority: disabled
-
 EOF
 fi
 cat >>.dotfiles/.condarc <<'EOF'
+channel_priority: disabled
+
 ssl_verify: true
 show_channel_urls: false
 report_errors: false

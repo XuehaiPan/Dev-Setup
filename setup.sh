@@ -26,10 +26,10 @@ if [[ "$(uname -s)" == "Darwin" ]]; then
 elif [[ "$(uname -s)" == "Linux" ]]; then
 	if grep -qiE 'ID.*ubuntu' /etc/*-release; then
 		OS_NAME="Ubuntu"
-		PACKAGE_MANAGER="APT"
+		PACKAGE_MANAGER="APT, Linuxbrew"
 	elif grep -qiE 'ID.*manjaro' /etc/*-release; then
 		OS_NAME="Manjaro"
-		PACKAGE_MANAGER="Pacman"
+		PACKAGE_MANAGER="Pacman, Linuxbrew"
 	fi
 fi
 

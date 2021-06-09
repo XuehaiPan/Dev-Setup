@@ -41,9 +41,9 @@ export LC_ALL="en_US.UTF-8"
 
 # Homebrew
 eval "$(/usr/local/bin/brew shellenv)"
-export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/bottles"
 export HOMEBREW_EDITOR="vim"
 export HOMEBREW_BAT=true
+export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/bottles"
 
 # Anaconda
 # >>> conda initialize >>>
@@ -63,9 +63,9 @@ unset __conda_setup
 export CONDA_JL_HOME="$HOME/Miniconda3/envs/python38"
 
 # CXX Compilers
-export CC="$HOMEBREW_PREFIX/bin/gcc-10"
-export CXX="$HOMEBREW_PREFIX/bin/g++-10"
-export FC="$HOMEBREW_PREFIX/bin/gfortran-10"
+export CC="$HOMEBREW_PREFIX/bin/gcc-11"
+export CXX="$HOMEBREW_PREFIX/bin/g++-11"
+export FC="$HOMEBREW_PREFIX/bin/gfortran-11"
 export OMPI_CC="$CC" MPICH_CC="$CC"
 export OMPI_CXX="$CXX" MPICH_CXX="$CXX"
 export OMPI_FC="$FC" MPICH_FC="$FC"
@@ -293,7 +293,6 @@ plugins=(
 )
 
 ZSH_COLORIZE_STYLE="monokai"
-ZSH_DISABLE_COMPFIX=true
 ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 
 source "$ZSH/oh-my-zsh.sh"

@@ -18,6 +18,9 @@
 [difftool]
 	prompt = false
 
+[interactive]
+	diffFilter = diff-so-fancy --patch
+
 [merge]
 	tool = vimdiff
 	guitool = gvimdiff
@@ -58,6 +61,7 @@
 	old = red bold
 	new = green bold
 	whitespace = red reverse
+	func = 146 bold
 
 [diff-so-fancy]
 	first-run = false

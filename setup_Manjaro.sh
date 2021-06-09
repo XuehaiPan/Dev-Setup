@@ -231,21 +231,20 @@ git config --global filter.lfs.smudge 'git-lfs smudge -- %f'
 git config --global filter.lfs.process 'git-lfs filter-process'
 git config --global filter.lfs.required true
 git config --global color.ui true
+git config --global color.diff-highlight.oldNormal 'red bold'
+git config --global color.diff-highlight.oldHighlight 'red bold 52'
+git config --global color.diff-highlight.newNormal 'green bold'
+git config --global color.diff-highlight.newHighlight 'green bold 22'
+git config --global color.diff.meta 'yellow'
+git config --global color.diff.frag 'magenta bold'
+git config --global color.diff.func '146 bold'
+git config --global color.diff.commit 'yellow bold'
+git config --global color.diff.old 'red bold'
+git config --global color.diff.new 'green bold'
+git config --global color.diff.whitespace 'red reverse'
 if [[ -x "$(command -v diff-so-fancy)" ]]; then
 	git config --global core.pager 'diff-so-fancy | less --tabs=4 -RFX'
 	git config --global interactive.diffFilter 'diff-so-fancy --patch'
-	git config --global color.diff-highlight.oldNormal    'red bold'
-	git config --global color.diff-highlight.oldHighlight 'red bold 52'
-	git config --global color.diff-highlight.newNormal    'green bold'
-	git config --global color.diff-highlight.newHighlight 'green bold 22'
-
-	git config --global color.diff.meta       '11'
-	git config --global color.diff.frag       'magenta bold'
-	git config --global color.diff.func       '146 bold'
-	git config --global color.diff.commit     'yellow bold'
-	git config --global color.diff.old        'red bold'
-	git config --global color.diff.new        'green bold'
-	git config --global color.diff.whitespace 'red reverse'
 fi
 
 mv -f .gitconfig .dotfiles/.gitconfig
@@ -269,8 +268,7 @@ else
 	HOMEBREW_PREFIX="$(brew --prefix)"
 fi
 
-HOMEBREW_PREFIX="${HOMEBREW_PREFIX/#$HOME/\$HOME}"
-exec_cmd "eval \"\$($HOMEBREW_PREFIX/bin/brew shellenv)\""
+exec_cmd "eval \"\$(${HOMEBREW_PREFIX/#$HOME/\$HOME}/bin/brew shellenv)\""
 
 exec_cmd 'brew update --force --verbose'
 
@@ -371,15 +369,16 @@ exec_cmd "AUTOMATED_TESTING=1 perl -MCPAN -e 'install Term::ReadLine::Perl, Term
 backup_dotfiles .dotfiles/.zshrc
 
 HOMEBREW_SETTINGS='# Linuxbrew
-'"eval \"\$($HOMEBREW_PREFIX/bin/brew shellenv)\""'
+'"eval \"\$(${HOMEBREW_PREFIX/#$HOME/\$HOME}/bin/brew shellenv)\""'
+export C_INCLUDE_PATH="$HOMEBREW_PREFIX/include${C_INCLUDE_PATH:+:"$C_INCLUDE_PATH"}"
+export CPLUS_INCLUDE_PATH="$HOMEBREW_PREFIX/include${CPLUS_INCLUDE_PATH:+:"$CPLUS_INCLUDE_PATH"}"
+export LIBRARY_PATH="$HOMEBREW_PREFIX/lib${LIBRARY_PATH:+:"$LIBRARY_PATH"}"
+export LD_LIBRARY_PATH="$HOMEBREW_PREFIX/lib${LD_LIBRARY_PATH:+:"$LD_LIBRARY_PATH"}"
 export HOMEBREW_EDITOR="vim"
 export HOMEBREW_BAT=true'
 if $SET_MIRRORS; then
-	HOMEBREW_SETTINGS='# Linuxbrew
-'"eval \"\$($HOMEBREW_PREFIX/bin/brew shellenv)\""'
-export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/linuxbrew-bottles/bottles"
-export HOMEBREW_EDITOR="vim"
-export HOMEBREW_BAT=true'
+	HOMEBREW_SETTINGS+='
+export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/linuxbrew-bottles/bottles"'
 fi
 cat >.dotfiles/.zshrc <<'EOF'
 # Source global definitions
@@ -456,6 +455,9 @@ export OMPI_CC="$CC" MPICH_CC="$CC"
 export OMPI_CXX="$CXX" MPICH_CXX="$CXX"
 export OMPI_FC="$FC" MPICH_FC="$FC"
 
+# Zsh
+export FPATH="$HOMEBREW_PREFIX/share/zsh/site-functions${FPATH:+:"$FPATH"}:$HOMEBREW_PREFIX/share/zsh/functions"
+
 # Ruby
 if [[ -x "$(command -v ruby)" && -x "$(command -v gem)" ]]; then
 	export RUBYOPT="-W0"
@@ -499,6 +501,7 @@ __remove_duplicate ':' C_INCLUDE_PATH
 __remove_duplicate ':' CPLUS_INCLUDE_PATH
 __remove_duplicate ':' LIBRARY_PATH
 __remove_duplicate ':' LD_LIBRARY_PATH
+__remove_duplicate ':' FPATH
 unset -f __remove_duplicate
 
 # Utilities
@@ -623,7 +626,6 @@ plugins=(
 )
 
 ZSH_COLORIZE_STYLE="monokai"
-ZSH_DISABLE_COMPFIX=true
 ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 
 source "$ZSH/oh-my-zsh.sh"
@@ -1177,7 +1179,9 @@ if [[ -f "$HOME/.dotfiles/utilities.sh" ]]; then
 fi
 
 # Bash completion
-if [[ -r "/etc/profile.d/bash_completion.sh" ]]; then
+if [[ -r "$HOMEBREW_PREFIX/etc/profile.d/bash_completion.sh" ]]; then
+	source "$HOMEBREW_PREFIX/etc/profile.d/bash_completion.sh"
+elif [[ -r "/etc/profile.d/bash_completion.sh" ]]; then
 	source "/etc/profile.d/bash_completion.sh"
 elif [[ -r "/usr/share/bash-completion/bash_completion" ]]; then
 	source "/usr/share/bash-completion/bash_completion"

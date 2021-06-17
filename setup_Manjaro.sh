@@ -951,7 +951,7 @@ function set_proxy() {
 	local FTP_PORT="${4:-"7890"}"
 	local SOCKS_PORT="${5:-"7891"}"
 
-	if [[ -x "$(command -v /usr/bin/gsettings)" ]]; then
+	if [[ -x "$(command -v /usr/bin/gsettings)" && -n "$DISPLAY" ]]; then
 		/usr/bin/gsettings set org.gnome.system.proxy mode 'manual'
 		/usr/bin/gsettings set org.gnome.system.proxy.http host "$PROXY_HOST"
 		/usr/bin/gsettings set org.gnome.system.proxy.http port "$HTTP_PORT"
@@ -974,7 +974,7 @@ function set_proxy() {
 }
 
 function reset_proxy() {
-	if [[ -x "$(command -v /usr/bin/gsettings)" ]]; then
+	if [[ -x "$(command -v /usr/bin/gsettings)" && -n "$DISPLAY" ]]; then
 		/usr/bin/gsettings set org.gnome.system.proxy mode 'none'
 		/usr/bin/gsettings set org.gnome.system.proxy.http host '127.0.0.1'
 		/usr/bin/gsettings set org.gnome.system.proxy.http port 8080

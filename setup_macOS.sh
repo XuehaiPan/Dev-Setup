@@ -185,7 +185,7 @@ exec_cmd 'brew install gcc gdb llvm make cmake automake autoconf'
 exec_cmd 'brew install bash-completion wget curl git git-lfs macvim tmux'
 exec_cmd 'brew install coreutils ranger fd bat highlight ripgrep git-extras'
 exec_cmd 'brew install jq shfmt shellcheck diffutils colordiff diff-so-fancy'
-exec_cmd 'brew install htop openssh tree reattach-to-user-namespace'
+exec_cmd 'brew install htop openssh atool tree reattach-to-user-namespace'
 
 exec_cmd 'brew install ruby perl'
 export PATH="$HOMEBREW_PREFIX/opt/ruby/bin${PATH:+:"$PATH"}"

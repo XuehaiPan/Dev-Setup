@@ -247,7 +247,7 @@ EOS
 	exec_cmd "sudo mv -f \"$TMP_DIR/diff-so-fancy\" /usr/local/bin/diff-so-fancy"
 	exec_cmd 'sudo chmod a+x /usr/local/bin/diff-so-fancy'
 	exec_cmd 'sudo chown root:root /usr/local/bin/diff-so-fancy'
-	exec_cmd 'sudo apt-get install htop ssh net-tools exfat-utils tree colordiff xclip --yes'
+	exec_cmd 'sudo apt-get install htop ssh net-tools exfat-utils atool tree colordiff xclip --yes'
 	exec_cmd 'sudo apt-get install make cmake automake autoconf build-essential gcc g++ gdb --yes'
 	exec_cmd 'sudo apt-get install clang clang-format llvm lldb ruby-full libssl-dev libreadline-dev --yes'
 	exec_cmd 'sudo apt-get autoremove --yes'

@@ -11,6 +11,7 @@ DATETIME="$(date +"%Y-%m-%d-%T")"
 BACKUP_DIR="$HOME/.dotfiles/backups/$DATETIME"
 mkdir -p "$BACKUP_DIR/.dotfiles"
 ln -sfn "$DATETIME" "$HOME/.dotfiles/backups/latest"
+chmod 755 "$HOME/.dotfiles"
 
 # Set temporary directory
 TMP_DIR="$(mktemp -d -t dev-setup.XXXXXX)"
@@ -311,6 +312,7 @@ fi
 
 mv -f .gitconfig .dotfiles/.gitconfig
 ln -sf .dotfiles/.gitconfig .
+chmod 644 .dotfiles/.gitconfig
 
 # Install and setup Linuxbrew
 if $SET_MIRRORS; then
@@ -395,6 +397,7 @@ if $SET_MIRRORS; then
 fi
 
 ln -sf .dotfiles/.gemrc .
+chmod 644 .dotfiles/.gemrc
 
 # Install Color LS
 if [[ -x "$(command -v ruby)" && -x "$(command -v gem)" ]]; then
@@ -767,6 +770,7 @@ fi
 EOF
 
 ln -sf .dotfiles/.zshrc .
+chmod 644 .dotfiles/.zshrc
 
 # Configurations for Zsh Powerlevel10k Lean style
 SHEBANG='#!/bin/sh'
@@ -1095,6 +1099,8 @@ function auto_reannounce_trackers() {
 }
 EOF
 
+chmod 644 .dotfiles/utilities.sh
+
 # Configurations for Bash
 backup_dotfiles .bashrc .dotfiles/.bashrc
 
@@ -1115,6 +1121,7 @@ fi
 
 mv -f .bashrc .dotfiles/.bashrc
 ln -sf .dotfiles/.bashrc .
+chmod 644 .dotfiles/.bashrc
 
 backup_dotfiles .profile .dotfiles/.profile
 
@@ -1278,6 +1285,7 @@ fi
 EOF
 
 ln -sf .dotfiles/.profile .
+chmod 644 .dotfiles/.profile
 
 # Configurations for Vim
 backup_dotfiles .vimrc .dotfiles/.vimrc
@@ -1489,6 +1497,7 @@ call plug#end()
 EOF
 
 ln -sf .dotfiles/.vimrc .
+chmod 644 .dotfiles/.vimrc
 
 # Add Vim Monokai color theme
 mkdir -p .vim/colors
@@ -1711,6 +1720,7 @@ EOF
 exec_cmd 'wget -N -P "$HOME/.dotfiles" https://github.com/gpakosz/.tmux/raw/HEAD/.tmux.conf{,.local}'
 ln -sf .dotfiles/.tmux.conf .
 ln -sf .dotfiles/.tmux.conf.local .
+chmod 644 .dotfiles/.tmux.conf .dotfiles/.tmux.conf.local .dotfiles/.tmux.conf.user
 
 sed -i 's/tmux_conf_copy_to_os_clipboard=false/tmux_conf_copy_to_os_clipboard=true/g' .dotfiles/.tmux.conf.local
 sed -i 's/#set -g history-limit 10000/set -g history-limit 10000/g' .dotfiles/.tmux.conf.local
@@ -1977,6 +1987,7 @@ tags
 EOF
 
 ln -sf .dotfiles/.gitignore_global .
+chmod 644 .dotfiles/.gitignore_global
 
 # Configurations for Conda
 backup_dotfiles .condarc .dotfiles/.condarc
@@ -2036,6 +2047,7 @@ create_default_packages:
 EOF
 
 ln -sf .dotfiles/.condarc .
+chmod 644 .dotfiles/.condarc
 
 # Install Miniconda
 if [[ ! -d "$HOME/$CONDA_DIR" ]]; then

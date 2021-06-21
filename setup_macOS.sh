@@ -18,6 +18,7 @@ DATETIME="$(date +"%Y-%m-%d-%T")"
 BACKUP_DIR="$HOME/.dotfiles/backups/$DATETIME"
 mkdir -p "$BACKUP_DIR/.dotfiles"
 ln -sfn "$DATETIME" "$HOME/.dotfiles/backups/latest"
+chmod 755 "$HOME/.dotfiles"
 
 # Set temporary directory
 TMP_DIR="$(mktemp -d -t dev-setup)"
@@ -257,6 +258,7 @@ fi
 
 mv -f .gitconfig .dotfiles/.gitconfig
 ln -sf .dotfiles/.gitconfig .
+chmod 644 .dotfiles/.gitconfig
 
 # Install Oh-My-Zsh
 export ZSH="${ZSH:-"$HOME/.oh-my-zsh"}"
@@ -319,6 +321,7 @@ if $SET_MIRRORS; then
 fi
 
 ln -sf .dotfiles/.gemrc .
+chmod 644 .dotfiles/.gemrc
 
 # Install Color LS
 exec_cmd 'gem install colorls'
@@ -686,6 +689,7 @@ fi
 EOF
 
 ln -sf .dotfiles/.zshrc .
+chmod 644 .dotfiles/.zshrc
 
 # Configurations for Zsh Powerlevel10k Lean style
 SHEBANG='#!/bin/sh'
@@ -954,6 +958,8 @@ function auto_reannounce_trackers() {
 }
 EOF
 
+chmod 644 .dotfiles/utilities.sh
+
 # Configurations for Bash
 backup_dotfiles .bashrc .dotfiles/.bashrc
 
@@ -1027,6 +1033,7 @@ fi
 EOF
 
 ln -sf .dotfiles/.bashrc .
+chmod 644 .dotfiles/.bashrc
 
 backup_dotfiles .bash_profile .dotfiles/.bash_profile
 
@@ -1199,6 +1206,7 @@ fi
 EOF
 
 ln -sf .dotfiles/.bash_profile .
+chmod 644 .dotfiles/.bash_profile
 
 # Add 'SpaceGray Eighties' color scheme for iTerm
 if [[ ! -s "$HOME/Library/Preferences/com.googlecode.iterm2.plist" ]]; then
@@ -1321,6 +1329,7 @@ xterm.*.colorBD:     #FFFFFF
 EOF
 
 ln -sf .dotfiles/.Xresources .
+chmod 644 .dotfiles/.Xresources
 
 # Configurations for Vim
 backup_dotfiles .vimrc .dotfiles/.vimrc
@@ -1524,6 +1533,7 @@ call plug#end()
 EOF
 
 ln -sf .dotfiles/.vimrc .
+chmod 644 .dotfiles/.vimrc
 
 # Add Vim Monokai color theme
 mkdir -p .vim/colors
@@ -1744,6 +1754,7 @@ EOF
 exec_cmd 'wget -N -P "$HOME/.dotfiles" https://github.com/gpakosz/.tmux/raw/HEAD/.tmux.conf{,.local}'
 ln -sf .dotfiles/.tmux.conf .
 ln -sf .dotfiles/.tmux.conf.local .
+chmod 644 .dotfiles/.tmux.conf .dotfiles/.tmux.conf.local .dotfiles/.tmux.conf.user
 
 sed -i "" 's/tmux_conf_copy_to_os_clipboard=false/tmux_conf_copy_to_os_clipboard=true/g' .dotfiles/.tmux.conf.local
 sed -i "" 's/#set -g history-limit 10000/set -g history-limit 10000/g' .dotfiles/.tmux.conf.local
@@ -2010,6 +2021,7 @@ tags
 EOF
 
 ln -sf .dotfiles/.gitignore_global .
+chmod 644 .dotfiles/.gitignore_global
 
 # Configurations for GDB
 backup_dotfiles .gdbinit .dotfiles/.gdbinit
@@ -2022,6 +2034,7 @@ if ! grep -qF 'set startup-with-shell off' .dotfiles/.gdbinit; then
 fi
 
 ln -sf .dotfiles/.gdbinit .
+chmod 644 .dotfiles/.gdbinit
 
 # Configurations for Conda
 backup_dotfiles .condarc .dotfiles/.condarc
@@ -2081,6 +2094,7 @@ create_default_packages:
 EOF
 
 ln -sf .dotfiles/.condarc .
+chmod 644 .dotfiles/.condarc
 
 # Install Miniconda
 if [[ ! -d "$HOME/$CONDA_DIR" ]]; then

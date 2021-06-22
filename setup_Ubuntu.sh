@@ -1644,7 +1644,7 @@ cat >.dotfiles/.tmux.conf.user <<'EOF'
 # Set default terminal
 set-option -gs default-terminal "tmux-256color"
 set-option -gsa terminal-overrides ",xterm-termite:Tc"
-set-option -gs default-shell /usr/bin/zsh
+set-option -gs default-command 'P10K_LEAN_STYLE=true /usr/bin/zsh'
 
 # Automatically set window title
 set-option -gs automatic-rename on

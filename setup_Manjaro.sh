@@ -272,6 +272,7 @@ fi
 
 exec_cmd "eval \"\$(${HOMEBREW_PREFIX/#$HOME/\$HOME}/bin/brew shellenv)\""
 
+exec_cmd 'brew tap homebrew/command-not-found'
 exec_cmd 'brew update --force --verbose'
 
 # Install Oh-My-Zsh
@@ -383,6 +384,12 @@ if $SET_MIRRORS; then
 	HOMEBREW_SETTINGS+='
 export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/linuxbrew-bottles/bottles"'
 fi
+HOMEBREW_SETTINGS+='
+__COMMAND_NOT_FOUND_HANDLER="$(brew --repository homebrew/command-not-found)/handler.sh"
+if [[ -f "${__COMMAND_NOT_FOUND_HANDLER}" ]]; then
+	source "${__COMMAND_NOT_FOUND_HANDLER}"
+fi
+unset __COMMAND_NOT_FOUND_HANDLER'
 cat >.dotfiles/.zshrc <<'EOF'
 # Source global definitions
 # Include /etc/profile if it exists

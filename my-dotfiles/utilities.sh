@@ -235,7 +235,7 @@ function available_cuda_devices() {
 			((memused >= 3072 || memfree <= 6144 || utilization >= 20)); then
 			continue
 		fi
-		available="${available:+$available,}$index"
+		available="${available:+"$available",}$index"
 		((maxcount -= 1))
 	done < <(
 		nvidia-smi --query-gpu=index,memory.free,memory.used,utilization.gpu --format=csv,noheader,nounits |

@@ -941,6 +941,29 @@ function reset_proxy() {
 	unset ALL_PROXY
 }
 
+function available_cuda_devices() {
+	local maxcount="${1:-4}"
+	local available="" index memfree memused utilization pids
+
+	while read -r index memfree memused utilization; do
+		if ! ((maxcount > 0)); then
+			break
+		fi
+		pids=$(nvidia-smi --id="$index" --query-compute-apps=pid --format=csv,noheader | xargs echo -n)
+		if [[ -n "$pids" ]] && (ps -o user -p $pids | tail -n +2 | grep -qvF "$USER") &&
+			((memused >= 3072 || memfree <= 6144 || utilization >= 20)); then
+			continue
+		fi
+		available="${available:+"$available",}$index"
+		((maxcount -= 1))
+	done < <(
+		nvidia-smi --query-gpu=index,memory.free,memory.used,utilization.gpu --format=csv,noheader,nounits |
+			sort -t ',' -k2nr -k4n -k3n -k1nr | tr -d ','
+	)
+
+	echo "$available"
+}
+
 function auto_reannounce_trackers() {
 	local TIMES="${1:-60}"
 	local INTERVAL="${2:-60}"

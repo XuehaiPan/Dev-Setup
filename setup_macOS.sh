@@ -14,6 +14,7 @@ export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin
 export USER="${USER:-"$(whoami)"}"
 
 # Set configuration backup directory
+umask 022
 DATETIME="$(date +"%Y-%m-%d-%T")"
 BACKUP_DIR="$HOME/.dotfiles/backups/$DATETIME"
 mkdir -p "$BACKUP_DIR/.dotfiles"

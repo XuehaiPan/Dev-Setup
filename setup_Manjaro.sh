@@ -693,7 +693,7 @@ else
 	# Use Powerlevel10k Lean style
 	source "$ZSH_CUSTOM/themes/powerlevel10k/config/p10k-lean.zsh"
 	POWERLEVEL9K_MODE="compatible"
-	POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(dir vcs newline prompt_char)
+	POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context root_indicator dir vcs newline prompt_char)
 	POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status command_execution_time background_jobs virtualenv anaconda pyenv time)
 	POWERLEVEL9K_TRANSIENT_PROMPT="same-dir"
 	POWERLEVEL9K_MULTILINE_FIRST_PROMPT_GAP_CHAR='·'

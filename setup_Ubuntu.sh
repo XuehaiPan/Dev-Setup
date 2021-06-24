@@ -242,12 +242,12 @@ EOS
 	if [[ -n "$LATEST_SHFMT_VERSION" ]] && ! check_binary shfmt "$LATEST_SHFMT_VERSION"; then
 		exec_cmd "wget -N -P \"$TMP_DIR\" https://github.com/mvdan/sh/releases/download/${LATEST_SHFMT_VERSION}/shfmt_${LATEST_SHFMT_VERSION}_linux_amd64"
 		exec_cmd "sudo mv -f \"$TMP_DIR/shfmt_${LATEST_SHFMT_VERSION}_linux_amd64\" /usr/local/bin/shfmt"
-		exec_cmd 'sudo chmod a+x /usr/local/bin/shfmt'
+		exec_cmd 'sudo chmod 755 /usr/local/bin/shfmt'
 		exec_cmd 'sudo chown root:root /usr/local/bin/shfmt'
 	fi
 	exec_cmd "wget -N -P \"$TMP_DIR\" https://github.com/so-fancy/diff-so-fancy/raw/HEAD/third_party/build_fatpack/diff-so-fancy"
 	exec_cmd "sudo mv -f \"$TMP_DIR/diff-so-fancy\" /usr/local/bin/diff-so-fancy"
-	exec_cmd 'sudo chmod a+x /usr/local/bin/diff-so-fancy'
+	exec_cmd 'sudo chmod 755 /usr/local/bin/diff-so-fancy'
 	exec_cmd 'sudo chown root:root /usr/local/bin/diff-so-fancy'
 	exec_cmd 'sudo apt-get install htop ssh net-tools exfat-utils atool tree colordiff xclip --yes'
 	exec_cmd 'sudo apt-get install make cmake automake autoconf build-essential gcc g++ gdb --yes'
@@ -797,7 +797,7 @@ if $IS_SUDOER; then
 			exec_cmd 'sudo rm -f /usr/local/bin/zsh-lean'
 		fi
 		exec_cmd "printf \"%s\\n\" '$SHEBANG' '$COMMAND' | sudo tee /usr/local/bin/zsh-lean"
-		exec_cmd 'sudo chmod a+x /usr/local/bin/zsh-lean'
+		exec_cmd 'sudo chmod 755 /usr/local/bin/zsh-lean'
 	fi
 	if ! grep -qF '/usr/local/bin/zsh-lean' /etc/shells; then
 		exec_cmd 'echo "/usr/local/bin/zsh-lean" | sudo tee -a /etc/shells'
@@ -805,7 +805,7 @@ if $IS_SUDOER; then
 else
 	mkdir -p "$HOME/.local/bin"
 	exec_cmd "cp -f \"$TMP_DIR/zsh-lean\" \"\$HOME/.local/bin/zsh-lean\""
-	chmod +x "$HOME/.local/bin/zsh-lean"
+	chmod 755 "$HOME/.local/bin/zsh-lean"
 fi
 
 # Add utility script file
@@ -2189,7 +2189,7 @@ EOS
 done < <(conda info --envs | awk 'NF > 0 && $0 !~ /^#.*/ { printf("%s %s\n", $1, $NF) }')
 EOF
 
-chmod +x "$HOME/$CONDA_DIR/etc/init-envs.sh"
+chmod 755 "$HOME/$CONDA_DIR/etc/init-envs.sh"
 
 # Setup IPython
 exec_cmd "\"\$HOME/$CONDA_DIR/bin/ipython\" profile create"

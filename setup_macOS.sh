@@ -712,7 +712,7 @@ if [[ ! -x "/usr/local/bin/zsh-lean" || -L "/usr/local/bin/zsh-lean" ]] ||
 		exec_cmd 'sudo rm -f /usr/local/bin/zsh-lean'
 	fi
 	exec_cmd "printf \"%s\\n\" '$SHEBANG' '$COMMAND' | sudo tee /usr/local/bin/zsh-lean"
-	exec_cmd 'sudo chmod a+x /usr/local/bin/zsh-lean'
+	exec_cmd 'sudo chmod 755 /usr/local/bin/zsh-lean'
 fi
 if ! grep -qF '/usr/local/bin/zsh-lean' /etc/shells; then
 	exec_cmd 'echo "/usr/local/bin/zsh-lean" | sudo tee -a /etc/shells'
@@ -1281,12 +1281,12 @@ ALIASES="$(join_by '; ' "${ALIASES_ARRAY[@]}")"
 ITERM_UTILITIES_ARRAY="$(join_by ',' "${ITERM_UTILITIES[@]}")"
 
 exec_cmd "wget -N -P \"\$HOME/.iterm2/bin\" https://iterm2.com/utilities/{$ITERM_UTILITIES_ARRAY}"
-exec_cmd "chmod +x \"\$HOME/.iterm2/bin\"/{$ITERM_UTILITIES_ARRAY}"
 for shell in "bash" "zsh"; do
-	exec_cmd "wget -O \"\$HOME/.iterm2/.iterm2_shell_integration.$shell\" \"https://iterm2.com/shell_integration/$shell\" && chmod +x \"\$HOME/.iterm2/.iterm2_shell_integration.$shell\""
+	exec_cmd "wget -O \"\$HOME/.iterm2/.iterm2_shell_integration.$shell\" \"https://iterm2.com/shell_integration/$shell\" && chmod 755 \"\$HOME/.iterm2/.iterm2_shell_integration.$shell\""
 	printf "\n# Utilities\n" >>"$HOME/.iterm2/.iterm2_shell_integration.$shell"
 	exec_cmd "echo \"$ALIASES\" >> \"\$HOME/.iterm2/.iterm2_shell_integration.$shell\""
 done
+exec_cmd "chmod -R 755 \"\$HOME/.iterm2\""
 
 # Configurations for X11
 backup_dotfiles .Xresources .dotfiles/.Xresources
@@ -2236,7 +2236,7 @@ EOS
 done < <(conda info --envs | awk 'NF > 0 && $0 !~ /^#.*/ { printf("%s %s\n", $1, $NF) }')
 EOF
 
-chmod +x "$HOME/$CONDA_DIR/etc/init-envs.sh"
+chmod 755 "$HOME/$CONDA_DIR/etc/init-envs.sh"
 
 # Setup IPython
 exec_cmd "\"\$HOME/$CONDA_DIR/bin/ipython\" profile create"

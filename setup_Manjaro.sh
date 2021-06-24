@@ -725,7 +725,7 @@ if $IS_SUDOER; then
 			exec_cmd 'sudo rm -f /usr/local/bin/zsh-lean'
 		fi
 		exec_cmd "printf \"%s\\n\" '$SHEBANG' '$COMMAND' | sudo tee /usr/local/bin/zsh-lean"
-		exec_cmd 'sudo chmod a+x /usr/local/bin/zsh-lean'
+		exec_cmd 'sudo chmod 755 /usr/local/bin/zsh-lean'
 	fi
 	if ! grep -qF '/usr/local/bin/zsh-lean' /etc/shells; then
 		exec_cmd 'echo "/usr/local/bin/zsh-lean" | sudo tee -a /etc/shells'
@@ -733,7 +733,7 @@ if $IS_SUDOER; then
 else
 	mkdir -p "$HOME/.local/bin"
 	exec_cmd "cp -f \"$TMP_DIR/zsh-lean\" \"\$HOME/.local/bin/zsh-lean\""
-	chmod +x "$HOME/.local/bin/zsh-lean"
+	chmod 755 "$HOME/.local/bin/zsh-lean"
 fi
 
 # Add utility script file
@@ -2105,7 +2105,7 @@ EOS
 done < <(conda info --envs | awk 'NF > 0 && $0 !~ /^#.*/ { printf("%s %s\n", $1, $NF) }')
 EOF
 
-chmod +x "$HOME/$CONDA_DIR/etc/init-envs.sh"
+chmod 755 "$HOME/$CONDA_DIR/etc/init-envs.sh"
 
 # Setup IPython
 exec_cmd "\"\$HOME/$CONDA_DIR/bin/ipython\" profile create"

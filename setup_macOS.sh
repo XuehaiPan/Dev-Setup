@@ -14,7 +14,7 @@ export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin
 export USER="${USER:-"$(whoami)"}"
 
 # Set configuration backup directory
-umask 022
+umask g-w,o-w
 DATETIME="$(date +"%Y-%m-%d-%T")"
 BACKUP_DIR="$HOME/.dotfiles/backups/$DATETIME"
 mkdir -p "$BACKUP_DIR/.dotfiles"
@@ -303,6 +303,8 @@ else
 	exec_cmd 'git -C "$HOME/.fzf" pull --ff-only 2>&1'
 fi
 exec_cmd '"$HOME/.fzf/install" --key-bindings --completion --no-update-rc'
+
+exec_cmd 'chown -R g-w,o-w "$ZSH" "$HOME/.fzf"'
 
 # Configurations for RubyGems
 backup_dotfiles .gemrc .dotfiles/.gemrc

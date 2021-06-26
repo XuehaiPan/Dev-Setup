@@ -304,7 +304,7 @@ else
 fi
 exec_cmd '"$HOME/.fzf/install" --key-bindings --completion --no-update-rc'
 
-exec_cmd 'chown -R g-w,o-w "$ZSH" "$HOME/.fzf"'
+exec_cmd 'chmod -R g-w,o-w "$ZSH" "$HOME/.fzf"'
 
 # Configurations for RubyGems
 backup_dotfiles .gemrc .dotfiles/.gemrc

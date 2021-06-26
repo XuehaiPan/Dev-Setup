@@ -415,7 +415,7 @@ fi
 # Configurations for Perl
 export PERL_MB_OPT="--install_base \"$HOME/.perl\""
 export PERL_MM_OPT="INSTALL_BASE=\"$HOME/.perl\""
-exec_cmd "PERL_MM_USE_DEFAULT=1 http_proxy=\"\" ftp_proxy=\"\" perl -MCPAN -e 'mkmyconfig'"
+exec_cmd "PERL_MM_USE_DEFAULT=1 http_proxy=\"\" https_proxy=\"\" ftp_proxy=\"\" perl -MCPAN -e 'mkmyconfig'"
 exec_cmd "perl -MCPAN -e 'CPAN::HandleConfig->load();' \\
 	-e 'CPAN::HandleConfig->edit(\"cleanup_after_install\", \"1\");' \\
 	-e 'CPAN::HandleConfig->commit()'"

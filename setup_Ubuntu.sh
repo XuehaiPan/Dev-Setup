@@ -2117,8 +2117,9 @@ while read -r env CONDA_PREFIX; do
 	mkdir -p "$CONDA_PREFIX/etc/conda/activate.d"
 	mkdir -p "$CONDA_PREFIX/etc/conda/deactivate.d"
 
-	# Create hook script on conda activate
-	cat >"$CONDA_PREFIX/etc/conda/activate.d/env-vars.sh" <<'EOS'
+	if [[ ! -f "$CONDA_PREFIX/etc/conda/activate.d/env-vars.sh" ]]; then
+		# Create hook script on conda activate
+		cat >"$CONDA_PREFIX/etc/conda/activate.d/env-vars.sh" <<'EOS'
 #!/usr/bin/env bash
 
 export CONDA_C_INCLUDE_PATH_BACKUP="$C_INCLUDE_PATH"
@@ -2137,9 +2138,11 @@ if [[ -d "$CONDA_PREFIX/pkgs/cuda-toolkit" ]]; then
 	export CUDA_HOME="$CONDA_PREFIX/pkgs/cuda-toolkit"
 fi
 EOS
+	fi
 
-	# Create hook script on conda deactivate
-	cat >"$CONDA_PREFIX/etc/conda/deactivate.d/env-vars.sh" <<'EOS'
+	if [[ ! -f "$CONDA_PREFIX/etc/conda/deactivate.d/env-vars.sh" ]]; then
+		# Create hook script on conda deactivate
+		cat >"$CONDA_PREFIX/etc/conda/deactivate.d/env-vars.sh" <<'EOS'
 #!/usr/bin/env bash
 
 export C_INCLUDE_PATH="$CONDA_C_INCLUDE_PATH_BACKUP"
@@ -2163,6 +2166,7 @@ unset CONDA_CUDA_HOME_BACKUP
 [[ -z "$CMAKE_PREFIX_PATH" ]] && unset CMAKE_PREFIX_PATH
 [[ -z "$CUDA_HOME" ]] && unset CUDA_HOME
 EOS
+	fi
 
 	# Exit for non-Python environment
 	[[ -x "$CONDA_PREFIX/bin/python" ]] || continue

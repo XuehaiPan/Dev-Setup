@@ -69,6 +69,9 @@
     "workbench.fontAliasing": "auto",
     "workbench.settings.editor": "ui",
     "workbench.settings.useSplitJSON": true,
+    "workbench.editorAssociations": {
+        "*.ipynb": "jupyter-notebook"
+    },
 
     //* Window */
     "window.zoomLevel": -0.25,
@@ -105,7 +108,7 @@
         "**/.settings": true,
         "**/.idea": true,
         "**/.history": true,
-        "**/*.pyc": true,
+        "**/*.py[cod]": true,
         "**/__pycache__": true
     },
 
@@ -843,7 +846,7 @@
     "python.analysis.useLibraryCodeForTypes": true,
     "python.autoUpdateLanguageServer": true,
     "python.condaPath": "~/Miniconda3/condabin/conda",
-    "python.pythonPath": "~/Miniconda3/envs/python38/bin/python",
+    "python.defaultInterpreterPath": "~/Miniconda3/envs/python38/bin/python",
     "python.terminal.activateEnvironment": true,
     "python.terminal.activateEnvInCurrentTerminal": true,
     "python.languageServer": "Pylance",
@@ -868,12 +871,6 @@
     "jupyter.defaultCellMarker": "# %%",
     "jupyter.allowInput": true,
     "jupyter.jupyterServerType": "local",
-    "workbench.editorAssociations": [
-        {
-            "viewType": "jupyter.notebook.ipynb",
-            "filenamePattern": "*.ipynb"
-        }
-    ],
 
     //* Remote */
     "remote.extensionKind": {
@@ -896,6 +893,9 @@
         "ms-python.vscode-pylance",
         "ms-toolsai.jupyter"
     ],
+
+    //* reStructuredText */
+    "restructuredtext.languageServer.disabled": true,
 
     //* Settings Sync */
     "sync.autoDownload": false,

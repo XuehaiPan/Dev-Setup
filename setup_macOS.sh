@@ -2218,17 +2218,16 @@ EOS
 	# Exit for non-Python environment
 	[[ -x "$CONDA_PREFIX/bin/python" ]] || continue
 
-	# Create sitecustomize.py in USER_SITE directory
+	# Create usercustomize.py in USER_SITE directory
 	USER_SITE="$("$CONDA_PREFIX/bin/python" -c 'from __future__ import print_function; import site; print(site.getusersitepackages())')"
 	mkdir -p "$USER_SITE"
-	if [[ ! -s "$USER_SITE/sitecustomize.py" ]]; then
-		touch "$USER_SITE/sitecustomize.py"
+	if [[ ! -s "$USER_SITE/usercustomize.py" ]]; then
+		touch "$USER_SITE/usercustomize.py"
 	fi
-	if ! grep -qE '^\s*(import|from)\s+rich' "$USER_SITE/sitecustomize.py"; then
-		[[ -s "$USER_SITE/sitecustomize.py" ]] && echo >>"$USER_SITE/sitecustomize.py"
-		cat >>"$USER_SITE/sitecustomize.py" <<'EOS'
+	if ! grep -qE '^\s*(import|from)\s+rich' "$USER_SITE/usercustomize.py"; then
+		[[ -s "$USER_SITE/usercustomize.py" ]] && echo >>"$USER_SITE/usercustomize.py"
+		cat >>"$USER_SITE/usercustomize.py" <<'EOS'
 try:
-    from rich import print
     import rich.pretty
     import rich.traceback
 except ImportError:

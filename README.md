@@ -131,8 +131,13 @@ which do not need additional font settings.
 **Note**: If you are using **WSL on Windows**, you need to run [Windows Terminal](https://github.com/Microsoft/Terminal) as **administrator** to get the permissions to copy fonts to `C:\Windows\Fonts`. If you forgot to obtain the appropriate privileges, you can open WSL in a new terminal window with administrator privilege. Then run the following command:
 
 ```bash
-find ~/.local/share/fonts -type f -name '*.[ot]t[fc]' -print \
-        -exec cp -f '{}' /mnt/c/Windows/Fonts \;
+find -L ~/.local/share/fonts -not -empty -type f -name '*.tt[fc]' -print0 | xargs -0 -I '{}' bash -c \
+    'file="{}"
+    font=${file##*/}
+    echo "Installing \"${font}\" to \"/mnt/c/Windows/Fonts\""
+    cp -f "${file}" /mnt/c/Windows/Fonts
+    /mnt/c/Windows/System32/reg.exe add "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Fonts" \
+        /v "${font%.tt[fc]} (TrueType)" /t REG_SZ /d "${font}" /f'
 ```
 
 ## Customization

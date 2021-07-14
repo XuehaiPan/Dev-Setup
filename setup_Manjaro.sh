@@ -2141,26 +2141,31 @@ else:
 EOF
 
 # Install fonts
-mkdir -p "$HOME/.local/share/fonts"
-FONT_DIR_LIST=('$HOME/.local/share/fonts')
-if $IN_WSL; then
-	FONT_DIR_LIST+=('/mnt/c/Windows/Fonts')
-fi
+URL_LIST=("https://github.com/ryanoasis/nerd-fonts/releases/latest/download/DejaVuSansMono.zip")
 LATEST_CASCADIA_VERSION="$(get_latest_version "microsoft/cascadia-code")"
-URL_LIST=(
-	"https://github.com/ryanoasis/nerd-fonts/releases/latest/download/DejaVuSansMono.zip"
-	"https://github.com/microsoft/cascadia-code/releases/latest/download/CascadiaCode-${LATEST_CASCADIA_VERSION#v}.zip"
-)
+if [[ $? -eq 0 && -n "$LATEST_CASCADIA_VERSION" ]]; then
+	URL_LIST+=("https://github.com/microsoft/cascadia-code/releases/latest/download/CascadiaCode-${LATEST_CASCADIA_VERSION#v}.zip")
+fi
 exec_cmd "wget -N -P \"$TMP_DIR/fonts\" https://github.com/XuehaiPan/Dev-Setup/raw/HEAD/Menlo.ttc"
 for url in "${URL_LIST[@]}"; do
 	exec_cmd "wget -N -P \"$TMP_DIR\" $url"
 	exec_cmd "unzip -o \"$TMP_DIR/$(basename "$url")\" -d \"$TMP_DIR/fonts\""
 done
-for font_dir in "${FONT_DIR_LIST[@]}"; do
-	exec_cmd "find -L \"$TMP_DIR/fonts\" -not -empty -type f -name '*.[ot]t[fc]' \\
-		-printf '==> cp -f \"%p\" \"$font_dir\"\n' \\
-		-exec cp -f '{}' \"$font_dir\" \\;"
-done
+
+mkdir -p "$HOME/.local/share/fonts"
+exec_cmd "find -L \"$TMP_DIR/fonts\" -not -empty -type f -name '*.[ot]t[fc]' \\
+	-printf '==> cp -f \"%p\" \"\$HOME/.local/share/fonts\"\n' \\
+	-exec cp -f '{}' \"\$HOME/.local/share/fonts\" \\;"
+if $IN_WSL && [[ -w "/mnt/c/Windows/Fonts" ]]; then
+	exec_cmd "find -L \"$TMP_DIR/fonts\" -not -empty -type f -name '*.ttf' \\
+		-printf '==> cp -f \"%p\" \"/mnt/c/Windows/Fonts\"\n' \\
+		-exec cp -f '{}' \"/mnt/c/Windows/Fonts\" \\;"
+	REGKEY='HKLM\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Fonts'
+	exec_cmd "find -L \"$TMP_DIR/fonts\" -not -empty -type f -name '*.tt[fc]' -print0 | \\
+		xargs -0 -I '{}' bash -c 'file=\"{}\"; font=\${file##*/}; \\
+		command=\"/mnt/c/Windows/System32/reg.exe add \\\"$REGKEY\\\" /v \\\"\${font%.tt[fc]} (TrueType)\\\" /t REG_SZ /d \\\"\${font}\\\" /f\"; \\
+		echo \"\${command}\"; eval \"\${command}\"'"
+fi
 if [[ -x "$(command -v fc-cache)" ]]; then
 	exec_cmd 'fc-cache --force'
 fi

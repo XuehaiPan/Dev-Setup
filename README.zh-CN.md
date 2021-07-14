@@ -131,8 +131,13 @@ chsh -s /usr/local/bin/zsh-lean   # change the login shell
 **注**：如果你使用的是 Windows 上的 **WSL (Windows Subsystem for Linux)**，你需要以 **管理员权限** 运行 [Windows Terminal](https://github.com/Microsoft/Terminal)，用以获得权限将字体文件拷贝至文件夹 `C:\Windows\Fonts`。如果你运行脚本时忘记使用管理员权限，你可以重新使用管理员权限打开一个新的终端窗口，并运行如下命令：
 
 ```bash
-find ~/.local/share/fonts -type f -name '*.[ot]t[fc]' -print \
-        -exec cp -f '{}' /mnt/c/Windows/Fonts \;
+find -L ~/.local/share/fonts -not -empty -type f -name '*.tt[fc]' -print0 | xargs -0 -I '{}' bash -c \
+    'file="{}"
+    font=${file##*/}
+    echo "Installing \"${font}\" to \"/mnt/c/Windows/Fonts\""
+    cp -f "${file}" /mnt/c/Windows/Fonts
+    /mnt/c/Windows/System32/reg.exe add "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Fonts" \
+        /v "${font%.tt[fc]} (TrueType)" /t REG_SZ /d "${font}" /f'
 ```
 
 ## 个性化设置

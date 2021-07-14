@@ -271,6 +271,15 @@ if [[ -d "$ZSH/.git" && -f "$ZSH/tools/upgrade.sh" ]]; then
 	rm -f "$ZSH_CACHE_DIR/.zsh-update" 2>/dev/null
 	zsh "$ZSH/tools/check_for_upgrade.sh" 2>/dev/null
 	exec_cmd 'zsh "$ZSH/tools/upgrade.sh" 2>&1'
+elif [[ -d "$ZSH" && ! -d "$ZSH/.git" ]]; then
+	exec_cmd 'git clone -c core.eol=lf -c core.autocrlf=false \
+		-c fsck.zeroPaddedFilemode=ignore \
+		-c fetch.fsck.zeroPaddedFilemode=ignore \
+		-c receive.fsck.zeroPaddedFilemode=ignore \
+		--depth=1 https://github.com/ohmyzsh/ohmyzsh.git "${TMP_DIR}/ohmyzsh" 2>&1'
+	exec_cmd 'mv -f "${TMP_DIR}/ohmyzsh/.git" "${ZSH:-"$HOME/.oh-my-zsh"}/.git"'
+	exec_cmd 'git -C "${ZSH:-"$HOME/.oh-my-zsh"}" reset --hard'
+	rm -f "$HOME"/.zcompdump* 2>/dev/null
 else
 	exec_cmd 'git clone -c core.eol=lf -c core.autocrlf=false \
 		-c fsck.zeroPaddedFilemode=ignore \

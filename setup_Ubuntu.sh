@@ -438,10 +438,10 @@ if $SET_MIRRORS; then
 			-e 'CPAN::HandleConfig->commit()'"
 	fi
 fi
-exec_cmd "perl -MCPAN -e 'install local::lib'"
+exec_cmd "perl -MCPAN -e 'force install local::lib'"
 exec_cmd 'eval "$(perl -I$HOME/.perl/lib/perl5 -Mlocal::lib=$HOME/.perl)"'
-exec_cmd "perl -MCPAN -e 'install CPAN'"
-exec_cmd "AUTOMATED_TESTING=1 perl -MCPAN -e 'install Term::ReadLine::Perl, Term::ReadKey'"
+exec_cmd "perl -MCPAN -e 'force install CPAN'"
+exec_cmd "AUTOMATED_TESTING=1 perl -MCPAN -e 'force install Term::ReadLine::Perl, Term::ReadKey'"
 
 # Configurations for Zsh
 backup_dotfiles .dotfiles/.zshrc

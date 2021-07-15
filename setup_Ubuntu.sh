@@ -424,6 +424,7 @@ fi
 # Configurations for Perl
 export PERL_MB_OPT="--install_base \"$HOME/.perl\""
 export PERL_MM_OPT="INSTALL_BASE=\"$HOME/.perl\""
+export PERL_MM_USE_DEFAULT=1
 exec_cmd "PERL_MM_USE_DEFAULT=1 http_proxy=\"\" https_proxy=\"\" ftp_proxy=\"\" perl -MCPAN -e 'mkmyconfig'"
 exec_cmd "perl -MCPAN -e 'CPAN::HandleConfig->load();' \\
 	-e 'CPAN::HandleConfig->edit(\"cleanup_after_install\", \"1\");' \\
@@ -438,10 +439,10 @@ if $SET_MIRRORS; then
 			-e 'CPAN::HandleConfig->commit()'"
 	fi
 fi
-exec_cmd "perl -MCPAN -e 'force install local::lib'"
+exec_cmd 'PERL_MM_OPT="INSTALL_BASE=\"$HOME/.perl\"" cpan -i -T local::lib'
 exec_cmd 'eval "$(perl -I$HOME/.perl/lib/perl5 -Mlocal::lib=$HOME/.perl)"'
-exec_cmd "perl -MCPAN -e 'force install CPAN'"
-exec_cmd "AUTOMATED_TESTING=1 perl -MCPAN -e 'force install Term::ReadLine::Perl, Term::ReadKey'"
+exec_cmd "cpan -i CPAN"
+exec_cmd "AUTOMATED_TESTING=1 cpan -i Term::ReadLine::Perl Term::ReadKey"
 
 # Configurations for Zsh
 backup_dotfiles .dotfiles/.zshrc

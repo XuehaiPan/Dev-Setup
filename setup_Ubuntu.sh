@@ -258,10 +258,14 @@ fi
 
 # Change the login shell to Zsh
 if [[ "$(basename "$SHELL")" != "zsh" ]]; then
+	CHSH="chsh"
+	if $IS_SUDOER; then
+		CHSH="sudo chsh"
+	fi
 	if grep -qF '/usr/bin/zsh' /etc/shells; then
-		exec_cmd 'chsh -s /usr/bin/zsh'
+		exec_cmd "$CHSH --shell /usr/bin/zsh $USER"
 	elif grep -qF '/bin/zsh' /etc/shells; then
-		exec_cmd 'chsh -s /bin/zsh'
+		exec_cmd "$CHSH --shell /bin/zsh $USER"
 	fi
 fi
 

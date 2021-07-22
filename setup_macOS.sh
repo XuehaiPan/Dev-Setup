@@ -206,9 +206,9 @@ exec_cmd 'brew cleanup -s --prune 7'
 # Change the login shell to Zsh
 if [[ "$(basename "$SHELL")" != "zsh" ]]; then
 	if grep -qF '/usr/local/bin/zsh' /etc/shells; then
-		exec_cmd 'chsh -s /usr/local/bin/zsh'
+		exec_cmd "sudo chsh --shell /usr/local/bin/zsh $USER"
 	elif grep -qF '/bin/zsh' /etc/shells; then
-		exec_cmd 'chsh -s /bin/zsh'
+		exec_cmd "sudo chsh --shell /bin/zsh $USER"
 	fi
 fi
 

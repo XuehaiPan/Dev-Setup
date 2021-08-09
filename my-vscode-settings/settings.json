@@ -149,7 +149,7 @@
     "terminal.integrated.fontFamily": "'DejaVuSansMono Nerd Font', Menlo",
     "terminal.integrated.tabs.enabled": true,
     "terminal.integrated.showExitAlert": true,
-    "terminal.integrated.confirmOnExit": true,
+    "terminal.integrated.confirmOnExit": "hasChildProcesses",
     "terminal.integrated.sendKeybindingsToShell": true,
     "terminal.integrated.cursorBlinking": true,
     "terminal.integrated.enableBell": true,
@@ -443,7 +443,7 @@
     "go.buildOnSave": "package",
     "go.gocodePackageLookupMode": "go",
     "go.docsTool": "godoc",
-    "go.formatTool": "goreturns",
+    "go.formatTool": "default",
     "go.lintTool": "golint",
     "go.lintOnSave": "package",
     "go.installDependenciesWhenBuilding": true,
@@ -837,7 +837,6 @@
     "powershell.scriptAnalysis.enable": true,
 
     //* Python */
-    "python.showStartPage": false,
     "python.autoComplete.addBrackets": true,
     "python.autoComplete.showAdvancedMembers": true,
     "python.analysis.autoImportCompletions": true,

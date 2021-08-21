@@ -1960,9 +1960,9 @@ auto_activate_base: false
 auto_update_conda: true
 
 channels:
+  - pytorch
   - defaults
   - conda-forge
-  - pytorch
 EOF
 if $SET_MIRRORS; then
 	cat >>.dotfiles/.condarc <<'EOF'
@@ -1980,7 +1980,7 @@ custom_channels:
 EOF
 fi
 cat >>.dotfiles/.condarc <<'EOF'
-channel_priority: disabled
+channel_priority: flexible
 
 ssl_verify: true
 show_channel_urls: false

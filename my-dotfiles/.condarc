@@ -2,9 +2,9 @@ auto_activate_base: false
 auto_update_conda: true
 
 channels:
+  - pytorch
   - defaults
   - conda-forge
-  - pytorch
 default_channels:
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r
@@ -16,7 +16,7 @@ custom_channels:
   bioconda: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
   menpo: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
   simpleitk: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
-channel_priority: disabled
+channel_priority: flexible
 
 ssl_verify: true
 show_channel_urls: false

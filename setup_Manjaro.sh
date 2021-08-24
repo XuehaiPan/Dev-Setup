@@ -307,21 +307,20 @@ else
 	rm -f "$HOME"/.zcompdump* 2>/dev/null
 fi
 
-# Install Powerlevel10k theme
-if [[ ! -d "$ZSH_CUSTOM/themes/powerlevel10k/.git" ]]; then
-	exec_cmd 'git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "$ZSH_CUSTOM/themes/powerlevel10k" 2>&1'
-else
-	exec_cmd 'git -C "$ZSH_CUSTOM/themes/powerlevel10k" pull --ff-only 2>&1'
-fi
-
-# Install Zsh plugins
-for plugin in zsh-{syntax-highlighting,autosuggestions,completions}; do
-	if [[ ! -d "$ZSH_CUSTOM/plugins/$plugin/.git" ]]; then
-		exec_cmd "git clone --depth=1 https://github.com/zsh-users/${plugin}.git \"\$ZSH_CUSTOM/plugins/$plugin\" 2>&1"
+# Install Powerlevel10k theme and Zsh plugins
+while read -r repo target; do
+	if [[ ! -d "$ZSH_CUSTOM/$target/.git" ]]; then
+		exec_cmd "git clone --depth=1 https://github.com/${repo}.git \"\$ZSH_CUSTOM/$target\" 2>&1"
 	else
-		exec_cmd "git -C \"\$ZSH_CUSTOM/plugins/$plugin\" pull --ff-only 2>&1"
+		exec_cmd "git -C \"\$ZSH_CUSTOM/$target\" pull --ff-only 2>&1"
 	fi
-done
+done <<EOS
+	romkatv/powerlevel10k             themes/powerlevel10k
+	zsh-users/zsh-syntax-highlighting plugins/zsh-syntax-highlighting
+	zsh-users/zsh-autosuggestions     plugins/zsh-autosuggestions
+	zsh-users/zsh-completions         plugins/zsh-completions
+	esc/conda-zsh-completion          plugins/conda-zsh-completion
+EOS
 
 # Install fzf
 if [[ ! -d "$HOME/.fzf" ]]; then
@@ -636,6 +635,7 @@ plugins=(
 	zsh-syntax-highlighting
 	zsh-autosuggestions
 	zsh-completions
+	conda-zsh-completion
 	colorize
 	colored-man-pages
 	fd

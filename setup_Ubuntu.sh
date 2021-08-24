@@ -1251,6 +1251,10 @@ else
 	fi
 fi
 unset __conda_setup
+
+if [[ -f "\$HOME/$CONDA_DIR/etc/profile.d/mamba.sh" ]]; then
+	source "\$HOME/$CONDA_DIR/etc/profile.d/mamba.sh"
+fi
 # <<< conda initialize <<<
 
 EOF

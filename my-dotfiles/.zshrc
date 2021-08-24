@@ -281,6 +281,7 @@ plugins=(
 	zsh-syntax-highlighting
 	zsh-autosuggestions
 	zsh-completions
+	conda-zsh-completion
 	colorize
 	colored-man-pages
 	fd

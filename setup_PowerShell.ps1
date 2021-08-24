@@ -283,6 +283,7 @@ call plug#begin('~/vimfiles/plugged')
     Plug 'jiangmiao/auto-pairs'
     Plug 'tpope/vim-surround'
     Plug 'mg979/vim-visual-multi'
+    Plug 'tpope/vim-unimpaired'
     Plug 'mbbill/undotree'
     Plug 'airblade/vim-gitgutter'
     Plug 'tpope/vim-fugitive'

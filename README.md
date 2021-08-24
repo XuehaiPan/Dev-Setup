@@ -218,6 +218,7 @@ The following packages will be setup:
 | [shellcheck](https://www.shellcheck.net)                                                                                         |   ✔   |      ✔       |       ✔       |
 |                                                                                                                                  |       |              |               |
 | [Miniconda3](https://docs.conda.io/en/latest/miniconda.html)                                                                     |   ✔   |      ✔       |       ✔       |
+| [mamba](https://github.com/mamba-org/mamba)                                                                                      |   ✔   |      ✔       |       ✔       |
 | [gcc](https://gcc.gnu.org)                                                                                                       |   ✔   |      ✔       |       ✔       |
 | [gdb](https://www.gnu.org/software/gdb)                                                                                          |   ✔   |      ✔       |       ✔       |
 | [clang](https://clang.llvm.org) & [llvm](https://llvm.org)                                                                       |   ✔   |      ✔       |       ✔       |

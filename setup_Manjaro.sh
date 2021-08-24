@@ -470,6 +470,10 @@ else
 	fi
 fi
 unset __conda_setup
+
+if [[ -f "\$HOME/$CONDA_DIR/etc/profile.d/mamba.sh" ]]; then
+	source "\$HOME/$CONDA_DIR/etc/profile.d/mamba.sh"
+fi
 # <<< conda initialize <<<
 
 EOF
@@ -919,20 +923,20 @@ function upgrade_cpan() {
 function upgrade_conda() {
 	local env cmds
 
-	# Upgrade Conda
-	exec_cmd 'conda update conda --name base --yes'
+	# Upgrade Conda and Mamba
+	exec_cmd 'mamba update conda mamba --name base --yes'
 
 	# Upgrade Conda packages in each environment
 	while read -r env; do
-		cmds="conda update --all --yes"
+		cmds="mamba update --all --yes"
 		if conda list --full-name anaconda --name "$env" | grep -q '^anaconda[^-]'; then
-			cmds="$cmds; conda update anaconda --yes"
+			cmds="$cmds; mamba update anaconda --yes"
 		fi
 		exec_cmd "conda activate $env; $cmds; conda deactivate"
 	done < <(conda info --envs | awk 'NF > 0 && $0 !~ /^#.*/ { print $1 }')
 
 	# Clean up Conda cache
-	exec_cmd 'conda clean --all --yes'
+	exec_cmd 'mamba clean --all --yes'
 }
 
 function foreach_conda_env_do() {
@@ -2024,12 +2028,14 @@ fi
 
 # Install Conda packages
 export PATH="${PATH:+"$PATH":}$HOME/$CONDA_DIR/condabin"
-exec_cmd 'conda update conda --yes'
-exec_cmd 'conda install pip ipython ipdb \
+source "$HOME/$CONDA_DIR/bin/activate"
+exec_cmd 'conda install mamba --yes'
+exec_cmd 'mamba update conda mamba --yes'
+exec_cmd 'mamba install mamba pip ipython ipdb \
 	jupyter notebook jupyterlab jupyter_contrib_nbextensions \
 	numpy numba matplotlib pandas seaborn \
 	cython rich tqdm autopep8 pylint --yes'
-exec_cmd 'conda clean --all --yes'
+exec_cmd 'mamba clean --all --yes'
 exec_cmd "\"\$HOME/$CONDA_DIR/bin/jupyter\" contrib nbextension install --user &>/dev/null"
 if $SET_MIRRORS; then
 	exec_cmd "\"\$HOME/$CONDA_DIR/bin/pip\" config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple"

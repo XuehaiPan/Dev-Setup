@@ -76,6 +76,10 @@ else
 	fi
 fi
 unset __conda_setup
+
+if [[ -f "$HOME/Miniconda3/etc/profile.d/mamba.sh" ]]; then
+	source "$HOME/Miniconda3/etc/profile.d/mamba.sh"
+fi
 # <<< conda initialize <<<
 export CONDA_JL_HOME="$HOME/Miniconda3/envs/python38"
 

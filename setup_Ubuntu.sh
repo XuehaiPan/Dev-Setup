@@ -339,7 +339,11 @@ fi
 
 exec_cmd "eval \"\$(${HOMEBREW_PREFIX/#$HOME/\$HOME}/bin/brew shellenv)\""
 
-exec_cmd 'brew tap homebrew/command-not-found'
+if $SET_MIRRORS; then
+	exec_cmd "brew tap --force-auto-update homebrew/command-not-found https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-command-not-found.git"
+else
+	exec_cmd 'brew tap --force-auto-update homebrew/command-not-found'
+fi
 exec_cmd 'brew update --force --verbose'
 
 # Install Oh-My-Zsh

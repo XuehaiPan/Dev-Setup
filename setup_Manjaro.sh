@@ -2040,7 +2040,7 @@ export PATH="${PATH:+"$PATH":}$HOME/$CONDA_DIR/condabin"
 source "$HOME/$CONDA_DIR/bin/activate"
 exec_cmd 'conda install mamba --yes'
 exec_cmd 'mamba update conda mamba --yes'
-exec_cmd 'mamba install mamba pip ipython ipdb \
+exec_cmd 'mamba install pip ipython ipdb \
 	jupyter notebook jupyterlab jupyter_contrib_nbextensions \
 	numpy numba matplotlib pandas seaborn \
 	cython rich tqdm autopep8 pylint --yes'

@@ -43,7 +43,7 @@ export LC_ALL="en_US.UTF-8"
 eval "$(/usr/local/bin/brew shellenv)"
 export HOMEBREW_EDITOR="vim"
 export HOMEBREW_BAT=true
-export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/bottles"
+export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.sjtug.sjtu.edu.cn/homebrew-bottles/bottles"
 __COMMAND_NOT_FOUND_HANDLER="$(brew --repository homebrew/command-not-found)/handler.sh"
 if [[ -f "${__COMMAND_NOT_FOUND_HANDLER}" ]]; then
 	source "${__COMMAND_NOT_FOUND_HANDLER}"

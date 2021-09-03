@@ -139,7 +139,7 @@ if [[ ! -x "$(command -v brew)" ]]; then
 	if $SET_MIRRORS; then
 		exec_cmd 'export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"'
 		exec_cmd 'export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git"'
-		exec_cmd 'export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/bottles"'
+		exec_cmd 'export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.sjtug.sjtu.edu.cn/homebrew-bottles/bottles"'
 		exec_cmd "git clone --depth=1 https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/install.git \"$TMP_DIR/brew-install\""
 		exec_cmd "/bin/bash \"$TMP_DIR/brew-install/install.sh\""
 		exec_cmd 'unset HOMEBREW_{BREW,CORE}_GIT_REMOTE'
@@ -370,7 +370,7 @@ export HOMEBREW_EDITOR="vim"
 export HOMEBREW_BAT=true'
 if $SET_MIRRORS; then
 	HOMEBREW_SETTINGS+='
-export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/bottles"'
+export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.sjtug.sjtu.edu.cn/homebrew-bottles/bottles"'
 fi
 HOMEBREW_SETTINGS+='
 __COMMAND_NOT_FOUND_HANDLER="$(brew --repository homebrew/command-not-found)/handler.sh"

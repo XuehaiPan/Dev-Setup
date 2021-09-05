@@ -193,6 +193,13 @@ EOS
 		fi
 		exec_cmd 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" | sudo tee /etc/apt/sources.list.d/vscode.list'
 	fi
+	exec_cmd 'wget -qO - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -'
+	if ! grep -qF 'dl.google.com/linux/chrome/deb' /etc/apt/source.list; then
+		if [ -f /etc/apt/sources.list.d/google-chrome.list ]; then
+			exec_cmd "sudo cp -f /etc/apt/sources.list.d/google-chrome.list /etc/apt/sources.list.d/google-chrome.list.save"
+		fi
+		exec_cmd 'echo "deb [arch=amd64] https://dl.google.com/linux/chrome/deb stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list'
+	fi
 	exec_cmd 'wget -qO - https://deb.nodesource.com/setup_lts.x | sudo -E bash -'
 
 	# Install and setup shells

@@ -2132,7 +2132,7 @@ create_default_packages:
   - jupyterlab
   - numpy
   - numba
-  - matplotlib
+  - matplotlib-base
   - pandas
   - seaborn
   - cython
@@ -2164,7 +2164,7 @@ exec_cmd 'conda install mamba --yes'
 exec_cmd 'mamba update conda mamba --yes'
 exec_cmd 'mamba install pip ipython ipdb \
 	jupyter notebook jupyterlab jupyter_contrib_nbextensions \
-	numpy numba matplotlib pandas seaborn \
+	numpy numba matplotlib-base pandas seaborn \
 	cython rich tqdm autopep8 pylint --yes'
 exec_cmd 'mamba clean --all --yes'
 exec_cmd "\"\$HOME/$CONDA_DIR/bin/jupyter\" contrib nbextension install --user &>/dev/null"

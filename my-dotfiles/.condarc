@@ -33,7 +33,7 @@ create_default_packages:
   - jupyterlab
   - numpy
   - numba
-  - matplotlib
+  - matplotlib-base
   - pandas
   - seaborn
   - cython

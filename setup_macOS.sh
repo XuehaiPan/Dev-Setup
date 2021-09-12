@@ -152,9 +152,9 @@ exec_cmd "eval \"\$($HOMEBREW_PREFIX/bin/brew shellenv)\""
 
 if $SET_MIRRORS; then
 	exec_cmd 'git -C "$(brew --repo)" remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git'
-	BREW_TAPS="$(brew tap)"
+	BREW_TAPS="$(BREW_TAPS="$(brew tap 2>/dev/null)"; echo -n "${BREW_TAPS//$'\n'/:}")"
 	for tap in core cask{,-fonts,-drivers,-versions} command-not-found; do
-		if echo "$BREW_TAPS" | grep -qE "^homebrew/${tap}\$"; then
+		if [[ ":${BREW_TAPS}:" == *":homebrew/${tap}:"* ]]; then
 			exec_cmd "git -C \"\$(brew --repo homebrew/${tap})\" remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-${tap}.git"
 			exec_cmd "git -C \"\$(brew --repo homebrew/${tap})\" config homebrew.forceautoupdate true"
 		else
@@ -162,9 +162,9 @@ if $SET_MIRRORS; then
 		fi
 	done
 else
-	BREW_TAPS="$(brew tap)"
+	BREW_TAPS="$(BREW_TAPS="$(brew tap 2>/dev/null)"; echo -n "${BREW_TAPS//$'\n'/:}")"
 	for tap in core cask{,-fonts,-drivers,-versions} command-not-found; do
-		if ! (echo "$BREW_TAPS" | grep -qE "^homebrew/${tap}\$"); then
+		if [[ ":${BREW_TAPS}:" == *":homebrew/${tap}:"* ]]; then
 			exec_cmd "brew tap --force-auto-update homebrew/${tap}"
 		fi
 	done

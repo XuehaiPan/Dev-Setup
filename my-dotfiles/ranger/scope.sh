@@ -24,7 +24,7 @@ IFS=$'\n'
 ## 3    | fix width  | Don't reload when width changes
 ## 4    | fix height | Don't reload when height changes
 ## 5    | fix both   | Don't ever reload
-## 6    | image      | Display the image `$IMAGE_CACHE_PATH` points to as an image preview
+## 6    | image      | Display the image `${IMAGE_CACHE_PATH}` points to as an image preview
 ## 7    | image      | Display the file directly as an image
 
 ## Script arguments
@@ -155,7 +155,7 @@ handle_image() {
             orientation="$( identify -format '%[EXIF:Orientation]\n' -- "${FILE_PATH}" )"
             ## If orientation data is present and the image actually
             ## needs rotating ("1" means no rotation)...
-            if [[ -n "$orientation" && "$orientation" != 1 ]]; then
+            if [[ -n "${orientation}" && "${orientation}" != 1 ]]; then
                 ## ...auto-rotate the image according to the EXIF data.
                 convert -- "${FILE_PATH}" -auto-orient "${IMAGE_CACHE_PATH}" && exit 6
             fi
@@ -224,30 +224,30 @@ handle_image() {
                 application/x-7z-compressed) ;;
                 *) tar=1 ;;
             esac
-            { [ "$tar" ] && fn=$( tar --list --file "${FILE_PATH}" ); } ||
+            { [ "${tar}" ] && fn=$( tar --list --file "${FILE_PATH}" ); } ||
             { fn=$( bsdtar --list --file "${FILE_PATH}" ) && bsd=1 && tar=""; } ||
-            { [ "$rar" ] && fn=$( unrar lb -p- -- "${FILE_PATH}" ); } ||
-            { [ "$zip" ] && fn=$( zipinfo -1 -- "${FILE_PATH}" ); } || return
+            { [ "${rar}" ] && fn=$( unrar lb -p- -- "${FILE_PATH}" ); } ||
+            { [ "${zip}" ] && fn=$( zipinfo -1 -- "${FILE_PATH}" ); } || return
 
-            fn=$( echo "$fn" | python3 -c "from __future__ import print_function; \
+            fn=$( echo "${fn}" | python3 -c "from __future__ import print_function; \
                     import sys; import mimetypes as m; \
                     [ print(l, end='') for l in sys.stdin \
                       if (m.guess_type(l[:-1])[0] or '').startswith('image/') ]" |
                 sort -V | head -n 1 )
-            [ "$fn" = "" ] && return
-            [ "$bsd" ] && fn=$( printf '%b' "$fn" )
+            [ "${fn}" = "" ] && return
+            [ "${bsd}" ] && fn=$( printf '%b' "${fn}" )
 
-            [ "$tar" ] && tar --extract --to-stdout \
-                --file "${FILE_PATH}" -- "$fn" >"${IMAGE_CACHE_PATH}" && exit 6
-            fe=$( echo -n "$fn" | sed 's/[][*?\]/\\\0/g' )
-            [ "$bsd" ] && bsdtar --extract --to-stdout \
-                --file "${FILE_PATH}" -- "$fe" >"${IMAGE_CACHE_PATH}" && exit 6
-            [ "$bsd" ] || [ "$tar" ] && rm -- "${IMAGE_CACHE_PATH}"
-            [ "$rar" ] && unrar p -p- -inul -- "${FILE_PATH}" "$fn" > \
+            [ "${tar}" ] && tar --extract --to-stdout \
+                --file "${FILE_PATH}" -- "${fn}" >"${IMAGE_CACHE_PATH}" && exit 6
+            fe=$( echo -n "${fn}" | sed 's/[][*?\]/\\\0/g' )
+            [ "${bsd}" ] && bsdtar --extract --to-stdout \
+                --file "${FILE_PATH}" -- "${fe}" >"${IMAGE_CACHE_PATH}" && exit 6
+            [ "${bsd}" ] || [ "${tar}" ] && rm -- "${IMAGE_CACHE_PATH}"
+            [ "${rar}" ] && unrar p -p- -inul -- "${FILE_PATH}" "${fn}" > \
                 "${IMAGE_CACHE_PATH}" && exit 6
-            [ "$zip" ] && unzip -pP "" -- "${FILE_PATH}" "$fe" > \
+            [ "${zip}" ] && unzip -pP "" -- "${FILE_PATH}" "${fe}" > \
                 "${IMAGE_CACHE_PATH}" && exit 6
-            [ "$rar" ] || [ "$zip" ] && rm -- "${IMAGE_CACHE_PATH}"
+            [ "${rar}" ] || [ "${zip}" ] && rm -- "${IMAGE_CACHE_PATH}"
             ;;
     esac
 
@@ -338,7 +338,7 @@ handle_mime() {
                     FROM pragma_table_info(tblname)
                 ) AS "types"
                 FROM '"(${sqlite_rowcount_query});"
-            if [ "$SQLITE_TABLE_LIMIT" -gt 0 ] && [ "$SQLITE_ROW_LIMIT" -ge 0 ]; then
+            if [ "${SQLITE_TABLE_LIMIT}" -gt 0 ] && [ "${SQLITE_ROW_LIMIT}" -ge 0 ]; then
                 ## Do exhaustive preview
                 echo; printf '>%.0s' $( seq "${PV_WIDTH}" ); echo
                 sqlite3 "file:${FILE_PATH}?mode=ro" -noheader \
@@ -347,7 +347,7 @@ handle_mime() {
                         sqlite_table_rowcount="$( sqlite3 "file:${FILE_PATH}?mode=ro" -noheader "SELECT count(*) FROM ${sqlite_table}" )"
                         echo; echo "${sqlite_table}[${sqlite_table_rowcount}]:"
                         sqlite_table_query="SELECT * FROM ${sqlite_table};"
-                        [ "$SQLITE_ROW_LIMIT" -gt 0 ] && sqlite_table_query="SELECT * FROM ${sqlite_table} LIMIT ${SQLITE_ROW_LIMIT} OFFSET (${sqlite_table_rowcount} - ${SQLITE_ROW_LIMIT});"
+                        [ "${SQLITE_ROW_LIMIT}" -gt 0 ] && sqlite_table_query="SELECT * FROM ${sqlite_table} LIMIT ${SQLITE_ROW_LIMIT} OFFSET (${sqlite_table_rowcount} - ${SQLITE_ROW_LIMIT});"
                         sqlite_show_query "${sqlite_table_query}"
                     done
             fi

@@ -58,7 +58,7 @@ Options:
 
 **Note**: If you are using **WSL on Windows**, you need to run [Windows Terminal](https://github.com/Microsoft/Terminal) as **administrator** to get the permissions to copy fonts to `C:\Windows\Fonts`. Otherwise, the fonts will not be installed successfully on Windows. You can download them from [nerdfonts.com](https://www.nerdfonts.com) and install them manually. See [Font Settings](#font-settings) for more details.
 
-After running the script, all the old configuration files involved will be backed up to the folder `$HOME/.dotfiles/backups/<DATETIME>`, and a symbolic link `$HOME/.dotfiles/backups/latest` will link to the latest one. You can compare the differences using:
+After running the script, all the old configuration files involved will be backed up to the folder `${HOME}/.dotfiles/backups/<DATETIME>`, and a symbolic link `${HOME}/.dotfiles/backups/latest` will link to the latest one. You can compare the differences using:
 
 ```bash
 # Compare the differences
@@ -84,11 +84,11 @@ You can get vimdiff reference manual from [https://vimhelp.org/diff.txt.html](ht
 You can rollback to your previous dotfiles using:
 
 ```bash
-# Rollback to the latest backup in "$HOME/.dotfiles/backups/latest"
+# Rollback to the latest backup in "${HOME}/.dotfiles/backups/latest"
 bash restore_dotfiles.sh
 
 # Rollback to a specific version
-bash restore_dotfiles.sh "$HOME/.dotfiles/backups/<DATETIME>"
+bash restore_dotfiles.sh "${HOME}/.dotfiles/backups/<DATETIME>"
 ```
 
 **Note**: the packages installed by [`setup.sh`](setup.sh) (see [Packages](#packages)) will remain in your system.
@@ -101,7 +101,7 @@ You can upgrade your packages just by running:
 upgrade_packages
 ```
 
-By default, `upgrade_packages` will not upgrade your conda environments. If you want to always keep your conda up-to-date, you can uncomment the corresponding line in `$HOME/.dotfiles/utilities.sh`. Or run the script as:
+By default, `upgrade_packages` will not upgrade your conda environments. If you want to always keep your conda up-to-date, you can uncomment the corresponding line in `${HOME}/.dotfiles/utilities.sh`. Or run the script as:
 
 ```bash
 upgrade_packages; upgrade_conda
@@ -146,14 +146,14 @@ Make your own setup scripts. Add a new config file to the script:
 
 1. fork this repository;
 2. copy the contents of your config file to a temp file `temp.txt`;
-3. replace all identifiers of your home directory with `$HOME` in `temp.txt`;
-4. replace all identifiers of your user name with `$USER` in `temp.txt`;
+3. replace all identifiers of your home directory with `${HOME}` in `temp.txt`;
+4. replace all identifiers of your user name with `${USER}` in `temp.txt`;
 5. replace all `\` with `\\` in `temp.txt`;
 6. replace all `$` with `\$` in `temp.txt`;
 7. add the following lines to script `setup_<OS_NAME>.sh`:
 
 ```bash
-cd $HOME   # this line has already been added at the top of the script
+cd "${HOME}"   # this line has already been added at the top of the script
 
 # Replace <CFG_FILE> with the config file's name
 backup_dotfiles <CFG_FILE> .dotfiles/<CFG_FILE>

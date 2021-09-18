@@ -58,7 +58,7 @@ cd Dev-Setup
 
 **注**：如果你使用的是 Windows 上的 **WSL (Windows Subsystem for Linux)**，你需要以 **管理员权限** 运行 [Windows Terminal](https://github.com/Microsoft/Terminal)，用以获得权限将字体文件拷贝至文件夹 `C:\Windows\Fonts`，否则将无法在 Windows 上正确安装字体文件。你可以从 [nerdfonts.com](https://www.nerdfonts.com) 下载字体并手动安装，更多信息请参见 [字体设置](#字体设置)。
 
-脚本执行结束后，所有被涉及的旧配置文件会被备份至文件夹 `$HOME/.dotfiles/backups/<DATETIME>`，并将会有一个软链接 `$HOME/.dotfiles/backups/latest` 链接至最新的备份文件夹。你可以使用如下命令比较文件变更：
+脚本执行结束后，所有被涉及的旧配置文件会被备份至文件夹 `${HOME}/.dotfiles/backups/<DATETIME>`，并将会有一个软链接 `${HOME}/.dotfiles/backups/latest` 链接至最新的备份文件夹。你可以使用如下命令比较文件变更：
 
 ```bash
 # Compare the differences
@@ -84,11 +84,11 @@ vim -c "DirDiff ~/.dotfiles ~/.dotfiles/backups/latest/.dotfiles"
 你可以运行如下命令回滚旧设置：
 
 ```bash
-# Rollback to the latest backup in "$HOME/.dotfiles/backups/latest"
+# Rollback to the latest backup in "${HOME}/.dotfiles/backups/latest"
 bash restore_dotfiles.sh
 
 # Rollback to a specific version
-bash restore_dotfiles.sh "$HOME/.dotfiles/backups/<DATETIME>"
+bash restore_dotfiles.sh "${HOME}/.dotfiles/backups/<DATETIME>"
 ```
 
 **注**：由脚本 [`setup.sh`](setup.sh) 安装的软件包将保留在你的系统之中。（更多信息请参见 [软件包列表](#软件包列表)）
@@ -101,7 +101,7 @@ bash restore_dotfiles.sh "$HOME/.dotfiles/backups/<DATETIME>"
 upgrade_packages
 ```
 
-在默认设置下，命令 `upgrade_packages` 不会更新 conda 环境。如果你想总是更新所有 conda 环境，可以解注释 `$HOME/.dotfiles/utilities.sh` 中对应的行。或执行以下命令：
+在默认设置下，命令 `upgrade_packages` 不会更新 conda 环境。如果你想总是更新所有 conda 环境，可以解注释 `${HOME}/.dotfiles/utilities.sh` 中对应的行。或执行以下命令：
 
 ```bash
 upgrade_packages; upgrade_conda
@@ -146,14 +146,14 @@ find -L ~/.local/share/fonts -not -empty -type f -name '*.tt[fc]' -print0 | xarg
 
 1. fork 本仓库；
 2. 拷贝新的配置文件的内容至一个临时文件 `temp.txt`；
-3. 将 `temp.txt` 中的所有的用户文件夹符号 `~` 替换为 `$HOME`；
-4. 将 `temp.txt` 中的所有的当前用户的用户名替换为 `$USER`；
+3. 将 `temp.txt` 中的所有的用户文件夹符号 `~` 替换为 `${HOME}`；
+4. 将 `temp.txt` 中的所有的当前用户的用户名替换为 `${USER}`；
 5. 将 `temp.txt` 中的所有 `\` 替换为 `\\`；
 6. 将 `temp.txt` 中的所有 `$` 替换为 `\$`；
 7. 在脚本 `setup_<OS_NAME>.sh` 中添加如下若干行：
 
 ```bash
-cd $HOME   # this line has already been added at the top of the script
+cd "${HOME}"   # this line has already been added at the top of the script
 
 # Replace <CFG_FILE> with the config file's name
 backup_dotfiles <CFG_FILE> .dotfiles/<CFG_FILE>

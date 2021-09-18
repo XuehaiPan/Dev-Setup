@@ -9,10 +9,10 @@ export USER="${USER:-"$(whoami)"}"
 # Set configuration backup directory
 umask g-w,o-w
 DATETIME="$(date +"%Y-%m-%d-%T")"
-BACKUP_DIR="$HOME/.dotfiles/backups/$DATETIME"
-mkdir -p "$BACKUP_DIR/.dotfiles"
-ln -sfn "$DATETIME" "$HOME/.dotfiles/backups/latest"
-chmod 755 "$HOME/.dotfiles"
+BACKUP_DIR="${HOME}/.dotfiles/backups/${DATETIME}"
+mkdir -p "${BACKUP_DIR}/.dotfiles"
+ln -sfn "${DATETIME}" "${HOME}/.dotfiles/backups/latest"
+chmod 755 "${HOME}/.dotfiles"
 
 # Set temporary directory
 TMP_DIR="$(mktemp -d -t dev-setup.XXXXXX)"
@@ -25,17 +25,17 @@ fi
 
 # Check if in WSL
 IN_WSL=false
-if [[ -n "$WSL_DISTRO_NAME" ]] || (uname -r | grep -qF 'Microsoft'); then
+if [[ -n "${WSL_DISTRO_NAME}" ]] || (uname -r | grep -qF 'Microsoft'); then
 	IN_WSL=true
 fi
 
 # Set default Conda installation directory
 CONDA_DIR="Miniconda3"
-if [[ -d "$HOME/miniconda3" && ! -d "$HOME/Miniconda3" ]]; then
+if [[ -d "${HOME}/miniconda3" && ! -d "${HOME}/Miniconda3" ]]; then
 	CONDA_DIR="miniconda3"
-elif [[ -d "$HOME/Anaconda3" ]]; then
+elif [[ -d "${HOME}/Anaconda3" ]]; then
 	CONDA_DIR="Anaconda3"
-elif [[ -d "$HOME/anaconda3" ]]; then
+elif [[ -d "${HOME}/anaconda3" ]]; then
 	CONDA_DIR="anaconda3"
 fi
 
@@ -119,13 +119,13 @@ function exec_cmd() {
 function backup_dotfiles() {
 	local file original_file
 	for file in "$@"; do
-		if [[ -f "$file" || -d "$file" ]]; then
-			if [[ -L "$file" ]]; then
-				original_file="$(realpath "$file")"
-				rm -f "$file"
-				cp -rf "$original_file" "$file"
+		if [[ -f "${file}" || -d "${file}" ]]; then
+			if [[ -L "${file}" ]]; then
+				original_file="$(realpath "${file}")"
+				rm -f "${file}"
+				cp -rf "${original_file}" "${file}"
 			fi
-			cp -rf "$file" "$BACKUP_DIR/$file"
+			cp -rf "${file}" "${BACKUP_DIR}/${file}"
 		fi
 	done
 }
@@ -138,23 +138,23 @@ function get_latest_version() {
 	local REPO="$1" VERSION="" i
 	for ((i = 0; i < 5; ++i)); do
 		VERSION="$(
-			curl --silent --connect-timeout 10 "https://api.github.com/repos/$REPO/releases/latest" |
+			curl --silent --connect-timeout 10 "https://api.github.com/repos/${REPO}/releases/latest" |
 				grep '"tag_name":' |
 				sed -E 's/^.*:\s*"([^"]+)",?$/\1/'
 		)"
-		if [[ -n "$VERSION" ]]; then
+		if [[ -n "${VERSION}" ]]; then
 			break
 		fi
 	done
-	echo "$VERSION"
+	echo "${VERSION}"
 }
 
-if $IS_SUDOER; then
+if ${IS_SUDOER}; then
 	# Setup Pacman configurations
-	if $SET_MIRRORS; then
+	if ${SET_MIRRORS}; then
 		for repo in "arch4edu" "archlinuxcn"; do
-			if ! grep -qF "[$repo]" /etc/pacman.conf; then
-				exec_cmd "printf \"\\n%s\\n%s\\n\" '[$repo]' 'Server = https://mirrors.tuna.tsinghua.edu.cn/$repo/\$arch' \\
+			if ! grep -qF "[${repo}]" /etc/pacman.conf; then
+				exec_cmd "printf \"\\n%s\\n%s\\n\" '[${repo}]' 'Server = https://mirrors.tuna.tsinghua.edu.cn/${repo}/\${arch}' \\
 					| sudo tee -a /etc/pacman.conf"
 			fi
 		done
@@ -164,12 +164,12 @@ if $IS_SUDOER; then
 		exec_cmd "sudo sed -i -E 's/^(\\s*)#\\s*Color$/\\1Color/g' /etc/pacman.conf"
 	fi
 
-	if $SET_MIRRORS; then
+	if ${SET_MIRRORS}; then
 		exec_cmd 'sudo pacman-mirrors --country China --method rank'
 	fi
 	exec_cmd 'sudo pacman -Syy'
 
-	if $SET_MIRRORS; then
+	if ${SET_MIRRORS}; then
 		exec_cmd 'sudo pacman-key --recv-keys 7931B6D628C8D3BA'
 		exec_cmd 'sudo pacman-key --finger 7931B6D628C8D3BA'
 		exec_cmd 'sudo pacman-key --lsign-key 7931B6D628C8D3BA'
@@ -195,19 +195,19 @@ if $IS_SUDOER; then
 fi
 
 # Change the login shell to Zsh
-if [[ "$(basename "$SHELL")" != "zsh" ]]; then
+if [[ "$(basename "${SHELL}")" != "zsh" ]]; then
 	CHSH="chsh"
-	if $IS_SUDOER; then
+	if ${IS_SUDOER}; then
 		CHSH="sudo chsh"
 	fi
 	if grep -qF '/usr/bin/zsh' /etc/shells; then
-		exec_cmd "$CHSH --shell /usr/bin/zsh $USER"
+		exec_cmd "${CHSH} --shell /usr/bin/zsh ${USER}"
 	elif grep -qF '/bin/zsh' /etc/shells; then
-		exec_cmd "$CHSH --shell /bin/zsh $USER"
+		exec_cmd "${CHSH} --shell /bin/zsh ${USER}"
 	fi
 fi
 
-exec_cmd 'cd "$HOME"'
+exec_cmd 'cd "${HOME}"'
 
 # Configurations for Git
 export GIT_HTTP_LOW_SPEED_LIMIT=0
@@ -258,26 +258,26 @@ ln -sf .dotfiles/.gitconfig .
 chmod 644 .dotfiles/.gitconfig
 
 # Install and setup Linuxbrew
-if $SET_MIRRORS; then
+if ${SET_MIRRORS}; then
 	exec_cmd 'export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"'
 	exec_cmd 'export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/linuxbrew-core.git"'
 	exec_cmd 'export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/linuxbrew-bottles"'
 fi
 if [[ ! -x "$(command -v brew)" ]]; then
-	HOMEBREW_PREFIX="$HOME/.linuxbrew"
-	if $SET_MIRRORS; then
-		exec_cmd "git clone --depth=1 https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/install.git \"$TMP_DIR/brew-install\""
-		exec_cmd "NONINTERACTIVE=1 HAVE_SUDO_ACCESS=1 /bin/bash -c \"\$(sed -E 's#^(\\s*)(HOMEBREW_PREFIX_DEFAULT)=(.*)\$#\\1\\2=\"\$HOME/.linuxbrew\"#' \"$TMP_DIR/brew-install/install.sh\")\""
+	HOMEBREW_PREFIX="${HOME}/.linuxbrew"
+	if ${SET_MIRRORS}; then
+		exec_cmd "git clone --depth=1 https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/install.git \"${TMP_DIR}/brew-install\""
+		exec_cmd "NONINTERACTIVE=1 HAVE_SUDO_ACCESS=1 /bin/bash -c \"\$(sed -E 's#^(\\s*)(HOMEBREW_PREFIX_DEFAULT)=(.*)\$#\\1\\2=\"\${HOME}/.linuxbrew\"#' \"${TMP_DIR}/brew-install/install.sh\")\""
 	else
-		exec_cmd "NONINTERACTIVE=1 HAVE_SUDO_ACCESS=1 /bin/bash -c \"\$(curl -fsSL https://github.com/Homebrew/install/raw/HEAD/install.sh | sed -E 's#^(\\s*)(HOMEBREW_PREFIX_DEFAULT)=(.*)\$#\\1\\2=\"\$HOME/.linuxbrew\"#')\""
+		exec_cmd "NONINTERACTIVE=1 HAVE_SUDO_ACCESS=1 /bin/bash -c \"\$(curl -fsSL https://github.com/Homebrew/install/raw/HEAD/install.sh | sed -E 's#^(\\s*)(HOMEBREW_PREFIX_DEFAULT)=(.*)\$#\\1\\2=\"\${HOME}/.linuxbrew\"#')\""
 	fi
 else
 	HOMEBREW_PREFIX="$(brew --prefix)"
 fi
 
-exec_cmd "eval \"\$(${HOMEBREW_PREFIX/#$HOME/\$HOME}/bin/brew shellenv)\""
+exec_cmd "eval \"\$(${HOMEBREW_PREFIX/#${HOME}/\$HOME}/bin/brew shellenv)\""
 
-if $SET_MIRRORS; then
+if ${SET_MIRRORS}; then
 	exec_cmd "brew tap --force-auto-update homebrew/command-not-found https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-command-not-found.git"
 	git -C "$(brew --repo homebrew/command-not-found)" remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-command-not-found.git
 else
@@ -286,38 +286,38 @@ fi
 exec_cmd 'brew update --force --verbose'
 
 # Install Oh-My-Zsh
-export ZSH="${ZSH:-"$HOME/.oh-my-zsh"}"
-export ZSH_CUSTOM="${ZSH_CUSTOM:-"$ZSH/custom"}"
-export ZSH_CACHE_DIR="${ZSH_CACHE_DIR:-"$ZSH/cahce"}"
+export ZSH="${ZSH:-"${HOME}/.oh-my-zsh"}"
+export ZSH_CUSTOM="${ZSH_CUSTOM:-"${ZSH}/custom"}"
+export ZSH_CACHE_DIR="${ZSH_CACHE_DIR:-"${ZSH}/cahce"}"
 
-if [[ -d "$ZSH/.git" && -f "$ZSH/tools/upgrade.sh" ]]; then
-	rm -f "$ZSH_CACHE_DIR/.zsh-update" 2>/dev/null
-	zsh "$ZSH/tools/check_for_upgrade.sh" 2>/dev/null
-	exec_cmd 'zsh "$ZSH/tools/upgrade.sh" 2>&1'
-elif [[ -d "$ZSH" && ! -d "$ZSH/.git" ]]; then
+if [[ -d "${ZSH}/.git" && -f "${ZSH}/tools/upgrade.sh" ]]; then
+	rm -f "${ZSH_CACHE_DIR}/.zsh-update" 2>/dev/null
+	zsh "${ZSH}/tools/check_for_upgrade.sh" 2>/dev/null
+	exec_cmd 'zsh "${ZSH}/tools/upgrade.sh" 2>&1'
+elif [[ -d "${ZSH}" && ! -d "${ZSH}/.git" ]]; then
 	exec_cmd 'git clone -c core.eol=lf -c core.autocrlf=false \
 		-c fsck.zeroPaddedFilemode=ignore \
 		-c fetch.fsck.zeroPaddedFilemode=ignore \
 		-c receive.fsck.zeroPaddedFilemode=ignore \
 		--depth=1 https://github.com/ohmyzsh/ohmyzsh.git "${TMP_DIR}/ohmyzsh" 2>&1'
-	exec_cmd 'mv -f "${TMP_DIR}/ohmyzsh/.git" "${ZSH:-"$HOME/.oh-my-zsh"}/.git"'
-	exec_cmd 'git -C "${ZSH:-"$HOME/.oh-my-zsh"}" reset --hard'
-	rm -f "$HOME"/.zcompdump* 2>/dev/null
+	exec_cmd 'mv -f "${TMP_DIR}/ohmyzsh/.git" "${ZSH:-"${HOME}/.oh-my-zsh"}/.git"'
+	exec_cmd 'git -C "${ZSH:-"${HOME}/.oh-my-zsh"}" reset --hard'
+	rm -f "${HOME}"/.zcompdump* 2>/dev/null
 else
 	exec_cmd 'git clone -c core.eol=lf -c core.autocrlf=false \
 		-c fsck.zeroPaddedFilemode=ignore \
 		-c fetch.fsck.zeroPaddedFilemode=ignore \
 		-c receive.fsck.zeroPaddedFilemode=ignore \
-		--depth=1 https://github.com/ohmyzsh/ohmyzsh.git "${ZSH:-"$HOME/.oh-my-zsh"}" 2>&1'
-	rm -f "$HOME"/.zcompdump* 2>/dev/null
+		--depth=1 https://github.com/ohmyzsh/ohmyzsh.git "${ZSH:-"${HOME}/.oh-my-zsh"}" 2>&1'
+	rm -f "${HOME}"/.zcompdump* 2>/dev/null
 fi
 
 # Install Powerlevel10k theme and Zsh plugins
 while read -r repo target; do
-	if [[ ! -d "$ZSH_CUSTOM/$target/.git" ]]; then
-		exec_cmd "git clone --depth=1 https://github.com/${repo}.git \"\$ZSH_CUSTOM/$target\" 2>&1"
+	if [[ ! -d "${ZSH_CUSTOM}/${target}/.git" ]]; then
+		exec_cmd "git clone --depth=1 https://github.com/${repo}.git \"\${ZSH_CUSTOM}/${target}\" 2>&1"
 	else
-		exec_cmd "git -C \"\$ZSH_CUSTOM/$target\" pull --ff-only 2>&1"
+		exec_cmd "git -C \"\${ZSH_CUSTOM}/${target}\" pull --ff-only 2>&1"
 	fi
 done <<EOS
 	romkatv/powerlevel10k             themes/powerlevel10k
@@ -328,14 +328,14 @@ done <<EOS
 EOS
 
 # Install fzf
-if [[ ! -d "$HOME/.fzf" ]]; then
-	exec_cmd 'git clone --depth=1 https://github.com/junegunn/fzf.git "$HOME/.fzf" 2>&1'
+if [[ ! -d "${HOME}/.fzf" ]]; then
+	exec_cmd 'git clone --depth=1 https://github.com/junegunn/fzf.git "${HOME}/.fzf" 2>&1'
 else
-	exec_cmd 'git -C "$HOME/.fzf" pull --ff-only 2>&1'
+	exec_cmd 'git -C "${HOME}/.fzf" pull --ff-only 2>&1'
 fi
-exec_cmd '"$HOME/.fzf/install" --key-bindings --completion --no-update-rc'
+exec_cmd '"${HOME}/.fzf/install" --key-bindings --completion --no-update-rc'
 
-exec_cmd 'chmod -R g-w,o-w "$ZSH" "$HOME/.fzf"'
+exec_cmd 'chmod -R g-w,o-w "${ZSH}" "${HOME}/.fzf"'
 
 # Configurations for RubyGems
 backup_dotfiles .gemrc .dotfiles/.gemrc
@@ -348,7 +348,7 @@ cat >.dotfiles/.gemrc <<'EOF'
 :verbose: true
 :concurrent_downloads: 8
 EOF
-if $SET_MIRRORS; then
+if ${SET_MIRRORS}; then
 	cat >>.dotfiles/.gemrc <<-'EOF'
 		:sources:
 		- https://mirrors.tuna.tsinghua.edu.cn/rubygems/
@@ -361,21 +361,21 @@ chmod 644 .dotfiles/.gemrc
 # Install Color LS
 if [[ -x "$(command -v ruby)" && -x "$(command -v gem)" ]]; then
 	export RUBYOPT="-W0"
-	export PATH="$(ruby -r rubygems -e 'puts Gem.dir')/bin${PATH:+:"$PATH"}"
-	export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin${PATH:+:"$PATH"}"
+	export PATH="$(ruby -r rubygems -e 'puts Gem.dir')/bin${PATH:+:"${PATH}"}"
+	export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin${PATH:+:"${PATH}"}"
 	exec_cmd 'gem install colorls --user-install'
 	exec_cmd 'gem cleanup --user-install'
 fi
 
 # Configurations for Perl
-export PERL_MB_OPT="--install_base \"$HOME/.perl\""
-export PERL_MM_OPT="INSTALL_BASE=\"$HOME/.perl\""
+export PERL_MB_OPT="--install_base \"${HOME}/.perl\""
+export PERL_MM_OPT="INSTALL_BASE=\"${HOME}/.perl\""
 export PERL_MM_USE_DEFAULT=1
 exec_cmd "PERL_MM_USE_DEFAULT=1 http_proxy=\"\" https_proxy=\"\" ftp_proxy=\"\" perl -MCPAN -e 'mkmyconfig'"
 exec_cmd "perl -MCPAN -e 'CPAN::HandleConfig->load();' \\
 	-e 'CPAN::HandleConfig->edit(\"cleanup_after_install\", \"1\");' \\
 	-e 'CPAN::HandleConfig->commit()'"
-if $SET_MIRRORS; then
+if ${SET_MIRRORS}; then
 	if ! (
 		perl -MCPAN -e 'CPAN::HandleConfig->load();' -e 'CPAN::HandleConfig->prettyprint("urllist")' |
 			grep -qF 'https://mirrors.tuna.tsinghua.edu.cn/CPAN/'
@@ -385,8 +385,8 @@ if $SET_MIRRORS; then
 			-e 'CPAN::HandleConfig->commit()'"
 	fi
 fi
-exec_cmd 'PERL_MM_OPT="INSTALL_BASE=\"$HOME/.perl\"" cpan -i -T local::lib'
-exec_cmd 'eval "$(perl -I$HOME/.perl/lib/perl5 -Mlocal::lib=$HOME/.perl)"'
+exec_cmd 'PERL_MM_OPT="INSTALL_BASE=\"${HOME}/.perl\"" cpan -i -T local::lib'
+exec_cmd 'eval "$(perl -I"${HOME}/.perl/lib/perl5" -Mlocal::lib="${HOME}/.perl")"'
 exec_cmd "cpan -i CPAN"
 exec_cmd "AUTOMATED_TESTING=1 cpan -i Term::ReadLine::Perl Term::ReadKey"
 
@@ -394,14 +394,14 @@ exec_cmd "AUTOMATED_TESTING=1 cpan -i Term::ReadLine::Perl Term::ReadKey"
 backup_dotfiles .dotfiles/.zshrc
 
 HOMEBREW_SETTINGS='# Linuxbrew
-'"eval \"\$(${HOMEBREW_PREFIX/#$HOME/\$HOME}/bin/brew shellenv)\""'
-export C_INCLUDE_PATH="$HOMEBREW_PREFIX/include${C_INCLUDE_PATH:+:"$C_INCLUDE_PATH"}"
-export CPLUS_INCLUDE_PATH="$HOMEBREW_PREFIX/include${CPLUS_INCLUDE_PATH:+:"$CPLUS_INCLUDE_PATH"}"
-export LIBRARY_PATH="$HOMEBREW_PREFIX/lib${LIBRARY_PATH:+:"$LIBRARY_PATH"}"
-export LD_LIBRARY_PATH="$HOMEBREW_PREFIX/lib${LD_LIBRARY_PATH:+:"$LD_LIBRARY_PATH"}"
+'"eval \"\$(${HOMEBREW_PREFIX/#${HOME}/\$HOME}/bin/brew shellenv)\""'
+export C_INCLUDE_PATH="${HOMEBREW_PREFIX}/include${C_INCLUDE_PATH:+:"${C_INCLUDE_PATH}"}"
+export CPLUS_INCLUDE_PATH="${HOMEBREW_PREFIX}/include${CPLUS_INCLUDE_PATH:+:"${CPLUS_INCLUDE_PATH}"}"
+export LIBRARY_PATH="${HOMEBREW_PREFIX}/lib${LIBRARY_PATH:+:"${LIBRARY_PATH}"}"
+export LD_LIBRARY_PATH="${HOMEBREW_PREFIX}/lib${LD_LIBRARY_PATH:+:"${LD_LIBRARY_PATH}"}"
 export HOMEBREW_EDITOR="vim"
 export HOMEBREW_BAT=true'
-if $SET_MIRRORS; then
+if ${SET_MIRRORS}; then
 	HOMEBREW_SETTINGS+='
 export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/linuxbrew-bottles"'
 fi
@@ -429,24 +429,24 @@ if [[ -f /etc/zsh/zshrc ]]; then
 fi
 
 # Set PATH so it includes user's private bin if it exists
-if [[ -d "$HOME/.local/bin" ]]; then
-	export PATH="$HOME/.local/bin${PATH:+:"$PATH"}"
+if [[ -d "${HOME}/.local/bin" ]]; then
+	export PATH="${HOME}/.local/bin${PATH:+:"${PATH}"}"
 fi
 
 # Set C_INCLUDE_PATH and CPLUS_INCLUDE_PATH so it includes user's private include if it exists
-if [[ -d "$HOME/.local/include" ]]; then
-	export C_INCLUDE_PATH="$HOME/.local/include${C_INCLUDE_PATH:+:"$C_INCLUDE_PATH"}"
-	export CPLUS_INCLUDE_PATH="$HOME/.local/include${CPLUS_INCLUDE_PATH:+:"$CPLUS_INCLUDE_PATH"}"
+if [[ -d "${HOME}/.local/include" ]]; then
+	export C_INCLUDE_PATH="${HOME}/.local/include${C_INCLUDE_PATH:+:"${C_INCLUDE_PATH}"}"
+	export CPLUS_INCLUDE_PATH="${HOME}/.local/include${CPLUS_INCLUDE_PATH:+:"${CPLUS_INCLUDE_PATH}"}"
 fi
 
 # Set LIBRARY_PATH and LD_LIBRARY_PATH so it includes user's private lib if it exists
-if [[ -d "$HOME/.local/lib" ]]; then
-	export LIBRARY_PATH="$HOME/.local/lib${LIBRARY_PATH:+:"$LIBRARY_PATH"}"
-	export LD_LIBRARY_PATH="$HOME/.local/lib${LD_LIBRARY_PATH:+:"$LD_LIBRARY_PATH"}"
+if [[ -d "${HOME}/.local/lib" ]]; then
+	export LIBRARY_PATH="${HOME}/.local/lib${LIBRARY_PATH:+:"${LIBRARY_PATH}"}"
+	export LD_LIBRARY_PATH="${HOME}/.local/lib${LD_LIBRARY_PATH:+:"${LD_LIBRARY_PATH}"}"
 fi
-if [[ -d "$HOME/.local/lib64" ]]; then
-	export LIBRARY_PATH="$HOME/.local/lib64${LIBRARY_PATH:+:"$LIBRARY_PATH"}"
-	export LD_LIBRARY_PATH="$HOME/.local/lib64${LD_LIBRARY_PATH:+:"$LD_LIBRARY_PATH"}"
+if [[ -d "${HOME}/.local/lib64" ]]; then
+	export LIBRARY_PATH="${HOME}/.local/lib64${LIBRARY_PATH:+:"${LIBRARY_PATH}"}"
+	export LD_LIBRARY_PATH="${HOME}/.local/lib64${LD_LIBRARY_PATH:+:"${LD_LIBRARY_PATH}"}"
 fi
 
 # User specific environment
@@ -463,20 +463,20 @@ ${HOMEBREW_SETTINGS}
 # Anaconda
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-__conda_setup="\$(CONDA_REPORT_ERRORS=false "\$HOME/$CONDA_DIR/bin/conda" shell.zsh hook 2>/dev/null)"
+__conda_setup="\$(CONDA_REPORT_ERRORS=false "\${HOME}/${CONDA_DIR}/bin/conda" shell.zsh hook 2>/dev/null)"
 if [[ \$? -eq 0 ]]; then
-	eval "\$__conda_setup"
+	eval "\${__conda_setup}"
 else
-	if [[ -f "\$HOME/$CONDA_DIR/etc/profile.d/conda.sh" ]]; then
-		source "\$HOME/$CONDA_DIR/etc/profile.d/conda.sh"
+	if [[ -f "\${HOME}/${CONDA_DIR}/etc/profile.d/conda.sh" ]]; then
+		source "\${HOME}/${CONDA_DIR}/etc/profile.d/conda.sh"
 	else
-		export PATH="\$HOME/$CONDA_DIR/bin\${PATH:+:"\$PATH"}"
+		export PATH="\${HOME}/${CONDA_DIR}/bin\${PATH:+:"\${PATH}"}"
 	fi
 fi
 unset __conda_setup
 
-if [[ -f "\$HOME/$CONDA_DIR/etc/profile.d/mamba.sh" ]]; then
-	source "\$HOME/$CONDA_DIR/etc/profile.d/mamba.sh"
+if [[ -f "\${HOME}/${CONDA_DIR}/etc/profile.d/mamba.sh" ]]; then
+	source "\${HOME}/${CONDA_DIR}/etc/profile.d/mamba.sh"
 fi
 # <<< conda initialize <<<
 
@@ -486,30 +486,30 @@ cat >>.dotfiles/.zshrc <<'EOF'
 export CC="/usr/bin/gcc"
 export CXX="/usr/bin/g++"
 export FC="/usr/bin/gfortran"
-export OMPI_CC="$CC" MPICH_CC="$CC"
-export OMPI_CXX="$CXX" MPICH_CXX="$CXX"
-export OMPI_FC="$FC" MPICH_FC="$FC"
+export OMPI_CC="${CC}" MPICH_CC="${CC}"
+export OMPI_CXX="${CXX}" MPICH_CXX="${CXX}"
+export OMPI_FC="${FC}" MPICH_FC="${FC}"
 
 # Zsh
-export FPATH="$HOMEBREW_PREFIX/share/zsh/site-functions${FPATH:+:"$FPATH"}:$HOMEBREW_PREFIX/share/zsh/functions"
+export FPATH="${HOMEBREW_PREFIX}/share/zsh/site-functions${FPATH:+:"${FPATH}"}:${HOMEBREW_PREFIX}/share/zsh/functions"
 
 # Ruby
 if [[ -x "$(command -v ruby)" && -x "$(command -v gem)" ]]; then
 	export RUBYOPT="-W0"
-	export PATH="$(ruby -r rubygems -e 'puts Gem.dir')/bin${PATH:+:"$PATH"}"
-	export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin${PATH:+:"$PATH"}"
+	export PATH="$(ruby -r rubygems -e 'puts Gem.dir')/bin${PATH:+:"${PATH}"}"
+	export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin${PATH:+:"${PATH}"}"
 fi
 
 # Perl
-eval "$(perl -I"$HOME/.perl/lib/perl5" -Mlocal::lib="$HOME/.perl")"
+eval "$(perl -I"${HOME}/.perl/lib/perl5" -Mlocal::lib="${HOME}/.perl")"
 
 # fzf
-if [[ -f "$HOME/.fzf.zsh" ]]; then
-	source "$HOME/.fzf.zsh"
+if [[ -f "${HOME}/.fzf.zsh" ]]; then
+	source "${HOME}/.fzf.zsh"
 fi
 if [[ -x "$(command -v fd)" ]]; then
 	export FZF_DEFAULT_COMMAND="fd --type file --follow --hidden --no-ignore-vcs --exclude '.git' --exclude '[Mm]iniconda3' --exclude '[Aa]naconda3' --color=always"
-	export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+	export FZF_CTRL_T_COMMAND="${FZF_DEFAULT_COMMAND}"
 fi
 FZF_PREVIEW_COMMAND="(bat --color=always {} || highlight -O ansi {} || cat {}) 2>/dev/null | head -100"
 export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --ansi --preview='${FZF_PREVIEW_COMMAND}'"
@@ -521,14 +521,14 @@ export BAT_THEME="Monokai Extended"
 function __remove_duplicate() {
 	local SEP="$1" NAME="$2" VALUE
 	VALUE="$(
-		eval "printf \"%s%s\" \"\$$NAME\" \"$SEP\"" |
-			/usr/bin/awk -v RS="$SEP" 'BEGIN { idx = 0; }
+		eval "printf \"%s%s\" \"\$${NAME}\" \"${SEP}\"" |
+			/usr/bin/awk -v RS="${SEP}" 'BEGIN { idx = 0; }
 				{ if (!(exists[$0]++)) printf("%s%s", (!(idx++) ? "" : RS), $0); }'
 	)"
-	if [[ -n "$VALUE" ]]; then
-		export "$NAME"="$VALUE"
+	if [[ -n "${VALUE}" ]]; then
+		export "${NAME}"="${VALUE}"
 	else
-		unset "$NAME"
+		unset "${NAME}"
 	fi
 }
 __remove_duplicate ':' PATH
@@ -540,23 +540,23 @@ __remove_duplicate ':' FPATH
 unset -f __remove_duplicate
 
 # Utilities
-if [[ -f "$HOME/.dotfiles/utilities.sh" ]]; then
-	source "$HOME/.dotfiles/utilities.sh"
+if [[ -f "${HOME}/.dotfiles/utilities.sh" ]]; then
+	source "${HOME}/.dotfiles/utilities.sh"
 fi
 
 # Path to your oh-my-zsh installation.
-export ZSH="$HOME/.oh-my-zsh"
-ZSH_COMPDUMP="$HOME/.zcompdump"
-HISTFILE="$HOME/.zsh_history"
+export ZSH="${HOME}/.oh-my-zsh"
+ZSH_COMPDUMP="${HOME}/.zcompdump"
+HISTFILE="${HOME}/.zsh_history"
 EOF
 cat >>.dotfiles/.zshrc <<EOF
-DEFAULT_USER="$USER"
+DEFAULT_USER="${USER}"
 
 EOF
 cat >>.dotfiles/.zshrc <<'EOF'
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
-# to know which specific one was loaded, run: echo $RANDOM_THEME
+# to know which specific one was loaded, run: echo "${RANDOM_THEME}"
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
 ZSH_THEME="powerlevel10k/powerlevel10k"
 
@@ -579,7 +579,7 @@ GITSTATUS_NUM_THREADS=4
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
-# a theme from this variable instead of looking in $ZSH/themes/
+# a theme from this variable instead of looking in ${ZSH}/themes/
 # If set to an empty array, this variable will have no effect.
 # ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
 
@@ -627,12 +627,12 @@ GITSTATUS_NUM_THREADS=4
 # see 'man strftime' for details.
 # HIST_STAMPS="mm/dd/yyyy"
 
-# Would you like to use another custom folder than $ZSH/custom?
+# Would you like to use another custom folder than ${ZSH}/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
 # Which plugins would you like to load?
-# Standard plugins can be found in $ZSH/plugins/
-# Custom plugins may be added to $ZSH_CUSTOM/plugins/
+# Standard plugins can be found in ${ZSH}/plugins/
+# Custom plugins may be added to ${ZSH_CUSTOM}/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
@@ -667,17 +667,17 @@ if [[ "${EUID:-"${UID}"}" == "0" ]]; then
 	ZSH_DISABLE_COMPFIX=true
 fi
 
-source "$ZSH/oh-my-zsh.sh"
+source "${ZSH}/oh-my-zsh.sh"
 
 # User configuration
 
-# export MANPATH="/usr/local/man${MANPATH:+:"$MANPATH"}"
+# export MANPATH="/usr/local/man${MANPATH:+:"${MANPATH}"}"
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
-# if [[ -n "$SSH_CONNECTION" ]]; then
+# if [[ -n "${SSH_CONNECTION}" ]]; then
 #   export EDITOR='vim'
 # else
 #   export EDITOR='mvim'
@@ -706,7 +706,7 @@ alias l='ls -alh'
 alias ll='ls -lh'
 alias la='ls -Alh'
 
-if [[ -z "$P10K_LEAN_STYLE" ]]; then
+if [[ -z "${P10K_LEAN_STYLE}" ]]; then
 	# Setup Color LS
 	if [[ -x "$(command -v ruby)" && -x "$(command -v gem)" ]]; then
 		if gem list --silent --installed colorls; then
@@ -716,7 +716,7 @@ if [[ -z "$P10K_LEAN_STYLE" ]]; then
 	fi
 else
 	# Use Powerlevel10k Lean style
-	source "$ZSH_CUSTOM/themes/powerlevel10k/config/p10k-lean.zsh"
+	source "${ZSH_CUSTOM}/themes/powerlevel10k/config/p10k-lean.zsh"
 	POWERLEVEL9K_MODE="compatible"
 	POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context root_indicator dir vcs newline prompt_char)
 	POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status command_execution_time background_jobs virtualenv anaconda pyenv time)
@@ -736,29 +736,29 @@ chmod 644 .dotfiles/.zshrc
 # Configurations for Zsh Powerlevel10k Lean style
 SHEBANG='#!/bin/sh'
 COMMAND='P10K_LEAN_STYLE=true exec /usr/bin/zsh "$@"'
-cat >"$TMP_DIR/zsh-lean" <<EOF
+cat >"${TMP_DIR}/zsh-lean" <<EOF
 ${SHEBANG}
 ${COMMAND}
 EOF
-if $IS_SUDOER; then
+if ${IS_SUDOER}; then
 	if [[ ! -d "/usr/local/bin" ]]; then
 		exec_cmd 'sudo mkdir -p "/usr/local/bin"'
 	fi
 	if [[ ! -x "/usr/local/bin/zsh-lean" || -L "/usr/local/bin/zsh-lean" ]] ||
-		! diff -EB "/usr/local/bin/zsh-lean" "$TMP_DIR/zsh-lean" &>/dev/null; then
+		! diff -EB "/usr/local/bin/zsh-lean" "${TMP_DIR}/zsh-lean" &>/dev/null; then
 		if [[ -f "/usr/local/bin/zsh-lean" ]]; then
 			exec_cmd 'sudo rm -f /usr/local/bin/zsh-lean'
 		fi
-		exec_cmd "printf \"%s\\n\" '$SHEBANG' '$COMMAND' | sudo tee /usr/local/bin/zsh-lean"
+		exec_cmd "printf \"%s\\n\" '${SHEBANG}' '${COMMAND}' | sudo tee /usr/local/bin/zsh-lean"
 		exec_cmd 'sudo chmod 755 /usr/local/bin/zsh-lean'
 	fi
 	if ! grep -qF '/usr/local/bin/zsh-lean' /etc/shells; then
 		exec_cmd 'echo "/usr/local/bin/zsh-lean" | sudo tee -a /etc/shells'
 	fi
 else
-	mkdir -p "$HOME/.local/bin"
-	exec_cmd "cp -f \"$TMP_DIR/zsh-lean\" \"\$HOME/.local/bin/zsh-lean\""
-	chmod 755 "$HOME/.local/bin/zsh-lean"
+	mkdir -p "${HOME}/.local/bin"
+	exec_cmd "cp -f \"${TMP_DIR}/zsh-lean\" \"\${HOME}/.local/bin/zsh-lean\""
+	chmod 755 "${HOME}/.local/bin/zsh-lean"
 fi
 
 # Add utility script file
@@ -874,35 +874,35 @@ function upgrade_ohmyzsh() {
 	local repo
 
 	# Set oh-my-zsh installation path
-	export ZSH="${ZSH:-"$HOME/.oh-my-zsh"}"
-	export ZSH_CUSTOM="${ZSH_CUSTOM:-"$ZSH/custom"}"
-	export ZSH_CACHE_DIR="${ZSH_CACHE_DIR:-"$ZSH/cache"}"
+	export ZSH="${ZSH:-"${HOME}/.oh-my-zsh"}"
+	export ZSH_CUSTOM="${ZSH_CUSTOM:-"${ZSH}/custom"}"
+	export ZSH_CACHE_DIR="${ZSH_CACHE_DIR:-"${ZSH}/cache"}"
 
 	# Upgrade oh my zsh
-	rm -f "$ZSH_CACHE_DIR/.zsh-update" 2>/dev/null
-	zsh "$ZSH/tools/check_for_upgrade.sh" 2>/dev/null
-	exec_cmd 'zsh "$ZSH/tools/upgrade.sh"'
-	exec_cmd 'git -C "$ZSH" fetch --prune'
-	exec_cmd 'git -C "$ZSH" gc --prune=all'
+	rm -f "${ZSH_CACHE_DIR}/.zsh-update" 2>/dev/null
+	zsh "${ZSH}/tools/check_for_upgrade.sh" 2>/dev/null
+	exec_cmd 'zsh "${ZSH}/tools/upgrade.sh"'
+	exec_cmd 'git -C "${ZSH}" fetch --prune'
+	exec_cmd 'git -C "${ZSH}" gc --prune=all'
 
 	# Upgrade themes and plugins
 	while read -r repo; do
-		exec_cmd "git -C \"\$ZSH_CUSTOM/$repo\" pull --prune --ff-only"
-		exec_cmd "git -C \"\$ZSH_CUSTOM/$repo\" gc --prune=all"
+		exec_cmd "git -C \"\${ZSH_CUSTOM}/${repo}\" pull --prune --ff-only"
+		exec_cmd "git -C \"\${ZSH_CUSTOM}/${repo}\" gc --prune=all"
 	done < <(
-		cd "$ZSH_CUSTOM" &&
+		cd "${ZSH_CUSTOM}" &&
 			find -L . -mindepth 3 -maxdepth 3 -not -empty -type d -name '.git' -prune -exec dirname {} \; |
 			cut -b3-
 	)
 
 	# Remove old zcompdump file
-	rm -f "${ZSH_COMPDUMP:-"${ZDOTDIR:-"$HOME"}"/.zcompdump}" &>/dev/null
+	rm -f "${ZSH_COMPDUMP:-"${ZDOTDIR:-"${HOME}"}"/.zcompdump}" &>/dev/null
 }
 
 function upgrade_fzf() {
-	exec_cmd 'git -C "$HOME/.fzf" pull --prune --ff-only'
-	exec_cmd 'git -C "$HOME/.fzf" gc --prune=all'
-	exec_cmd '"$HOME/.fzf/install" --key-bindings --completion --no-update-rc'
+	exec_cmd 'git -C "${HOME}/.fzf" pull --prune --ff-only'
+	exec_cmd 'git -C "${HOME}/.fzf" gc --prune=all'
+	exec_cmd '"${HOME}/.fzf/install" --key-bindings --completion --no-update-rc'
 }
 
 function upgrade_vim() {
@@ -912,10 +912,10 @@ function upgrade_vim() {
 function upgrade_gems() {
 	if groups | grep -qE '(wheel|root)'; then
 		if [[ "$(command -v gem)" != /usr/bin/gem && "$(command -v gem)" != /bin/gem ]]; then
-			exec_cmd 'sudo gem update --system --config-file "$HOME/.gemrc"'
+			exec_cmd 'sudo gem update --system --config-file "${HOME}/.gemrc"'
 		fi
-		exec_cmd 'sudo gem update --config-file "$HOME/.gemrc"'
-		exec_cmd 'sudo gem cleanup --config-file "$HOME/.gemrc"'
+		exec_cmd 'sudo gem update --config-file "${HOME}/.gemrc"'
+		exec_cmd 'sudo gem cleanup --config-file "${HOME}/.gemrc"'
 	fi
 	exec_cmd 'gem update --user-install'
 	exec_cmd 'gem cleanup --user-install'
@@ -934,10 +934,10 @@ function upgrade_conda() {
 	# Upgrade Conda packages in each environment
 	while read -r env; do
 		cmds="mamba update --all --yes"
-		if conda list --full-name anaconda --name "$env" | grep -q '^anaconda[^-]'; then
-			cmds="$cmds; mamba update anaconda --yes"
+		if conda list --full-name anaconda --name "${env}" | grep -q '^anaconda[^-]'; then
+			cmds="${cmds}; mamba update anaconda --yes"
 		fi
-		exec_cmd "conda activate $env; $cmds; conda deactivate"
+		exec_cmd "conda activate ${env}; ${cmds}; conda deactivate"
 	done < <(conda info --envs | awk 'NF > 0 && $0 !~ /^#.*/ { print $1 }')
 
 	# Clean up Conda cache
@@ -949,7 +949,7 @@ function foreach_conda_env_do() {
 
 	# Execute in each Conda environment
 	while read -r env; do
-		exec_cmd "conda activate $env; ${*}; conda deactivate"
+		exec_cmd "conda activate ${env}; ${*}; conda deactivate"
 	done < <(conda info --envs | awk 'NF > 0 && $0 !~ /^#.*/ { print $1 }')
 }
 
@@ -969,14 +969,14 @@ function upgrade_packages() {
 	# upgrade_cpan
 	# upgrade_conda
 
-	if [[ -n "$ZSH_VERSION" ]]; then
-		rm -f "${ZSH_COMPDUMP:-"${ZDOTDIR:-"$HOME"}"/.zcompdump}" &>/dev/null
-		if [[ -f "${ZDOTDIR:-"$HOME"}/.zshrc" ]]; then
-			source "${ZDOTDIR:-"$HOME"}/.zshrc"
+	if [[ -n "${ZSH_VERSION}" ]]; then
+		rm -f "${ZSH_COMPDUMP:-"${ZDOTDIR:-"${HOME}"}"/.zcompdump}" &>/dev/null
+		if [[ -f "${ZDOTDIR:-"${HOME}"}/.zshrc" ]]; then
+			source "${ZDOTDIR:-"${HOME}"}/.zshrc"
 		fi
-	elif [[ -n "$BASH_VERSION" ]]; then
-		if [[ -f "$HOME/.bash_profile" ]]; then
-			source "$HOME/.bash_profile"
+	elif [[ -n "${BASH_VERSION}" ]]; then
+		if [[ -f "${HOME}/.bash_profile" ]]; then
+			source "${HOME}/.bash_profile"
 		fi
 	fi
 }
@@ -988,30 +988,30 @@ function set_proxy() {
 	local FTP_PORT="${4:-"7890"}"
 	local SOCKS_PORT="${5:-"7891"}"
 
-	if [[ -x "$(command -v /usr/bin/gsettings)" && -n "$DISPLAY" ]]; then
+	if [[ -x "$(command -v /usr/bin/gsettings)" && -n "${DISPLAY}" ]]; then
 		/usr/bin/gsettings set org.gnome.system.proxy mode 'manual'
-		/usr/bin/gsettings set org.gnome.system.proxy.http host "$PROXY_HOST"
-		/usr/bin/gsettings set org.gnome.system.proxy.http port "$HTTP_PORT"
-		/usr/bin/gsettings set org.gnome.system.proxy.https host "$PROXY_HOST"
-		/usr/bin/gsettings set org.gnome.system.proxy.https port "$HTTPS_PORT"
-		/usr/bin/gsettings set org.gnome.system.proxy.ftp host "$PROXY_HOST"
-		/usr/bin/gsettings set org.gnome.system.proxy.ftp port "$FTP_PORT"
-		/usr/bin/gsettings set org.gnome.system.proxy.socks host "$PROXY_HOST"
-		/usr/bin/gsettings set org.gnome.system.proxy.socks port "$SOCKS_PORT"
+		/usr/bin/gsettings set org.gnome.system.proxy.http host "${PROXY_HOST}"
+		/usr/bin/gsettings set org.gnome.system.proxy.http port "${HTTP_PORT}"
+		/usr/bin/gsettings set org.gnome.system.proxy.https host "${PROXY_HOST}"
+		/usr/bin/gsettings set org.gnome.system.proxy.https port "${HTTPS_PORT}"
+		/usr/bin/gsettings set org.gnome.system.proxy.ftp host "${PROXY_HOST}"
+		/usr/bin/gsettings set org.gnome.system.proxy.ftp port "${FTP_PORT}"
+		/usr/bin/gsettings set org.gnome.system.proxy.socks host "${PROXY_HOST}"
+		/usr/bin/gsettings set org.gnome.system.proxy.socks port "${SOCKS_PORT}"
 	fi
 
 	export http_proxy="http://${PROXY_HOST}:${HTTP_PORT}"
 	export https_proxy="http://${PROXY_HOST}:${HTTPS_PORT}"
 	export ftp_proxy="http://${PROXY_HOST}:${FTP_PORT}"
 	export all_proxy="socks5://${PROXY_HOST}:${SOCKS_PORT}"
-	export HTTP_PROXY="$http_proxy"
-	export HTTPS_PROXY="$https_proxy"
-	export FTP_PROXY="$ftp_proxy"
-	export ALL_PROXY="$all_proxy"
+	export HTTP_PROXY="${http_proxy}"
+	export HTTPS_PROXY="${https_proxy}"
+	export FTP_PROXY="${ftp_proxy}"
+	export ALL_PROXY="${all_proxy}"
 }
 
 function reset_proxy() {
-	if [[ -x "$(command -v /usr/bin/gsettings)" && -n "$DISPLAY" ]]; then
+	if [[ -x "$(command -v /usr/bin/gsettings)" && -n "${DISPLAY}" ]]; then
 		/usr/bin/gsettings set org.gnome.system.proxy mode 'none'
 		/usr/bin/gsettings set org.gnome.system.proxy.http host '127.0.0.1'
 		/usr/bin/gsettings set org.gnome.system.proxy.http port 8080
@@ -1041,19 +1041,19 @@ function available_cuda_devices() {
 		if ! ((maxcount > 0)); then
 			break
 		fi
-		pids=$(nvidia-smi --id="$index" --query-compute-apps=pid --format=csv,noheader | xargs echo -n)
-		if [[ -n "$pids" ]] && (ps -o user -p $pids | tail -n +2 | grep -qvF "$USER") &&
+		pids=$(nvidia-smi --id="${index}" --query-compute-apps=pid --format=csv,noheader | xargs echo -n)
+		if [[ -n "${pids}" ]] && (ps -o user -p ${pids} | tail -n +2 | grep -qvF "${USER}") &&
 			((memused >= 3072 || memfree <= 6144 || utilization >= 20)); then
 			continue
 		fi
-		available="${available:+"$available",}$index"
+		available="${available:+"${available}",}${index}"
 		((maxcount -= 1))
 	done < <(
 		nvidia-smi --query-gpu=index,memory.free,memory.used,utilization.gpu --format=csv,noheader,nounits |
 			sort -t ',' -k2nr -k4n -k3n -k1nr | tr -d ','
 	)
 
-	echo "$available"
+	echo "${available}"
 }
 
 function auto_reannounce_trackers() {
@@ -1069,10 +1069,10 @@ function auto_reannounce_trackers() {
 		else
 			TORRENT="all"
 		fi
-		CMD="transmission-remote --torrent $TORRENT --reannounce"
-		eval "$CMD" 1>/dev/null
+		CMD="transmission-remote --torrent ${TORRENT} --reannounce"
+		eval "${CMD}" 1>/dev/null
 		for ((r = INTERVAL - 1; r >= 0; --r)); do
-			echo -ne "$CMD ($t/$TIMES, next reannounce in ${r}s)\033[K\r"
+			echo -ne "${CMD} (${t}/${TIMES}, next reannounce in ${r}s)\033[K\r"
 			sleep 1
 		done
 	done
@@ -1092,10 +1092,10 @@ if ! grep -qF 'shopt -q login_shell' .bashrc; then
 # Always source ~/.bash_profile
 if ! shopt -q login_shell; then
 	# Include ~/.bash_profile if it exists
-	if [[ -f "$HOME/.bash_profile" ]]; then
-		source "$HOME/.bash_profile"
-	elif [[ -f "$HOME/.profile" ]]; then
-		source "$HOME/.profile"
+	if [[ -f "${HOME}/.bash_profile" ]]; then
+		source "${HOME}/.bash_profile"
+	elif [[ -f "${HOME}/.profile" ]]; then
+		source "${HOME}/.profile"
 	fi
 fi
 EOF
@@ -1124,38 +1124,38 @@ if [[ -f /etc/profile ]]; then
 fi
 
 # If running bash as login shell
-if [[ -n "$BASH_VERSION" ]] && shopt -q login_shell; then
+if [[ -n "${BASH_VERSION}" ]] && shopt -q login_shell; then
 	# Include ~/.bashrc if it exists
-	if [[ -f "$HOME/.bashrc" ]]; then
-		source "$HOME/.bashrc"
+	if [[ -f "${HOME}/.bashrc" ]]; then
+		source "${HOME}/.bashrc"
 	fi
 fi
 
 # Set PATH so it includes user's private bin if it exists
-if [[ -d "$HOME/.local/bin" ]]; then
-	export PATH="$HOME/.local/bin${PATH:+:"$PATH"}"
+if [[ -d "${HOME}/.local/bin" ]]; then
+	export PATH="${HOME}/.local/bin${PATH:+:"${PATH}"}"
 fi
 
 # Set C_INCLUDE_PATH and CPLUS_INCLUDE_PATH so it includes user's private include if it exists
-if [[ -d "$HOME/.local/include" ]]; then
-	export C_INCLUDE_PATH="$HOME/.local/include${C_INCLUDE_PATH:+:"$C_INCLUDE_PATH"}"
-	export CPLUS_INCLUDE_PATH="$HOME/.local/include${CPLUS_INCLUDE_PATH:+:"$CPLUS_INCLUDE_PATH"}"
+if [[ -d "${HOME}/.local/include" ]]; then
+	export C_INCLUDE_PATH="${HOME}/.local/include${C_INCLUDE_PATH:+:"${C_INCLUDE_PATH}"}"
+	export CPLUS_INCLUDE_PATH="${HOME}/.local/include${CPLUS_INCLUDE_PATH:+:"${CPLUS_INCLUDE_PATH}"}"
 fi
 
 # Set LIBRARY_PATH and LD_LIBRARY_PATH so it includes user's private lib if it exists
-if [[ -d "$HOME/.local/lib" ]]; then
-	export LIBRARY_PATH="$HOME/.local/lib${LIBRARY_PATH:+:"$LIBRARY_PATH"}"
-	export LD_LIBRARY_PATH="$HOME/.local/lib${LD_LIBRARY_PATH:+:"$LD_LIBRARY_PATH"}"
+if [[ -d "${HOME}/.local/lib" ]]; then
+	export LIBRARY_PATH="${HOME}/.local/lib${LIBRARY_PATH:+:"${LIBRARY_PATH}"}"
+	export LD_LIBRARY_PATH="${HOME}/.local/lib${LD_LIBRARY_PATH:+:"${LD_LIBRARY_PATH}"}"
 fi
-if [[ -d "$HOME/.local/lib64" ]]; then
-	export LIBRARY_PATH="$HOME/.local/lib64${LIBRARY_PATH:+:"$LIBRARY_PATH"}"
-	export LD_LIBRARY_PATH="$HOME/.local/lib64${LD_LIBRARY_PATH:+:"$LD_LIBRARY_PATH"}"
+if [[ -d "${HOME}/.local/lib64" ]]; then
+	export LIBRARY_PATH="${HOME}/.local/lib64${LIBRARY_PATH:+:"${LIBRARY_PATH}"}"
+	export LD_LIBRARY_PATH="${HOME}/.local/lib64${LD_LIBRARY_PATH:+:"${LD_LIBRARY_PATH}"}"
 fi
 
 # User specific environment and startup programs
 export TERM="xterm-256color"
 export LESS="-R -M -i -j5"
-if [[ -n "$SSH_CONNECTION" ]]; then
+if [[ -n "${SSH_CONNECTION}" ]]; then
 	export PS1='[\[\e[1;33m\]\u\[\e[0m\]@\[\e[1;32m\]\h\[\e[0m\]:\[\e[1;35m\]\w\[\e[0m\]]\$ '
 else
 	export PS1='[\[\e[1;33m\]\u\[\e[0m\]:\[\e[1;35m\]\w\[\e[0m\]]\$ '
@@ -1171,20 +1171,20 @@ ${HOMEBREW_SETTINGS}
 # Anaconda
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-__conda_setup="\$(CONDA_REPORT_ERRORS=false "\$HOME/$CONDA_DIR/bin/conda" shell.bash hook 2>/dev/null)"
+__conda_setup="\$(CONDA_REPORT_ERRORS=false "\${HOME}/${CONDA_DIR}/bin/conda" shell.bash hook 2>/dev/null)"
 if [[ \$? -eq 0 ]]; then
-	eval "\$__conda_setup"
+	eval "\${__conda_setup}"
 else
-	if [[ -f "\$HOME/$CONDA_DIR/etc/profile.d/conda.sh" ]]; then
-		source "\$HOME/$CONDA_DIR/etc/profile.d/conda.sh"
+	if [[ -f "\${HOME}/${CONDA_DIR}/etc/profile.d/conda.sh" ]]; then
+		source "\${HOME}/${CONDA_DIR}/etc/profile.d/conda.sh"
 	else
-		export PATH="\$HOME/$CONDA_DIR/bin\${PATH:+:"\$PATH"}"
+		export PATH="\${HOME}/${CONDA_DIR}/bin\${PATH:+:"\${PATH}"}"
 	fi
 fi
 unset __conda_setup
 
-if [[ -f "\$HOME/$CONDA_DIR/etc/profile.d/mamba.sh" ]]; then
-	source "\$HOME/$CONDA_DIR/etc/profile.d/mamba.sh"
+if [[ -f "\${HOME}/${CONDA_DIR}/etc/profile.d/mamba.sh" ]]; then
+	source "\${HOME}/${CONDA_DIR}/etc/profile.d/mamba.sh"
 fi
 # <<< conda initialize <<<
 
@@ -1194,27 +1194,27 @@ cat >>.dotfiles/.bash_profile <<'EOF'
 export CC="/usr/bin/gcc"
 export CXX="/usr/bin/g++"
 export FC="/usr/bin/gfortran"
-export OMPI_CC="$CC" MPICH_CC="$CC"
-export OMPI_CXX="$CXX" MPICH_CXX="$CXX"
-export OMPI_FC="$FC" MPICH_FC="$FC"
+export OMPI_CC="${CC}" MPICH_CC="${CC}"
+export OMPI_CXX="${CXX}" MPICH_CXX="${CXX}"
+export OMPI_FC="${FC}" MPICH_FC="${FC}"
 
 # Ruby
 if [[ -x "$(command -v ruby)" && -x "$(command -v gem)" ]]; then
 	export RUBYOPT="-W0"
-	export PATH="$(ruby -r rubygems -e 'puts Gem.dir')/bin${PATH:+:"$PATH"}"
-	export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin${PATH:+:"$PATH"}"
+	export PATH="$(ruby -r rubygems -e 'puts Gem.dir')/bin${PATH:+:"${PATH}"}"
+	export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin${PATH:+:"${PATH}"}"
 fi
 
 # Perl
-eval "$(perl -I"$HOME/.perl/lib/perl5" -Mlocal::lib="$HOME/.perl")"
+eval "$(perl -I"${HOME}/.perl/lib/perl5" -Mlocal::lib="${HOME}/.perl")"
 
 # fzf
-if [[ -f "$HOME/.fzf.bash" ]]; then
-	source "$HOME/.fzf.bash"
+if [[ -f "${HOME}/.fzf.bash" ]]; then
+	source "${HOME}/.fzf.bash"
 fi
 if [[ -x "$(command -v fd)" ]]; then
 	export FZF_DEFAULT_COMMAND="fd --type file --follow --hidden --no-ignore-vcs --exclude '.git' --exclude '[Mm]iniconda3' --exclude '[Aa]naconda3' --color=always"
-	export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+	export FZF_CTRL_T_COMMAND="${FZF_DEFAULT_COMMAND}"
 fi
 FZF_PREVIEW_COMMAND="(bat --color=always {} || highlight -O ansi {} || cat {}) 2>/dev/null | head -100"
 export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --ansi --preview='${FZF_PREVIEW_COMMAND}'"
@@ -1226,14 +1226,14 @@ export BAT_THEME="Monokai Extended"
 function __remove_duplicate() {
 	local SEP="$1" NAME="$2" VALUE
 	VALUE="$(
-		eval "printf \"%s%s\" \"\$$NAME\" \"$SEP\"" |
-			/usr/bin/awk -v RS="$SEP" 'BEGIN { idx = 0; }
+		eval "printf \"%s%s\" \"\$${NAME}\" \"${SEP}\"" |
+			/usr/bin/awk -v RS="${SEP}" 'BEGIN { idx = 0; }
 				{ if (!(exists[$0]++)) printf("%s%s", (!(idx++) ? "" : RS), $0); }'
 	)"
-	if [[ -n "$VALUE" ]]; then
-		export "$NAME"="$VALUE"
+	if [[ -n "${VALUE}" ]]; then
+		export "${NAME}"="${VALUE}"
 	else
-		unset "$NAME"
+		unset "${NAME}"
 	fi
 }
 __remove_duplicate ':' PATH
@@ -1244,13 +1244,13 @@ __remove_duplicate ':' LD_LIBRARY_PATH
 unset -f __remove_duplicate
 
 # Utilities
-if [[ -f "$HOME/.dotfiles/utilities.sh" ]]; then
-	source "$HOME/.dotfiles/utilities.sh"
+if [[ -f "${HOME}/.dotfiles/utilities.sh" ]]; then
+	source "${HOME}/.dotfiles/utilities.sh"
 fi
 
 # Bash completion
-if [[ -r "$HOMEBREW_PREFIX/etc/profile.d/bash_completion.sh" ]]; then
-	source "$HOMEBREW_PREFIX/etc/profile.d/bash_completion.sh"
+if [[ -r "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh" ]]; then
+	source "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh"
 elif [[ -r "/etc/profile.d/bash_completion.sh" ]]; then
 	source "/etc/profile.d/bash_completion.sh"
 elif [[ -r "/usr/share/bash-completion/bash_completion" ]]; then
@@ -1267,7 +1267,7 @@ chmod 644 .dotfiles/.bash_profile
 backup_dotfiles .vimrc .dotfiles/.vimrc
 
 GUI_FONT='DejaVuSansMono\ Nerd\ Font\ Mono\ 10'
-if $IN_WSL; then
+if ${IN_WSL}; then
 	GUI_FONT='DejaVuSansMono\ NF\ 10'
 fi
 cat >.dotfiles/.vimrc <<'EOF'
@@ -1429,7 +1429,7 @@ let g:ycm_key_list_stop_completion = ['<C-y>']
 let g:ycm_key_list_select_completion = ['<Down>']
 let g:ycm_key_list_previous_completion = ['<Up>']
 
-if !exists('$SSH_CONNECTION')
+if !exists('${SSH_CONNECTION}')
     let g:mkdp_auto_start = 1
 endif
 
@@ -1592,16 +1592,16 @@ highlight cssBraces                    ctermfg=NONE ctermbg=NONE cterm=NONE     
 EOF
 
 # Install Vim-Plug plugin manager
-if [[ ! -f "$HOME/.vim/autoload/plug.vim" ]]; then
-	exec_cmd 'curl -fL#o "$HOME/.vim/autoload/plug.vim" --create-dirs \
+if [[ ! -f "${HOME}/.vim/autoload/plug.vim" ]]; then
+	exec_cmd 'curl -fL#o "${HOME}/.vim/autoload/plug.vim" --create-dirs \
 		https://github.com/junegunn/vim-plug/raw/HEAD/plug.vim'
 fi
 
 # Install Vim plugins
 if [[ -x "$(command -v vim)" ]]; then
 	exec_cmd 'vim -c "PlugUpgrade | PlugInstall | PlugUpdate | sleep 5 | quitall"'
-	if [[ ! -f "$HOME/.vim/plugged/markdown-preview.nvim/app/bin/markdown-preview-linux" ]]; then
-		exec_cmd 'cd "$HOME/.vim/plugged/markdown-preview.nvim/app"; ./install.sh; cd "$HOME"'
+	if [[ ! -f "${HOME}/.vim/plugged/markdown-preview.nvim/app/bin/markdown-preview-linux" ]]; then
+		exec_cmd 'cd "${HOME}/.vim/plugged/markdown-preview.nvim/app"; ./install.sh; cd "${HOME}"'
 	fi
 fi
 
@@ -1694,7 +1694,7 @@ bind-key -n S-Right next-window
 bind-key r source-file ~/.tmux.conf \; display-message "tmux.conf reloaded"
 EOF
 
-exec_cmd 'wget -N -P "$HOME/.dotfiles" https://github.com/gpakosz/.tmux/raw/HEAD/.tmux.conf{,.local}'
+exec_cmd 'wget -N -P "${HOME}/.dotfiles" https://github.com/gpakosz/.tmux/raw/HEAD/.tmux.conf{,.local}'
 ln -sf .dotfiles/.tmux.conf .
 ln -sf .dotfiles/.tmux.conf.local .
 chmod 644 .dotfiles/.tmux.conf .dotfiles/.tmux.conf.local .dotfiles/.tmux.conf.user
@@ -1978,7 +1978,7 @@ channels:
   - defaults
   - conda-forge
 EOF
-if $SET_MIRRORS; then
+if ${SET_MIRRORS}; then
 	cat >>.dotfiles/.condarc <<'EOF'
 default_channels:
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
@@ -2027,18 +2027,18 @@ ln -sf .dotfiles/.condarc .
 chmod 644 .dotfiles/.condarc
 
 # Install Miniconda
-if [[ ! -d "$HOME/$CONDA_DIR" ]]; then
-	if $SET_MIRRORS; then
-		exec_cmd "wget -N -P \"$TMP_DIR\" https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-latest-Linux-x86_64.sh"
+if [[ ! -d "${HOME}/${CONDA_DIR}" ]]; then
+	if ${SET_MIRRORS}; then
+		exec_cmd "wget -N -P \"${TMP_DIR}\" https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-latest-Linux-x86_64.sh"
 	else
-		exec_cmd "wget -N -P \"$TMP_DIR\" https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh"
+		exec_cmd "wget -N -P \"${TMP_DIR}\" https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh"
 	fi
-	exec_cmd "/bin/sh \"$TMP_DIR/Miniconda3-latest-Linux-x86_64.sh\" -b -p \"\$HOME/$CONDA_DIR\""
+	exec_cmd "/bin/sh \"${TMP_DIR}/Miniconda3-latest-Linux-x86_64.sh\" -b -p \"\${HOME}/${CONDA_DIR}\""
 fi
 
 # Install Conda packages
-export PATH="${PATH:+"$PATH":}$HOME/$CONDA_DIR/condabin"
-source "$HOME/$CONDA_DIR/bin/activate"
+export PATH="${PATH:+"${PATH}":}${HOME}/${CONDA_DIR}/condabin"
+source "${HOME}/${CONDA_DIR}/bin/activate"
 exec_cmd 'conda install mamba --yes'
 exec_cmd 'mamba update conda mamba --yes'
 exec_cmd 'mamba install pip ipython ipdb \
@@ -2046,57 +2046,57 @@ exec_cmd 'mamba install pip ipython ipdb \
 	numpy numba matplotlib-base pandas seaborn \
 	cython rich tqdm autopep8 pylint --yes'
 exec_cmd 'mamba clean --all --yes'
-exec_cmd "\"\$HOME/$CONDA_DIR/bin/jupyter\" contrib nbextension install --user &>/dev/null"
-if $SET_MIRRORS; then
-	exec_cmd "\"\$HOME/$CONDA_DIR/bin/pip\" config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple"
+exec_cmd "\"\${HOME}/${CONDA_DIR}/bin/jupyter\" contrib nbextension install --user &>/dev/null"
+if ${SET_MIRRORS}; then
+	exec_cmd "\"\${HOME}/${CONDA_DIR}/bin/pip\" config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple"
 fi
 
 # Add Conda Environment Initialization Script
-mkdir -p "$HOME/$CONDA_DIR/etc"
+mkdir -p "${HOME}/${CONDA_DIR}/etc"
 
-cat >"$HOME/$CONDA_DIR/etc/init-envs.sh" <<'EOF'
+cat >"${HOME}/${CONDA_DIR}/etc/init-envs.sh" <<'EOF'
 #!/usr/bin/env bash
 
 while read -r env CONDA_PREFIX; do
-	echo "$env $CONDA_PREFIX"
+	echo "${env} ${CONDA_PREFIX}"
 
-	mkdir -p "$CONDA_PREFIX/etc/conda/activate.d"
-	mkdir -p "$CONDA_PREFIX/etc/conda/deactivate.d"
+	mkdir -p "${CONDA_PREFIX}/etc/conda/activate.d"
+	mkdir -p "${CONDA_PREFIX}/etc/conda/deactivate.d"
 
-	if [[ ! -f "$CONDA_PREFIX/etc/conda/activate.d/env-vars.sh" ]]; then
+	if [[ ! -f "${CONDA_PREFIX}/etc/conda/activate.d/env-vars.sh" ]]; then
 		# Create hook script on conda activate
-		cat >"$CONDA_PREFIX/etc/conda/activate.d/env-vars.sh" <<'EOS'
+		cat >"${CONDA_PREFIX}/etc/conda/activate.d/env-vars.sh" <<'EOS'
 #!/usr/bin/env bash
 
-export CONDA_C_INCLUDE_PATH_BACKUP="$C_INCLUDE_PATH"
-export CONDA_CPLUS_INCLUDE_PATH_BACKUP="$CPLUS_INCLUDE_PATH"
-export CONDA_LIBRARY_PATH_BACKUP="$LIBRARY_PATH"
-export CONDA_LD_LIBRARY_PATH_BACKUP="$LD_LIBRARY_PATH"
-export CONDA_CMAKE_PREFIX_PATH_BACKUP="$CMAKE_PREFIX_PATH"
-export CONDA_CUDA_HOME_BACKUP="$CUDA_HOME"
+export CONDA_C_INCLUDE_PATH_BACKUP="${C_INCLUDE_PATH}"
+export CONDA_CPLUS_INCLUDE_PATH_BACKUP="${CPLUS_INCLUDE_PATH}"
+export CONDA_LIBRARY_PATH_BACKUP="${LIBRARY_PATH}"
+export CONDA_LD_LIBRARY_PATH_BACKUP="${LD_LIBRARY_PATH}"
+export CONDA_CMAKE_PREFIX_PATH_BACKUP="${CMAKE_PREFIX_PATH}"
+export CONDA_CUDA_HOME_BACKUP="${CUDA_HOME}"
 
-export C_INCLUDE_PATH="$CONDA_PREFIX/include${C_INCLUDE_PATH:+:"$C_INCLUDE_PATH"}"
-export CPLUS_INCLUDE_PATH="$CONDA_PREFIX/include${CPLUS_INCLUDE_PATH:+:"$CPLUS_INCLUDE_PATH"}"
-export LIBRARY_PATH="$CONDA_PREFIX/lib${LIBRARY_PATH:+:"$LIBRARY_PATH"}"
-export LD_LIBRARY_PATH="$CONDA_PREFIX/lib${LD_LIBRARY_PATH:+:"$LD_LIBRARY_PATH"}"
-export CMAKE_PREFIX_PATH="${CONDA_PREFIX}${CMAKE_PREFIX_PATH:+:"$CMAKE_PREFIX_PATH"}"
-if [[ -d "$CONDA_PREFIX/pkgs/cuda-toolkit" ]]; then
-	export CUDA_HOME="$CONDA_PREFIX/pkgs/cuda-toolkit"
+export C_INCLUDE_PATH="${CONDA_PREFIX}/include${C_INCLUDE_PATH:+:"${C_INCLUDE_PATH}"}"
+export CPLUS_INCLUDE_PATH="${CONDA_PREFIX}/include${CPLUS_INCLUDE_PATH:+:"${CPLUS_INCLUDE_PATH}"}"
+export LIBRARY_PATH="${CONDA_PREFIX}/lib${LIBRARY_PATH:+:"${LIBRARY_PATH}"}"
+export LD_LIBRARY_PATH="${CONDA_PREFIX}/lib${LD_LIBRARY_PATH:+:"${LD_LIBRARY_PATH}"}"
+export CMAKE_PREFIX_PATH="${CONDA_PREFIX}${CMAKE_PREFIX_PATH:+:"${CMAKE_PREFIX_PATH}"}"
+if [[ -d "${CONDA_PREFIX}/pkgs/cuda-toolkit" ]]; then
+	export CUDA_HOME="${CONDA_PREFIX}/pkgs/cuda-toolkit"
 fi
 EOS
 	fi
 
-	if [[ ! -f "$CONDA_PREFIX/etc/conda/deactivate.d/env-vars.sh" ]]; then
+	if [[ ! -f "${CONDA_PREFIX}/etc/conda/deactivate.d/env-vars.sh" ]]; then
 		# Create hook script on conda deactivate
-		cat >"$CONDA_PREFIX/etc/conda/deactivate.d/env-vars.sh" <<'EOS'
+		cat >"${CONDA_PREFIX}/etc/conda/deactivate.d/env-vars.sh" <<'EOS'
 #!/usr/bin/env bash
 
-export C_INCLUDE_PATH="$CONDA_C_INCLUDE_PATH_BACKUP"
-export CPLUS_INCLUDE_PATH="$CONDA_CPLUS_INCLUDE_PATH_BACKUP"
-export LIBRARY_PATH="$CONDA_LIBRARY_PATH_BACKUP"
-export LD_LIBRARY_PATH="$CONDA_LD_LIBRARY_PATH_BACKUP"
-export CMAKE_PREFIX_PATH="$CONDA_CMAKE_PREFIX_PATH_BACKUP"
-export CUDA_HOME="$CONDA_CUDA_HOME_BACKUP"
+export C_INCLUDE_PATH="${CONDA_C_INCLUDE_PATH_BACKUP}"
+export CPLUS_INCLUDE_PATH="${CONDA_CPLUS_INCLUDE_PATH_BACKUP}"
+export LIBRARY_PATH="${CONDA_LIBRARY_PATH_BACKUP}"
+export LD_LIBRARY_PATH="${CONDA_LD_LIBRARY_PATH_BACKUP}"
+export CMAKE_PREFIX_PATH="${CONDA_CMAKE_PREFIX_PATH_BACKUP}"
+export CUDA_HOME="${CONDA_CUDA_HOME_BACKUP}"
 
 unset CONDA_C_INCLUDE_PATH_BACKUP
 unset CONDA_CPLUS_INCLUDE_PATH_BACKUP
@@ -2105,27 +2105,27 @@ unset CONDA_LD_LIBRARY_PATH_BACKUP
 unset CONDA_CMAKE_PREFIX_PATH_BACKUP
 unset CONDA_CUDA_HOME_BACKUP
 
-[[ -z "$C_INCLUDE_PATH" ]] && unset C_INCLUDE_PATH
-[[ -z "$CPLUS_INCLUDE_PATH" ]] && unset CPLUS_INCLUDE_PATH
-[[ -z "$LIBRARY_PATH" ]] && unset LIBRARY_PATH
-[[ -z "$LD_LIBRARY_PATH" ]] && unset LD_LIBRARY_PATH
-[[ -z "$CMAKE_PREFIX_PATH" ]] && unset CMAKE_PREFIX_PATH
-[[ -z "$CUDA_HOME" ]] && unset CUDA_HOME
+[[ -z "${C_INCLUDE_PATH}" ]] && unset C_INCLUDE_PATH
+[[ -z "${CPLUS_INCLUDE_PATH}" ]] && unset CPLUS_INCLUDE_PATH
+[[ -z "${LIBRARY_PATH}" ]] && unset LIBRARY_PATH
+[[ -z "${LD_LIBRARY_PATH}" ]] && unset LD_LIBRARY_PATH
+[[ -z "${CMAKE_PREFIX_PATH}" ]] && unset CMAKE_PREFIX_PATH
+[[ -z "${CUDA_HOME}" ]] && unset CUDA_HOME
 EOS
 	fi
 
 	# Exit for non-Python environment
-	[[ -x "$CONDA_PREFIX/bin/python" ]] || continue
+	[[ -x "${CONDA_PREFIX}/bin/python" ]] || continue
 
 	# Create usercustomize.py in USER_SITE directory
-	USER_SITE="$("$CONDA_PREFIX/bin/python" -c 'from __future__ import print_function; import site; print(site.getusersitepackages())')"
-	mkdir -p "$USER_SITE"
-	if [[ ! -s "$USER_SITE/usercustomize.py" ]]; then
-		touch "$USER_SITE/usercustomize.py"
+	USER_SITE="$("${CONDA_PREFIX}/bin/python" -c 'from __future__ import print_function; import site; print(site.getusersitepackages())')"
+	mkdir -p "${USER_SITE}"
+	if [[ ! -s "${USER_SITE}/usercustomize.py" ]]; then
+		touch "${USER_SITE}/usercustomize.py"
 	fi
-	if ! grep -qE '^\s*(import|from)\s+rich' "$USER_SITE/usercustomize.py"; then
-		[[ -s "$USER_SITE/usercustomize.py" ]] && echo >>"$USER_SITE/usercustomize.py"
-		cat >>"$USER_SITE/usercustomize.py" <<'EOS'
+	if ! grep -qE '^\s*(import|from)\s+rich' "${USER_SITE}/usercustomize.py"; then
+		[[ -s "${USER_SITE}/usercustomize.py" ]] && echo >>"${USER_SITE}/usercustomize.py"
+		cat >>"${USER_SITE}/usercustomize.py" <<'EOS'
 try:
     import rich.pretty
     import rich.traceback
@@ -2140,16 +2140,16 @@ EOS
 done < <(conda info --envs | awk 'NF > 0 && $0 !~ /^#.*/ { printf("%s %s\n", $1, $NF) }')
 EOF
 
-chmod 755 "$HOME/$CONDA_DIR/etc/init-envs.sh"
+chmod 755 "${HOME}/${CONDA_DIR}/etc/init-envs.sh"
 
 # Setup IPython
-exec_cmd "\"\$HOME/$CONDA_DIR/bin/ipython\" profile create"
-exec_cmd "sed -i -E 's/^\\s*#?\\s*(c.InteractiveShell.colors).*\$/\\1 = \"Linux\"/g' \"\$HOME/.ipython/profile_default/ipython_config.py\""
-exec_cmd "sed -i -E 's/^\\s*#?\\s*(c.InteractiveShell.colors).*\$/\\1 = \"Linux\"/g' \"\$HOME/.ipython/profile_default/ipython_kernel_config.py\""
+exec_cmd "\"\${HOME}/${CONDA_DIR}/bin/ipython\" profile create"
+exec_cmd "sed -i -E 's/^\\s*#?\\s*(c.InteractiveShell.colors).*\$/\\1 = \"Linux\"/g' \"\${HOME}/.ipython/profile_default/ipython_config.py\""
+exec_cmd "sed -i -E 's/^\\s*#?\\s*(c.InteractiveShell.colors).*\$/\\1 = \"Linux\"/g' \"\${HOME}/.ipython/profile_default/ipython_kernel_config.py\""
 
-mkdir -p "$HOME/.ipython/profile_default/startup"
+mkdir -p "${HOME}/.ipython/profile_default/startup"
 
-cat >"$HOME/.ipython/profile_default/startup/00-rich.py" <<'EOF'
+cat >"${HOME}/.ipython/profile_default/startup/00-rich.py" <<'EOF'
 try:
     from rich import print
     import rich.pretty
@@ -2164,27 +2164,27 @@ EOF
 # Install fonts
 URL_LIST=("https://github.com/ryanoasis/nerd-fonts/releases/latest/download/DejaVuSansMono.zip")
 LATEST_CASCADIA_VERSION="$(get_latest_version "microsoft/cascadia-code")"
-if [[ $? -eq 0 && -n "$LATEST_CASCADIA_VERSION" ]]; then
+if [[ $? -eq 0 && -n "${LATEST_CASCADIA_VERSION}" ]]; then
 	URL_LIST+=("https://github.com/microsoft/cascadia-code/releases/latest/download/CascadiaCode-${LATEST_CASCADIA_VERSION#v}.zip")
 fi
-exec_cmd "wget -N -P \"$TMP_DIR/fonts\" https://github.com/XuehaiPan/Dev-Setup/raw/HEAD/Menlo.ttc"
+exec_cmd "wget -N -P \"${TMP_DIR}/fonts\" https://github.com/XuehaiPan/Dev-Setup/raw/HEAD/Menlo.ttc"
 for url in "${URL_LIST[@]}"; do
-	exec_cmd "wget -N -P \"$TMP_DIR\" $url"
-	exec_cmd "unzip -o \"$TMP_DIR/$(basename "$url")\" -d \"$TMP_DIR/fonts\""
+	exec_cmd "wget -N -P \"${TMP_DIR}\" ${url}"
+	exec_cmd "unzip -o \"${TMP_DIR}/$(basename "${url}")\" -d \"${TMP_DIR}/fonts\""
 done
 
-mkdir -p "$HOME/.local/share/fonts"
-exec_cmd "find -L \"$TMP_DIR/fonts\" -not -empty -type f -name '*.[ot]t[fc]' \\
-	-printf '==> cp -f \"%p\" \"\$HOME/.local/share/fonts\"\n' \\
-	-exec cp -f '{}' \"\$HOME/.local/share/fonts\" \\;"
-if $IN_WSL && [[ -w "/mnt/c/Windows/Fonts" ]]; then
-	exec_cmd "find -L \"$TMP_DIR/fonts\" -not -empty -type f -name '*.ttf' \\
+mkdir -p "${HOME}/.local/share/fonts"
+exec_cmd "find -L \"${TMP_DIR}/fonts\" -not -empty -type f -name '*.[ot]t[fc]' \\
+	-printf '==> cp -f \"%p\" \"\${HOME}/.local/share/fonts\"\n' \\
+	-exec cp -f '{}' \"\${HOME}/.local/share/fonts\" \\;"
+if ${IN_WSL} && [[ -w "/mnt/c/Windows/Fonts" ]]; then
+	exec_cmd "find -L \"${TMP_DIR}/fonts\" -not -empty -type f -name '*.ttf' \\
 		-printf '==> cp -f \"%p\" \"/mnt/c/Windows/Fonts\"\n' \\
 		-exec cp -f '{}' \"/mnt/c/Windows/Fonts\" \\;"
 	REGKEY='HKLM\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Fonts'
-	exec_cmd "find -L \"$TMP_DIR/fonts\" -not -empty -type f -name '*.tt[fc]' -print0 | \\
+	exec_cmd "find -L \"${TMP_DIR}/fonts\" -not -empty -type f -name '*.tt[fc]' -print0 | \\
 		xargs -0 -I '{}' bash -c 'file=\"{}\"; font=\${file##*/}; \\
-		command=\"/mnt/c/Windows/System32/reg.exe add \\\"$REGKEY\\\" /v \\\"\${font%.tt[fc]} (TrueType)\\\" /t REG_SZ /d \\\"\${font}\\\" /f\"; \\
+		command=\"/mnt/c/Windows/System32/reg.exe add \\\"${REGKEY}\\\" /v \\\"\${font%.tt[fc]} (TrueType)\\\" /t REG_SZ /d \\\"\${font}\\\" /f\"; \\
 		echo \"\${command}\"; eval \"\${command}\"'"
 fi
 if [[ -x "$(command -v fc-cache)" ]]; then

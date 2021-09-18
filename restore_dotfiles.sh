@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 
-BACKUP_DIR="${1:-"$HOME/.dotfiles/backups/latest"}"
+BACKUP_DIR="${1:-"${HOME}/.dotfiles/backups/latest"}"
 
-if [[ ! -d "$BACKUP_DIR" ]]; then
-	echo "Backup directory \"$BACKUP_DIR\" does not exist." >&2
+if [[ ! -d "${BACKUP_DIR}" ]]; then
+	echo "Backup directory \"${BACKUP_DIR}\" does not exist." >&2
 	exit 1
 fi
 
-echo "Restore dotfiles in backup directory \"$BACKUP_DIR\"."
+echo "Restore dotfiles in backup directory \"${BACKUP_DIR}\"."
 
 DOTFILES=(
 	.zshrc				.dotfiles/.zshrc
@@ -27,22 +27,22 @@ DOTFILES=(
 						.dotfiles/utilities.sh
 )
 
-cd "$HOME"
+cd "${HOME}"
 
 for file in "${DOTFILES[@]}"; do
-	if [[ -f "$BACKUP_DIR/$file" || -d "$BACKUP_DIR/$file" ]]; then
-		backup_prefix="$(dirname "$BACKUP_DIR/$file")"
-		prefix="$(dirname "$HOME/$file")"
-		file="$(basename "$file")"
-		if diff -EB "$backup_prefix/$file" "$prefix/$file" &>/dev/null; then
-			echo "The file \"$file\" in \"$backup_prefix\" is same as the one in \"$prefix\". Skip."
+	if [[ -f "${BACKUP_DIR}/${file}" || -d "${BACKUP_DIR}/${file}" ]]; then
+		backup_prefix="$(dirname "${BACKUP_DIR}/${file}")"
+		prefix="$(dirname "${HOME}/${file}")"
+		file="$(basename "${file}")"
+		if diff -EB "${backup_prefix}/${file}" "${prefix}/${file}" &>/dev/null; then
+			echo "The file \"${file}\" in \"${backup_prefix}\" is same as the one in \"${prefix}\". Skip."
 		else
-			echo "Restore \"$file\" from \"$backup_prefix\" to \"$prefix\"."
-			cp -rf "$backup_prefix/$file" "$prefix/"
-			if [[ "$prefix" == "$HOME/.dotfiles" ]]; then
-				if diff -EB "$file" ".dotfiles/$file" &>/dev/null; then
-					echo "The file \"$file\" in \"$HOME\" is same as the one in \"$HOME/.dotfiles\". Make symbolic link."
-					ln -sf ".dotfiles/$file" .
+			echo "Restore \"${file}\" from \"${backup_prefix}\" to \"${prefix}\"."
+			cp -rf "${backup_prefix}/${file}" "${prefix}/"
+			if [[ "${prefix}" == "${HOME}/.dotfiles" ]]; then
+				if diff -EB "${file}" ".dotfiles/${file}" &>/dev/null; then
+					echo "The file \"${file}\" in \"${HOME}\" is same as the one in \"${HOME}/.dotfiles\". Make symbolic link."
+					ln -sf ".dotfiles/${file}" .
 				fi
 			fi
 		fi

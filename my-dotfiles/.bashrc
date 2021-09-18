@@ -40,8 +40,8 @@ alias la='ls -AlhF'
 # Alias definitions.
 # You may want to put all your additions into a separate file like
 # ~/.bash_aliases, instead of adding them here directly.
-if [[ -f "$HOME/.bash_aliases" ]]; then
-	source "$HOME/.bash_aliases"
+if [[ -f "${HOME}/.bash_aliases" ]]; then
+	source "${HOME}/.bash_aliases"
 fi
 
 # Enable programmable completion features
@@ -58,9 +58,9 @@ fi
 # Always source ~/.bash_profile
 if ! shopt -q login_shell; then
 	# Include ~/.bash_profile if it exists
-	if [[ -f "$HOME/.bash_profile" ]]; then
-		source "$HOME/.bash_profile"
-	elif [[ -f "$HOME/.profile" ]]; then
-		source "$HOME/.profile"
+	if [[ -f "${HOME}/.bash_profile" ]]; then
+		source "${HOME}/.bash_profile"
+	elif [[ -f "${HOME}/.profile" ]]; then
+		source "${HOME}/.profile"
 	fi
 fi

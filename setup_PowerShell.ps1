@@ -259,10 +259,6 @@ let g:ycm_key_list_stop_completion = ['<C-y>']
 let g:ycm_key_list_select_completion = ['<Down>']
 let g:ycm_key_list_previous_completion = ['<Up>']
 
-if !exists('`$SSH_CONNECTION')
-    let g:mkdp_auto_start = 1
-endif
-
 call plug#begin('~/vimfiles/plugged')
     Plug 'flazz/vim-colorschemes'
     Plug 'mhinz/vim-startify'

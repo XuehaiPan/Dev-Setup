@@ -95,35 +95,35 @@ function upgrade_ohmyzsh() {
 	local repo
 
 	# Set oh-my-zsh installation path
-	export ZSH="${ZSH:-"$HOME/.oh-my-zsh"}"
-	export ZSH_CUSTOM="${ZSH_CUSTOM:-"$ZSH/custom"}"
-	export ZSH_CACHE_DIR="${ZSH_CACHE_DIR:-"$ZSH/cache"}"
+	export ZSH="${ZSH:-"${HOME}/.oh-my-zsh"}"
+	export ZSH_CUSTOM="${ZSH_CUSTOM:-"${ZSH}/custom"}"
+	export ZSH_CACHE_DIR="${ZSH_CACHE_DIR:-"${ZSH}/cache"}"
 
 	# Upgrade oh my zsh
-	rm -f "$ZSH_CACHE_DIR/.zsh-update" 2>/dev/null
-	zsh "$ZSH/tools/check_for_upgrade.sh" 2>/dev/null
-	exec_cmd 'zsh "$ZSH/tools/upgrade.sh"'
-	exec_cmd 'git -C "$ZSH" fetch --prune'
-	exec_cmd 'git -C "$ZSH" gc --prune=all'
+	rm -f "${ZSH_CACHE_DIR}/.zsh-update" 2>/dev/null
+	zsh "${ZSH}/tools/check_for_upgrade.sh" 2>/dev/null
+	exec_cmd 'zsh "${ZSH}/tools/upgrade.sh"'
+	exec_cmd 'git -C "${ZSH}" fetch --prune'
+	exec_cmd 'git -C "${ZSH}" gc --prune=all'
 
 	# Upgrade themes and plugins
 	while read -r repo; do
-		exec_cmd "git -C \"\$ZSH_CUSTOM/$repo\" pull --prune --ff-only"
-		exec_cmd "git -C \"\$ZSH_CUSTOM/$repo\" gc --prune=all"
+		exec_cmd "git -C \"\${ZSH_CUSTOM}/${repo}\" pull --prune --ff-only"
+		exec_cmd "git -C \"\${ZSH_CUSTOM}/${repo}\" gc --prune=all"
 	done < <(
-		cd "$ZSH_CUSTOM" &&
+		cd "${ZSH_CUSTOM}" &&
 			find -L . -mindepth 3 -maxdepth 3 -not -empty -type d -name '.git' -prune -exec dirname {} \; |
 			cut -b3-
 	)
 
 	# Remove old zcompdump file
-	rm -f "${ZSH_COMPDUMP:-"${ZDOTDIR:-"$HOME"}"/.zcompdump}" &>/dev/null
+	rm -f "${ZSH_COMPDUMP:-"${ZDOTDIR:-"${HOME}"}"/.zcompdump}" &>/dev/null
 }
 
 function upgrade_fzf() {
-	exec_cmd 'git -C "$HOME/.fzf" pull --prune --ff-only'
-	exec_cmd 'git -C "$HOME/.fzf" gc --prune=all'
-	exec_cmd '"$HOME/.fzf/install" --key-bindings --completion --no-update-rc'
+	exec_cmd 'git -C "${HOME}/.fzf" pull --prune --ff-only'
+	exec_cmd 'git -C "${HOME}/.fzf" gc --prune=all'
+	exec_cmd '"${HOME}/.fzf/install" --key-bindings --completion --no-update-rc'
 }
 
 function upgrade_vim() {
@@ -153,10 +153,10 @@ function upgrade_conda() {
 	# Upgrade Conda packages in each environment
 	while read -r env; do
 		cmds="mamba update --all --yes"
-		if conda list --full-name anaconda --name "$env" | grep -q '^anaconda[^-]'; then
-			cmds="$cmds; mamba update anaconda --yes"
+		if conda list --full-name anaconda --name "${env}" | grep -q '^anaconda[^-]'; then
+			cmds="${cmds}; mamba update anaconda --yes"
 		fi
-		exec_cmd "conda activate $env; $cmds; conda deactivate"
+		exec_cmd "conda activate ${env}; ${cmds}; conda deactivate"
 	done < <(conda info --envs | awk 'NF > 0 && $0 !~ /^#.*/ { print $1 }')
 
 	# Clean up Conda cache
@@ -168,7 +168,7 @@ function foreach_conda_env_do() {
 
 	# Execute in each Conda environment
 	while read -r env; do
-		exec_cmd "conda activate $env; ${*}; conda deactivate"
+		exec_cmd "conda activate ${env}; ${*}; conda deactivate"
 	done < <(conda info --envs | awk 'NF > 0 && $0 !~ /^#.*/ { print $1 }')
 }
 
@@ -182,14 +182,14 @@ function upgrade_packages() {
 	upgrade_texlive
 	# upgrade_conda
 
-	if [[ -n "$ZSH_VERSION" ]]; then
-		rm -f "${ZSH_COMPDUMP:-"${ZDOTDIR:-"$HOME"}"/.zcompdump}" &>/dev/null
-		if [[ -f "${ZDOTDIR:-"$HOME"}/.zshrc" ]]; then
-			source "${ZDOTDIR:-"$HOME"}/.zshrc"
+	if [[ -n "${ZSH_VERSION}" ]]; then
+		rm -f "${ZSH_COMPDUMP:-"${ZDOTDIR:-"${HOME}"}"/.zcompdump}" &>/dev/null
+		if [[ -f "${ZDOTDIR:-"${HOME}"}/.zshrc" ]]; then
+			source "${ZDOTDIR:-"${HOME}"}/.zshrc"
 		fi
-	elif [[ -n "$BASH_VERSION" ]]; then
-		if [[ -f "$HOME/.bash_profile" ]]; then
-			source "$HOME/.bash_profile"
+	elif [[ -n "${BASH_VERSION}" ]]; then
+		if [[ -f "${HOME}/.bash_profile" ]]; then
+			source "${HOME}/.bash_profile"
 		fi
 	fi
 }
@@ -205,10 +205,10 @@ function set_proxy() {
 	export https_proxy="http://${PROXY_HOST}:${HTTPS_PORT}"
 	export ftp_proxy="http://${PROXY_HOST}:${FTP_PORT}"
 	export all_proxy="socks5://${PROXY_HOST}:${SOCKS_PORT}"
-	export HTTP_PROXY="$http_proxy"
-	export HTTPS_PROXY="$https_proxy"
-	export FTP_PROXY="$ftp_proxy"
-	export ALL_PROXY="$all_proxy"
+	export HTTP_PROXY="${http_proxy}"
+	export HTTPS_PROXY="${https_proxy}"
+	export FTP_PROXY="${ftp_proxy}"
+	export ALL_PROXY="${all_proxy}"
 }
 
 function reset_proxy() {
@@ -230,19 +230,19 @@ function available_cuda_devices() {
 		if ! ((maxcount > 0)); then
 			break
 		fi
-		pids=$(nvidia-smi --id="$index" --query-compute-apps=pid --format=csv,noheader | xargs echo -n)
-		if [[ -n "$pids" ]] && (ps -o user -p $pids | tail -n +2 | grep -qvF "$USER") &&
+		pids=$(nvidia-smi --id="${index}" --query-compute-apps=pid --format=csv,noheader | xargs echo -n)
+		if [[ -n "${pids}" ]] && (ps -o user -p ${pids} | tail -n +2 | grep -qvF "${USER}") &&
 			((memused >= 3072 || memfree <= 6144 || utilization >= 20)); then
 			continue
 		fi
-		available="${available:+"$available",}$index"
+		available="${available:+"${available}",}${index}"
 		((maxcount -= 1))
 	done < <(
 		nvidia-smi --query-gpu=index,memory.free,memory.used,utilization.gpu --format=csv,noheader,nounits |
 			sort -t ',' -k2nr -k4n -k3n -k1nr | tr -d ','
 	)
 
-	echo "$available"
+	echo "${available}"
 }
 
 function auto_reannounce_trackers() {
@@ -258,10 +258,10 @@ function auto_reannounce_trackers() {
 		else
 			TORRENT="all"
 		fi
-		CMD="transmission-remote --torrent $TORRENT --reannounce"
-		eval "$CMD" 1>/dev/null
+		CMD="transmission-remote --torrent ${TORRENT} --reannounce"
+		eval "${CMD}" 1>/dev/null
 		for ((r = INTERVAL - 1; r >= 0; --r)); do
-			echo -ne "$CMD ($t/$TIMES, next reannounce in ${r}s)\033[K\r"
+			echo -ne "${CMD} (${t}/${TIMES}, next reannounce in ${r}s)\033[K\r"
 			sleep 1
 		done
 	done
@@ -276,22 +276,22 @@ function pull_projects() {
 	if [ "$#" -gt 0 ]; then
 		BASE_DIRS=("$@")
 	else
-		BASE_DIRS=("$HOME/VSCodeProjects" "$HOME/PycharmProjects" "$HOME/ClionProjects" "$HOME/IdeaProjects")
+		BASE_DIRS=("${HOME}/VSCodeProjects" "${HOME}/PycharmProjects" "${HOME}/ClionProjects" "${HOME}/IdeaProjects")
 	fi
 
 	# Fetch and pull
 	for BASE_DIR in "${BASE_DIRS[@]}"; do
 		while read -r PROJ_DIR; do
-			if [[ -n "$(git -C "$PROJ_DIR" remote)" ]]; then
-				exec_cmd "git -C \"${PROJ_DIR/#$HOME/\$HOME}\" fetch --all --prune"
-				HEAD_HASH="$(git -C "$PROJ_DIR" rev-parse HEAD)"
-				exec_cmd "git -C \"${PROJ_DIR/#$HOME/\$HOME}\" pull --ff-only"
-				if [[ "$HEAD_HASH" != "$(git -C "$PROJ_DIR" rev-parse HEAD)" ]]; then
-					exec_cmd "git -C \"${PROJ_DIR/#$HOME/\$HOME}\" gc --aggressive"
+			if [[ -n "$(git -C "${PROJ_DIR}" remote)" ]]; then
+				exec_cmd "git -C \"${PROJ_DIR/#${HOME}/\$HOME}\" fetch --all --prune"
+				HEAD_HASH="$(git -C "${PROJ_DIR}" rev-parse HEAD)"
+				exec_cmd "git -C \"${PROJ_DIR/#${HOME}/\$HOME}\" pull --ff-only"
+				if [[ "${HEAD_HASH}" != "$(git -C "${PROJ_DIR}" rev-parse HEAD)" ]]; then
+					exec_cmd "git -C \"${PROJ_DIR/#${HOME}/\$HOME}\" gc --aggressive"
 				fi
 			fi
 		done < <(
-			find -L "$BASE_DIR" -maxdepth 5 -not -empty -type d -name '.git' -prune -exec dirname {} \;
+			find -L "${BASE_DIR}" -maxdepth 5 -not -empty -type d -name '.git' -prune -exec dirname {} \;
 		)
 	done
 }

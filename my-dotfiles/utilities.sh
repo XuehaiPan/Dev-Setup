@@ -273,7 +273,7 @@ function pull_projects() {
 	local BASE_DIRS BASE_DIR PROJ_DIR HEAD_HASH
 
 	# Project directories
-	if [ "$#" -gt 0 ]; then
+	if [[ "$#" -gt 0 ]]; then
 		BASE_DIRS=("$@")
 	else
 		BASE_DIRS=("${HOME}/VSCodeProjects" "${HOME}/PycharmProjects" "${HOME}/ClionProjects" "${HOME}/IdeaProjects")

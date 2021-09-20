@@ -148,19 +148,19 @@ function upgrade_conda() {
 	local env cmds
 
 	# Upgrade Conda and Mamba
-	exec_cmd 'mamba update conda mamba --name base --yes'
+	exec_cmd 'conda update conda mamba --name base --yes'
 
 	# Upgrade Conda packages in each environment
 	while read -r env; do
-		cmds="mamba update --all --yes"
+		cmds="conda update --all --yes"
 		if conda list --full-name anaconda --name "${env}" | grep -q '^anaconda[^-]'; then
-			cmds="${cmds}; mamba update anaconda --yes"
+			cmds="${cmds}; conda update anaconda --yes"
 		fi
 		exec_cmd "conda activate ${env}; ${cmds}; conda deactivate"
 	done < <(conda info --envs | awk 'NF > 0 && $0 !~ /^#.*/ { print $1 }')
 
 	# Clean up Conda cache
-	exec_cmd 'mamba clean --all --yes'
+	exec_cmd 'conda clean --all --yes'
 }
 
 function foreach_conda_env_do() {

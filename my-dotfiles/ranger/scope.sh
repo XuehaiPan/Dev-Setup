@@ -403,8 +403,9 @@ handle_mime() {
             exiftool "${FILE_PATH}" && exit 5
             exit 1;;
 
-        ## Shared library
-        application/x-sharedlib | application/x-mach-binary)
+        ## Executables and shared objects
+        application/x-executable | application/x-pie-executable | \
+            application/x-sharedlib | application/x-mach-binary)
             objdump --demangle --syms "${FILE_PATH}" && exit 5
             nm --demangle "${FILE_PATH}" && exit 5
             exit 1;;

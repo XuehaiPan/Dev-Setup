@@ -283,11 +283,11 @@ function pull_projects() {
 	for BASE_DIR in "${BASE_DIRS[@]}"; do
 		while read -r PROJ_DIR; do
 			if [[ -n "$(git -C "${PROJ_DIR}" remote)" ]]; then
-				exec_cmd "git -C \"${PROJ_DIR/#${HOME}/\$HOME}\" fetch --all --prune"
+				exec_cmd "git -C \"${PROJ_DIR/#${HOME}/\${HOME\}}\" fetch --all --prune"
 				HEAD_HASH="$(git -C "${PROJ_DIR}" rev-parse HEAD)"
-				exec_cmd "git -C \"${PROJ_DIR/#${HOME}/\$HOME}\" pull --ff-only"
+				exec_cmd "git -C \"${PROJ_DIR/#${HOME}/\${HOME\}}\" pull --ff-only"
 				if [[ "${HEAD_HASH}" != "$(git -C "${PROJ_DIR}" rev-parse HEAD)" ]]; then
-					exec_cmd "git -C \"${PROJ_DIR/#${HOME}/\$HOME}\" gc --aggressive"
+					exec_cmd "git -C \"${PROJ_DIR/#${HOME}/\${HOME\}}\" gc --aggressive"
 				fi
 			fi
 		done < <(

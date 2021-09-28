@@ -275,7 +275,7 @@ else
 	HOMEBREW_PREFIX="$(brew --prefix)"
 fi
 
-exec_cmd "eval \"\$(${HOMEBREW_PREFIX/#${HOME}/\$HOME}/bin/brew shellenv)\""
+exec_cmd "eval \"\$(${HOMEBREW_PREFIX/#${HOME}/\${HOME\}}/bin/brew shellenv)\""
 
 if ${SET_MIRRORS}; then
 	exec_cmd "brew tap --force-auto-update homebrew/command-not-found https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-command-not-found.git"
@@ -394,7 +394,7 @@ exec_cmd "AUTOMATED_TESTING=1 cpan -i Term::ReadLine::Perl Term::ReadKey"
 backup_dotfiles .dotfiles/.zshrc
 
 HOMEBREW_SETTINGS='# Linuxbrew
-'"eval \"\$(${HOMEBREW_PREFIX/#${HOME}/\$HOME}/bin/brew shellenv)\""'
+'"eval \"\$(${HOMEBREW_PREFIX/#${HOME}/\${HOME\}}/bin/brew shellenv)\""'
 export C_INCLUDE_PATH="${HOMEBREW_PREFIX}/include${C_INCLUDE_PATH:+:"${C_INCLUDE_PATH}"}"
 export CPLUS_INCLUDE_PATH="${HOMEBREW_PREFIX}/include${CPLUS_INCLUDE_PATH:+:"${CPLUS_INCLUDE_PATH}"}"
 export LIBRARY_PATH="${HOMEBREW_PREFIX}/lib${LIBRARY_PATH:+:"${LIBRARY_PATH}"}"

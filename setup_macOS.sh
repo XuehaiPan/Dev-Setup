@@ -142,7 +142,6 @@ if [[ ! -x "$(command -v brew)" ]]; then
 		exec_cmd 'export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles"'
 		exec_cmd "git clone --depth=1 https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/install.git \"${TMP_DIR}/brew-install\""
 		exec_cmd "/bin/bash \"${TMP_DIR}/brew-install/install.sh\""
-		exec_cmd 'unset HOMEBREW_{BREW,CORE}_GIT_REMOTE'
 	else
 		exec_cmd '/bin/bash -c "$(curl -fsSL https://github.com/Homebrew/install/raw/HEAD/install.sh)"'
 	fi
@@ -376,6 +375,8 @@ export HOMEBREW_EDITOR="vim"
 export HOMEBREW_BAT=true'
 if ${SET_MIRRORS}; then
 	HOMEBREW_SETTINGS+='
+export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"
+export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git"
 export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles"'
 fi
 HOMEBREW_SETTINGS+='

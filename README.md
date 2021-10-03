@@ -2,7 +2,7 @@
 
 [中文版](README.zh-CN.md) 👈
 
-Automation scripts for setting up basic development environment. ([screenshots](#screenshots))
+Automation scripts for setting up a basic development environment. ([screenshots](#screenshots))
 
 ## Table of Contents <!-- omit in toc -->
 
@@ -48,7 +48,7 @@ cd Dev-Setup
 
 Options:
 
-- `SET_MIRRORS` (default `false`) : set the source of package managers to open source mirrors at [TUNA (@China)](https://mirrors.tuna.tsinghua.edu.cn) to speed up downloading. (see [Packages](#packages) for more details). If you want to bypass the prompt, run:
+- `SET_MIRRORS` (default `false`): set the source of package managers to open source mirrors at [TUNA (@China)](https://mirrors.tuna.tsinghua.edu.cn) to speed up downloading. (see [Packages](#packages) for more details). If you want to bypass the prompt, run:
 
   ```bash
   # Bypass the prompt

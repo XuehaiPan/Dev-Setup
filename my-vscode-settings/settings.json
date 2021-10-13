@@ -15,8 +15,8 @@
     "editor.detectIndentation": true,
     "editor.folding": true,
     "editor.foldingStrategy": "auto",
-    "editor.highlightActiveIndentGuide": true,
-    "editor.renderIndentGuides": true,
+    "editor.guides.highlightActiveIndentation": true,
+    "editor.guides.indentation": true,
     "editor.wordWrapColumn": 120,
     "editor.rulers": [
         80,
@@ -866,9 +866,7 @@
         "--generated-members=numpy.*,torch.*",
         "--max-line-length=120"
     ],
-    "jupyter.allowImportFromNotebook": true,
     "jupyter.defaultCellMarker": "# %%",
-    "jupyter.allowInput": true,
     "jupyter.jupyterServerType": "local",
 
     //* Remote */
@@ -910,7 +908,8 @@
     "shellcheck.enableQuickFix": true,
     "shellcheck.run": "onSave",
     "shellcheck.customArgs": [
-        "--shell=bash"
+        "--shell=bash",
+        "--enable=all"
     ],
 
     //* Shell-format */

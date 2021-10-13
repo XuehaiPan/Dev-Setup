@@ -279,8 +279,7 @@ else
 fi
 
 if ${SET_MIRRORS}; then
-	exec_cmd "brew tap --force-auto-update homebrew/command-not-found https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-command-not-found.git"
-	git -C "$(brew --repo homebrew/command-not-found)" remote set-url origin https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-command-not-found.git
+	exec_cmd "brew tap --custom-remote --force-auto-update homebrew/command-not-found https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-command-not-found.git"
 else
 	exec_cmd 'brew tap --force-auto-update homebrew/command-not-found'
 fi

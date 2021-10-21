@@ -326,11 +326,11 @@ mv -f .gitconfig .dotfiles/.gitconfig
 ln -sf .dotfiles/.gitconfig .
 chmod 644 .dotfiles/.gitconfig
 
-# Install and setup Linuxbrew
+# Install and setup Homebrew
 if ${SET_MIRRORS}; then
 	exec_cmd 'export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"'
-	exec_cmd 'export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/linuxbrew-core.git"'
-	exec_cmd 'export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/linuxbrew-bottles"'
+	exec_cmd 'export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git"'
+	exec_cmd 'export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles"'
 fi
 if [[ ! -x "$(command -v brew)" ]]; then
 	HOMEBREW_PREFIX="${HOME}/.linuxbrew"
@@ -462,7 +462,7 @@ exec_cmd "AUTOMATED_TESTING=1 cpan -i Term::ReadLine::Perl Term::ReadKey"
 # Configurations for Zsh
 backup_dotfiles .dotfiles/.zshrc
 
-HOMEBREW_SETTINGS='# Linuxbrew
+HOMEBREW_SETTINGS='# Homebrew
 '"eval \"\$(${HOMEBREW_PREFIX/#${HOME}/\${HOME\}}/bin/brew shellenv)\""'
 export C_INCLUDE_PATH="${HOMEBREW_PREFIX}/include${C_INCLUDE_PATH:+:"${C_INCLUDE_PATH}"}"
 export CPLUS_INCLUDE_PATH="${HOMEBREW_PREFIX}/include${CPLUS_INCLUDE_PATH:+:"${CPLUS_INCLUDE_PATH}"}"
@@ -473,8 +473,8 @@ export HOMEBREW_BAT=true'
 if ${SET_MIRRORS}; then
 	HOMEBREW_SETTINGS+='
 export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"
-export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/linuxbrew-core.git"
-export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/linuxbrew-bottles"'
+export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git"
+export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles"'
 fi
 HOMEBREW_SETTINGS+='
 __COMMAND_NOT_FOUND_HANDLER="$(brew --repository homebrew/command-not-found)/handler.sh"
@@ -938,18 +938,18 @@ function upgrade_ubuntu() {
 	exec_cmd 'sudo apt-get autoclean'
 }
 
-function upgrade_linuxbrew() {
-	# Upgrade Linuxbrew
+function upgrade_homebrew() {
+	# Upgrade Homebrew
 	exec_cmd 'brew update --verbose'
 	exec_cmd 'brew outdated'
 
-	# Upgrade Linuxbrew formulae
+	# Upgrade Homebrew formulae
 	exec_cmd 'brew upgrade'
 
 	# Uninstall formulae that no longer needed
 	exec_cmd 'brew autoremove --verbose'
 
-	# Clean up Linuxbrew cache
+	# Clean up Homebrew cache
 	exec_cmd 'brew cleanup -s --prune 7'
 }
 
@@ -1040,7 +1040,7 @@ function upgrade_packages() {
 	if groups | grep -qE '(sudo|root)'; then
 		upgrade_ubuntu
 	fi
-	upgrade_linuxbrew
+	upgrade_homebrew
 	upgrade_ohmyzsh
 	upgrade_fzf
 	if [[ -x "$(command -v vim)" ]]; then

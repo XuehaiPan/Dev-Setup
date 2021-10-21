@@ -176,7 +176,7 @@ ln -sf .dotfiles/<CFG_FILE> .
 | Package                                                                                                                          | macOS | Ubuntu Linux | Manjaro Linux |
 | :------------------------------------------------------------------------------------------------------------------------------- | :---: | :----------: | :-----------: |
 | [Mirrors at TUNA (@China)](https://mirrors.tuna.tsinghua.edu.cn)                                                                 |   ✔   |      ✔       |       ✔       |
-| [Homebrew / Linuxbrew](https://brew.sh)                                                                                          |   ✔   |      ✔       |       ✔       |
+| [Homebrew](https://brew.sh)                                                                                                      |   ✔   |      ✔       |       ✔       |
 |                                                                                                                                  |       |              |               |
 | [bash](https://www.gnu.org/software/bash)                                                                                        |   ✔   |      ✔       |       ✔       |
 | [bash-completion](https://salsa.debian.org/debian/bash-completion)                                                               |   ✔   |      ✔       |       ✔       |

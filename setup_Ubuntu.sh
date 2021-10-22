@@ -1707,7 +1707,7 @@ fi
 if [[ -x "$(command -v vim)" ]]; then
 	exec_cmd 'vim -c "PlugUpgrade | PlugInstall | PlugUpdate | sleep 5 | quitall"'
 	if [[ ! -f "${HOME}/.vim/plugged/markdown-preview.nvim/app/bin/markdown-preview-linux" ]]; then
-		exec_cmd 'cd "${HOME}/.vim/plugged/markdown-preview.nvim/app"; ./install.sh; cd "${HOME}"'
+		exec_cmd '(cd "${HOME}/.vim/plugged/markdown-preview.nvim/app" && ./install.sh)'
 	fi
 fi
 

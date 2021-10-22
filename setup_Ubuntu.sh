@@ -7,7 +7,7 @@ export SET_MIRRORS="${SET_MIRRORS:-false}"
 export USER="${USER:-"$(whoami)"}"
 
 # Set configuration backup directory
-umask g-w,o-w
+umask go-w
 DATETIME="$(date +"%Y-%m-%d-%T")"
 BACKUP_DIR="${HOME}/.dotfiles/backups/${DATETIME}"
 mkdir -p "${BACKUP_DIR}/.dotfiles"
@@ -417,7 +417,7 @@ else
 fi
 exec_cmd '"${HOME}/.fzf/install" --key-bindings --completion --no-update-rc'
 
-exec_cmd 'chmod -R g-w,o-w "${ZSH}" "${HOME}/.fzf"'
+exec_cmd 'chmod -R go-w "${ZSH}" "${HOME}/.fzf"'
 
 # Configurations for RubyGems
 backup_dotfiles .gemrc .dotfiles/.gemrc

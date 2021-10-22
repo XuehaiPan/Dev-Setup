@@ -264,19 +264,31 @@ if ${SET_MIRRORS}; then
 	exec_cmd 'export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles"'
 fi
 if [[ ! -x "$(command -v brew)" ]]; then
-	HOMEBREW_PREFIX="${HOME}/.linuxbrew"
-	if [[ ! -x "${HOMEBREW_PREFIX}/bin/brew" ]]; then
-		exec_cmd 'git clone "${HOMEBREW_BREW_GIT_REMOTE:-https://github.com/Homebrew/brew}" "${HOME}/.linuxbrew/Homebrew"'
-		exec_cmd 'mkdir "${HOME}/.linuxbrew/bin"'
-		exec_cmd 'ln -sfn "../Homebrew/bin/brew" "${HOME}/.linuxbrew/bin"'
+	HOMEBREW_PREFIX="/home/linuxbrew/.linuxbrew"
+	if ${IS_SUDOER} && [[ ! -d "${HOMEBREW_PREFIX}" || "$(/usr/bin/stat --printf "%u" "${HOMEBREW_PREFIX}")" == "${UID}" ]]; then
+		if ${SET_MIRRORS}; then
+			exec_cmd "git clone --depth=1 https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/install.git \"${TMP_DIR}/brew-install\""
+			exec_cmd "NONINTERACTIVE=1 /bin/bash \"${TMP_DIR}/brew-install/install.sh\""
+		else
+			exec_cmd 'NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://github.com/Homebrew/install/raw/HEAD/install.sh)"'
+		fi
+	else
+		HOMEBREW_PREFIX="${HOME}/.linuxbrew"
+		if [[ ! -x "${HOMEBREW_PREFIX}/bin/brew" ]]; then
+			exec_cmd 'git clone "${HOMEBREW_BREW_GIT_REMOTE:-https://github.com/Homebrew/brew}" "${HOME}/.linuxbrew/Homebrew"'
+			exec_cmd 'mkdir "${HOME}/.linuxbrew/bin"'
+			exec_cmd 'ln -sfn "../Homebrew/bin/brew" "${HOME}/.linuxbrew/bin"'
+		fi
+		exec_cmd 'eval "$(${HOME}/.linuxbrew/bin/brew shellenv)"'
+		exec_cmd 'brew update --force --quiet'
+		exec_cmd 'chmod -R go-w "$(brew --prefix)/share/zsh"'
 	fi
-	exec_cmd 'eval "$(${HOME}/.linuxbrew/bin/brew shellenv)"'
-	exec_cmd 'brew update --force --quiet'
-	exec_cmd 'chmod -R go-w "$(brew --prefix)/share/zsh"'
 else
 	HOMEBREW_PREFIX="$(brew --prefix)"
-	exec_cmd "eval \"\$(${HOMEBREW_PREFIX/#${HOME}/\${HOME\}}/bin/brew shellenv)\""
 fi
+
+exec_cmd "eval \"\$(${HOMEBREW_PREFIX/#${HOME}/\${HOME\}}/bin/brew shellenv)\""
+exec_cmd 'brew update'
 
 if ${SET_MIRRORS}; then
 	exec_cmd "brew tap --custom-remote --force-auto-update homebrew/command-not-found https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-command-not-found.git"

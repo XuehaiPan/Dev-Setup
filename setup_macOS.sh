@@ -134,20 +134,21 @@ function wget() {
 }
 
 # Install and setup Homebrew
-if [[ ! -x "$(command -v brew)" ]]; then
+if [[ ! -x "${HOMEBREW_PREFIX}/bin/brew" ]]; then
 	exec_cmd 'xcode-select --install'
 	if ${SET_MIRRORS}; then
 		exec_cmd 'export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"'
 		exec_cmd 'export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git"'
 		exec_cmd 'export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles"'
 		exec_cmd "git clone --depth=1 https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/install.git \"${TMP_DIR}/brew-install\""
-		exec_cmd "/bin/bash \"${TMP_DIR}/brew-install/install.sh\""
+		exec_cmd "NONINTERACTIVE=1 /bin/bash \"${TMP_DIR}/brew-install/install.sh\""
 	else
-		exec_cmd '/bin/bash -c "$(curl -fsSL https://github.com/Homebrew/install/raw/HEAD/install.sh)"'
+		exec_cmd 'NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://github.com/Homebrew/install/raw/HEAD/install.sh)"'
 	fi
 fi
 
 exec_cmd "eval \"\$(${HOMEBREW_PREFIX}/bin/brew shellenv)\""
+exec_cmd 'brew update'
 
 if ${SET_MIRRORS}; then
 	for tap in core cask{,-fonts,-drivers,-versions} command-not-found; do

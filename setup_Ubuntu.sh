@@ -574,6 +574,16 @@ export OMPI_CC="${CC}" MPICH_CC="${CC}"
 export OMPI_CXX="${CXX}" MPICH_CXX="${CXX}"
 export OMPI_FC="${FC}" MPICH_FC="${FC}"
 
+# CUDA Toolkit
+if [[ -d "/usr/local/cuda" ]]; then
+	export CUDA_HOME="/usr/local/cuda"
+	export PATH="${CUDA_HOME}/bin${PATH:+:"${PATH}"}"
+	export C_INCLUDE_PATH="${CUDA_HOME}/include:${CUDA_HOME}/extras/CUPTI/include${C_INCLUDE_PATH:+:"${C_INCLUDE_PATH}"}"
+	export CPLUS_INCLUDE_PATH="${CUDA_HOME}/include:${CUDA_HOME}/extras/CUPTI/include${CPLUS_INCLUDE_PATH:+:"${CPLUS_INCLUDE_PATH}"}"
+	export LIBRARY_PATH="${CUDA_HOME}/lib64:${CUDA_HOME}/extras/CUPTI/lib64${LIBRARY_PATH:+:"${LIBRARY_PATH}"}"
+	export LD_LIBRARY_PATH="${CUDA_HOME}/lib64:${CUDA_HOME}/extras/CUPTI/lib64${LD_LIBRARY_PATH:+:"${LD_LIBRARY_PATH}"}"
+fi
+
 # Zsh
 export FPATH="${HOMEBREW_PREFIX}/share/zsh/site-functions${FPATH:+:"${FPATH}"}:${HOMEBREW_PREFIX}/share/zsh/functions"
 
@@ -1293,6 +1303,16 @@ export FC="/usr/bin/gfortran"
 export OMPI_CC="${CC}" MPICH_CC="${CC}"
 export OMPI_CXX="${CXX}" MPICH_CXX="${CXX}"
 export OMPI_FC="${FC}" MPICH_FC="${FC}"
+
+# CUDA Toolkit
+if [[ -d "/usr/local/cuda" ]]; then
+	export CUDA_HOME="/usr/local/cuda"
+	export PATH="${CUDA_HOME}/bin${PATH:+:"${PATH}"}"
+	export C_INCLUDE_PATH="${CUDA_HOME}/include:${CUDA_HOME}/extras/CUPTI/include${C_INCLUDE_PATH:+:"${C_INCLUDE_PATH}"}"
+	export CPLUS_INCLUDE_PATH="${CUDA_HOME}/include:${CUDA_HOME}/extras/CUPTI/include${CPLUS_INCLUDE_PATH:+:"${CPLUS_INCLUDE_PATH}"}"
+	export LIBRARY_PATH="${CUDA_HOME}/lib64:${CUDA_HOME}/extras/CUPTI/lib64${LIBRARY_PATH:+:"${LIBRARY_PATH}"}"
+	export LD_LIBRARY_PATH="${CUDA_HOME}/lib64:${CUDA_HOME}/extras/CUPTI/lib64${LD_LIBRARY_PATH:+:"${LD_LIBRARY_PATH}"}"
+fi
 
 # Ruby
 if [[ -x "$(command -v ruby)" && -x "$(command -v gem)" ]]; then

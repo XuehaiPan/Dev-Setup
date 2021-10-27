@@ -575,13 +575,15 @@ export OMPI_CXX="${CXX}" MPICH_CXX="${CXX}"
 export OMPI_FC="${FC}" MPICH_FC="${FC}"
 
 # CUDA Toolkit
-if [[ -d "/usr/local/cuda" ]]; then
-	export CUDA_HOME="/usr/local/cuda"
+export CUDA_HOME="${CUDA_HOME:-/usr/local/cuda}"
+if [[ -d "${CUDA_HOME}" ]]; then
 	export PATH="${CUDA_HOME}/bin${PATH:+:"${PATH}"}"
 	export C_INCLUDE_PATH="${CUDA_HOME}/include:${CUDA_HOME}/extras/CUPTI/include${C_INCLUDE_PATH:+:"${C_INCLUDE_PATH}"}"
 	export CPLUS_INCLUDE_PATH="${CUDA_HOME}/include:${CUDA_HOME}/extras/CUPTI/include${CPLUS_INCLUDE_PATH:+:"${CPLUS_INCLUDE_PATH}"}"
 	export LIBRARY_PATH="${CUDA_HOME}/lib64:${CUDA_HOME}/extras/CUPTI/lib64${LIBRARY_PATH:+:"${LIBRARY_PATH}"}"
 	export LD_LIBRARY_PATH="${CUDA_HOME}/lib64:${CUDA_HOME}/extras/CUPTI/lib64${LD_LIBRARY_PATH:+:"${LD_LIBRARY_PATH}"}"
+else
+	unset CUDA_HOME
 fi
 
 # Zsh
@@ -1305,13 +1307,15 @@ export OMPI_CXX="${CXX}" MPICH_CXX="${CXX}"
 export OMPI_FC="${FC}" MPICH_FC="${FC}"
 
 # CUDA Toolkit
-if [[ -d "/usr/local/cuda" ]]; then
-	export CUDA_HOME="/usr/local/cuda"
+export CUDA_HOME="${CUDA_HOME:-/usr/local/cuda}"
+if [[ -d "${CUDA_HOME}" ]]; then
 	export PATH="${CUDA_HOME}/bin${PATH:+:"${PATH}"}"
 	export C_INCLUDE_PATH="${CUDA_HOME}/include:${CUDA_HOME}/extras/CUPTI/include${C_INCLUDE_PATH:+:"${C_INCLUDE_PATH}"}"
 	export CPLUS_INCLUDE_PATH="${CUDA_HOME}/include:${CUDA_HOME}/extras/CUPTI/include${CPLUS_INCLUDE_PATH:+:"${CPLUS_INCLUDE_PATH}"}"
 	export LIBRARY_PATH="${CUDA_HOME}/lib64:${CUDA_HOME}/extras/CUPTI/lib64${LIBRARY_PATH:+:"${LIBRARY_PATH}"}"
 	export LD_LIBRARY_PATH="${CUDA_HOME}/lib64:${CUDA_HOME}/extras/CUPTI/lib64${LD_LIBRARY_PATH:+:"${LD_LIBRARY_PATH}"}"
+else
+	unset CUDA_HOME
 fi
 
 # Ruby

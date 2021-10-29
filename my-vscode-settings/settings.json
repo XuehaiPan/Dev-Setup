@@ -256,7 +256,7 @@
     "bracket-pair-colorizer-2.highlightActiveScope": true,
 
     //* C/C++ */
-    "C_Cpp.default.compilerPath": "/usr/bin/gcc",
+    "C_Cpp.default.compilerPath": "gcc",
     "C_Cpp.default.cppStandard": "c++17",
     "C_Cpp.default.cStandard": "c11",
     "C_Cpp.default.intelliSenseMode": "gcc-x64",
@@ -283,8 +283,8 @@
 
     //* Cmake Tools */
     "cmake.cmakePath": "cmake",
-    "cmake.sourceDirectory": "${workspaceRoot}",
-    "cmake.buildDirectory": "${workspaceRoot}/cmake-build-${buildType}",
+    "cmake.sourceDirectory": "${workspaceFolder}",
+    "cmake.buildDirectory": "${workspaceFolder}/cmake-build-${buildType}",
     "cmake.configureOnEdit": true,
     "cmake.clearOutputBeforeBuild": true,
     "cmake.saveBeforeBuild": true,
@@ -799,8 +799,8 @@
     },
 
     //* Matlab */
-    "matlab.matlabpath": "/Applications/MATLAB_R2020a.app/bin/matlab",
-    "matlab.mlintpath": "/Applications/MATLAB_R2020a.app/bin/maci64/mlint",
+    "matlab.matlabpath": "/Applications/MATLAB_R2021b.app/bin/matlab",
+    "matlab.mlintpath": "/Applications/MATLAB_R2021b.app/bin/maci64/mlint",
     "matlab.lintOnSave": true,
     "matlab.linterEncoding": "utf8",
 

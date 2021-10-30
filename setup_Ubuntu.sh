@@ -258,7 +258,7 @@ EOS
 	exec_cmd 'sudo apt-get install htop ssh net-tools exfat-utils atool tree colordiff xclip --yes'
 	exec_cmd 'sudo apt-get install make cmake automake autoconf build-essential gcc g++ gdb --yes'
 	exec_cmd 'sudo apt-get install clang clang-format llvm lldb ruby-full libssl-dev libreadline-dev --yes'
-	exec_cmd 'sudo apt-get autoremove --yes'
+	exec_cmd 'sudo apt-get autoremove --purge --yes'
 	exec_cmd 'sudo apt-get autoclean'
 fi
 
@@ -956,7 +956,7 @@ function upgrade_ubuntu() {
 	exec_cmd 'sudo apt-get upgrade --yes'
 
 	# Remove unused packages
-	exec_cmd 'sudo apt-get autoremove --yes'
+	exec_cmd 'sudo apt-get autoremove --purge --yes'
 
 	# Clean up cache
 	exec_cmd 'sudo apt-get autoclean'

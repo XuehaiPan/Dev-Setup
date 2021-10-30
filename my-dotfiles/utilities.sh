@@ -72,7 +72,7 @@ function exec_cmd() {
 		}
 		END {
 			printf("%s\n", RESET);
-		}'
+		}' >&2
 	eval "$@"
 }
 

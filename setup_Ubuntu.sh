@@ -7,7 +7,6 @@ export SET_MIRRORS="${SET_MIRRORS:-false}"
 export USER="${USER:-"$(whoami)"}"
 
 # Set configuration backup directory
-umask go-w
 DATETIME="$(date +"%Y-%m-%d-%T")"
 BACKUP_DIR="${HOME}/.dotfiles/backups/${DATETIME}"
 mkdir -p "${BACKUP_DIR}/.dotfiles"

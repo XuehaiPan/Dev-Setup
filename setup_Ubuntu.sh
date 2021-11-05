@@ -184,6 +184,7 @@ EOS
 
 	exec_cmd 'sudo apt-get update'
 	exec_cmd 'sudo apt-get install software-properties-common apt-transport-https wget --yes'
+	exec_cmd 'sudo add-apt-repository ppa:graphics-drivers/ppa --yes'
 	exec_cmd 'sudo add-apt-repository ppa:jonathonf/vim --yes'
 	exec_cmd 'wget -qO - https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -'
 	if ! grep -qF 'packages.microsoft.com/repos/vscode' /etc/apt/sources.list; then

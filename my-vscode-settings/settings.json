@@ -15,8 +15,11 @@
     "editor.detectIndentation": true,
     "editor.folding": true,
     "editor.foldingStrategy": "auto",
-    "editor.guides.highlightActiveIndentation": true,
+    "editor.guides.bracketPairs": true,
+    "editor.guides.bracketPairsHorizontal": true,
+    "editor.guides.highlightActiveBracketPair": true,
     "editor.guides.indentation": true,
+    "editor.guides.highlightActiveIndentation": true,
     "editor.wordWrapColumn": 120,
     "editor.rulers": [
         80,
@@ -925,6 +928,14 @@
     "mssql.intelliSense.enableSuggestions": true,
     "mssql.intelliSense.lowerCaseSuggestions": true,
     "mssql.showBatchTime": true,
+    "mssql.connections": [
+        {
+            "server": "{{put-server-name-here}}",
+            "database": "{{put-database-name-here}}",
+            "user": "{{put-username-here}}",
+            "password": ""
+        }
+    ],
 
     //* TabNine */
     "tabnine.experimentalAutoImports": true,

@@ -279,7 +279,7 @@ GITSTATUS_NUM_THREADS=4
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
-	osx
+	macos
 	zsh-syntax-highlighting
 	zsh-autosuggestions
 	zsh-completions

@@ -721,6 +721,13 @@
             ]
         }
     ],
+    "latex-workshop.latexindent.args": [
+        "-c",
+        "%DIR%",
+        "%TMPFILE%",
+        "-y",
+        "defaultIndent: '%INDENT%', verbatimEnvironments:nameAsRegex:name: '\\w+code\\*?'"
+    ],
     "latex-workshop.latex.clean.fileTypes": [
         "*.xdv",
         "*.aux",

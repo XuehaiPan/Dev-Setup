@@ -847,13 +847,10 @@
     "powershell.scriptAnalysis.enable": true,
 
     //* Python */
-    "python.autoComplete.addBrackets": true,
-    "python.autoComplete.showAdvancedMembers": true,
     "python.analysis.autoImportCompletions": true,
     "python.analysis.autoSearchPaths": true,
     "python.analysis.completeFunctionParens": true,
     "python.analysis.useLibraryCodeForTypes": true,
-    "python.autoUpdateLanguageServer": true,
     "python.condaPath": "~/Miniconda3/condabin/conda",
     "python.defaultInterpreterPath": "~/Miniconda3/envs/python38/bin/python",
     "python.terminal.activateEnvironment": true,

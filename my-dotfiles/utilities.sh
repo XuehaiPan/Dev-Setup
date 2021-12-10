@@ -190,6 +190,8 @@ function upgrade_packages() {
 	elif [[ -n "${BASH_VERSION}" ]]; then
 		if [[ -f "${HOME}/.bash_profile" ]]; then
 			source "${HOME}/.bash_profile"
+		elif [[ -f "${HOME}/.profile" ]]; then
+			source "${HOME}/.profile"
 		fi
 	fi
 }

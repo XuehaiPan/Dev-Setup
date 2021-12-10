@@ -335,7 +335,6 @@ fi
 if [[ ! -x "$(command -v brew)" ]]; then
 	HOMEBREW_PREFIX="/home/linuxbrew/.linuxbrew"
 	if ${IS_SUDOER} && [[ ! -d "${HOMEBREW_PREFIX}" || "$(/usr/bin/stat --printf "%u" "${HOMEBREW_PREFIX}")" == "${UID}" ]]; then
-		HOMEBREW_PREFIX="/home/linuxbrew/.linuxbrew"
 		if ${SET_MIRRORS}; then
 			exec_cmd "git clone --depth=1 https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/install.git \"${TMP_DIR}/brew-install\""
 			exec_cmd "NONINTERACTIVE=1 /bin/bash \"${TMP_DIR}/brew-install/install.sh\""
@@ -1083,7 +1082,9 @@ function upgrade_packages() {
 			source "${ZDOTDIR:-"${HOME}"}/.zshrc"
 		fi
 	elif [[ -n "${BASH_VERSION}" ]]; then
-		if [[ -f "${HOME}/.profile" ]]; then
+		if [[ -f "${HOME}/.bash_profile" ]]; then
+			source "${HOME}/.bash_profile"
+		elif [[ -f "${HOME}/.profile" ]]; then
 			source "${HOME}/.profile"
 		fi
 	fi
@@ -1213,12 +1214,12 @@ mv -f .bashrc .dotfiles/.bashrc
 ln -sf .dotfiles/.bashrc .
 chmod 644 .dotfiles/.bashrc
 
-backup_dotfiles .profile .dotfiles/.profile
+backup_dotfiles .bash_profile .dotfiles/.bash_profile
 
-cat >.dotfiles/.profile <<'EOF'
-# ~/.profile: executed by the command interpreter for login shells.
-# This file is not read by bash(1), if ~/.bash_profile or ~/.bash_login
-# exists.
+cat >.dotfiles/.bash_profile <<'EOF'
+#
+# ~/.bash_profile
+#
 # See /usr/share/doc/bash/examples/startup-files for examples.
 # The files are located in the bash-doc package.
 
@@ -1273,7 +1274,7 @@ fi
 export LC_ALL="en_US.utf8"
 
 EOF
-cat >>.dotfiles/.profile <<EOF
+cat >>.dotfiles/.bash_profile <<EOF
 ${HOMEBREW_SETTINGS}
 
 # Anaconda
@@ -1297,7 +1298,7 @@ fi
 # <<< conda initialize <<<
 
 EOF
-cat >>.dotfiles/.profile <<'EOF'
+cat >>.dotfiles/.bash_profile <<'EOF'
 # CXX Compilers
 export CC="/usr/bin/gcc"
 export CXX="/usr/bin/g++"
@@ -1390,8 +1391,8 @@ elif [[ -r "/etc/bash_completion" ]]; then
 fi
 EOF
 
-ln -sf .dotfiles/.profile .
-chmod 644 .dotfiles/.profile
+ln -sf .dotfiles/.bash_profile .
+chmod 644 .dotfiles/.bash_profile
 
 # Configurations for Vim
 backup_dotfiles .vimrc .dotfiles/.vimrc

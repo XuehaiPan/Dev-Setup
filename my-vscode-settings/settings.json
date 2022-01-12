@@ -20,6 +20,7 @@
     "editor.guides.highlightActiveBracketPair": true,
     "editor.guides.indentation": true,
     "editor.guides.highlightActiveIndentation": true,
+    "editor.bracketPairColorization.enabled": true,
     "editor.wordWrapColumn": 120,
     "editor.rulers": [
         80,
@@ -69,9 +70,17 @@
     "workbench.editor.closeOnFileDelete": false,
     "workbench.editor.enablePreview": true,
     "workbench.editor.highlightModifiedTabs": true,
-    "workbench.fontAliasing": "auto",
     "workbench.settings.editor": "ui",
     "workbench.settings.useSplitJSON": true,
+    "workbench.colorCustomizations": {
+        "editorBracketHighlight.foreground1": "#ffd700",
+        "editorBracketHighlight.foreground2": "#ff1491",
+        "editorBracketHighlight.foreground3": "#00bfff",
+        "editorBracketHighlight.foreground4": "#ff8c00",
+        "editorBracketHighlight.foreground5": "#32cd32",
+        "editorBracketHighlight.foreground6": "#ee82ee",
+        "editorBracketHighlight.unexpectedBracket.foreground": "#ffffff"
+    },
     "workbench.editorAssociations": {
         "*.ipynb": "jupyter-notebook"
     },
@@ -237,27 +246,6 @@
     //* Better Comments */
     "better-comments.highlightPlainText": true,
     "better-comments.multilineComments": true,
-
-    //* Bracket Pair Colorizer */
-    "bracket-pair-colorizer-2.depreciation-notice": false,
-    "bracket-pair-colorizer-2.colorMode": "Consecutive",
-    "bracket-pair-colorizer-2.colors": [
-        "Gold",
-        "DeepPink",
-        "Cyan",
-        "DarkOrange",
-        "LimeGreen",
-        "Magenta",
-        "DeepSkyBlue",
-        "HotPink",
-        "LightSeaGreen",
-        "Orchid"
-    ],
-    "bracket-pair-colorizer-2.showBracketsInGutter": true,
-    "bracket-pair-colorizer-2.showBracketsInRuler": true,
-    "bracket-pair-colorizer-2.showHorizontalScopeLine": true,
-    "bracket-pair-colorizer-2.showVerticalScopeLine": true,
-    "bracket-pair-colorizer-2.highlightActiveScope": true,
 
     //* C/C++ */
     "C_Cpp.default.compilerPath": "gcc",

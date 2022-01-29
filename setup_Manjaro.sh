@@ -743,13 +743,15 @@ else
 	# Use Powerlevel10k Lean style
 	source "${ZSH_CUSTOM}/themes/powerlevel10k/config/p10k-lean.zsh"
 	POWERLEVEL9K_MODE="compatible"
-	POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context root_indicator dir vcs newline prompt_char)
-	POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status command_execution_time background_jobs virtualenv anaconda pyenv time)
+	POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(virtualenv anaconda pyenv context root_indicator dir vcs newline prompt_char)
+	POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status command_execution_time background_jobs time ssh)
 	POWERLEVEL9K_MULTILINE_FIRST_PROMPT_GAP_CHAR='·'
 	POWERLEVEL9K_LEFT_PROMPT_LAST_SEGMENT_END_SYMBOL=' '
 	POWERLEVEL9K_RIGHT_PROMPT_FIRST_SEGMENT_START_SYMBOL=' '
 	POWERLEVEL9K_EMPTY_LINE_LEFT_PROMPT_FIRST_SEGMENT_END_SYMBOL='%{%}'
 	POWERLEVEL9K_EMPTY_LINE_RIGHT_PROMPT_FIRST_SEGMENT_START_SYMBOL='%{%}'
+	POWERLEVEL9K_ANACONDA_SHOW_PYTHON_VERSION=true
+	POWERLEVEL9K_VIRTUALENV_SHOW_PYTHON_VERSION=true
 	p10k reload
 fi
 EOF

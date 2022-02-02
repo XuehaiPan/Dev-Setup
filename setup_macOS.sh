@@ -850,6 +850,34 @@ function exec_cmd() {
 	eval "$@"
 }
 
+function have_sudo_access() {
+	if [[ "${EUID:-"${UID}"}" == "0" ]]; then
+		return 0
+	fi
+
+	if [[ ! -x "/usr/bin/sudo" ]]; then
+		return 1
+	fi
+
+	local -a SUDO=("/usr/bin/sudo")
+	if [[ -n "${SUDO_ASKPASS-}" ]]; then
+		SUDO+=("-A")
+	fi
+
+	if [[ -z "${__HAVE_SUDO_ACCESS-}" ]]; then
+		local RESET="\033[0m"
+		local BOLD="\033[1m"
+		local YELLOW="\033[33m"
+		local BLUE="\033[34m"
+		local WHITE="\033[37m"
+		echo -e "${BOLD}${BLUE}==> ${WHITE}Checking sudo access (press ${YELLOW}Ctrl+C${WHITE} to run as normal user).${RESET}" >&2
+		exec_cmd "${SUDO[*]} -v && ${SUDO[*]} -l mkdir &>/dev/null"
+		__HAVE_SUDO_ACCESS="$?"
+	fi
+
+	return "${__HAVE_SUDO_ACCESS}"
+}
+
 function upgrade_homebrew() {
 	# Upgrade Homebrew
 	exec_cmd 'brew update --verbose'
@@ -943,6 +971,8 @@ function foreach_conda_env_do() {
 }
 
 function upgrade_packages() {
+	unset __HAVE_SUDO_ACCESS
+
 	upgrade_homebrew
 	upgrade_ohmyzsh
 	upgrade_fzf

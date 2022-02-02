@@ -110,6 +110,40 @@ function exec_cmd() {
 	eval "$@"
 }
 
+unset HAVE_SUDO_ACCESS
+
+function have_sudo_access() {
+	if [[ "${EUID:-"${UID}"}" == "0" ]]; then
+		return 0
+	fi
+
+	if [[ ! -x "/usr/bin/sudo" ]]; then
+		return 1
+	fi
+
+	local -a SUDO=("/usr/bin/sudo")
+	if [[ -n "${SUDO_ASKPASS-}" ]]; then
+		SUDO+=("-A")
+	fi
+
+	if [[ -z "${HAVE_SUDO_ACCESS-}" ]]; then
+		local RESET="\033[0m"
+		local BOLD="\033[1m"
+		local BLUE="\033[34m"
+		local WHITE="\033[37m"
+		echo -e "${BOLD}${BLUE}==> ${WHITE}Checking sudo access.${RESET}" >&2
+		exec_cmd "${SUDO[*]} -v && ${SUDO[*]} -l mkdir &>/dev/null"
+		HAVE_SUDO_ACCESS="$?"
+	fi
+
+	if [[ "${HAVE_SUDO_ACCESS}" -ne 0 ]]; then
+		echo "Need sudo access on macOS (e.g. the user ${USER} needs to be an Administrator)" >&2
+		exit 1
+	fi
+
+	return "${HAVE_SUDO_ACCESS}"
+}
+
 function realpath() {
 	/usr/bin/python3 -c "import os,sys; print(os.path.realpath(sys.argv[1]))" "$1"
 }

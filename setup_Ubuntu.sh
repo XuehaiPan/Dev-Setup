@@ -16,12 +16,6 @@ chmod 755 "${HOME}/.dotfiles"
 # Set temporary directory
 TMP_DIR="$(mktemp -d -t dev-setup.XXXXXX)"
 
-# Check if has sudo privileges
-IS_SUDOER=false
-if groups | grep -qE '(sudo|root)'; then
-	IS_SUDOER=true
-fi
-
 # Check if in WSL
 IN_WSL=false
 if [[ -n "${WSL_DISTRO_NAME}" ]] || (uname -r | grep -qiF 'microsoft'); then
@@ -115,6 +109,36 @@ function exec_cmd() {
 	eval "$@"
 }
 
+unset HAVE_SUDO_ACCESS
+
+function have_sudo_access() {
+	if [[ "${EUID:-"${UID}"}" == "0" ]]; then
+		return 0
+	fi
+
+	if [[ ! -x "/usr/bin/sudo" ]]; then
+		return 1
+	fi
+
+	local -a SUDO=("/usr/bin/sudo")
+	if [[ -n "${SUDO_ASKPASS-}" ]]; then
+		SUDO+=("-A")
+	fi
+
+	if [[ -z "${HAVE_SUDO_ACCESS-}" ]]; then
+		local RESET="\033[0m"
+		local BOLD="\033[1m"
+		local YELLOW="\033[33m"
+		local BLUE="\033[34m"
+		local WHITE="\033[37m"
+		echo -e "${BOLD}${BLUE}==> ${WHITE}Checking sudo access (press ${YELLOW}Ctrl+C${WHITE} to run as normal user).${RESET}" >&2
+		exec_cmd "${SUDO[*]} -v && ${SUDO[*]} -l mkdir &>/dev/null"
+		HAVE_SUDO_ACCESS="$?"
+	fi
+
+	return "${HAVE_SUDO_ACCESS}"
+}
+
 function backup_dotfiles() {
 	local file original_file
 	for file in "$@"; do
@@ -159,7 +183,7 @@ function check_binary() {
 	return 1
 }
 
-if ${IS_SUDOER}; then
+if have_sudo_access; then
 	# Setup APT sources
 	if ${SET_MIRRORS}; then
 		while read -r sources_list; do
@@ -266,7 +290,7 @@ fi
 # Change the login shell to Zsh
 if [[ "$(basename "${SHELL}")" != "zsh" ]]; then
 	CHSH="chsh"
-	if ${IS_SUDOER}; then
+	if have_sudo_access; then
 		CHSH="sudo chsh"
 	fi
 	if grep -qF '/usr/bin/zsh' /etc/shells; then
@@ -334,7 +358,7 @@ if ${SET_MIRRORS}; then
 fi
 if [[ ! -x "$(command -v brew)" ]]; then
 	HOMEBREW_PREFIX="/home/linuxbrew/.linuxbrew"
-	if ${IS_SUDOER} && [[ ! -d "${HOMEBREW_PREFIX}" || "$(/usr/bin/stat --printf "%u" "${HOMEBREW_PREFIX}")" == "${UID}" ]]; then
+	if have_sudo_access && [[ ! -d "${HOMEBREW_PREFIX}" || "$(/usr/bin/stat --printf "%u" "${HOMEBREW_PREFIX}")" == "${UID}" ]]; then
 		if ${SET_MIRRORS}; then
 			exec_cmd "git clone --depth=1 https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/install.git \"${TMP_DIR}/brew-install\""
 			exec_cmd "NONINTERACTIVE=1 /bin/bash \"${TMP_DIR}/brew-install/install.sh\""
@@ -853,7 +877,7 @@ cat >"${TMP_DIR}/zsh-lean" <<EOF
 ${SHEBANG}
 ${COMMAND}
 EOF
-if ${IS_SUDOER}; then
+if have_sudo_access; then
 	if [[ ! -d "/usr/local/bin" ]]; then
 		exec_cmd 'sudo mkdir -p "/usr/local/bin"'
 	fi

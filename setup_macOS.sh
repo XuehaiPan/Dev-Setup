@@ -870,7 +870,7 @@ function have_sudo_access() {
 		local YELLOW="\033[33m"
 		local BLUE="\033[34m"
 		local WHITE="\033[37m"
-		echo -e "${BOLD}${BLUE}==> ${WHITE}Checking sudo access (press ${YELLOW}Ctrl+C${WHITE} to run as normal user).${RESET}" >&2
+		echo -e "${BOLD}${BLUE}==> ${WHITE}Checking sudo access (press ${YELLOW}Control+C${WHITE} to run as normal user).${RESET}" >&2
 		exec_cmd "${SUDO[*]} -v && ${SUDO[*]} -l mkdir &>/dev/null"
 		__HAVE_SUDO_ACCESS="$?"
 	fi

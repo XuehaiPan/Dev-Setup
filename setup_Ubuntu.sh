@@ -775,7 +775,7 @@ plugins=(
 	fd
 	fzf
 	copyfile
-	copydir
+	copypath
 	cp
 	rsync
 	alias-finder

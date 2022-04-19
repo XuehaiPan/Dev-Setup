@@ -1631,6 +1631,7 @@ call plug#begin('~/.vim/plugged')
     Plug 'tpope/vim-surround'
     Plug 'mg979/vim-visual-multi'
     Plug 'tpope/vim-unimpaired'
+    Plug 'tpope/vim-endwise'
     Plug 'mbbill/undotree'
     Plug 'airblade/vim-gitgutter'
     Plug 'tpope/vim-fugitive'

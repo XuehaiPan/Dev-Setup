@@ -35,7 +35,9 @@ if (Test-Path -Path ~\Miniconda3\shell\condabin\conda-hook.ps1) {
     . ~\Miniconda3\shell\condabin\conda-hook.ps1
 }
 
-Set-PoshPrompt -Theme ys -ErrorAction:Ignore
+`$Env:POSH_PREFIX = (Split-Path -Resolve -Parent -Path (Split-Path -Parent -Path (Get-Command oh-my-posh).Source))
+`$Env:POSH_THEMES_PATH = (Join-Path -Resolve -Path "`$Env:POSH_PREFIX" -Child "themes")
+oh-my-posh init pwsh --config (Join-Path -Path "`$Env:POSH_THEMES_PATH" -Child "ys.omp.json") | Invoke-Expression
 Set-PSReadLineOption -EditMode Emacs
 Set-PSReadLineKeyHandler -Key UpArrow -Function HistorySearchBackward
 Set-PSReadLineKeyHandler -Key DownArrow -Function HistorySearchForward

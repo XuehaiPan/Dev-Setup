@@ -17,7 +17,6 @@ choco install powershell-core git --yes
 # Setup PowerShell
 Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
 Install-Module -Name posh-git -AcceptLicense -Force -Confirm:$false
-Install-Module -Name oh-my-posh -AcceptLicense -Force -Confirm:$false
 Install-Module -Name PSReadLine -SkipPublisherCheck -AcceptLicense -Force -Confirm:$false
 Install-Module -Name Get-ChildItemColor -AllowClobber -AcceptLicense -Force -Confirm:$false
 
@@ -87,13 +86,12 @@ Function Reset-Proxy() {
 "@ | Set-Content -Path $PROFILE.CurrentUserAllHosts -Encoding utf8
 
 Update-SessionEnvironment
-. $PROFILE.CurrentUserAllHosts
 
 # Install Chocolatey packages
 choco install vim --params="'/InstallDir:$Env:ChocolateyToolsLocation\Vim /NoDesktopShortcuts'" --yes
 choco install python3 --params="'/InstallDir:$Env:ChocolateyToolsLocation\Python3'" --yes
 choco install cmake --installargs="'ADD_CMAKE_TO_PATH=System'" --yes
-choco install vscode conemu mobaxterm vcxsrv --yes
+choco install vscode conemu mobaxterm oh-my-posh vcxsrv --yes
 choco install fzf bat ripgrep shellcheck wget mingw --yes
 
 # Setup Vim

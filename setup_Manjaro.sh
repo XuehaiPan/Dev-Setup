@@ -157,19 +157,49 @@ function wget() {
 	command wget --no-verbose --timeout=10 --show-progress --progress=bar:force:noscroll "$@"
 }
 
+function curl() {
+	command curl --fail --show-error --location --retry 3 "$@"
+}
+
+function wait_for() {
+	local MESSAGE="$2" TIME="$1" t s="s"
+	echo "${MESSAGE}" >&2
+	echo -ne "\033[?25l" >&2
+	for ((t = TIME; t > 0; --t)); do
+		((t > 1)) || s=""
+		echo -ne "Wait for ${t} second${s}.\033[K\r" >&2
+		sleep 1
+	done
+	echo -ne "\033[K\033[?25h" >&2
+}
+
 function get_latest_version() {
-	local REPO="$1" VERSION="" i
-	for ((i = 0; i < 5; ++i)); do
+	# Usage: get_latest_version repo timeout
+	local REPO="$1" VERSION=""
+	local URL="https://api.github.com/repos/${REPO}/releases/latest"
+	local TIMEOUT="${2:-300}"
+	local TIME=0 INTERVAL=1 t
+
+	echo "Checking latest version of ${REPO}..." >&2
+	while true; do
+		((TIME > 0)) && echo "Retrying..." >&2
+
 		VERSION="$(
-			curl --silent --connect-timeout 10 "https://api.github.com/repos/${REPO}/releases/latest" |
+			curl --silent --connect-timeout 10 "${URL}" |
 				grep '"tag_name":' |
-				sed -E 's/^.*:\s*"([^"]+)",?$/\1/'
+				sed -E 's/^.*: *"([^"]+)",?$/\1/'
 		)"
-		if [[ -n "${VERSION}" ]]; then
+		if [[ -n "${VERSION}" ]] || ((TIME >= TIMEOUT)); then
 			break
 		fi
+
+		wait_for "${INTERVAL}" "Failed to find latest release of ${REPO}."
+		TIME="$((TIME + INTERVAL))"
+		INTERVAL="$((INTERVAL * 2))"
 	done
+
 	echo "${VERSION}"
+	[[ -n "${VERSION}" ]]
 }
 
 if have_sudo_access; then

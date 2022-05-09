@@ -153,7 +153,7 @@
     "outline.problems.enabled": true,
 
     //* Debug */
-    "debug.inlineValues": true,
+    "debug.inlineValues": "auto",
     "debug.openExplorerOnEnd": true,
 
     //* Integrated Terminal */
@@ -891,9 +891,6 @@
         "ms-python.vscode-pylance",
         "ms-toolsai.jupyter"
     ],
-
-    //* reStructuredText */
-    "restructuredtext.languageServer.disabled": true,
 
     //* Settings Sync */
     "sync.autoDownload": false,

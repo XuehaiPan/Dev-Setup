@@ -4,6 +4,7 @@
         "rogalmic.bash-debug",
         "aaron-bond.better-comments",
         "jeff-hykin.better-cpp-syntax",
+        "jeff-hykin.better-dockerfile-syntax",
         "jeff-hykin.better-shellscript-syntax",
         "twxs.cmake",
         "ms-vscode.cmake-tools",
@@ -13,6 +14,7 @@
         "streetsidesoftware.code-spell-checker",
         "ms-vscode.cpptools",
         "EditorConfig.EditorConfig",
+        "kaiwood.endwise",
         "GrapeCity.gc-excelviewer",
         "mhutchie.git-graph",
         "donjayamanne.githistory",
@@ -78,7 +80,6 @@
         "ms-vsliveshare.vsliveshare-pack",
         "ms-vsliveshare.vsliveshare",
         "ms-vsliveshare.vsliveshare-audio",
-        "DotJoshJohnson.xml",
-        "rogalmic.zsh-debug"
+        "DotJoshJohnson.xml"
     ]
 }

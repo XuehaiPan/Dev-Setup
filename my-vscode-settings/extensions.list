@@ -1,81 +1,81 @@
-    "ms-vscode.azure-account",
-    "rogalmic.bash-debug",
-    "aaron-bond.better-comments",
-    "jeff-hykin.better-cpp-syntax",
-    "jeff-hykin.better-dockerfile-syntax",
-    "jeff-hykin.better-shellscript-syntax",
-    "twxs.cmake",
-    "ms-vscode.cmake-tools",
-    "austin.code-gnu-global",
-    "formulahendry.code-runner",
-    "Shan.code-settings-sync",
-    "streetsidesoftware.code-spell-checker",
-    "ms-vscode.cpptools",
-    "EditorConfig.EditorConfig",
-    "kaiwood.endwise",
-    "GrapeCity.gc-excelviewer",
-    "mhutchie.git-graph",
-    "donjayamanne.githistory",
-    "codezombiech.gitignore",
-    "eamodio.gitlens",
-    "golang.go",
-    "k--kato.intellij-idea-keybindings",
-    "redhat.java",
-    "ms-toolsai.jupyter",
-    "julialang.language-julia",
-    "James-Yu.latex-workshop",
-    "tecosaur.latex-utilities",
-    "ritwickdey.LiveServer",
-    "xyz.local-history",
-    "yzhang.markdown-all-in-one",
-    "PKief.material-icon-theme",
-    "Gimly81.matlab",
-    "AffenWiesel.matlab-formatter",
-    "ms-mssql.mssql",
-    "christian-kohler.npm-intellisense",
-    "ryu1kn.partial-diff",
-    "christian-kohler.path-intellisense",
-    "jebbs.plantuml",
-    "ms-vscode.powershell",
-    "ms-python.python",
-    "ms-python.vscode-pylance",
-    "mechatroner.rainbow-csv",
-    "ms-vscode-remote.vscode-remote-extensionpack",
-    "ms-vscode-remote.remote-containers",
-    "ms-vscode-remote.remote-ssh",
-    "ms-vscode-remote.remote-ssh-edit",
-    "ms-vscode-remote.remote-wsl",
-    "lextudio.restructuredtext",
-    "trond-snekvik.simple-rst",
-    "stkb.rewrap",
-    "rebornix.ruby",
-    "alefragnani.separators",
-    "liximomo.sftp",
-    "foxundermoon.shell-format",
-    "timonwong.shellcheck",
-    "TabNine.tabnine-vscode",
-    "Gruntfuggly.todo-tree",
-    "octref.vetur",
-    "dunstontc.viml",
-    "mitaki28.vscode-clang",
-    "ms-azuretools.vscode-docker",
-    "dbaeumer.vscode-eslint",
-    "vscode-icons-team.vscode-icons",
-    "vscjava.vscode-java-pack",
-    "vscjava.vscode-java-debug",
-    "vscjava.vscode-java-dependency",
-    "vscjava.vscode-java-test",
-    "vscjava.vscode-maven",
-    "MS-CEINTL.vscode-language-pack-zh-hans",
-    "DavidAnson.vscode-markdownlint",
-    "formulahendry.vscode-mysql",
-    "eg2.vscode-npm-script",
-    "wingrunr21.vscode-ruby",
-    "ms-vscode.vscode-typescript-next",
-    "ms-vscode.vscode-typescript-tslint-plugin",
-    "redhat.vscode-yaml",
-    "VisualStudioExptTeam.vscodeintellicode",
-    "ms-vsliveshare.vsliveshare-pack",
-    "ms-vsliveshare.vsliveshare",
-    "ms-vsliveshare.vsliveshare-audio",
-    "DotJoshJohnson.xml",
+ms-vscode.azure-account
+rogalmic.bash-debug
+aaron-bond.better-comments
+jeff-hykin.better-cpp-syntax
+jeff-hykin.better-dockerfile-syntax
+jeff-hykin.better-shellscript-syntax
+twxs.cmake
+ms-vscode.cmake-tools
+austin.code-gnu-global
+formulahendry.code-runner
+Shan.code-settings-sync
+streetsidesoftware.code-spell-checker
+ms-vscode.cpptools
+EditorConfig.EditorConfig
+kaiwood.endwise
+GrapeCity.gc-excelviewer
+mhutchie.git-graph
+donjayamanne.githistory
+codezombiech.gitignore
+eamodio.gitlens
+golang.go
+k--kato.intellij-idea-keybindings
+redhat.java
+ms-toolsai.jupyter
+julialang.language-julia
+James-Yu.latex-workshop
+tecosaur.latex-utilities
+ritwickdey.LiveServer
+xyz.local-history
+yzhang.markdown-all-in-one
+PKief.material-icon-theme
+Gimly81.matlab
+AffenWiesel.matlab-formatter
+ms-mssql.mssql
+christian-kohler.npm-intellisense
+ryu1kn.partial-diff
+christian-kohler.path-intellisense
+jebbs.plantuml
+ms-vscode.powershell
+ms-python.python
+ms-python.vscode-pylance
+mechatroner.rainbow-csv
+ms-vscode-remote.vscode-remote-extensionpack
+ms-vscode-remote.remote-containers
+ms-vscode-remote.remote-ssh
+ms-vscode-remote.remote-ssh-edit
+ms-vscode-remote.remote-wsl
+lextudio.restructuredtext
+trond-snekvik.simple-rst
+stkb.rewrap
+rebornix.ruby
+alefragnani.separators
+liximomo.sftp
+foxundermoon.shell-format
+timonwong.shellcheck
+TabNine.tabnine-vscode
+Gruntfuggly.todo-tree
+octref.vetur
+dunstontc.viml
+mitaki28.vscode-clang
+ms-azuretools.vscode-docker
+dbaeumer.vscode-eslint
+vscode-icons-team.vscode-icons
+vscjava.vscode-java-pack
+vscjava.vscode-java-debug
+vscjava.vscode-java-dependency
+vscjava.vscode-java-test
+vscjava.vscode-maven
+MS-CEINTL.vscode-language-pack-zh-hans
+DavidAnson.vscode-markdownlint
+formulahendry.vscode-mysql
+eg2.vscode-npm-script
+wingrunr21.vscode-ruby
+ms-vscode.vscode-typescript-next
+ms-vscode.vscode-typescript-tslint-plugin
+redhat.vscode-yaml
+VisualStudioExptTeam.vscodeintellicode
+ms-vsliveshare.vsliveshare-pack
+ms-vsliveshare.vsliveshare
+ms-vsliveshare.vsliveshare-audio
+DotJoshJohnson.xml

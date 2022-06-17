@@ -214,6 +214,9 @@ function check_binary() {
 }
 
 if have_sudo_access; then
+	# Update ca-certificates
+	exec_cmd 'sudo apt-get update && sudo apt-get install --only-upgrade ca-certificates --yes'
+
 	# Setup APT sources
 	if ${SET_MIRRORS}; then
 		while read -r sources_list; do

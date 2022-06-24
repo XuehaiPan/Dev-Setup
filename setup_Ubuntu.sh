@@ -2389,7 +2389,7 @@ except ImportError:
     pass
 else:
     rich.pretty.install(indent_guides=True)
-    rich.traceback.install(indent_guides=True, width=None, show_locals=True)
+    rich.traceback.install(indent_guides=True, width=None)
 EOF
 
 # Install fonts

@@ -2303,7 +2303,8 @@ LATEST_CASCADIA_VERSION="$(get_latest_version "microsoft/cascadia-code")"
 if [[ $? -eq 0 && -n "${LATEST_CASCADIA_VERSION}" ]]; then
 	URL_LIST+=("https://github.com/microsoft/cascadia-code/releases/latest/download/CascadiaCode-${LATEST_CASCADIA_VERSION#v}.zip")
 fi
-exec_cmd "wget -N -P \"${TMP_DIR}/fonts\" https://github.com/XuehaiPan/Dev-Setup/raw/HEAD/Menlo.ttc"
+exec_cmd "wget -N -P \"${TMP_DIR}/fonts\" https://github.com/XuehaiPan/Dev-Setup/raw/HEAD/fonts/Menlo.ttc"
+exec_cmd "wget -N -P \"${TMP_DIR}/fonts\" https://github.com/XuehaiPan/Dev-Setup/raw/HEAD/fonts/Microsoft-YaHei-Mono.ttf"
 for url in "${URL_LIST[@]}"; do
 	exec_cmd "wget -N -P \"${TMP_DIR}\" ${url}"
 	exec_cmd "unzip -o \"${TMP_DIR}/$(basename "${url}")\" -d \"${TMP_DIR}/fonts\""

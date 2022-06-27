@@ -230,7 +230,8 @@ ln -sf .dotfiles/<CFG_FILE> .
 |                                                                                                                                  |       |              |               |
 | [DejaVu Sans Mono Nerd Font](https://github.com/ryanoasis/nerd-fonts/blob/HEAD/patched-fonts/DejaVuSansMono)                     |   ✔   |      ✔       |       ✔       |
 | [Cascadia Code Font](https://github.com/microsoft/cascadia-code)                                                                 |   ✔   |      ✔       |       ✔       |
-| [Menlo Font](https://github.com/XuehaiPan/Dev-Setup/blob/HEAD/Menlo.zip)                                                         |   ✔   |      ✔       |       ✔       |
+| [Menlo Font](https://github.com/XuehaiPan/Dev-Setup/blob/HEAD/fonts)                                                             |   ✔   |      ✔       |       ✔       |
+| [Microsoft YaHei Mono Font](https://github.com/XuehaiPan/Dev-Setup/blob/HEAD/fonts)                                              |   ✔   |      ✔       |       ✔       |
 
 仅在 macOS 上由 Homebrew 安装的 App：
 

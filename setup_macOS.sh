@@ -2353,6 +2353,7 @@ else:
 EOF
 
 # Miscellaneous settings
+exec_cmd 'wget -N -P "${HOME}/Library/Fonts" https://github.com/XuehaiPan/Dev-Setup/raw/HEAD/fonts/Microsoft-YaHei-Mono.ttf'
 exec_cmd 'defaults write -globalDomain KeyRepeat -int 2'
 exec_cmd 'defaults write -globalDomain InitialKeyRepeat -int 45'
 exec_cmd 'defaults write com.apple.screencapture disable-shadow -boolean true'

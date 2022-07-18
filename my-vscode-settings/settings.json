@@ -46,6 +46,7 @@
     "editor.formatOnPaste": true,
     "editor.formatOnSave": true,
     "editor.formatOnSaveMode": "modifications",
+    "editor.inlineSuggest.enabled": true,
     "editor.suggestSelection": "first",
     "editor.snippetSuggestions": "inline",
     "editor.suggest.filterGraceful": true,
@@ -124,6 +125,7 @@
         "**/*.py[cod]": true,
         "**/__pycache__": true
     },
+    "files.maxMemoryForLargeFilesMB": 10240,
 
     //* File Explorer */
     "explorer.autoReveal": true,
@@ -218,7 +220,11 @@
         "editor.detectIndentation": false,
         "editor.wordWrap": "on",
         "editor.renderWhitespace": "all",
-        "editor.quickSuggestions": true,
+        "editor.quickSuggestions": {
+            "comments": "on",
+            "strings": "on",
+            "other": "on"
+        },
         "editor.acceptSuggestionOnEnter": "off",
         "editor.defaultFormatter": "yzhang.markdown-all-in-one"
     },
@@ -227,13 +233,18 @@
         "editor.formatOnType": false,
         "gitlens.codeLens.symbolScopes": [
             "!Module"
-        ]
+        ],
+        "editor.defaultFormatter": "ms-python.black-formatter"
     },
     "[restructuredtext]": {
         "editor.tabSize": 4,
         "editor.wordWrap": "on",
         "editor.renderWhitespace": "all",
-        "editor.quickSuggestions": true,
+        "editor.quickSuggestions": {
+            "comments": "on",
+            "strings": "on",
+            "other": "on"
+        },
         "editor.acceptSuggestionOnEnter": "off"
     },
     "[shellscript]": {
@@ -751,7 +762,8 @@
         "*.fdb_latexmk",
         "*.synctex(busy)",
         "*.synctex.gz(busy)",
-        "_minted-*/**"
+        "_minted-*/**",
+        "_minted-*/"
     ],
 
     //* LaTeX Utilities */
@@ -869,6 +881,9 @@
     ],
     "jupyter.defaultCellMarker": "# %%",
     "jupyter.jupyterServerType": "local",
+    "notebook.lineNumbers": "on",
+    "notebook.cellToolbarVisibility": "hover",
+    "notebook.showFoldingControls": "always",
 
     //* Remote */
     "remote.extensionKind": {

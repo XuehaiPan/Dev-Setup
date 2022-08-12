@@ -55,7 +55,7 @@ handle_extension() {
         a | ace | alz | arc | arj | bz | bz2 | cab | cpio | deb | \
             gz | jar | lha | lz | lzh | lzma | lzo | rpm | rz | \
             t7z | tar | tbz | tbz2 | tgz | tlz | txz | tZ | tzo | \
-            war | xpi | xz | Z | zip)
+            war | whl | xpi | xz | Z | zip)
             atool --list -- "${FILE_PATH}" && exit 5
             bsdtar --list --file "${FILE_PATH}" && exit 5
             exit 1;;
@@ -406,6 +406,7 @@ handle_mime() {
         ## Executables and shared objects
         application/x-executable | application/x-pie-executable | \
             application/x-sharedlib | application/x-mach-binary)
+            echo "ldd: ${FILE_PATH}" && ldd "${FILE_PATH}"
             objdump --demangle --syms "${FILE_PATH}" && exit 5
             nm --demangle "${FILE_PATH}" && exit 5
             exit 1;;

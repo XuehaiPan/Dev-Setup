@@ -26,6 +26,10 @@ fi
 CONDA_DIR="Miniconda3"
 if [[ -d "${HOME}/miniconda3" && ! -d "${HOME}/Miniconda3" ]]; then
 	CONDA_DIR="miniconda3"
+elif [[ -d "${HOME}/Miniforge3" ]]; then
+	CONDA_DIR="Miniforge3"
+elif [[ -d "${HOME}/miniforge3" ]]; then
+	CONDA_DIR="miniforge3"
 elif [[ -d "${HOME}/Anaconda3" ]]; then
 	CONDA_DIR="Anaconda3"
 elif [[ -d "${HOME}/anaconda3" ]]; then

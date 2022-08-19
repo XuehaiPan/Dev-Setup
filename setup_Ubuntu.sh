@@ -1930,6 +1930,7 @@ ln -sf .dotfiles/.tmux.conf .
 ln -sf .dotfiles/.tmux.conf.local .
 chmod 644 .dotfiles/.tmux.conf .dotfiles/.tmux.conf.local .dotfiles/.tmux.conf.user
 
+sed -i 's/tmux_conf_theme_pane_border="$tmux_conf_theme_colour_2"/tmux_conf_theme_pane_border="$tmux_conf_theme_colour_3"/g' .dotfiles/.tmux.conf.local
 sed -i 's/tmux_conf_copy_to_os_clipboard=false/tmux_conf_copy_to_os_clipboard=true/g' .dotfiles/.tmux.conf.local
 sed -i 's/#set -g history-limit 10000/set -g history-limit 10000/g' .dotfiles/.tmux.conf.local
 sed -i 's/#set -g mouse on/set -g mouse on/g' .dotfiles/.tmux.conf.local

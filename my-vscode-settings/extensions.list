@@ -15,6 +15,7 @@ GitHub.copilot
 ms-vscode.cpptools
 EditorConfig.EditorConfig
 kaiwood.endwise
+tamasfe.even-better-toml
 GrapeCity.gc-excelviewer
 mhutchie.git-graph
 donjayamanne.githistory
@@ -41,7 +42,9 @@ christian-kohler.npm-intellisense
 ryu1kn.partial-diff
 christian-kohler.path-intellisense
 jebbs.plantuml
+mxschmitt.postscript
 ms-vscode.powershell
+esbenp.prettier-vscode
 ms-python.python
 ms-python.vscode-pylance
 ms-python.black-formatter
@@ -52,6 +55,8 @@ ms-vscode-remote.remote-containers
 ms-vscode-remote.remote-ssh
 ms-vscode-remote.remote-ssh-edit
 ms-vscode-remote.remote-wsl
+GitHub.vscode-pull-request-github
+GitHub.remotehub
 lextudio.restructuredtext
 trond-snekvik.simple-rst
 stkb.rewrap
@@ -64,6 +69,7 @@ TabNine.tabnine-vscode
 Gruntfuggly.todo-tree
 octref.vetur
 dunstontc.viml
+BazelBuild.vscode-bazel
 mitaki28.vscode-clang
 ms-azuretools.vscode-docker
 dbaeumer.vscode-eslint

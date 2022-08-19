@@ -86,9 +86,9 @@ fi
 export CONDA_JL_HOME="${HOME}/Miniconda3/envs/python38"
 
 # CXX Compilers
-export CC="${HOMEBREW_PREFIX}/bin/gcc-12"
-export CXX="${HOMEBREW_PREFIX}/bin/g++-12"
-export FC="${HOMEBREW_PREFIX}/bin/gfortran-12"
+export CC="/usr/bin/gcc"
+export CXX="/usr/bin/g++"
+export FC="${HOMEBREW_PREFIX}/bin/gfortran"
 export OMPI_CC="${CC}" MPICH_CC="${CC}"
 export OMPI_CXX="${CXX}" MPICH_CXX="${CXX}"
 export OMPI_FC="${FC}" MPICH_FC="${FC}"

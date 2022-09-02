@@ -7,7 +7,6 @@ jeff-hykin.better-shellscript-syntax
 twxs.cmake
 josetr.cmake-language-support-vscode
 ms-vscode.cmake-tools
-austin.code-gnu-global
 formulahendry.code-runner
 Shan.code-settings-sync
 streetsidesoftware.code-spell-checker
@@ -55,6 +54,7 @@ ms-vscode-remote.remote-containers
 ms-vscode-remote.remote-ssh
 ms-vscode-remote.remote-ssh-edit
 ms-vscode-remote.remote-wsl
+ms-vscode.remote-repositories
 GitHub.vscode-pull-request-github
 GitHub.remotehub
 lextudio.restructuredtext

@@ -437,6 +437,27 @@
     "gitHistory.hideCommitViewExplorer": false,
     "gitHistory.showEditorTitleMenuBarIcons": true,
 
+    //* GitHub */
+    "github.gitProtocol": "ssh",
+    "github.codespaces.defaultExtensions": [
+        "GitHub.codespaces",
+        "GitHub.vscode-pull-request-github",
+        "GitHub.copilot",
+        "EditorConfig.EditorConfig",
+        "mhutchie.git-graph",
+        "donjayamanne.githistory",
+        "eamodio.gitlens",
+        "k--kato.intellij-idea-keybindings",
+        "ryu1kn.partial-diff",
+        "alefragnani.separators",
+        "Gruntfuggly.todo-tree",
+        "ms-python.python",
+        "ms-python.vscode-pylance"
+    ],
+
+    //* GitHub Pull Requests and Issues */
+    "githubPullRequests.pullBranch": "never",
+
     //* GitLens */
     "gitlens.defaultTimeFormat": "HH:mm",
     "gitlens.defaultDateFormat": "MMMM Do, YYYY HH:mm",

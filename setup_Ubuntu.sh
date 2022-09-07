@@ -537,10 +537,6 @@ backup_dotfiles .dotfiles/.zshrc
 
 HOMEBREW_SETTINGS='# Homebrew
 '"eval \"\$(${HOMEBREW_PREFIX/#${HOME}/\${HOME\}}/bin/brew shellenv)\""'
-export C_INCLUDE_PATH="${HOMEBREW_PREFIX}/include${C_INCLUDE_PATH:+:"${C_INCLUDE_PATH}"}"
-export CPLUS_INCLUDE_PATH="${HOMEBREW_PREFIX}/include${CPLUS_INCLUDE_PATH:+:"${CPLUS_INCLUDE_PATH}"}"
-export LIBRARY_PATH="${HOMEBREW_PREFIX}/lib${LIBRARY_PATH:+:"${LIBRARY_PATH}"}"
-export LD_LIBRARY_PATH="${HOMEBREW_PREFIX}/lib${LD_LIBRARY_PATH:+:"${LD_LIBRARY_PATH}"}"
 export HOMEBREW_EDITOR="vim"
 export HOMEBREW_BAT=true'
 if ${SET_MIRRORS}; then

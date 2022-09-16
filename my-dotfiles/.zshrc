@@ -204,23 +204,99 @@ DEFAULT_USER="PanXuehai"
 ZSH_THEME="powerlevel10k/powerlevel10k"
 
 # Powerlevel10k configrations
-POWERLEVEL9K_MODE="nerdfont-complete"
-POWERLEVEL9K_PROMPT_ON_NEWLINE=true
-POWERLEVEL9K_RPROMPT_ON_NEWLINE=false
-POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX=""
-POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="%K{white}%F{black} \ue795 \uf155 %f%k%F{white}\ue0b0%f "
-POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(virtualenv anaconda pyenv context root_indicator dir dir_writable vcs)
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(command_execution_time status background_jobs time ssh)
-POWERLEVEL9K_SHORTEN_DIR_LENGTH=1
-POWERLEVEL9K_SHORTEN_STRATEGY="truncate_to_unique"
-POWERLEVEL9K_DIR_ANCHOR_BOLD=true
-POWERLEVEL9K_DIR_MAX_LENGTH='75%'
-POWERLEVEL9K_SHOW_CHANGESET=true
-POWERLEVEL9K_CHANGESET_HASH_LENGTH=6
-POWERLEVEL9K_VCS_SHORTEN_LENGTH=4
-POWERLEVEL9K_VCS_SHORTEN_MIN_LENGTH=9
-POWERLEVEL9K_VCS_SHORTEN_STRATEGY="truncate_middle"
-GITSTATUS_NUM_THREADS=4
+typeset -g POWERLEVEL9K_MODE="nerdfont-complete"
+typeset -g POWERLEVEL9K_PROMPT_ON_NEWLINE=true
+typeset -g POWERLEVEL9K_RPROMPT_ON_NEWLINE=false
+typeset -g POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX=""
+typeset -g POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="%K{white}%F{black} \ue795 \uf155 %f%k%F{white}\ue0b0%f "
+typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(virtualenv anaconda pyenv context root_indicator dir dir_writable vcs)
+typeset -g POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(command_execution_time status background_jobs time ssh)
+typeset -g POWERLEVEL9K_SHORTEN_DIR_LENGTH=1
+typeset -g POWERLEVEL9K_SHORTEN_STRATEGY="truncate_to_unique"
+typeset -g POWERLEVEL9K_DIR_ANCHOR_BOLD=true
+typeset -g POWERLEVEL9K_DIR_MAX_LENGTH='75%'
+typeset -g GITSTATUS_NUM_THREADS=4
+typeset -g POWERLEVEL9K_VCS_PUSH_INCOMING_CHANGES_ICON='\uf190 '
+typeset -g POWERLEVEL9K_VCS_PUSH_OUTGOING_CHANGES_ICON='\uf18e '
+typeset -g POWERLEVEL9K_VCS_SHORTEN_DELIMITER="…"
+typeset -g POWERLEVEL9K_VCS_MAX_INDEX_SIZE_DIRTY=-1
+typeset -g POWERLEVEL9K_VCS_{STAGED,UNSTAGED,UNTRACKED,CONFLICTED,COMMITS_AHEAD,COMMITS_BEHIND}_MAX_NUM=-1
+typeset -g POWERLEVEL9K_VCS_DISABLED_WORKDIR_PATTERN='~'
+# Formatter for Git status.
+#
+# Example output: master wip ⇣42⇡42 *42 merge ~42 +42 !42 ?42.
+#
+# VCS_STATUS_* parameters are set by gitstatus plugin. See reference:
+# https://github.com/romkatv/gitstatus/blob/master/gitstatus.plugin.zsh.
+function _p9k_gitstatus_formatter() {
+	emulate -L zsh
+
+	if [[ -n "${P9K_CONTENT}" ]]; then
+		# If P9K_CONTENT is not empty, use it. It's either "loading" or from vcs_info (not from
+		# gitstatus plugin). VCS_STATUS_* parameters are not available in this case.
+		_p9k_gitstatus_format="${P9K_CONTENT}"
+		return
+	fi
+
+	# Styling for different parts of Git status.
+	local       meta='%7F' # white foreground
+	local      clean='%0F' # black foreground
+	local   modified='%0F' # black foreground
+	local  untracked='%0F' # black foreground
+	local conflicted='%1F' # red foreground
+
+	local res="${meta}${clean}$(print_icon VCS_COMMIT_ICON)${VCS_STATUS_COMMIT[1,6]}"
+
+	if [[ -n "${VCS_STATUS_LOCAL_BRANCH}" ]]; then
+		local branch="${(V)VCS_STATUS_LOCAL_BRANCH}"
+		# If local branch name is at most 9 characters long, show it in full.
+		# Otherwise show the first 4 … the last 4.
+		(( ${#branch} > 9 )) && branch[5,-5]="${(g::)POWERLEVEL9K_VCS_SHORTEN_DELIMITER}"
+		res+=" ${clean}$(print_icon VCS_BRANCH_ICON)${branch//\%/%%}"
+	fi
+
+	if [[ -n "${VCS_STATUS_TAG}" ]]; then
+		local tag="${(V)VCS_STATUS_TAG}"
+		(( ${#tag} > 9 )) && tag[5,-5]="${(g::)POWERLEVEL9K_VCS_SHORTEN_DELIMITER}"
+		res+=" ${meta}$(print_icon VCS_TAG_ICON)${clean}${tag//\%/%%}"
+	fi
+
+	# Show tracking branch name if it differs from local branch.
+	if [[ -n "${VCS_STATUS_REMOTE_BRANCH:#"${VCS_STATUS_LOCAL_BRANCH}"}" ]]; then
+		res+=" ${meta}:${clean}${(V)VCS_STATUS_REMOTE_BRANCH//\%/%%}"
+	fi
+
+	# Display "wip" if the latest commit's summary contains "wip" or "WIP".
+	if [[ "${VCS_STATUS_COMMIT_SUMMARY}" == (|*[^[:alnum:]])(wip|WIP)(|[^[:alnum:]]*) ]]; then
+		res+=" ${modified}wip"
+	fi
+
+	# ⇣42 if behind the remote.
+	(( VCS_STATUS_COMMITS_BEHIND )) && res+=" ${clean}$(print_icon VCS_INCOMING_CHANGES_ICON)${VCS_STATUS_COMMITS_BEHIND}"
+	# ⇡42 if ahead of the remote.
+	(( VCS_STATUS_COMMITS_AHEAD  )) && res+=" ${clean}$(print_icon VCS_OUTGOING_CHANGES_ICON)${VCS_STATUS_COMMITS_AHEAD}"
+	# ⇠42 if behind the push remote.
+	(( VCS_STATUS_PUSH_COMMITS_BEHIND )) && res+=" ${clean}$(print_icon VCS_PUSH_INCOMING_CHANGES_ICON)${VCS_STATUS_PUSH_COMMITS_BEHIND}"
+	# ⇢42 if ahead of the push remote.
+	(( VCS_STATUS_PUSH_COMMITS_AHEAD  )) && res+=" ${clean}$(print_icon VCS_PUSH_OUTGOING_CHANGES_ICON)${VCS_STATUS_PUSH_COMMITS_AHEAD}"
+	# *42 if have stashes.
+	(( VCS_STATUS_STASHES        )) && res+=" ${clean}$(print_icon VCS_STASH_ICON)${VCS_STATUS_STASHES}"
+	# 'merge' if the repo is in an unusual state.
+	[[ -n "${VCS_STATUS_ACTION}" ]] && res+=" ${conflicted}${VCS_STATUS_ACTION//\%/%%}"
+	# ~42 if have merge conflicts.
+	(( VCS_STATUS_NUM_CONFLICTED )) && res+=" ${conflicted}${VCS_STATUS_NUM_CONFLICTED}"
+	# +42 if have staged changes.
+	(( VCS_STATUS_NUM_STAGED     )) && res+=" ${modified}$(print_icon VCS_STAGED_ICON)${VCS_STATUS_NUM_STAGED}"
+	# !42 if have unstaged changes.
+	(( VCS_STATUS_NUM_UNSTAGED   )) && res+=" ${modified}$(print_icon VCS_UNSTAGED_ICON)${VCS_STATUS_NUM_UNSTAGED}"
+	(( VCS_STATUS_NUM_UNTRACKED  )) && res+=" ${untracked}$(print_icon VCS_UNTRACKED_ICON)${VCS_STATUS_NUM_UNTRACKED}"
+	(( VCS_STATUS_HAS_UNSTAGED == -1 )) && res+=" ${modified}─"
+
+	_p9k_gitstatus_format="${res}"
+}
+functions -M _p9k_gitstatus_formatter 2>/dev/null
+typeset -g POWERLEVEL9K_VCS_DISABLE_GITSTATUS_FORMATTING=true
+typeset -g POWERLEVEL9K_VCS_CONTENT_EXPANSION='${$((_p9k_gitstatus_formatter()))+${_p9k_gitstatus_format}}'
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load

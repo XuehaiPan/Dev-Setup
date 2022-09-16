@@ -469,6 +469,14 @@ done <<EOS
 	esc/conda-zsh-completion          plugins/conda-zsh-completion
 EOS
 
+# Install GitStatus
+if [[ "${ZSH_CUSTOM}" == "${HOME}/.oh-my-zsh/custom" ]]; then
+	GITSTATUS_DIR="../.oh-my-zsh/custom/themes/powerlevel10k/gitstatus"
+else
+	GITSTATUS_DIR="${ZSH_CUSTOM}/themes/powerlevel10k/gitstatus"
+fi
+ln -sfn "${GITSTATUS_DIR}" .dotfiles/gitstatus
+
 # Install fzf
 if [[ ! -d "${HOME}/.fzf" ]]; then
 	exec_cmd 'git clone --depth=1 https://github.com/junegunn/fzf.git "${HOME}/.fzf" 2>&1'
@@ -1361,7 +1369,9 @@ fi
 # User specific environment and startup programs
 export TERM="xterm-256color"
 export LESS="-R -M -i -j5"
-if [[ -n "${SSH_CONNECTION}" ]]; then
+if [[ -f "${HOME}/.dotfiles/gitstatus/gitstatus.prompt.sh" ]]; then
+	source "${HOME}/.dotfiles/gitstatus/gitstatus.prompt.sh"
+elif [[ -n "${SSH_CONNECTION}" ]]; then
 	export PS1='[\[\e[1;33m\]\u\[\e[0m\]@\[\e[1;32m\]\h\[\e[0m\]:\[\e[1;35m\]\w\[\e[0m\]]\$ '
 else
 	export PS1='[\[\e[1;33m\]\u\[\e[0m\]:\[\e[1;35m\]\w\[\e[0m\]]\$ '

@@ -841,7 +841,7 @@ chmod 644 .dotfiles/.zshrc
 
 # Configurations for Zsh Powerlevel10k Lean style
 SHEBANG='#!/bin/sh'
-COMMAND='P10K_LEAN_STYLE=true exec /usr/local/bin/zsh "$@"'
+COMMAND='P10K_LEAN_STYLE=true exec /bin/zsh "$@"'
 cat >"${TMP_DIR}/zsh-lean" <<EOF
 ${SHEBANG}
 ${COMMAND}
@@ -1882,7 +1882,7 @@ cat >.dotfiles/.tmux.conf.user <<'EOF'
 # Set default terminal
 set-option -gs default-terminal "tmux-256color"
 set-option -gsa terminal-overrides ",*-256color:Tc"
-set-option -gs default-command 'P10K_LEAN_STYLE=true /usr/local/bin/zsh'
+set-option -gs default-command 'P10K_LEAN_STYLE=true "${SHELL}"'
 
 # Automatically set window title
 set-option -gs automatic-rename on

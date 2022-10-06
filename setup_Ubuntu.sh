@@ -409,15 +409,25 @@ if [[ ! -x "$(command -v brew)" ]]; then
 			exec_cmd 'mkdir "${HOME}/.linuxbrew/bin"'
 			exec_cmd 'ln -sfn "../Homebrew/bin/brew" "${HOME}/.linuxbrew/bin"'
 		fi
-		exec_cmd 'eval "$(${HOME}/.linuxbrew/bin/brew shellenv)"'
+		exec_cmd 'eval "$("${HOME}/.linuxbrew/bin/brew" shellenv)"'
 		exec_cmd 'brew update --force --quiet'
 		exec_cmd 'chmod -R go-w "$(brew --prefix)/share/zsh"'
 	fi
 else
 	HOMEBREW_PREFIX="$(brew --prefix)"
+	if [[ -x "/home/linuxbrew/.linuxbrew/bin/brew" && "${HOMEBREW_PREFIX}" == "$(/home/linuxbrew/.linuxbrew/bin/brew --prefix)" ]]; then
+		HOMEBREW_PREFIX="/home/linuxbrew/.linuxbrew"
+	elif [[ -x "${HOME}/.linuxbrew/bin/brew" && "${HOMEBREW_PREFIX}" == "$("${HOME}/.linuxbrew/bin/brew" --prefix)" ]]; then
+		HOMEBREW_PREFIX="${HOME}/.linuxbrew"
+	fi
 fi
 
-exec_cmd "eval \"\$(${HOMEBREW_PREFIX/#${HOME}/\${HOME\}}/bin/brew shellenv)\""
+if [[ "${HOMEBREW_PREFIX/#${HOME}\//}" == "${HOMEBREW_PREFIX}" ]]; then
+	HOMEBREW_BREW="${HOMEBREW_PREFIX}/bin/brew"
+else
+	HOMEBREW_BREW="\"\${HOME}/${HOMEBREW_PREFIX/#${HOME}\//}/bin/brew\""
+fi
+exec_cmd "eval \"\$(${HOMEBREW_BREW} shellenv)\""
 exec_cmd 'brew update'
 
 if ${SET_MIRRORS}; then
@@ -544,7 +554,7 @@ exec_cmd "AUTOMATED_TESTING=1 cpan -i Term::ReadLine::Perl Term::ReadKey"
 backup_dotfiles .dotfiles/.zshrc
 
 HOMEBREW_SETTINGS='# Homebrew
-'"eval \"\$(${HOMEBREW_PREFIX/#${HOME}/\${HOME\}}/bin/brew shellenv)\""'
+'"eval \"\$(${HOMEBREW_BREW} shellenv)\""'
 export HOMEBREW_EDITOR="vim"
 export HOMEBREW_BAT=true'
 if ${SET_MIRRORS}; then

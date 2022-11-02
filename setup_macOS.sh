@@ -24,31 +24,38 @@ chmod 755 "${HOME}/.dotfiles"
 TMP_DIR="$(mktemp -d -t dev-setup)"
 
 # Set default Conda installation directory
-CONDA_DIR=""
+CONDA_DIR=''
+CONDA_BASE_PREFIX=''
+CONDA_BASE_PREFIX_EXIST=true
 if [[ -d "${HOME}/Miniconda3" || -L "${HOME}/Miniconda3" ]]; then
-	CONDA_DIR="Miniconda3"
+	CONDA_BASE_PREFIX="${HOME}/Miniconda3"
 elif [[ -d "${HOME}/miniconda3" || -L "${HOME}/miniconda3" ]]; then
-	CONDA_DIR="miniconda3"
+	CONDA_BASE_PREFIX="${HOME}/miniconda3"
 elif [[ -d "${HOME}/Miniforge3" || -L "${HOME}/Miniforge3" ]]; then
-	CONDA_DIR="Miniforge3"
+	CONDA_BASE_PREFIX="${HOME}/Miniforge3"
 elif [[ -d "${HOME}/miniforge3" || -L "${HOME}/miniforge3" ]]; then
-	CONDA_DIR="miniforge3"
+	CONDA_BASE_PREFIX="${HOME}/miniforge3"
 elif [[ -d "${HOME}/Anaconda3" || -L "${HOME}/Anaconda3" ]]; then
-	CONDA_DIR="Anaconda3"
+	CONDA_BASE_PREFIX="${HOME}/Anaconda3"
 elif [[ -d "${HOME}/anaconda3" || -L "${HOME}/anaconda3" ]]; then
-	CONDA_DIR="anaconda3"
-elif [[ -d "${HOMEBREW_PREFIX}/miniconda" ]]; then
-	CONDA_DIR="miniconda3"
-	ln -sfn "${HOMEBREW_PREFIX}/miniconda" "${HOME}/miniconda3"
-elif [[ -d "${HOMEBREW_PREFIX}/miniforge" ]]; then
-	CONDA_DIR="miniforge3"
-	ln -sfn "${HOMEBREW_PREFIX}/miniforge" "${HOME}/miniforge3"
-elif [[ -d "${HOMEBREW_PREFIX}/anaconda" ]]; then
-	CONDA_DIR="anaconda3"
-	ln -sfn "${HOMEBREW_PREFIX}/anaconda" "${HOME}/anaconda3"
+	CONDA_BASE_PREFIX="${HOME}/anaconda3"
+elif [[ -d "${HOMEBREW_PREFIX}/Caskroom/miniconda/base" ]]; then
+	CONDA_BASE_PREFIX="${HOMEBREW_PREFIX}/Caskroom/miniconda/base"
+elif [[ -d "${HOMEBREW_PREFIX}/Caskroom/miniforge/base" ]]; then
+	CONDA_BASE_PREFIX="${HOMEBREW_PREFIX}/Caskroom/miniforge/base"
+elif [[ -d "${HOMEBREW_PREFIX}/Caskroom/mambaforge/base" ]]; then
+	CONDA_BASE_PREFIX="${HOMEBREW_PREFIX}/Caskroom/mambaforge/base"
+elif [[ -d "${HOMEBREW_PREFIX}/Caskroom/anaconda/base" ]]; then
+	CONDA_BASE_PREFIX="${HOMEBREW_PREFIX}/Caskroom/anaconda/base"
 fi
-if [[ -z "${CONDA_DIR}" ]]; then
-	CONDA_DIR="Miniconda3"
+if [[ -z "${CONDA_BASE_PREFIX}" ]]; then
+	CONDA_BASE_PREFIX="${HOME}/Miniconda3"
+	CONDA_BASE_PREFIX_EXIST=false
+fi
+if [[ "${CONDA_BASE_PREFIX/#${HOME}\//}" == "${CONDA_BASE_PREFIX}" ]]; then
+	CONDA_DIR="${CONDA_BASE_PREFIX}"
+else
+	CONDA_DIR="\${HOME}/${CONDA_BASE_PREFIX/#${HOME}\//}"
 fi
 
 # Common functions
@@ -480,20 +487,20 @@ ${HOMEBREW_SETTINGS}
 # Anaconda
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-__conda_setup="\$(CONDA_REPORT_ERRORS=false "\${HOME}/${CONDA_DIR}/bin/conda" shell.zsh hook 2>/dev/null)"
+__conda_setup="\$(CONDA_REPORT_ERRORS=false "${CONDA_DIR}/bin/conda" shell.zsh hook 2>/dev/null)"
 if [[ \$? -eq 0 ]]; then
 	eval "\${__conda_setup}"
 else
-	if [[ -f "\${HOME}/${CONDA_DIR}/etc/profile.d/conda.sh" ]]; then
-		source "\${HOME}/${CONDA_DIR}/etc/profile.d/conda.sh"
+	if [[ -f "${CONDA_DIR}/etc/profile.d/conda.sh" ]]; then
+		source "${CONDA_DIR}/etc/profile.d/conda.sh"
 	else
-		export PATH="\${HOME}/${CONDA_DIR}/bin\${PATH:+:"\${PATH}"}"
+		export PATH="${CONDA_DIR}/bin\${PATH:+:"\${PATH}"}"
 	fi
 fi
 unset __conda_setup
 
-if [[ -f "\${HOME}/${CONDA_DIR}/etc/profile.d/mamba.sh" ]]; then
-	source "\${HOME}/${CONDA_DIR}/etc/profile.d/mamba.sh"
+if [[ -f "${CONDA_DIR}/etc/profile.d/mamba.sh" ]]; then
+	source "${CONDA_DIR}/etc/profile.d/mamba.sh"
 fi
 # <<< conda initialize <<<
 
@@ -1319,20 +1326,20 @@ ${HOMEBREW_SETTINGS}
 # Anaconda
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-__conda_setup="\$(CONDA_REPORT_ERRORS=false "\${HOME}/${CONDA_DIR}/bin/conda" shell.bash hook 2>/dev/null)"
+__conda_setup="\$(CONDA_REPORT_ERRORS=false "${CONDA_DIR}/bin/conda" shell.bash hook 2>/dev/null)"
 if [[ \$? -eq 0 ]]; then
 	eval "\${__conda_setup}"
 else
-	if [[ -f "\${HOME}/${CONDA_DIR}/etc/profile.d/conda.sh" ]]; then
-		source "\${HOME}/${CONDA_DIR}/etc/profile.d/conda.sh"
+	if [[ -f "${CONDA_DIR}/etc/profile.d/conda.sh" ]]; then
+		source "${CONDA_DIR}/etc/profile.d/conda.sh"
 	else
-		export PATH="\${HOME}/${CONDA_DIR}/bin\${PATH:+:"\${PATH}"}"
+		export PATH="${CONDA_DIR}/bin\${PATH:+:"\${PATH}"}"
 	fi
 fi
 unset __conda_setup
 
-if [[ -f "\${HOME}/${CONDA_DIR}/etc/profile.d/mamba.sh" ]]; then
-	source "\${HOME}/${CONDA_DIR}/etc/profile.d/mamba.sh"
+if [[ -f "${CONDA_DIR}/etc/profile.d/mamba.sh" ]]; then
+	source "${CONDA_DIR}/etc/profile.d/mamba.sh"
 fi
 # <<< conda initialize <<<
 
@@ -2325,18 +2332,18 @@ ln -sf .dotfiles/.condarc .
 chmod 644 .dotfiles/.condarc
 
 # Install Miniconda
-if [[ ! -d "${HOME}/${CONDA_DIR}" ]]; then
+if ! ${CONDA_BASE_PREFIX_EXIST}; then
 	if ${SET_MIRRORS}; then
 		exec_cmd "wget -N -P \"${TMP_DIR}\" https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-latest-MacOSX-x86_64.sh"
 	else
 		exec_cmd "wget -N -P \"${TMP_DIR}\" https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh"
 	fi
-	exec_cmd "/bin/sh \"${TMP_DIR}/Miniconda3-latest-MacOSX-x86_64.sh\" -b -p \"\${HOME}/${CONDA_DIR}\""
+	exec_cmd "/bin/sh \"${TMP_DIR}/Miniconda3-latest-MacOSX-x86_64.sh\" -b -p \"${CONDA_DIR}\""
 fi
 
 # Install Conda packages
-export PATH="${PATH:+"${PATH}":}${HOME}/${CONDA_DIR}/condabin"
-source "${HOME}/${CONDA_DIR}/bin/activate"
+export PATH="${PATH:+"${PATH}":}${CONDA_BASE_PREFIX}/bin"
+source "${CONDA_BASE_PREFIX}/bin/activate"
 exec_cmd 'conda install mamba --yes'
 exec_cmd 'conda update conda mamba --yes'
 exec_cmd 'conda install pip ipython ipdb \
@@ -2344,15 +2351,15 @@ exec_cmd 'conda install pip ipython ipdb \
 	numpy numba matplotlib-base pandas seaborn \
 	cython rich tqdm autopep8 pylint --yes'
 exec_cmd 'conda clean --all --yes'
-exec_cmd "\"\${HOME}/${CONDA_DIR}/bin/jupyter\" contrib nbextension install --user &>/dev/null"
+exec_cmd "\"${CONDA_DIR}/bin/jupyter\" contrib nbextension install --user &>/dev/null"
 if ${SET_MIRRORS}; then
-	exec_cmd "\"\${HOME}/${CONDA_DIR}/bin/pip\" config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple"
+	exec_cmd "\"${CONDA_DIR}/bin/pip\" config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple"
 fi
 
 # Add Conda Environment Initialization Script
-mkdir -p "${HOME}/${CONDA_DIR}/etc"
+mkdir -p "${CONDA_BASE_PREFIX}/etc"
 
-cat >"${HOME}/${CONDA_DIR}/etc/init-envs.sh" <<'EOF'
+cat >"${CONDA_BASE_PREFIX}/etc/init-envs.sh" <<'EOF'
 #!/usr/bin/env bash
 
 while read -r env CONDA_PREFIX; do
@@ -2442,10 +2449,10 @@ EOS
 done < <(conda info --envs | awk 'NF > 0 && $0 !~ /^#.*/ { printf("%s %s\n", $1, $NF) }')
 EOF
 
-chmod 755 "${HOME}/${CONDA_DIR}/etc/init-envs.sh"
+chmod 755 "${CONDA_BASE_PREFIX}/etc/init-envs.sh"
 
 # Setup IPython
-exec_cmd "\"\${HOME}/${CONDA_DIR}/bin/ipython\" profile create"
+exec_cmd "\"\${CONDA_DIR}/bin/ipython\" profile create"
 exec_cmd "sed -i \"\" -E 's/^ *#? *(c.InteractiveShell.colors).*\$/\\1 = \"Linux\"/g' \"\${HOME}/.ipython/profile_default/ipython_config.py\""
 exec_cmd "sed -i \"\" -E 's/^ *#? *(c.InteractiveShell.colors).*\$/\\1 = \"Linux\"/g' \"\${HOME}/.ipython/profile_default/ipython_kernel_config.py\""
 

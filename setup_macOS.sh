@@ -8,7 +8,7 @@ export HOMEBREW_PREFIX="/usr/local"
 if [[ "$(uname -m)" == "arm64" ]]; then
 	export HOMEBREW_PREFIX="/opt/homebrew"
 fi
-export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin:/Library/Apple/bin:${HOMEBREW_PREFIX}/bin${PATH:+:"${PATH}"}"
+export PATH="${HOMEBREW_PREFIX}/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin:/Library/Apple/bin${PATH:+:"${PATH}"}"
 
 # Set USER
 export USER="${USER:-"$(whoami)"}"
@@ -24,17 +24,31 @@ chmod 755 "${HOME}/.dotfiles"
 TMP_DIR="$(mktemp -d -t dev-setup)"
 
 # Set default Conda installation directory
-CONDA_DIR="Miniconda3"
-if [[ -d "${HOME}/miniconda3" && ! -d "${HOME}/Miniconda3" ]]; then
+CONDA_DIR=""
+if [[ -d "${HOME}/Miniconda3" || -L "${HOME}/Miniconda3" ]]; then
+	CONDA_DIR="Miniconda3"
+elif [[ -d "${HOME}/miniconda3" || -L "${HOME}/miniconda3" ]]; then
 	CONDA_DIR="miniconda3"
-elif [[ -d "${HOME}/Miniforge3" ]]; then
+elif [[ -d "${HOME}/Miniforge3" || -L "${HOME}/Miniforge3" ]]; then
 	CONDA_DIR="Miniforge3"
-elif [[ -d "${HOME}/miniforge3" ]]; then
+elif [[ -d "${HOME}/miniforge3" || -L "${HOME}/miniforge3" ]]; then
 	CONDA_DIR="miniforge3"
-elif [[ -d "${HOME}/Anaconda3" ]]; then
+elif [[ -d "${HOME}/Anaconda3" || -L "${HOME}/Anaconda3" ]]; then
 	CONDA_DIR="Anaconda3"
-elif [[ -d "${HOME}/anaconda3" ]]; then
+elif [[ -d "${HOME}/anaconda3" || -L "${HOME}/anaconda3" ]]; then
 	CONDA_DIR="anaconda3"
+elif [[ -d "${HOMEBREW_PREFIX}/miniconda" ]]; then
+	CONDA_DIR="miniconda3"
+	ln -sfn "${HOMEBREW_PREFIX}/miniconda" "${HOME}/miniconda3"
+elif [[ -d "${HOMEBREW_PREFIX}/miniforge" ]]; then
+	CONDA_DIR="miniforge3"
+	ln -sfn "${HOMEBREW_PREFIX}/miniforge" "${HOME}/miniforge3"
+elif [[ -d "${HOMEBREW_PREFIX}/anaconda" ]]; then
+	CONDA_DIR="anaconda3"
+	ln -sfn "${HOMEBREW_PREFIX}/anaconda" "${HOME}/anaconda3"
+fi
+if [[ -z "${CONDA_DIR}" ]]; then
+	CONDA_DIR="Miniconda3"
 fi
 
 # Common functions
@@ -203,12 +217,12 @@ exec_cmd 'brew update --force --verbose'
 # Install and setup shells
 exec_cmd 'brew install zsh bash'
 
-if ! grep -qF '/usr/local/bin/bash' /etc/shells; then
-	exec_cmd 'echo "/usr/local/bin/bash" | sudo tee -a /etc/shells'
+if ! grep -qF "${HOMEBREW_PREFIX}/bin/bash" /etc/shells; then
+	exec_cmd "echo '${HOMEBREW_PREFIX}/bin/bash' | sudo tee -a /etc/shells"
 fi
 
-if ! grep -qF '/usr/local/bin/zsh' /etc/shells; then
-	exec_cmd 'echo "/usr/local/bin/zsh" | sudo tee -a /etc/shells'
+if ! grep -qF "${HOMEBREW_PREFIX}/bin/zsh" /etc/shells; then
+	exec_cmd "echo '${HOMEBREW_PREFIX}/bin/zsh' | sudo tee -a /etc/shells"
 fi
 
 # Install packages
@@ -233,8 +247,8 @@ exec_cmd 'brew cleanup -s --prune 7'
 
 # Change the login shell to Zsh
 if [[ "$(basename "${SHELL}")" != "zsh" ]]; then
-	if grep -qF '/usr/local/bin/zsh' /etc/shells; then
-		exec_cmd "sudo chsh --shell /usr/local/bin/zsh ${USER}"
+	if grep -qF "${HOMEBREW_PREFIX}/bin/zsh" /etc/shells; then
+		exec_cmd "sudo chsh --shell ${HOMEBREW_PREFIX}/bin/zsh ${USER}"
 	elif grep -qF '/bin/zsh' /etc/shells; then
 		exec_cmd "sudo chsh --shell /bin/zsh ${USER}"
 	fi
@@ -846,16 +860,16 @@ cat >"${TMP_DIR}/zsh-lean" <<EOF
 ${SHEBANG}
 ${COMMAND}
 EOF
-if [[ ! -x "/usr/local/bin/zsh-lean" || -L "/usr/local/bin/zsh-lean" ]] ||
-	! diff -EB "/usr/local/bin/zsh-lean" "${TMP_DIR}/zsh-lean" &>/dev/null; then
-	if [[ -f "/usr/local/bin/zsh-lean" ]]; then
-		exec_cmd 'sudo rm -f /usr/local/bin/zsh-lean'
+if [[ ! -x "${HOMEBREW_PREFIX}/bin/zsh-lean" || -L "${HOMEBREW_PREFIX}/bin/zsh-lean" ]] ||
+	! diff -EB "${HOMEBREW_PREFIX}/bin/zsh-lean" "${TMP_DIR}/zsh-lean" &>/dev/null; then
+	if [[ -f "${HOMEBREW_PREFIX}/bin/zsh-lean" ]]; then
+		exec_cmd "sudo rm -f ${HOMEBREW_PREFIX}/bin/zsh-lean"
 	fi
-	exec_cmd "printf \"%s\\n\" '${SHEBANG}' '${COMMAND}' | sudo tee /usr/local/bin/zsh-lean"
-	exec_cmd 'sudo chmod 755 /usr/local/bin/zsh-lean'
+	exec_cmd "printf \"%s\\n\" '${SHEBANG}' '${COMMAND}' | sudo tee ${HOMEBREW_PREFIX}/bin/zsh-lean"
+	exec_cmd "sudo chmod 755 ${HOMEBREW_PREFIX}/bin/zsh-lean"
 fi
-if ! grep -qF '/usr/local/bin/zsh-lean' /etc/shells; then
-	exec_cmd 'echo "/usr/local/bin/zsh-lean" | sudo tee -a /etc/shells'
+if ! grep -qF "${HOMEBREW_PREFIX}/bin/zsh-lean" /etc/shells; then
+	exec_cmd "echo '${HOMEBREW_PREFIX}/bin/zsh-lean' | sudo tee -a /etc/shells"
 fi
 
 # Add utility script file
@@ -1217,6 +1231,8 @@ fi
 if ! shopt -oq posix; then
 	if [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]]; then
 		source "/usr/local/etc/profile.d/bash_completion.sh"
+	elif [[ -r "/opt/homebrew/etc/profile.d/bash_completion.sh" ]]; then
+		source "/opt/homebrew/etc/profile.d/bash_completion.sh"
 	elif [[ -f "/usr/share/bash-completion/bash_completion" ]]; then
 		source "/usr/share/bash-completion/bash_completion"
 	elif [[ -f "/etc/bash_completion" ]]; then
@@ -1409,8 +1425,8 @@ export DISPLAY=":0.0"
 xhost +local: &>/dev/null
 
 # Bash completion
-if [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]]; then
-	source "/usr/local/etc/profile.d/bash_completion.sh"
+if [[ -r "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh" ]]; then
+	source "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh"
 fi
 EOF
 

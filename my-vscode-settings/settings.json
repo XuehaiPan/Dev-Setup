@@ -288,39 +288,11 @@
     //* Cmake Tools */
     "cmake.cmakePath": "cmake",
     "cmake.sourceDirectory": "${workspaceFolder}",
-    "cmake.buildDirectory": "${workspaceFolder}/cmake-build-${buildType}",
+    "cmake.buildDirectory": "${workspaceFolder}/cmake-build-${variant:buildType}",
     "cmake.configureOnEdit": true,
     "cmake.clearOutputBeforeBuild": true,
     "cmake.saveBeforeBuild": true,
     "cmake.buildBeforeRun": true,
-    "cmake.defaultVariants": {
-        "buildType": {
-            "default": "debug",
-            "description": "The build type.",
-            "choices": {
-                "debug": {
-                    "short": "Debug",
-                    "long": "Disable optimizations - include debug information.",
-                    "buildType": "debug"
-                },
-                "release": {
-                    "short": "Release",
-                    "long": "Optimize for speed - exclude debug information.",
-                    "buildType": "release"
-                },
-                "minsize": {
-                    "short": "MinSizeRel",
-                    "long": "Optimize for smallest binary size - exclude debug information.",
-                    "buildType": "minsizerel"
-                },
-                "reldeb": {
-                    "short": "RelWithDebInfo",
-                    "long": "Optimize for speed - include debug information.",
-                    "buildType": "relwithdebinfo"
-                }
-            }
-        }
-    },
 
     //* Code Runner */
     "code-runner.clearPreviousOutput": false,

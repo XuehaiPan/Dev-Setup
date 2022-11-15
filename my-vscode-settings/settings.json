@@ -855,14 +855,12 @@
     "python.terminal.activateEnvironment": true,
     "python.terminal.activateEnvInCurrentTerminal": true,
     "python.languageServer": "Pylance",
-    "python.formatting.provider": "autopep8",
-    "python.formatting.autopep8Path": "autopep8",
-    "python.formatting.autopep8Args": [
-        "--aggressive",
-        "--aggressive",
-        "--aggressive",
-        "--max-line-length",
-        "120"
+    "python.formatting.provider": "black",
+    "python.formatting.blackArgs": [
+        "--safe",
+        "--line-length",
+        "100",
+        "--skip-string-normalization"
     ],
     "python.linting.enabled": true,
     "python.linting.lintOnSave": true,
@@ -877,6 +875,12 @@
     "notebook.lineNumbers": "on",
     "notebook.cellToolbarVisibility": "hover",
     "notebook.showFoldingControls": "always",
+    "black-formatter.args": [
+        "--safe",
+        "--line-length",
+        "100",
+        "--skip-string-normalization"
+    ],
 
     //* Remote */
     "remote.extensionKind": {

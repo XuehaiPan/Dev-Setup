@@ -261,16 +261,19 @@
 
     //* C/C++ */
     "C_Cpp.default.compilerPath": "gcc",
-    "C_Cpp.default.cppStandard": "c++17",
+    "C_Cpp.default.cppStandard": "c++20",
     "C_Cpp.default.cStandard": "c11",
     "C_Cpp.default.intelliSenseMode": "gcc-x64",
+    "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
     "C_Cpp.intelliSenseEngine": "Default",
     "C_Cpp.configurationWarnings": "Enabled",
     "C_Cpp.autocomplete": "Default",
     "C_Cpp.formatting": "clangFormat",
+    "C_Cpp.workspaceSymbols": "All",
     "C_Cpp.clang_format_sortIncludes": false,
     "C_Cpp.clang_format_style": "file",
     "C_Cpp.clang_format_fallbackStyle": "Visual Studio",
+    "C_Cpp.codeAnalysis.clangTidy.enabled": true,
 
     //* C/C++ Clang Command Adapter */
     "clang.executable": "clang",
@@ -278,21 +281,35 @@
         "-std=c11"
     ],
     "clang.cxxflags": [
-        "-std=c++17"
+        "-std=c++20"
     ],
     "clang.objcflags": [],
     "clang.completion.completeMacros": true,
     "clang.completion.enable": true,
     "clang.diagnostic.enable": true,
 
+    //* Clangd */
+    "clangd.arguments": [
+        "--compile-commands-dir=${workspaceFolder}/.vscode",
+        "--all-scopes-completion",
+        "--clang-tidy"
+    ],
+    "clangd.detectExtensionConflicts": false,
+
     //* Cmake Tools */
     "cmake.cmakePath": "cmake",
+    "cmake.preferredGenerators": [
+        "Unix Makefiles",
+        "Ninja"
+    ],
     "cmake.sourceDirectory": "${workspaceFolder}",
     "cmake.buildDirectory": "${workspaceFolder}/cmake-build-${variant:buildType}",
     "cmake.configureOnEdit": true,
     "cmake.clearOutputBeforeBuild": true,
     "cmake.saveBeforeBuild": true,
     "cmake.buildBeforeRun": true,
+    "cmake.exportCompileCommandsFile": true,
+    "cmake.copyCompileCommands": "${workspaceFolder}/.vscode/compile_commands.json",
 
     //* Code Runner */
     "code-runner.clearPreviousOutput": false,
@@ -761,11 +778,12 @@
 
     //* LaTeX Utilities */
     "latex-utilities.countWord.format": "${words} Words (${wordsBody} in Body)",
-    "latex-utilities.countWord.args": ["-merge", "%DOC%"],
+    "latex-utilities.countWord.args": [
+        "-merge",
+        "%DOC%"
+    ],
     "latex-utilities.formattedPaste.tableBooktabsStyle": true,
     "latex-utilities.formattedPaste.image.template": "\\includegraphics[width=\\linewidth]{${imageFilePath}}",
-    "latex-utilities.tikzpreview.enabled": true,
-    "latex-utilities.tikzpreview.parseTeXFile": true,
 
     //* Live Share */
     "liveshare.alwaysFollowHost": false,
@@ -871,7 +889,6 @@
         "--max-line-length=120"
     ],
     "jupyter.defaultCellMarker": "# %%",
-    "jupyter.jupyterServerType": "local",
     "notebook.lineNumbers": "on",
     "notebook.cellToolbarVisibility": "hover",
     "notebook.showFoldingControls": "always",
@@ -903,6 +920,10 @@
         "ms-python.vscode-pylance",
         "ms-toolsai.jupyter"
     ],
+
+    //* reStructuredText */
+    "restructuredtext.languageServer.disabled": true,
+    "esbonio.server.enabled": false,
 
     //* Settings Sync */
     "sync.autoDownload": false,

@@ -868,8 +868,6 @@
     "python.analysis.autoSearchPaths": true,
     "python.analysis.completeFunctionParens": true,
     "python.analysis.useLibraryCodeForTypes": true,
-    "python.condaPath": "~/Miniconda3/condabin/conda",
-    "python.defaultInterpreterPath": "~/Miniconda3/envs/python38/bin/python",
     "python.terminal.activateEnvironment": true,
     "python.terminal.activateEnvInCurrentTerminal": true,
     "python.languageServer": "Pylance",

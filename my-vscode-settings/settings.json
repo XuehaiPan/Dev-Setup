@@ -812,6 +812,10 @@
     "local-history.daysLimit": 14,
     "local-history.treeLocation": "localHistory",
 
+    //* Makefile Tools */
+    "makefile.configureOnEdit": false,
+    "makefile.configureOnOpen": false,
+
     //* Markdown All in One */
     "markdown.extension.list.indentationSize": "inherit",
     "markdown.extension.preview.autoShowPreviewToSide": false,

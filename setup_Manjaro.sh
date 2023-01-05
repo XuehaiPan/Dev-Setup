@@ -2250,7 +2250,9 @@ create_default_packages:
   - cython
   - rich
   - tqdm
-  - autopep8
+  - black-jupyter
+  - isort
+  - pre-commit
   - pylint
 
 # vim: filetype=yaml tabstop=2 shiftwidth=2 expandtab
@@ -2276,8 +2278,8 @@ exec_cmd 'conda install mamba --yes'
 exec_cmd 'conda update conda mamba --yes'
 exec_cmd 'conda install pip ipython ipdb \
 	jupyter notebook jupyterlab jupyter_contrib_nbextensions \
-	numpy numba matplotlib-base pandas seaborn \
-	cython rich tqdm autopep8 pylint --yes'
+	numpy numba matplotlib-base pandas seaborn cython \
+	rich tqdm black-jupyter isort pre-commit pylint --yes'
 exec_cmd 'conda clean --all --yes'
 exec_cmd "\"\${HOME}/${CONDA_DIR}/bin/jupyter\" contrib nbextension install --user &>/dev/null"
 if ${SET_MIRRORS}; then

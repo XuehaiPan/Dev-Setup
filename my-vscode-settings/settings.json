@@ -927,14 +927,6 @@
     "restructuredtext.languageServer.disabled": true,
     "esbonio.server.enabled": false,
 
-    //* Settings Sync */
-    "sync.autoDownload": false,
-    "sync.autoUpload": false,
-    "sync.forceUpload": true,
-    "sync.forceDownload": false,
-    "sync.syncExtensions": true,
-    "sync.removeExtensions": false,
-
     //* Shellcheck */
     "shellcheck.executablePath": "shellcheck",
     "shellcheck.enable": true,

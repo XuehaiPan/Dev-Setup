@@ -10,7 +10,6 @@
         "josetr.cmake-language-support-vscode",
         "ms-vscode.cmake-tools",
         "formulahendry.code-runner",
-        "Shan.code-settings-sync",
         "streetsidesoftware.code-spell-checker",
         "GitHub.copilot",
         "ms-vscode.cpptools",

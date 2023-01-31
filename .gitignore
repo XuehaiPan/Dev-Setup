@@ -126,7 +126,7 @@ $RECYCLE.BIN/
 ##### Vim.gitignore #####
 # Swap
 .*.s[a-v][a-z]
-!*.svg # comment out if you don't need vector files
+!*.svg  # comment out if you don't need vector files
 .*.sw[a-p]
 .s[a-rt-v][a-z]
 .ss[a-gi-z]

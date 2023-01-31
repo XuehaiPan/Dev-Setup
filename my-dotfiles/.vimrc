@@ -171,6 +171,7 @@ call plug#begin('~/.vim/plugged')
     Plug 'chrisbra/vim-diff-enhanced'
     Plug 'will133/vim-dirdiff'
     Plug 'yggdroot/indentline'
+    Plug 'editorconfig/editorconfig-vim'
     Plug 'luochen1990/rainbow'
     Plug 'jaxbot/semantic-highlight.vim'
     Plug 'chrisbra/Colorizer'

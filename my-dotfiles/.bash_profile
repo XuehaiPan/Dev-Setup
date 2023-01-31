@@ -206,6 +206,6 @@ export DISPLAY=":0.0"
 xhost +local: &>/dev/null
 
 # Bash completion
-if [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]]; then
-	source "/usr/local/etc/profile.d/bash_completion.sh"
+if [[ -r "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh" ]]; then
+	source "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh"
 fi

@@ -1499,7 +1499,7 @@ backup_dotfiles .vimrc .dotfiles/.vimrc
 
 GUI_FONT='DejaVuSansMono\ Nerd\ Font\ Mono\ 10'
 if ${IN_WSL}; then
-	GUI_FONT='DejaVuSansMono\ NF\ 10'
+	GUI_FONT='DejaVuSansMono\ NFM\ 10'
 fi
 cat >.dotfiles/.vimrc <<'EOF'
 set nocompatible

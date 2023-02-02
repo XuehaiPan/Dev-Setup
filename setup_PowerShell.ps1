@@ -149,7 +149,7 @@ set wildmode=longest:list,full
 set completeopt=longest,menu
 set background=dark
 set t_Co=256
-set guifont=DejaVuSansMono\ NF:h10
+set guifont=DejaVuSansMono\ NFM:h10
 colorscheme desert
 source `$VIMRUNTIME/delmenu.vim
 source `$VIMRUNTIME/menu.vim

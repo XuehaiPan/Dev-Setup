@@ -206,7 +206,6 @@ ln -sf .dotfiles/<CFG_FILE> .
 | [perl](https://www.perl.org) & [cpan](https://www.cpan.org)                                                                      |   ✔   |      ✔       |       ✔       |
 | [htop](https://hisham.hm/htop)                                                                                                   |   ✔   |      ✔       |       ✔       |
 | [net-tools](https://sourceforge.net/projects/net-tools)                                                                          |   ✔   |      ✔       |       ✔       |
-| [exfat-utils](https://pkgs.org/download/exfat-utils)                                                                             |   ✔   |      ✔       |       ✔       |
 | [atool](https://www.nongnu.org/atool/)                                                                                           |   ✔   |      ✔       |       ✔       |
 | [tree](http://mama.indstate.edu/users/ice/tree/)                                                                                 |   ✔   |      ✔       |       ✔       |
 | [git-extras](https://github.com/tj/git-extras)                                                                                   |   ✔   |      ✔       |       ✔       |

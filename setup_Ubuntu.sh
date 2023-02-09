@@ -478,7 +478,7 @@ done <<EOS
 	zsh-users/zsh-syntax-highlighting plugins/zsh-syntax-highlighting
 	zsh-users/zsh-autosuggestions     plugins/zsh-autosuggestions
 	zsh-users/zsh-completions         plugins/zsh-completions
-	esc/conda-zsh-completion          plugins/conda-zsh-completion
+	conda-incubator/conda-zsh-completion          plugins/conda-zsh-completion
 EOS
 
 # Install GitStatus

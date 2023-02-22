@@ -48,6 +48,8 @@ ms-python.vscode-pylance
 ms-python.black-formatter
 ms-python.isort
 ms-python.pylint
+ms-python.flake8
+charliermarsh.ruff
 ms-toolsai.vscode-jupyter-cell-tags
 ms-toolsai.vscode-jupyter-slideshow
 mechatroner.rainbow-csv

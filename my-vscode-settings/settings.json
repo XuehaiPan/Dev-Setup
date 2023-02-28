@@ -902,6 +902,7 @@
         "--atomic",
         "--profile=black",
         "--line-length=100",
+        "--lines-after-imports=2",
         "--remove-redundant-aliases",
         "--extra-builtin=typing_extensions"
     ],

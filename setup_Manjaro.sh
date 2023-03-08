@@ -1696,7 +1696,7 @@ call plug#begin('~/.vim/plugged')
     Plug 'junegunn/fzf.vim'
     Plug 'vim-autoformat/vim-autoformat'
     Plug 'vim-syntastic/syntastic'
-    Plug 'codota/tabnine-vim'
+    Plug 'codota/tabnine-nvim'
     Plug 'SirVer/ultisnips'
     Plug 'honza/vim-snippets'
     Plug 'PProvost/vim-ps1'

@@ -190,10 +190,9 @@
 
     //! Default Configuration Overrides */
     "[c]": {
-        "editor.insertSpaces": false
+        "editor.defaultFormatter": "ms-vscode.cpptools"
     },
     "[cpp]": {
-        "editor.insertSpaces": false,
         "editor.defaultFormatter": "ms-vscode.cpptools"
     },
     "[dockerfile]": {
@@ -270,7 +269,7 @@
     "C_Cpp.workspaceSymbols": "All",
     "C_Cpp.clang_format_sortIncludes": false,
     "C_Cpp.clang_format_style": "file",
-    "C_Cpp.clang_format_fallbackStyle": "Visual Studio",
+    "C_Cpp.clang_format_fallbackStyle": "{ BasedOnStyle: Google, IndentWidth: 4, AccessModifierOffset: -3, ColumnLimit: 100, BinPackArguments: false, BinPackParameters: false }",
     "C_Cpp.codeAnalysis.clangTidy.enabled": true,
 
     //* C/C++ Clang Command Adapter */
@@ -887,7 +886,7 @@
         "--generated-members=numpy.*,torch.*",
         "--max-line-length=120"
     ],
-    "jupyter.defaultCellMarker": "# %%",
+    "jupyter.interactiveWindow.cellMarker.default": "# %%"
     "notebook.lineNumbers": "on",
     "notebook.cellToolbarVisibility": "hover",
     "notebook.showFoldingControls": "always",

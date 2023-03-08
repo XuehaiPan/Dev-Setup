@@ -886,7 +886,7 @@
         "--generated-members=numpy.*,torch.*",
         "--max-line-length=120"
     ],
-    "jupyter.interactiveWindow.cellMarker.default": "# %%"
+    "jupyter.interactiveWindow.cellMarker.default": "# %%",
     "notebook.lineNumbers": "on",
     "notebook.cellToolbarVisibility": "hover",
     "notebook.showFoldingControls": "always",

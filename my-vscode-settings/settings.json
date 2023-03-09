@@ -916,6 +916,9 @@
         "--max-line-length=120"
     ],
     "ruff.importStrategy":"fromEnvironment",
+    "ruff.args": [
+        "--line-length=100"
+    ],
     "ruff.organizeImports": false,
 
     //* Remote */

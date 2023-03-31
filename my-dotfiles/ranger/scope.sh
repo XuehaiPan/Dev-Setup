@@ -115,7 +115,16 @@ handle_extension() {
             ;;
 
         ## JSON
-        json | ipynb)
+        json)
+            jq --color-output . "${FILE_PATH}" && exit 5
+            python3 -m json.tool --indent 2 -- "${FILE_PATH}" && exit 5
+            ;;
+
+        ## Jupyter Notebooks
+        ipynb)
+            jupyter nbconvert --to markdown "${FILE_PATH}" --stdout |
+                env COLORTERM=8bit bat --color=always --style=plain --language=markdown && exit 5
+            jupyter nbconvert --to markdown "${FILE_PATH}" --stdout && exit 5
             jq --color-output . "${FILE_PATH}" && exit 5
             python3 -m json.tool --indent 2 -- "${FILE_PATH}" && exit 5
             ;;
@@ -140,6 +149,10 @@ handle_image() {
     case "${mimetype}" in
         ## SVG
         image/svg+xml | image/svg)
+            rsvg-convert --keep-aspect-ratio --width "${DEFAULT_SIZE%x*}" \
+                "${FILE_PATH}" -o "${IMAGE_CACHE_PATH}.png" &&
+                mv "${IMAGE_CACHE_PATH}.png" "${IMAGE_CACHE_PATH}" &&
+                exit 6
             convert -- "${FILE_PATH}" "${IMAGE_CACHE_PATH}" && exit 6
             exit 1;;
 
@@ -171,6 +184,13 @@ handle_image() {
             # Get frame 10% into video
             ffmpegthumbnailer -i "${FILE_PATH}" -o "${IMAGE_CACHE_PATH}" -s 0 && exit 6
             exit 1;;
+
+        ## Audio
+        audio/*)
+            # Get embedded thumbnail
+            ffmpeg -i "${FILE_PATH}" -map 0:v -map -0:V -c copy \
+                "${IMAGE_CACHE_PATH}" && exit 6
+            ;;
 
         ## PDF
         application/pdf)
@@ -326,44 +346,71 @@ handle_mime() {
             ## Display basic table information
             sqlite_rowcount_query="$(
                 sqlite3 "file:${FILE_PATH}?mode=ro" -noheader \
-                    'SELECT (
-                        group_concat("SELECT """ || name || """ AS tblname, count(*) AS rowcount FROM " || name, " UNION ALL ")
-                    ) FROM sqlite_master WHERE type="table" AND name NOT LIKE "sqlite_%";'
+                    'SELECT group_concat(
+                        "SELECT """ || name || """ AS tblname,
+                                          count(*) AS rowcount
+                         FROM " || name,
+                        " UNION ALL "
+                    )
+                    FROM sqlite_master
+                    WHERE type="table" AND name NOT LIKE "sqlite_%";'
             )"
             sqlite_show_query \
-                'SELECT tblname AS "table", rowcount AS "count",
+                "SELECT tblname AS 'table', rowcount AS 'count',
                 (
-                    SELECT "(" || group_concat(name, ", ") || ")"
+                    SELECT '(' || group_concat(name, ', ') || ')'
                     FROM pragma_table_info(tblname)
-                ) AS "columns",
+                ) AS 'columns',
                 (
-                    SELECT "(" || group_concat(upper(type) || (CASE WHEN pk > 0 THEN " PRIMARY KEY" ELSE "" END), ", ") || ")"
+                    SELECT '(' || group_concat(
+                        upper(type) || (
+                            CASE WHEN pk > 0 THEN ' PRIMARY KEY' ELSE '' END
+                        ),
+                        ', '
+                    ) || ')'
                     FROM pragma_table_info(tblname)
-                ) AS "types"
-                FROM '"(${sqlite_rowcount_query});"
+                ) AS 'types'
+                FROM (${sqlite_rowcount_query});"
             if [ "${SQLITE_TABLE_LIMIT}" -gt 0 ] && [ "${SQLITE_ROW_LIMIT}" -ge 0 ]; then
                 ## Do exhaustive preview
-                echo; printf '>%.0s' $( seq "${PV_WIDTH}" ); echo
+                echo && printf '>%.0s' $( seq "${PV_WIDTH}" ) && echo
                 sqlite3 "file:${FILE_PATH}?mode=ro" -noheader \
-                    "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' LIMIT ${SQLITE_TABLE_LIMIT};" |
+                    "SELECT name FROM sqlite_master
+                    WHERE type='table' AND name NOT LIKE 'sqlite_%'
+                    LIMIT ${SQLITE_TABLE_LIMIT};" |
                     while read -r sqlite_table; do
-                        sqlite_table_rowcount="$( sqlite3 "file:${FILE_PATH}?mode=ro" -noheader "SELECT count(*) FROM ${sqlite_table}" )"
-                        if [ "${SQLITE_ROW_LIMIT}" -gt 0 ] && [ "${SQLITE_ROW_LIMIT}" -lt "${sqlite_table_rowcount}" ]; then
-                            echo; echo "${sqlite_table} [${SQLITE_ROW_LIMIT} of ${sqlite_table_rowcount}]:"
+                        sqlite_rowcount="$(
+                            sqlite3 "file:${FILE_PATH}?mode=ro" -noheader \
+                                "SELECT count(*) FROM ${sqlite_table}"
+                        )"
+                        echo
+                        if [ "${SQLITE_ROW_LIMIT}" -gt 0 ] &&
+                           [ "${SQLITE_ROW_LIMIT}" -lt "${sqlite_rowcount}" ]; then
+                            echo "${sqlite_table} [${SQLITE_ROW_LIMIT} of ${sqlite_rowcount}]:"
                             sqlite_ellipsis_query="$(
                                 sqlite3 "file:${FILE_PATH}?mode=ro" -noheader \
-                                "SELECT 'SELECT ' || group_concat('\"...\"', ', ') FROM pragma_table_info('${sqlite_table}');"
+                                    "SELECT 'SELECT ' || group_concat(
+                                        '''...''', ', '
+                                    )
+                                    FROM pragma_table_info(
+                                        '${sqlite_table}'
+                                    );"
                             )"
                             sqlite_show_query \
-                                'SELECT * FROM (SELECT * FROM '"${sqlite_table}"' LIMIT 1)
-                                UNION ALL '"${sqlite_ellipsis_query}"' UNION ALL
+                                "SELECT * FROM (
+                                    SELECT * FROM ${sqlite_table} LIMIT 1
+                                )
+                                UNION ALL ${sqlite_ellipsis_query} UNION ALL
                                 SELECT * FROM (
-                                    SELECT * FROM '"${sqlite_table}"'
-                                    LIMIT ('"${SQLITE_ROW_LIMIT}"' - 1)
-                                    OFFSET ('"${sqlite_table_rowcount}"' - ('"${SQLITE_ROW_LIMIT}"' - 1))
-                                );'
+                                    SELECT * FROM ${sqlite_table}
+                                    LIMIT (${SQLITE_ROW_LIMIT} - 1)
+                                    OFFSET (
+                                        ${sqlite_rowcount}
+                                        - (${SQLITE_ROW_LIMIT} - 1)
+                                    )
+                                );"
                         else
-                            echo; echo "${sqlite_table} [${sqlite_table_rowcount}]:"
+                            echo "${sqlite_table} [${sqlite_rowcount}]:"
                             sqlite_show_query "SELECT * FROM ${sqlite_table};"
                         fi
                     done
@@ -425,6 +472,7 @@ handle_mime() {
             application/x-sharedlib | application/x-mach-binary)
             echo "ldd: ${FILE_PATH}" && ldd "${FILE_PATH}"
             objdump --demangle --syms "${FILE_PATH}" && exit 5
+            readelf -WCa "${FILE_PATH}" && exit 5
             nm --demangle "${FILE_PATH}" && exit 5
             exit 1;;
     esac
@@ -434,7 +482,6 @@ handle_fallback() {
     echo '----- File Type Classification -----' && file --dereference --brief -- "${FILE_PATH}" && exit 5
     exit 1
 }
-
 
 MIMETYPE="$( file --dereference --brief --mime-type -- "${FILE_PATH}" )"
 if [[ "${PV_IMAGE_ENABLED}" == 'True' ]]; then

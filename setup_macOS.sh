@@ -2324,11 +2324,8 @@ create_default_packages:
   - notebook
   - jupyterlab
   - numpy
-  - numba
   - matplotlib-base
   - pandas
-  - seaborn
-  - cython
   - rich
   - tqdm
   - black-jupyter
@@ -2359,8 +2356,8 @@ exec_cmd 'conda install mamba --yes'
 exec_cmd 'conda update conda mamba --yes'
 exec_cmd 'conda install pip ipython ipdb \
 	jupyter notebook jupyterlab jupyter_contrib_nbextensions \
-	numpy numba matplotlib-base pandas seaborn cython \
-	rich tqdm black-jupyter isort pre-commit pylint --yes'
+	numpy matplotlib-base pandas rich tqdm \
+	black-jupyter isort pre-commit pylint --yes'
 exec_cmd 'conda clean --all --yes'
 exec_cmd "\"${CONDA_DIR}/bin/jupyter\" contrib nbextension install --user &>/dev/null"
 if ${SET_MIRRORS}; then

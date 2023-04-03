@@ -31,6 +31,12 @@
 [http]
 	postBuffer = 524288000
 
+[init]
+	defaultBranch = main
+
+[pull]
+	ff = only
+
 [fetch]
 	prune = true
 	parallel = 0
@@ -44,6 +50,9 @@
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
+
+[alias]
+	ignore-list = "! cd -- \"${GIT_PREFIX:-.}\" && git ls-files -v \"${1:-.}\" | sed -n -e \"s,^[a-z] \\\\(.*\\\\)\\$,${GIT_PREFIX:-./}\\\\1,p\" && git status --ignored --porcelain \"${1:-.}\" 2>/dev/null | sed -n -e \"s/^\\\\(\\\\!\\\\! \\\\)\\\\(.*\\\\)$/\\\\2/p\" #"
 
 [color]
 	ui = true

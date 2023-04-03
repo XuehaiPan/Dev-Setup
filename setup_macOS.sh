@@ -288,6 +288,8 @@ git config --global merge.tool vimdiff
 git config --global merge.guitool gvimdiff
 git config --global mergetool.prompt false
 git config --global http.postBuffer 524288000
+git config --global init.defaultBranch main
+git config --global pull.ff only
 git config --global fetch.prune true
 git config --global fetch.parallel 0
 git config --global submodule.recurse true
@@ -296,6 +298,7 @@ git config --global filter.lfs.clean 'git-lfs clean -- %f'
 git config --global filter.lfs.smudge 'git-lfs smudge -- %f'
 git config --global filter.lfs.process 'git-lfs filter-process'
 git config --global filter.lfs.required true
+git config --global alias.ignore-list '! cd -- "${GIT_PREFIX:-.}" && git ls-files -v "${1:-.}" | sed -n -e "s,^[a-z] \\(.*\\)\$,${GIT_PREFIX:-./}\\1,p" && git status --ignored --porcelain "${1:-.}" 2>/dev/null | sed -n -e "s/^\\(\\!\\! \\)\\(.*\\)$/\\2/p" #'
 git config --global color.ui true
 git config --global color.diff-highlight.oldNormal 'red bold'
 git config --global color.diff-highlight.oldHighlight 'red bold 52'

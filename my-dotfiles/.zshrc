@@ -110,9 +110,6 @@ eval "$(perl -I"${HOMEBREW_PREFIX}/opt/perl/lib/perl5" -Mlocal::lib="${HOMEBREW_
 # Mono
 export MONO_GAC_PREFIX="${HOMEBREW_PREFIX}"
 
-# Qt
-export PATH="${HOMEBREW_PREFIX}/opt/qt/bin${PATH:+:"${PATH}"}"
-
 # cURL
 export PATH="${HOMEBREW_PREFIX}/opt/curl/bin${PATH:+:"${PATH}"}"
 
@@ -121,9 +118,6 @@ export PATH="${HOMEBREW_PREFIX}/opt/openssl/bin${PATH:+:"${PATH}"}"
 
 # gettext
 export PATH="${HOMEBREW_PREFIX}/opt/gettext/bin${PATH:+:"${PATH}"}"
-
-# Bison
-export PATH="${HOMEBREW_PREFIX}/opt/bison/bin${PATH:+:"${PATH}"}"
 
 # NCURSES
 export PATH="${HOMEBREW_PREFIX}/opt/ncurses/bin${PATH:+:"${PATH}"}"

@@ -570,6 +570,11 @@ unset __conda_setup
 if [[ -f "\${HOME}/${CONDA_DIR}/etc/profile.d/mamba.sh" ]]; then
 	source "\${HOME}/${CONDA_DIR}/etc/profile.d/mamba.sh"
 fi
+
+__CONDA_PREFIX="\${CONDA_PREFIX}"
+while [[ -n "\${CONDA_PREFIX}" ]]; do
+	conda deactivate
+done
 # <<< conda initialize <<<
 
 EOF
@@ -620,6 +625,12 @@ export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --ansi --preview='${FZF_P
 
 # bat
 export BAT_THEME="Monokai Extended"
+
+# Conda
+if [[ -n "${__CONDA_PREFIX}" ]]; then
+	conda activate "${__CONDA_PREFIX}"
+fi
+unset __CONDA_PREFIX
 
 # Remove duplicate entries
 function __remove_duplicate() {
@@ -1410,6 +1421,11 @@ unset __conda_setup
 if [[ -f "\${HOME}/${CONDA_DIR}/etc/profile.d/mamba.sh" ]]; then
 	source "\${HOME}/${CONDA_DIR}/etc/profile.d/mamba.sh"
 fi
+
+__CONDA_PREFIX="\${CONDA_PREFIX}"
+while [[ -n "\${CONDA_PREFIX}" ]]; do
+	conda deactivate
+done
 # <<< conda initialize <<<
 
 EOF
@@ -1457,6 +1473,12 @@ export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --ansi --preview='${FZF_P
 
 # bat
 export BAT_THEME="Monokai Extended"
+
+# Conda
+if [[ -n "${__CONDA_PREFIX}" ]]; then
+	conda activate "${__CONDA_PREFIX}"
+fi
+unset __CONDA_PREFIX
 
 # Remove duplicate entries
 function __remove_duplicate() {

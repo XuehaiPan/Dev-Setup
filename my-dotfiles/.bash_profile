@@ -86,6 +86,11 @@ unset __conda_setup
 if [[ -f "${HOME}/Miniconda3/etc/profile.d/mamba.sh" ]]; then
 	source "${HOME}/Miniconda3/etc/profile.d/mamba.sh"
 fi
+
+__CONDA_PREFIX="${CONDA_PREFIX}"
+while [[ -n "${CONDA_PREFIX}" ]]; do
+	conda deactivate
+done
 # <<< conda initialize <<<
 
 # CXX Compilers
@@ -170,6 +175,12 @@ export BAT_THEME="Monokai Extended"
 if [[ -f "${HOME}/.iterm2/.iterm2_shell_integration.bash" ]]; then
 	source "${HOME}/.iterm2/.iterm2_shell_integration.bash"
 fi
+
+# Conda
+if [[ -n "${__CONDA_PREFIX}" ]]; then
+	conda activate "${__CONDA_PREFIX}"
+fi
+unset __CONDA_PREFIX
 
 # Remove duplicate entries
 function __remove_duplicate() {

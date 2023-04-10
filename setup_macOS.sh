@@ -513,6 +513,11 @@ unset __conda_setup
 if [[ -f "${CONDA_DIR}/etc/profile.d/mamba.sh" ]]; then
 	source "${CONDA_DIR}/etc/profile.d/mamba.sh"
 fi
+
+__CONDA_PREFIX="\${CONDA_PREFIX}"
+while [[ -n "\${CONDA_PREFIX}" ]]; do
+	conda deactivate
+done
 # <<< conda initialize <<<
 
 EOF
@@ -572,6 +577,12 @@ export BAT_THEME="Monokai Extended"
 if [[ -f "${HOME}/.iterm2/.iterm2_shell_integration.zsh" ]]; then
 	source "${HOME}/.iterm2/.iterm2_shell_integration.zsh"
 fi
+
+# Conda
+if [[ -n "${__CONDA_PREFIX}" ]]; then
+	conda activate "${__CONDA_PREFIX}"
+fi
+unset __CONDA_PREFIX
 
 # Remove duplicate entries
 function __remove_duplicate() {
@@ -1352,6 +1363,11 @@ unset __conda_setup
 if [[ -f "${CONDA_DIR}/etc/profile.d/mamba.sh" ]]; then
 	source "${CONDA_DIR}/etc/profile.d/mamba.sh"
 fi
+
+__CONDA_PREFIX="\${CONDA_PREFIX}"
+while [[ -n "\${CONDA_PREFIX}" ]]; do
+	conda deactivate
+done
 # <<< conda initialize <<<
 
 EOF
@@ -1411,6 +1427,12 @@ export BAT_THEME="Monokai Extended"
 if [[ -f "${HOME}/.iterm2/.iterm2_shell_integration.bash" ]]; then
 	source "${HOME}/.iterm2/.iterm2_shell_integration.bash"
 fi
+
+# Conda
+if [[ -n "${__CONDA_PREFIX}" ]]; then
+	conda activate "${__CONDA_PREFIX}"
+fi
+unset __CONDA_PREFIX
 
 # Remove duplicate entries
 function __remove_duplicate() {

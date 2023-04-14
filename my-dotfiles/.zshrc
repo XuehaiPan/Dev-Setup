@@ -209,7 +209,7 @@ DEFAULT_USER="PanXuehai"
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
 ZSH_THEME="powerlevel10k/powerlevel10k"
 
-# Powerlevel10k configrations
+# Powerlevel10k configurations
 typeset -g POWERLEVEL9K_MODE="nerdfont-complete"
 typeset -g POWERLEVEL9K_PROMPT_ON_NEWLINE=true
 typeset -g POWERLEVEL9K_RPROMPT_ON_NEWLINE=false

@@ -372,7 +372,7 @@ exec_cmd 'brew update --force --verbose'
 # Install Oh-My-Zsh
 export ZSH="${ZSH:-"${HOME}/.oh-my-zsh"}"
 export ZSH_CUSTOM="${ZSH_CUSTOM:-"${ZSH}/custom"}"
-export ZSH_CACHE_DIR="${ZSH_CACHE_DIR:-"${ZSH}/cahce"}"
+export ZSH_CACHE_DIR="${ZSH_CACHE_DIR:-"${ZSH}/cache"}"
 
 if [[ -d "${ZSH}/.git" && -f "${ZSH}/tools/upgrade.sh" ]]; then
 	rm -f "${ZSH_CACHE_DIR}/.zsh-update" 2>/dev/null
@@ -675,7 +675,7 @@ cat >>.dotfiles/.zshrc <<'EOF'
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
 ZSH_THEME="powerlevel10k/powerlevel10k"
 
-# Powerlevel10k configrations
+# Powerlevel10k configurations
 typeset -g POWERLEVEL9K_MODE="nerdfont-complete"
 typeset -g POWERLEVEL9K_PROMPT_ON_NEWLINE=true
 typeset -g POWERLEVEL9K_RPROMPT_ON_NEWLINE=false

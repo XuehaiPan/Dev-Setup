@@ -172,7 +172,7 @@ class fd_search(Command):
                 depth = '-d1'
                 target = self.rest(1)
         else:
-            self.fm.notify(":fd_search needs a query.", bad=True)
+            self.fm.notify(':fd_search needs a query.', bad=True)
             return
 
         hidden = ('--hidden' if self.fm.settings.show_hidden else '')

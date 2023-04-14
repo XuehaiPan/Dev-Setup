@@ -1,5 +1,3 @@
-#!/usr/bin/env bash
-
 function exec_cmd() {
 	printf "%s" "$@" | awk \
 		'BEGIN {

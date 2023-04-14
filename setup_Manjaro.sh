@@ -966,8 +966,6 @@ fi
 backup_dotfiles .dotfiles/utilities.sh
 
 cat >.dotfiles/utilities.sh <<'EOF'
-#!/usr/bin/env bash
-
 function exec_cmd() {
 	printf "%s" "$@" | awk \
 		'BEGIN {

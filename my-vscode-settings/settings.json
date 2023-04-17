@@ -923,7 +923,6 @@
 
     //* Remote */
     "remote.extensionKind": {
-        "coenraads.bracket-pair-colorizer-2": "ui",
         "ms-azuretools.vscode-docker": "workspace"
     },
     "remote.SSH.defaultExtensions": [

@@ -589,7 +589,7 @@ export OMPI_FC="${FC}" MPICH_FC="${FC}"
 
 # CUDA Toolkit
 export CUDA_HOME="${CUDA_HOME:-/usr/local/cuda}"
-if [[ -d "${CUDA_HOME}" ]]; then
+if [[ -d "${CUDA_HOME}" || -L "${CUDA_HOME}" ]]; then
 	export PATH="${CUDA_HOME}/bin${PATH:+:"${PATH}"}"
 	export C_INCLUDE_PATH="${CUDA_HOME}/include:${CUDA_HOME}/extras/CUPTI/include${C_INCLUDE_PATH:+:"${C_INCLUDE_PATH}"}"
 	export CPLUS_INCLUDE_PATH="${CUDA_HOME}/include:${CUDA_HOME}/extras/CUPTI/include${CPLUS_INCLUDE_PATH:+:"${CPLUS_INCLUDE_PATH}"}"
@@ -1438,7 +1438,7 @@ export OMPI_FC="${FC}" MPICH_FC="${FC}"
 
 # CUDA Toolkit
 export CUDA_HOME="${CUDA_HOME:-/usr/local/cuda}"
-if [[ -d "${CUDA_HOME}" ]]; then
+if [[ -d "${CUDA_HOME}" || -L "${CUDA_HOME}" ]]; then
 	export PATH="${CUDA_HOME}/bin${PATH:+:"${PATH}"}"
 	export C_INCLUDE_PATH="${CUDA_HOME}/include:${CUDA_HOME}/extras/CUPTI/include${C_INCLUDE_PATH:+:"${C_INCLUDE_PATH}"}"
 	export CPLUS_INCLUDE_PATH="${CUDA_HOME}/include:${CUDA_HOME}/extras/CUPTI/include${CPLUS_INCLUDE_PATH:+:"${CPLUS_INCLUDE_PATH}"}"

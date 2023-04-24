@@ -15,6 +15,7 @@
     "editor.detectIndentation": true,
     "editor.folding": true,
     "editor.foldingStrategy": "auto",
+    "editor.semanticHighlighting.enabled": true,
     "editor.guides.bracketPairs": true,
     "editor.guides.bracketPairsHorizontal": true,
     "editor.guides.highlightActiveBracketPair": true,

@@ -289,7 +289,7 @@ call plug#begin('~/vimfiles/plugged')
     Plug 'junegunn/fzf.vim'
     Plug 'vim-autoformat/vim-autoformat'
     Plug 'vim-syntastic/syntastic'
-    Plug 'codota/tabnine-nvim'
+    Plug 'github/copilot.vim'
     Plug 'SirVer/ultisnips'
     Plug 'honza/vim-snippets'
     Plug 'PProvost/vim-ps1'

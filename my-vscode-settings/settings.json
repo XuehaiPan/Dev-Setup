@@ -979,9 +979,6 @@
         }
     ],
 
-    //* TabNine */
-    "tabnine.experimentalAutoImports": true,
-
     //* Todo Tree */
     "todo-tree.general.tags": [
         "BUG",

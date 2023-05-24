@@ -1522,10 +1522,6 @@ chmod 644 .dotfiles/.bash_profile
 # Configurations for Vim
 backup_dotfiles .vimrc .dotfiles/.vimrc
 
-GUI_FONT='DejaVuSansMono\ Nerd\ Font\ Mono\ 10'
-if ${IN_WSL}; then
-	GUI_FONT='DejaVuSansMono\ NFM\ 10'
-fi
 cat >.dotfiles/.vimrc <<'EOF'
 set nocompatible
 set backspace=indent,eol,start
@@ -1573,11 +1569,7 @@ set wildmode=longest:list,full
 set completeopt=longest,menu
 set background=dark
 set t_Co=256
-EOF
-cat >>.dotfiles/.vimrc <<EOF
-set guifont=${GUI_FONT}
-EOF
-cat >>.dotfiles/.vimrc <<'EOF'
+set guifont=DejaVuSansM\ Nerd\ Font\ Mono:h12
 colorscheme monokai
 
 if has('mouse')

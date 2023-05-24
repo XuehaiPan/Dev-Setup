@@ -2,7 +2,7 @@
     //! Editor settings */
     //* Editor */
     "editor.fontSize": 13,
-    "editor.fontFamily": "Menlo, Monaco, Consolas, 'Courier New', 'Microsoft YaHei Mono', monospace, 'DejaVuSansMono Nerd Font Mono', 'DejaVuSansMono NF'",
+    "editor.fontFamily": "Menlo, Monaco, Consolas, 'Courier New', 'Microsoft YaHei Mono', monospace, 'DejaVuSansM Nerd Font Mono'",
     "editor.fontWeight": 600,
     "editor.tabSize": 4,
     "editor.insertSpaces": true,
@@ -162,7 +162,7 @@
     //* Integrated Terminal */
     "terminal.explorerKind": "integrated",
     "terminal.integrated.fontSize": 14,
-    "terminal.integrated.fontFamily": "'DejaVuSansMono Nerd Font Mono', 'DejaVuSansMono NF', Menlo, 'Microsoft YaHei Mono'",
+    "terminal.integrated.fontFamily": "'DejaVuSansM Nerd Font Mono', Menlo, 'Microsoft YaHei Mono'",
     "terminal.integrated.tabs.enabled": true,
     "terminal.integrated.showExitAlert": true,
     "terminal.integrated.confirmOnExit": "hasChildProcesses",

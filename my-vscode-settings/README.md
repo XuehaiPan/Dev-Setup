@@ -9,13 +9,13 @@ Compare with your VS Code settings:
 - macOS:
 
 ```bash
-code --diff ~/Library/ApplicationSupport/Code/User/settings.json settings.json
+code --diff "${HOME}/Library/Application Support/Code/User/settings.json" settings.json
 ```
 
 - Linux:
 
 ```bash
-code --diff ~/.config/Code/User/settings.json settings.json
+code --diff "${HOME}/.config/Code/User/settings.json" settings.json
 ```
 
 - Windows:

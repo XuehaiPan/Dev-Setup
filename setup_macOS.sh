@@ -2348,11 +2348,11 @@ chmod 644 .dotfiles/.condarc
 # Install Miniconda
 if ! ${CONDA_BASE_PREFIX_EXIST}; then
 	if ${SET_MIRRORS}; then
-		exec_cmd "wget -N -P \"${TMP_DIR}\" https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-latest-MacOSX-x86_64.sh"
+		exec_cmd "wget -N -P \"${TMP_DIR}\" https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-latest-MacOSX-$(uname -m).sh"
 	else
-		exec_cmd "wget -N -P \"${TMP_DIR}\" https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh"
+		exec_cmd "wget -N -P \"${TMP_DIR}\" https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-$(uname -m).sh"
 	fi
-	exec_cmd "/bin/sh \"${TMP_DIR}/Miniconda3-latest-MacOSX-x86_64.sh\" -b -p \"${CONDA_DIR}\""
+	exec_cmd "/bin/sh \"${TMP_DIR}/Miniconda3-latest-MacOSX-$(uname -m).sh\" -b -p \"${CONDA_DIR}\""
 fi
 
 # Install Conda packages

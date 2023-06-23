@@ -132,12 +132,14 @@ export PATH="${HOMEBREW_PREFIX}/opt/sqlite/bin${PATH:+:"${PATH}"}"
 # LLVM
 export PATH="${HOMEBREW_PREFIX}/opt/llvm/bin${PATH:+:"${PATH}"}"
 
+# libarchive
+export DYLD_FALLBACK_LIBRARY_PATH="${DYLD_FALLBACK_LIBRARY_PATH:+"${DYLD_FALLBACK_LIBRARY_PATH}":}${HOMEBREW_PREFIX}/opt/libarchive/lib"
+
 # Wine
 export WINEARCH="win32"
 export WINEPREFIX="${HOME}/.wine32"
 export WINEDEBUG="-all"
 export DYLD_FALLBACK_LIBRARY_PATH="${DYLD_FALLBACK_LIBRARY_PATH:+"${DYLD_FALLBACK_LIBRARY_PATH}":}/usr/X11/lib:${HOMEBREW_PREFIX}/lib"
-export DYLD_FALLBACK_LIBRARY_PATH="${DYLD_FALLBACK_LIBRARY_PATH:+"${DYLD_FALLBACK_LIBRARY_PATH}":}${HOMEBREW_PREFIX}/opt/ncurses/lib"
 
 # fzf
 if [[ -f "${HOME}/.fzf.zsh" ]]; then

@@ -243,7 +243,7 @@ fi
 exec_cmd 'brew install bash-completion wget curl git git-lfs macvim tmux'
 exec_cmd 'brew install coreutils ranger fd bat highlight ripgrep git-extras'
 exec_cmd 'brew install jq shfmt shellcheck diffutils colordiff diff-so-fancy'
-exec_cmd 'brew install htop openssh atool tree reattach-to-user-namespace'
+exec_cmd 'brew install htop openssh atool tree reattach-to-user-namespace libarchive'
 
 exec_cmd 'brew install ruby perl'
 export PATH="${HOMEBREW_PREFIX}/opt/ruby/bin${PATH:+:"${PATH}"}"
@@ -560,6 +560,9 @@ export PATH="${HOMEBREW_PREFIX}/opt/sqlite/bin${PATH:+:"${PATH}"}"
 
 # LLVM
 export PATH="${HOMEBREW_PREFIX}/opt/llvm/bin${PATH:+:"${PATH}"}"
+
+# libarchive
+export DYLD_FALLBACK_LIBRARY_PATH="${DYLD_FALLBACK_LIBRARY_PATH:+"${DYLD_FALLBACK_LIBRARY_PATH}":}${HOMEBREW_PREFIX}/opt/libarchive/lib"
 
 # fzf
 if [[ -f "${HOME}/.fzf.zsh" ]]; then
@@ -1408,6 +1411,9 @@ export PATH="${HOMEBREW_PREFIX}/opt/sqlite/bin${PATH:+:"${PATH}"}"
 
 # LLVM
 export PATH="${HOMEBREW_PREFIX}/opt/llvm/bin${PATH:+:"${PATH}"}"
+
+# libarchive
+export DYLD_FALLBACK_LIBRARY_PATH="${DYLD_FALLBACK_LIBRARY_PATH:+"${DYLD_FALLBACK_LIBRARY_PATH}":}${HOMEBREW_PREFIX}/opt/libarchive/lib"
 
 # fzf
 if [[ -f "${HOME}/.fzf.bash" ]]; then
@@ -2462,7 +2468,7 @@ EOF
 chmod 755 "${CONDA_BASE_PREFIX}/etc/init-envs.sh"
 
 # Setup IPython
-exec_cmd "\"\${CONDA_DIR}/bin/ipython\" profile create"
+exec_cmd "\"${CONDA_DIR}/bin/ipython\" profile create"
 exec_cmd "sed -i \"\" -E 's/^ *#? *(c.InteractiveShell.colors).*\$/\\1 = \"Linux\"/g' \"\${HOME}/.ipython/profile_default/ipython_config.py\""
 exec_cmd "sed -i \"\" -E 's/^ *#? *(c.InteractiveShell.colors).*\$/\\1 = \"Linux\"/g' \"\${HOME}/.ipython/profile_default/ipython_kernel_config.py\""
 

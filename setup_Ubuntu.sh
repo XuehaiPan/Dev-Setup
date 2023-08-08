@@ -415,7 +415,7 @@ if [[ ! -x "$(command -v brew)" ]]; then
 			exec_cmd 'ln -sfn "../Homebrew/bin/brew" "${HOME}/.linuxbrew/bin"'
 		fi
 		exec_cmd 'eval "$("${HOME}/.linuxbrew/bin/brew" shellenv)"'
-		exec_cmd 'brew update --force --quiet'
+		exec_cmd 'brew update --quiet'
 		exec_cmd 'chmod -R go-w "$(brew --prefix)/share/zsh"'
 	fi
 else
@@ -440,7 +440,7 @@ if ${SET_MIRRORS}; then
 else
 	exec_cmd 'brew tap --force-auto-update homebrew/command-not-found'
 fi
-exec_cmd 'brew update --force --verbose'
+exec_cmd 'brew update --verbose'
 
 # Install Oh-My-Zsh
 export ZSH="${ZSH:-"${HOME}/.oh-my-zsh"}"

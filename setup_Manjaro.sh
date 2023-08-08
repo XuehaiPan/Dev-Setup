@@ -342,7 +342,7 @@ if [[ ! -x "$(command -v brew)" ]]; then
 			exec_cmd 'ln -sfn "../Homebrew/bin/brew" "${HOME}/.linuxbrew/bin"'
 		fi
 		exec_cmd 'eval "$("${HOME}/.linuxbrew/bin/brew" shellenv)"'
-		exec_cmd 'brew update --force --quiet'
+		exec_cmd 'brew update --quiet'
 		exec_cmd 'chmod -R go-w "$(brew --prefix)/share/zsh"'
 	fi
 else
@@ -360,7 +360,7 @@ else
 	HOMEBREW_BREW="\"\${HOME}/${HOMEBREW_PREFIX/#${HOME}\//}/bin/brew\""
 fi
 exec_cmd "eval \"\$(${HOMEBREW_BREW} shellenv)\""
-exec_cmd 'brew update'
+exec_cmd 'brew update --verbose'
 
 if ${SET_MIRRORS}; then
 	exec_cmd "brew tap --custom-remote --force-auto-update homebrew/command-not-found https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-command-not-found.git"

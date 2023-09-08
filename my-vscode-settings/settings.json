@@ -84,6 +84,7 @@
     "workbench.editorAssociations": {
         "*.ipynb": "jupyter-notebook"
     },
+    "workbench.editorLargeFileConfirmation": 64,
     "workbench.localHistory.enabled": true,
     "workbench.localHistory.maxFileSize": 1024,
     "workbench.localHistory.mergeWindow": 60,
@@ -403,7 +404,6 @@
 
     //* Git */
     "git.enabled": true,
-    "git.path": "git",
     "git.autoRepositoryDetection": true,
     "git.autoStash": true,
     "git.autorefresh": true,
@@ -926,6 +926,7 @@
     "remote.extensionKind": {
         "ms-azuretools.vscode-docker": "workspace"
     },
+    "remote.SSH.connectTimeout": 120,
     "remote.SSH.defaultExtensions": [
         "ms-ceintl.vscode-language-pack-zh-hans",
         "formulahendry.code-runner",

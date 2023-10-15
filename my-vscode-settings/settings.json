@@ -163,7 +163,7 @@
     //* Integrated Terminal */
     "terminal.explorerKind": "integrated",
     "terminal.integrated.fontSize": 14,
-    "terminal.integrated.fontFamily": "'DejaVuSansM Nerd Font Mono', Menlo, 'Microsoft YaHei Mono'",
+    "terminal.integrated.fontFamily": "'DejaVuSansM Nerd Font Mono', 'DejaVuSansM NFM', Menlo, 'Microsoft YaHei Mono'",
     "terminal.integrated.tabs.enabled": true,
     "terminal.integrated.showExitAlert": true,
     "terminal.integrated.confirmOnExit": "hasChildProcesses",
@@ -204,7 +204,16 @@
     "[go]": {
         "editor.insertSpaces": false
     },
+    "[html]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
     "[java]": {},
+    "[json]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
     "[julia]": {},
     "[latex]": {
         "editor.tabSize": 2,
@@ -248,6 +257,9 @@
     },
     "[shellscript]": {
         "editor.insertSpaces": false
+    },
+    "[yaml]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
 
     //! Extension settings */
@@ -888,6 +900,7 @@
         "--max-line-length=120"
     ],
     "jupyter.interactiveWindow.cellMarker.default": "# %%",
+    "jupyter.debugJustMyCode": false,
     "notebook.lineNumbers": "on",
     "notebook.cellToolbarVisibility": "hover",
     "notebook.showFoldingControls": "always",
@@ -926,7 +939,7 @@
     "remote.extensionKind": {
         "ms-azuretools.vscode-docker": "workspace"
     },
-    "remote.SSH.connectTimeout": 120,
+    "remote.SSH.connectTimeout": 300,
     "remote.SSH.defaultExtensions": [
         "ms-ceintl.vscode-language-pack-zh-hans",
         "formulahendry.code-runner",

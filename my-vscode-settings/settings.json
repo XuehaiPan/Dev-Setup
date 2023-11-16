@@ -61,15 +61,16 @@
     "diffEditor.renderSideBySide": true,
     "workbench.colorTheme": "Monokai",
     "workbench.iconTheme": "material-icon-theme",
-    "workbench.startupEditor": "welcomePage",
+    "workbench.startupEditor": "none",
     "workbench.sideBar.location": "left",
     "workbench.enableExperiments": false,
     "workbench.editor.showIcons": true,
-    "workbench.editor.showTabs": true,
+    "workbench.editor.showTabs": "multiple",
     "workbench.editor.closeEmptyGroups": true,
     "workbench.editor.closeOnFileDelete": false,
     "workbench.editor.enablePreview": true,
     "workbench.editor.highlightModifiedTabs": true,
+    "workbench.fontAliasing": "auto",
     "workbench.settings.editor": "ui",
     "workbench.settings.useSplitJSON": true,
     "workbench.colorCustomizations": {
@@ -176,6 +177,19 @@
     "terminal.integrated.defaultProfile.linux": "zsh",
     "terminal.integrated.defaultProfile.osx": "zsh",
     "terminal.integrated.defaultProfile.windows": "PowerShell",
+    "terminal.integrated.profiles.linux": {
+        "zsh": {
+            "path": "/usr/bin/zsh"
+        }
+    },
+    "terminal.integrated.profiles.osx": {
+        "zsh": {
+            "path": "/bin/zsh",
+            "args": [
+                "-l"
+            ]
+        }
+    },
 
     //* External Terminal */
     "terminal.external.linuxExec": "x-terminal-emulator",
@@ -992,6 +1006,9 @@
             "password": ""
         }
     ],
+
+    //* Tabnine */
+    "tabnine.experimentalAutoImports": true,
 
     //* Todo Tree */
     "todo-tree.general.tags": [

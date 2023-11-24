@@ -471,7 +471,7 @@
     //* GitHub Pull Requests and Issues */
     "githubPullRequests.defaultMergeMethod": "squash",
     "githubPullRequests.pullBranch": "never",
-    "githubPullRequests.terminalLinksHandler": "github"
+    "githubPullRequests.terminalLinksHandler": "github",
 
     //* GitLens */
     "gitlens.defaultTimeFormat": "HH:mm",

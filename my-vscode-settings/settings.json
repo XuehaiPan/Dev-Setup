@@ -469,7 +469,9 @@
     ],
 
     //* GitHub Pull Requests and Issues */
+    "githubPullRequests.defaultMergeMethod": "squash",
     "githubPullRequests.pullBranch": "never",
+    "githubPullRequests.terminalLinksHandler": "github"
 
     //* GitLens */
     "gitlens.defaultTimeFormat": "HH:mm",
@@ -899,20 +901,6 @@
     "python.terminal.activateEnvironment": true,
     "python.terminal.activateEnvInCurrentTerminal": true,
     "python.languageServer": "Pylance",
-    "python.formatting.provider": "black",
-    "python.formatting.blackArgs": [
-        "--safe",
-        "--line-length=100",
-        "--skip-string-normalization"
-    ],
-    "python.linting.enabled": true,
-    "python.linting.lintOnSave": true,
-    "python.linting.pylintEnabled": true,
-    "python.linting.pylintPath": "pylint",
-    "python.linting.pylintArgs": [
-        "--generated-members=numpy.*,torch.*",
-        "--max-line-length=120"
-    ],
     "jupyter.interactiveWindow.cellMarker.default": "# %%",
     "jupyter.debugJustMyCode": false,
     "notebook.lineNumbers": "on",

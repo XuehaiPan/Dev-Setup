@@ -34,7 +34,7 @@
     "editor.smoothScrolling": true,
     "editor.mouseWheelZoom": false,
     "editor.multiCursorModifier": "ctrlCmd",
-    "editor.occurrencesHighlight": true,
+    "editor.occurrencesHighlight": "singleFile",
     "editor.selectionHighlight": true,
     "editor.parameterHints.enabled": true,
     "editor.matchBrackets": "always",

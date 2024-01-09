@@ -213,11 +213,11 @@ exec_cmd "eval \"\$(${HOMEBREW_PREFIX}/bin/brew shellenv)\""
 exec_cmd 'brew update'
 
 if ${SET_MIRRORS}; then
-	for tap in cask{-fonts,-drivers,-versions} command-not-found; do
+	for tap in cask{-fonts,-versions} command-not-found; do
 		exec_cmd "brew tap --custom-remote --force-auto-update homebrew/${tap} https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-${tap}.git"
 	done
 else
-	for tap in cask{-fonts,-drivers,-versions} command-not-found; do
+	for tap in cask{-fonts,-versions} command-not-found; do
 		exec_cmd "brew tap --force-auto-update homebrew/${tap}"
 	done
 fi

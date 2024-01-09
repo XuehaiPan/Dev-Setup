@@ -322,7 +322,6 @@
     "clangd.detectExtensionConflicts": false,
 
     //* Cmake Tools */
-    "cmake.cmakePath": "cmake",
     "cmake.preferredGenerators": [
         "Unix Makefiles",
         "Ninja"
@@ -898,6 +897,7 @@
     "python.analysis.autoSearchPaths": true,
     "python.analysis.completeFunctionParens": true,
     "python.analysis.useLibraryCodeForTypes": true,
+    "python.defaultInterpreterPath": "python3",
     "python.terminal.activateEnvironment": true,
     "python.terminal.activateEnvInCurrentTerminal": true,
     "python.languageServer": "Pylance",
@@ -964,7 +964,6 @@
     "esbonio.server.enabled": false,
 
     //* Shellcheck */
-    "shellcheck.executablePath": "shellcheck",
     "shellcheck.enable": true,
     "shellcheck.enableQuickFix": true,
     "shellcheck.run": "onSave",

@@ -218,6 +218,11 @@ function check_binary() {
 }
 
 if have_sudo_access; then
+	# Install sudo command
+	if [[ "${EUID:-"${UID}"}" == "0" && ! -x "/usr/bin/sudo" ]]; then
+		exec_cmd 'apt-get update && apt-get install sudo --yes'
+	fi
+
 	# Update ca-certificates
 	exec_cmd 'sudo apt-get update && sudo apt-get install --only-upgrade ca-certificates --yes'
 

@@ -91,7 +91,6 @@
     "workbench.localHistory.mergeWindow": 60,
 
     //* Window */
-    "window.zoomLevel": -0.25,
     "window.closeWhenEmpty": false,
     "window.newWindowDimensions": "maximized",
     "window.openFilesInNewWindow": "default",
@@ -1015,5 +1014,5 @@
     "vsintellicode.python.completionsEnabled": true,
     "vsintellicode.java.completionsEnabled": true,
     "vsintellicode.typescript.completionsEnabled": true,
-    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue"
+    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
 }

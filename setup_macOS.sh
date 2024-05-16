@@ -1533,7 +1533,7 @@ cat >.dotfiles/.Xresources <<'EOF'
 ! Use a nice truetype font and size by default...
 *.locale: UTF-8
 *.utf8: always
-xterm.*.faceName: DejaVuSansMono Nerd Font:style=Book
+xterm.*.faceName: DejaVuSansM Nerd Font:style=Book
 xterm.*.faceSize: 11
 
 xterm.*.geometry:  128x40

@@ -113,7 +113,7 @@ upgrade_packages; upgrade_conda
 
 将的终端字体设置为 nerd font：
 
-- 对 macOS 和 Linux 用户，将的终端字体设置为 "Nerd Font Complete"（例如 `'DejaVuSansMono Nerd Font Book'`）。
+- 对 macOS 和 Linux 用户，将的终端字体设置为 "Nerd Font Complete"（例如 `'DejaVuSansM Nerd Font Book'`）。
 - 对在 Windows 上使用 WSL 的用户，将的终端字体设置为 "Nerd Font Complete Windows Compatible"（例如 `'DejaVuSansMono NF'`）。
 
 查看 [Font configurations for Powerlevel10k](https://github.com/romkatv/powerlevel10k#fonts) 获取更多信息。

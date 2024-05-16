@@ -113,7 +113,7 @@ The login shell for the current user will be set to **`zsh`**. In order to get a
 
 Configure your terminal to use nerd fonts:
 
-- For macOS and Linux users, change the terminal font setting to "Nerd Font Complete" (e.g. `'DejaVuSansMono Nerd Font Book'`).
+- For macOS and Linux users, change the terminal font setting to "Nerd Font Complete" (e.g. `'DejaVuSansM Nerd Font Book'`).
 - For WSL on Windows users, change the terminal font setting to "Nerd Font Complete Windows Compatible" (e.g. `'DejaVuSansMono NF'`).
 
 See [Font configurations for Powerlevel10k](https://github.com/romkatv/powerlevel10k#fonts) for more details.

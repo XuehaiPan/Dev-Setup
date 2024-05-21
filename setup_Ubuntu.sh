@@ -1703,7 +1703,7 @@ let g:NERDTreeWinSize = 31
 let g:NERDTreeNotificationThreshold = 200
 let g:NERDTreeAutoToggleEnabled = (!&diff && argc() > 0)
 let s:NERDTreeClosedByResizing = 1
-function s:NERDTreeAutoToggle(minbufwidth = 80)
+function s:NERDTreeAutoToggle(minbufwidth)
     if g:NERDTreeAutoToggleEnabled && !(exists('b:NERDTree') && b:NERDTree.isTabTree())
         let NERDTreeIsOpen = (g:NERDTree.ExistsForTab() && g:NERDTree.IsOpen())
         let width = winwidth('%')

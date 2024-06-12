@@ -335,6 +335,10 @@
     "cmake.buildBeforeRun": true,
     "cmake.exportCompileCommandsFile": true,
     "cmake.copyCompileCommands": "${workspaceFolder}/.vscode/compile_commands.json",
+    "cmake.pinnedCommands": [
+        "workbench.action.tasks.configureTaskRunner",
+        "workbench.action.tasks.runTask"
+    ],
 
     //* Code Runner */
     "code-runner.clearPreviousOutput": false,
@@ -467,6 +471,7 @@
         "ms-python.python",
         "ms-python.vscode-pylance"
     ],
+    "github.copilot.editor.enableAutoCompletions": true,
 
     //* GitHub Pull Requests and Issues */
     "githubPullRequests.defaultMergeMethod": "squash",

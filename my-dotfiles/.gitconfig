@@ -52,8 +52,8 @@
 	required = true
 
 [alias]
-	ignore-list = "! cd -- \"${GIT_PREFIX:-.}\" && git ls-files -v \"${1:-.}\" | sed -n -e \"s,^[a-z] \\\\(.*\\\\)\\$,${GIT_PREFIX:-./}\\\\1,p\" && git status --ignored --porcelain \"${1:-.}\" 2>/dev/null | sed -n -e \"s/^\\\\(\\\\!\\\\! \\\\)\\\\(.*\\\\)$/\\\\2/p\" #"
-	track-upstream = ! cd -- \"${GIT_PREFIX:-.}\" && GIT_CURRENT_BRANCH_NAME=\"$(git branch --show-current)\" && GIT_BRANCH_NAME=\"${1:-\"${GIT_CURRENT_BRANCH_NAME}\"}\" && git checkout --track \"origin/${GIT_BRANCH_NAME}\" && git config branch.\"${GIT_BRANCH_NAME}\".remote upstream && git config branch.\"${GIT_BRANCH_NAME}\".pushremote origin && git checkout \"${GIT_CURRENT_BRANCH_NAME}\"
+	list-ignored = "! cd -- \"${GIT_PREFIX:-.}\" && git ls-files -v \"${1:-.}\" | sed -n -e \"s,^[a-z] \\\\(.*\\\\)\\$,${GIT_PREFIX:-./}\\\\1,p\" && git status --ignored --porcelain \"${1:-.}\" 2>/dev/null | sed -n -e \"s/^\\\\(\\\\!\\\\! \\\\)\\\\(.*\\\\)$/\\\\2/p\";"
+	config-push-remote = "! cd -- \"${GIT_PREFIX:-.}\" && GIT_BRANCH=\"${1:-\"$(git branch --show-current)\"}\" && git config branch.\"${GIT_BRANCH}\".remote upstream; git config branch.\"${GIT_BRANCH}\".pushremote origin;"
 
 [color]
 	ui = true

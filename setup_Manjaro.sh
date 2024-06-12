@@ -295,7 +295,8 @@ git config --global filter.lfs.clean 'git-lfs clean -- %f'
 git config --global filter.lfs.smudge 'git-lfs smudge -- %f'
 git config --global filter.lfs.process 'git-lfs filter-process'
 git config --global filter.lfs.required true
-git config --global alias.ignore-list '! cd -- "${GIT_PREFIX:-.}" && git ls-files -v "${1:-.}" | sed -n -e "s,^[a-z] \\(.*\\)\$,${GIT_PREFIX:-./}\\1,p" && git status --ignored --porcelain "${1:-.}" 2>/dev/null | sed -n -e "s/^\\(\\!\\! \\)\\(.*\\)$/\\2/p" #'
+git config --global alias.list-ignored '! cd -- "${GIT_PREFIX:-.}" && git ls-files -v "${1:-.}" | sed -n -e "s,^[a-z] \\(.*\\)\$,${GIT_PREFIX:-./}\\1,p" && git status --ignored --porcelain "${1:-.}" 2>/dev/null | sed -n -e "s/^\\(\\!\\! \\)\\(.*\\)$/\\2/p";'
+git config --global alias.config-push-remote '! cd -- "${GIT_PREFIX:-.}" && GIT_BRANCH="${1:-"$(git branch --show-current)"}" && git config branch."${GIT_BRANCH}".remote upstream; git config branch."${GIT_BRANCH}".pushremote origin;'
 git config --global color.ui true
 git config --global color.diff-highlight.oldNormal 'red bold'
 git config --global color.diff-highlight.oldHighlight 'red bold 52'

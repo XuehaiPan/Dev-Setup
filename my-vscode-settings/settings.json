@@ -486,15 +486,7 @@
     //* Go */
     "go.gopath": "/usr/local/opt/go",
     "go.goroot": "/usr/local/opt/go/libexec",
-    "go.gotoSymbol.includeGoroot": true,
-    "go.useCodeSnippetsOnFunctionSuggest": true,
-    "go.useCodeSnippetsOnFunctionSuggestWithoutType": true,
-    "go.autocompleteUnimportedPackages": true,
     "go.buildOnSave": "package",
-    "go.gocodePackageLookupMode": "go",
-    "go.docsTool": "godoc",
-    "go.formatTool": "default",
-    "go.lintTool": "golint",
     "go.lintOnSave": "package",
     "go.installDependenciesWhenBuilding": true,
     "go.useLanguageServer": true,
@@ -832,8 +824,6 @@
     "liveshare.populateGitCoAuthors": "always",
     "liveshare.showInStatusBar": "whileCollaborating",
     "liveshare.showVerboseNotifications": true,
-    "liveshare.audio.joinCallBehavior": "prompt",
-    "liveshare.audio.startCallOnShare": false,
 
     //* Local History */
     "local-history.enabled": 2,
@@ -1015,7 +1005,6 @@
     "todo-tree.regex.regex": "(//|#|<!--|;|/\\*|^|^\\s*(-|\\d+.))\\s*($TAGS)",
 
     //* Visual Studio IntelliCode */
-    "vsintellicode.features.python.deepLearning": "enabled",
     "vsintellicode.python.completionsEnabled": true,
     "vsintellicode.java.completionsEnabled": true,
     "vsintellicode.typescript.completionsEnabled": true,

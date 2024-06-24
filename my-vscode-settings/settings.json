@@ -59,6 +59,7 @@
     "diffEditor.ignoreTrimWhitespace": false,
     "diffEditor.renderIndicators": true,
     "diffEditor.renderSideBySide": true,
+    "diffEditor.maxComputationTime": 0,
     "workbench.colorTheme": "Monokai",
     "workbench.iconTheme": "material-icon-theme",
     "workbench.startupEditor": "none",
@@ -127,7 +128,6 @@
         "**/*.py[cod]": true,
         "**/__pycache__": true
     },
-    "files.maxMemoryForLargeFilesMB": 10240,
 
     //* File Explorer */
     "explorer.autoReveal": true,
@@ -339,6 +339,7 @@
         "workbench.action.tasks.configureTaskRunner",
         "workbench.action.tasks.runTask"
     ],
+    "cmake.showOptionsMovedNotification": false,
 
     //* Code Runner */
     "code-runner.clearPreviousOutput": false,

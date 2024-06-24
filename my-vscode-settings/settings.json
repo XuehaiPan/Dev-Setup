@@ -59,7 +59,7 @@
     "diffEditor.ignoreTrimWhitespace": false,
     "diffEditor.renderIndicators": true,
     "diffEditor.renderSideBySide": true,
-    "diffEditor.maxComputationTime": 0,
+    "diffEditor.maxComputationTime": 10000,
     "workbench.colorTheme": "Monokai",
     "workbench.iconTheme": "material-icon-theme",
     "workbench.startupEditor": "none",

@@ -500,20 +500,14 @@
         "rgba(255,127,255,0.15)",
         "rgba(79,236,236,0.15)"
     ],
+    "indentRainbow.errorColor": "rgba(128,32,32,0.2)",
     "indentRainbow.lightIndicatorStyleLineWidth": 2,
     "indentRainbow.updateDelay": 25,
 
     //* Java Extension Pack */
-    "java.home": "/Library/Java/JavaVirtualMachines/Home",
     "java.autobuild.enabled": true,
     "java.completion.enabled": true,
     "java.completion.guessMethodArguments": true,
-    "java.completion.importOrder": [
-        "java",
-        "javax",
-        "com",
-        "org"
-    ],
     "java.signatureHelp.enabled": true,
     "java.format.enabled": true,
     "java.format.onType.enabled": true,

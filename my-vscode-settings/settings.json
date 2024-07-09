@@ -19,7 +19,7 @@
     "editor.guides.bracketPairs": true,
     "editor.guides.bracketPairsHorizontal": true,
     "editor.guides.highlightActiveBracketPair": true,
-    "editor.guides.indentation": true,
+    "editor.guides.indentation": false,
     "editor.guides.highlightActiveIndentation": true,
     "editor.bracketPairColorization.enabled": true,
     "editor.wordWrapColumn": 120,
@@ -492,6 +492,17 @@
     "go.installDependenciesWhenBuilding": true,
     "go.useLanguageServer": true,
 
+    //* Indent Rainbow */
+    "indentRainbow.indicatorStyle": "light",
+    "indentRainbow.colors": [
+        "rgba(255,255,64,0.15)",
+        "rgba(127,255,127,0.15)",
+        "rgba(255,127,255,0.15)",
+        "rgba(79,236,236,0.15)"
+    ],
+    "indentRainbow.lightIndicatorStyleLineWidth": 2,
+    "indentRainbow.updateDelay": 25,
+
     //* Java Extension Pack */
     "java.home": "/Library/Java/JavaVirtualMachines/Home",
     "java.autobuild.enabled": true,
@@ -857,9 +868,6 @@
     "matlab.lintOnSave": true,
     "matlab.linterEncoding": "utf8",
 
-    //* MySQL */
-    "vscode-mysql.enableTelemetry": false,
-
     //* PlantUML */
     "plantuml.jar": "/usr/local/opt/plantuml/libexec/plantuml.jar",
     "plantuml.previewAutoUpdate": true,
@@ -970,25 +978,6 @@
 
     //* Shell-format */
     "shellformat.flag": "-i 0 -ci",
-
-    //* SQL Server (mssql) */
-    "mssql.format.datatypeCasing": "lowercase",
-    "mssql.format.keywordCasing": "lowercase",
-    "mssql.format.alignColumnDefinitionsInColumns": true,
-    "mssql.intelliSense.enableErrorChecking": true,
-    "mssql.intelliSense.enableIntelliSense": true,
-    "mssql.intelliSense.enableQuickInfo": true,
-    "mssql.intelliSense.enableSuggestions": true,
-    "mssql.intelliSense.lowerCaseSuggestions": true,
-    "mssql.showBatchTime": true,
-    "mssql.connections": [
-        {
-            "server": "{{put-server-name-here}}",
-            "database": "{{put-database-name-here}}",
-            "user": "{{put-username-here}}",
-            "password": ""
-        }
-    ],
 
     //* Tabnine */
     "tabnine.experimentalAutoImports": true,

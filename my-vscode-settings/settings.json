@@ -483,6 +483,9 @@
     "gitlens.defaultTimeFormat": "HH:mm",
     "gitlens.defaultDateFormat": "MMMM Do, YYYY HH:mm",
     "gitlens.defaultDateShortFormat": "MMMM D, YYYY",
+    "gitlens.advanced.messages": {
+        "suppressIntegrationRequestTimedOutWarning": true
+    },
 
     //* Go */
     "go.gopath": "/usr/local/opt/go",

@@ -977,6 +977,7 @@
     "shellformat.flag": "-i 0 -ci",
 
     //* Tabnine */
+    "tabnine.codeLensEnabled": false,
     "tabnine.experimentalAutoImports": true,
 
     //* Todo Tree */

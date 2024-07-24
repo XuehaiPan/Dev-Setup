@@ -795,7 +795,6 @@ plugins=(
 	conda-zsh-completion
 	colorize
 	colored-man-pages
-	fd
 	fzf
 	copyfile
 	copypath

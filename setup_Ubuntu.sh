@@ -318,7 +318,7 @@ EOS
 		exec_cmd 'sudo chmod 755 /usr/local/bin/shfmt'
 		exec_cmd 'sudo chown root:root /usr/local/bin/shfmt'
 	fi
-	exec_cmd "wget -N -P \"${TMP_DIR}\" https://github.com/so-fancy/diff-so-fancy/raw/HEAD/third_party/build_fatpack/diff-so-fancy"
+	exec_cmd "wget -N -P \"${TMP_DIR}\" https://github.com/so-fancy/diff-so-fancy/releases/latest/download/diff-so-fancy"
 	exec_cmd "sudo mv -f \"${TMP_DIR}/diff-so-fancy\" /usr/local/bin/diff-so-fancy"
 	exec_cmd 'sudo chmod 755 /usr/local/bin/diff-so-fancy'
 	exec_cmd 'sudo chown root:root /usr/local/bin/diff-so-fancy'

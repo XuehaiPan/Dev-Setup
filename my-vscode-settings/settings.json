@@ -291,9 +291,9 @@
     "C_Cpp.default.cStandard": "c11",
     "C_Cpp.default.intelliSenseMode": "gcc-x64",
     "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
-    "C_Cpp.intelliSenseEngine": "Default",
-    "C_Cpp.configurationWarnings": "Enabled",
-    "C_Cpp.autocomplete": "Default",
+    "C_Cpp.intelliSenseEngine": "default",
+    "C_Cpp.configurationWarnings": "enabled",
+    "C_Cpp.autocomplete": "default",
     "C_Cpp.formatting": "clangFormat",
     "C_Cpp.workspaceSymbols": "All",
     "C_Cpp.clang_format_sortIncludes": false,
@@ -933,7 +933,7 @@
         "--max-line-length=120"
     ],
     "ruff.importStrategy": "fromEnvironment",
-    "ruff.args": [
+    "ruff.lint.args": [
         "--line-length=100"
     ],
     "ruff.organizeImports": false,

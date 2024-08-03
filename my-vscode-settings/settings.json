@@ -157,7 +157,8 @@
     "outline.problems.enabled": true,
 
     //* Debug */
-    "debug.inlineValues": "auto",
+    "debug.inlineValues": "on",
+    "debug.showVariableTypes": true,
     "debug.openExplorerOnEnd": true,
 
     //* Integrated Terminal */
@@ -523,6 +524,13 @@
     "julia.enableCrashReporter": false,
     "julia.enableTelemetry": false,
     "julia.usePlotPane": true,
+
+    //* Kubernetes */
+    "vs-kubernetes": {
+        "vscode-kubernetes.helm-path-linux": "~/.local/state/vs-kubernetes/tools/helm/linux-amd64/helm",
+        "vscode-kubernetes.kubectl-path-linux": "~/.local/state/vs-kubernetes/tools/kubectl/kubectl",
+        "vscode-kubernetes.minikube-path-linux": "~/.local/state/vs-kubernetes/tools/minikube/linux-amd64/minikube"
+    },
 
     //* LaTeX Workshop */
     "latex-workshop.intellisense.package.enabled": true,
@@ -902,6 +910,8 @@
     "python.defaultInterpreterPath": "python3",
     "python.terminal.activateEnvironment": false,
     "python.languageServer": "Pylance",
+    "debugpy.debugJustMyCode": false,
+    "debugpy.showPythonInlineValues": true,
     "jupyter.interactiveWindow.cellMarker.default": "# %%",
     "jupyter.debugJustMyCode": false,
     "notebook.lineNumbers": "on",

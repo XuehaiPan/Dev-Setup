@@ -43,10 +43,13 @@
     "editor.minimap.maxColumn": 120,
     "editor.minimap.renderCharacters": true,
     "editor.minimap.size": "proportional",
-    "editor.formatOnType": true,
-    "editor.formatOnPaste": true,
+    "editor.formatOnType": false,
+    "editor.formatOnPaste": false,
     "editor.formatOnSave": true,
     "editor.formatOnSaveMode": "modifications",
+    "editor.codeActionsOnSave": {
+        "source.fixAll": "explicit"
+    },
     "editor.inlineSuggest.enabled": true,
     "editor.suggestSelection": "first",
     "editor.snippetSuggestions": "inline",
@@ -113,12 +116,19 @@
     "files.insertFinalNewline": true,
     "files.trimFinalNewlines": true,
     "files.trimTrailingWhitespace": true,
+    "files.associations": {
+        ".flake8": "properties",
+        ".coveragerc": "properties",
+        "*requirements*.txt": "pip-requirements",
+        "*requirements*.in": "pip-requirements"
+    },
     "files.exclude": {
         "**/.git": true,
         "**/.svn": true,
         "**/.hg": true,
         "**/CVS": true,
         "**/.DS_Store": true,
+        "**/Thumbs.db": true,
         "**/.classpath": true,
         "**/.factorypath": true,
         "**/.project": true,
@@ -126,7 +136,8 @@
         "**/.idea": true,
         "**/.history": true,
         "**/*.py[cod]": true,
-        "**/__pycache__": true
+        "**/__pycache__": true,
+        "**/*_cache/": true
     },
 
     //* File Explorer */
@@ -207,63 +218,34 @@
     "update.mode": "default",
 
     //! Default Configuration Overrides */
-    "[c]": {
-        "editor.defaultFormatter": "ms-vscode.cpptools"
+    "[go][makefile][shellscript]": {
+        "editor.insertSpaces": false
     },
-    "[cpp]": {
+    "[dockerfile][latex][markdown]": {
+        "editor.tabSize": 2
+    },
+    "[c][cpp]": {
         "editor.defaultFormatter": "ms-vscode.cpptools"
     },
     "[dockerfile]": {
-        "editor.tabSize": 2,
         "editor.defaultFormatter": "ms-azuretools.vscode-docker"
-    },
-    "[go]": {
-        "editor.insertSpaces": false
     },
     "[html]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
-    "[java]": {},
-    "[json]": {
+    "[json][jsonc]": {
         "editor.defaultFormatter": "vscode.json-language-features"
     },
-    "[jsonc]": {
-        "editor.defaultFormatter": "vscode.json-language-features"
+    "[latex][markdown][restructuredtext]": {
+        "editor.detectIndentation": false,
+        "editor.wordWrap": "bounded",
+        "editor.renderWhitespace": "all"
     },
-    "[julia]": {},
     "[latex]": {
-        "editor.tabSize": 2,
-        "editor.detectIndentation": false,
         "editor.formatOnSave": false,
-        "editor.formatOnType": false,
-        "editor.suggestSelection": "recentlyUsedByPrefix",
-        "editor.wordWrap": "bounded"
+        "editor.suggestSelection": "recentlyUsedByPrefix"
     },
-    "[makefile]": {
-        "editor.insertSpaces": false
-    },
-    "[markdown]": {
-        "editor.tabSize": 2,
-        "editor.detectIndentation": false,
-        "editor.wordWrap": "on",
-        "editor.renderWhitespace": "all",
-        "editor.quickSuggestions": {
-            "comments": "on",
-            "strings": "on",
-            "other": "on"
-        },
-        "editor.acceptSuggestionOnEnter": "off",
-        "editor.defaultFormatter": "yzhang.markdown-all-in-one"
-    },
-    "[python]": {
-        "editor.formatOnSave": false,
-        "editor.formatOnType": false,
-        "editor.defaultFormatter": "ms-python.black-formatter"
-    },
-    "[restructuredtext]": {
-        "editor.tabSize": 4,
-        "editor.wordWrap": "on",
-        "editor.renderWhitespace": "all",
+    "[markdown][restructuredtext]": {
         "editor.quickSuggestions": {
             "comments": "on",
             "strings": "on",
@@ -271,11 +253,21 @@
         },
         "editor.acceptSuggestionOnEnter": "off"
     },
-    "[shellscript]": {
-        "editor.insertSpaces": false
+    "[markdown]": {
+        "editor.defaultFormatter": "yzhang.markdown-all-in-one"
+    },
+    "[python]": {
+        "editor.formatOnSave": false,
+        "editor.defaultFormatter": "ms-python.black-formatter"
+    },
+    "[restructuredtext]": {
+        "editor.tabSize": 4
+    },
+    "[toml]": {
+        "editor.defaultFormatter": "tamasfe.even-better-toml"
     },
     "[yaml]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
+        "editor.defaultFormatter": "redhat.vscode-yaml"
     },
 
     //! Extension settings */
@@ -474,6 +466,12 @@
         "ms-python.vscode-pylance"
     ],
     "github.copilot.editor.enableAutoCompletions": true,
+    "github.copilot.enable": {
+        "*": true,
+        "markdown": true,
+        "plaintext": false,
+        "scminput": false
+    },
 
     //* GitHub Pull Requests and Issues */
     "githubPullRequests.defaultMergeMethod": "squash",
@@ -867,12 +865,6 @@
         ]
     },
 
-    //* Matlab */
-    "matlab.matlabpath": "/Applications/MATLAB_R2021b.app/bin/matlab",
-    "matlab.mlintpath": "/Applications/MATLAB_R2021b.app/bin/maci64/mlint",
-    "matlab.lintOnSave": true,
-    "matlab.linterEncoding": "utf8",
-
     //* PlantUML */
     "plantuml.jar": "/usr/local/opt/plantuml/libexec/plantuml.jar",
     "plantuml.previewAutoUpdate": true,
@@ -947,6 +939,7 @@
         "--line-length=100"
     ],
     "ruff.organizeImports": false,
+    "mypy-type-checker.importStrategy": "fromEnvironment",
 
     //* Remote */
     "remote.extensionKind": {

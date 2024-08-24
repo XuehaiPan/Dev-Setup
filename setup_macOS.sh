@@ -1546,7 +1546,7 @@ xeyes.*.geometry:  400x300
 xterm.*.loginShell: true
 
 ! Scrollback...
-xterm.*.saveLines: 10000
+xterm.*.saveLines: 100000
 
 ! Right hand side scrollbar...
 xterm.*.rightScrollBar: true
@@ -1939,7 +1939,7 @@ set-option -gs pane-base-index 1
 set-option -gs -q utf8 on
 set-option -gs status-keys vi
 set-option -gs mode-keys vi
-set-option -gs history-limit 10000
+set-option -gs history-limit 100000
 
 set-option -gs mouse on
 set-option -gs monitor-activity on
@@ -2014,8 +2014,6 @@ chmod 644 .dotfiles/.tmux.conf .dotfiles/.tmux.conf.local .dotfiles/.tmux.conf.u
 
 sed -i "" 's/tmux_conf_theme_pane_border="$tmux_conf_theme_colour_2"/tmux_conf_theme_pane_border="$tmux_conf_theme_colour_3"/g' .dotfiles/.tmux.conf.local
 sed -i "" 's/tmux_conf_copy_to_os_clipboard=false/tmux_conf_copy_to_os_clipboard=true/g' .dotfiles/.tmux.conf.local
-sed -i "" 's/#set -g history-limit 10000/set -g history-limit 10000/g' .dotfiles/.tmux.conf.local
-sed -i "" 's/#set -g mouse on/set -g mouse on/g' .dotfiles/.tmux.conf.local
 if ! grep -qF 'source-file -q ~/.dotfiles/.tmux.conf.user' .dotfiles/.tmux.conf.local; then
 	cat >>.dotfiles/.tmux.conf.local <<'EOF'
 

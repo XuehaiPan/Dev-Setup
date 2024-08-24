@@ -13,7 +13,7 @@ xeyes.*.geometry:  400x300
 xterm.*.loginShell: true
 
 ! Scrollback...
-xterm.*.saveLines: 10000
+xterm.*.saveLines: 100000
 
 ! Right hand side scrollbar...
 xterm.*.rightScrollBar: true

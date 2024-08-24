@@ -13,7 +13,7 @@ set-option -gs pane-base-index 1
 set-option -gs -q utf8 on
 set-option -gs status-keys vi
 set-option -gs mode-keys vi
-set-option -gs history-limit 10000
+set-option -gs history-limit 100000
 
 set-option -gs mouse on
 set-option -gs monitor-activity on

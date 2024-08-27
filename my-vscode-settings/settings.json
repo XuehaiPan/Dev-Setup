@@ -120,7 +120,8 @@
         ".flake8": "properties",
         ".coveragerc": "properties",
         "*requirements*.txt": "pip-requirements",
-        "*requirements*.in": "pip-requirements"
+        "*requirements*.in": "pip-requirements",
+        "Makefile.*": "makefile"
     },
     "files.exclude": {
         "**/.git": true,
@@ -221,7 +222,7 @@
     "[go][makefile][shellscript]": {
         "editor.insertSpaces": false
     },
-    "[dockerfile][latex][markdown]": {
+    "[dockerfile][latex][markdown][yaml]": {
         "editor.tabSize": 2
     },
     "[c][cpp]": {

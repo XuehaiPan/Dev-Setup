@@ -928,7 +928,7 @@
     "flake8.importStrategy": "fromEnvironment",
     "flake8.args": [
         "--max-line-length=120",
-        "--max-doc-length=100"
+        "--max-doc-length=120"
     ],
     "pylint.importStrategy": "fromEnvironment",
     "pylint.args": [
@@ -941,6 +941,20 @@
     ],
     "ruff.organizeImports": false,
     "mypy-type-checker.importStrategy": "fromEnvironment",
+    "mypy-type-checker.preferDaemon": true,
+    "mypy-type-checker.reportingScope": "workspace",
+    "mypy-type-checker.args": [
+        "--warn-redundant-casts",
+        "--warn-unused-ignores",
+        "--show-error-context",
+        "--show-error-end",
+        "--show-error-code-links",
+        "--pretty",
+        "--exclude='^(.*/)?setup\\.py$'",
+        "--exclude='^(.*/)?test_.*\\.py$'",
+        "--exclude='^(.*/)?test/.*\\.py$'",
+        "--exclude='^(.*/)?tests/.*\\.py$'",
+    ],
 
     //* Remote */
     "remote.extensionKind": {

@@ -659,9 +659,9 @@ done
 EOF
 cat >>.dotfiles/.zshrc <<'EOF'
 # CXX Compilers
-export CC="/usr/bin/gcc"
-export CXX="/usr/bin/g++"
-export FC="/usr/bin/gfortran"
+export CC="${CC:-"/usr/bin/gcc"}"
+export CXX="${CXX:-"/usr/bin/g++"}"
+export FC="${FC:-"/usr/bin/gfortran"}"
 export OMPI_CC="${CC}" MPICH_CC="${CC}"
 export OMPI_CXX="${CXX}" MPICH_CXX="${CXX}"
 export OMPI_FC="${FC}" MPICH_FC="${FC}"
@@ -1520,9 +1520,9 @@ done
 EOF
 cat >>.dotfiles/.bash_profile <<'EOF'
 # CXX Compilers
-export CC="/usr/bin/gcc"
-export CXX="/usr/bin/g++"
-export FC="/usr/bin/gfortran"
+export CC="${CC:-"/usr/bin/gcc"}"
+export CXX="${CXX:-"/usr/bin/g++"}"
+export FC="${FC:-"/usr/bin/gfortran"}"
 export OMPI_CC="${CC}" MPICH_CC="${CC}"
 export OMPI_CXX="${CXX}" MPICH_CXX="${CXX}"
 export OMPI_FC="${FC}" MPICH_FC="${FC}"
@@ -1693,6 +1693,7 @@ let g:tex_flavor = 'latex'
 autocmd Filetype sh,zsh,gitconfig,c,cpp,make,go set noexpandtab
 autocmd Filetype text,markdown,rst,asciidoc,tex set wrap
 autocmd FileType vim,tex let b:autoformat_autoindent = 0
+autocmd FileType gitcommit set colorcolumn=50,72,80,100,120,140
 
 let g:NERDTreeMouseMode = 2
 let g:NERDTreeShowBookmarks = 1

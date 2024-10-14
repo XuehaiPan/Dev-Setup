@@ -68,6 +68,7 @@ let g:tex_flavor = 'latex'
 autocmd Filetype sh,zsh,gitconfig,c,cpp,make,go set noexpandtab
 autocmd Filetype text,markdown,rst,asciidoc,tex set wrap
 autocmd FileType vim,tex let b:autoformat_autoindent = 0
+autocmd FileType gitcommit set colorcolumn=50,72,80,100,120,140
 
 let g:NERDTreeMouseMode = 2
 let g:NERDTreeShowBookmarks = 1

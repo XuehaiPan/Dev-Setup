@@ -121,7 +121,9 @@
         ".coveragerc": "properties",
         "*requirements*.txt": "pip-requirements",
         "*requirements*.in": "pip-requirements",
-        "Makefile.*": "makefile"
+        "Makefile.*": "makefile",
+        ".clang-format": "yaml",
+        ".clang-tidy": "yaml"
     },
     "files.exclude": {
         "**/.git": true,
@@ -281,7 +283,7 @@
 
     //* C/C++ */
     "C_Cpp.default.compilerPath": "gcc",
-    "C_Cpp.default.cppStandard": "c++20",
+    "C_Cpp.default.cppStandard": "c++17",
     "C_Cpp.default.cStandard": "c11",
     "C_Cpp.default.intelliSenseMode": "gcc-x64",
     "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
@@ -301,7 +303,7 @@
         "-std=c11"
     ],
     "clang.cxxflags": [
-        "-std=c++20"
+        "-std=c++17"
     ],
     "clang.objcflags": [],
     "clang.completion.completeMacros": true,
@@ -430,11 +432,14 @@
     //* Git */
     "git.enabled": true,
     "git.autoRepositoryDetection": true,
+    "git.detectSubmodules": true,
+    "git.confirmSync": true,
     "git.autoStash": true,
     "git.autorefresh": true,
-    "git.detectSubmodules": true,
     "git.autofetch": true,
-    "git.confirmSync": true,
+    "git.pruneOnFetch": true,
+    "git.pullTags": true,
+    "git.replaceTagsWhenPull": true,
 
     //* Git Graph */
     "git-graph.repository.commits.order": "date",
@@ -517,12 +522,6 @@
     "java.format.comments.enabled": true,
     "java.format.settings.profile": "GoogleStyle",
     "java.format.settings.url": "https://github.com/google/styleguide/raw/gh-pages/eclipse-java-google-style.xml",
-
-    //* Julia */
-    "julia.executablePath": "julia",
-    "julia.enableCrashReporter": false,
-    "julia.enableTelemetry": false,
-    "julia.usePlotPane": true,
 
     //* Kubernetes */
     "vs-kubernetes": {
@@ -957,9 +956,6 @@
     ],
 
     //* Remote */
-    "remote.extensionKind": {
-        "ms-azuretools.vscode-docker": "workspace"
-    },
     "remote.SSH.connectTimeout": 300,
     "remote.SSH.defaultExtensions": [
         "ms-ceintl.vscode-language-pack-zh-hans",
@@ -1009,10 +1005,4 @@
         "[x]"
     ],
     "todo-tree.regex.regex": "(//|#|<!--|;|/\\*|^|^\\s*(-|\\d+.))\\s*($TAGS)",
-
-    //* Visual Studio IntelliCode */
-    "vsintellicode.python.completionsEnabled": true,
-    "vsintellicode.java.completionsEnabled": true,
-    "vsintellicode.typescript.completionsEnabled": true,
-    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
 }

@@ -2341,17 +2341,18 @@ create_default_packages:
   - ipython
   - ipdb
   - jupyter
-  - notebook
   - jupyterlab
+  - jupyter-lsp
+  - jupyterlab-lsp
   - numpy
   - matplotlib-base
   - pandas
   - rich
   - tqdm
+  - ruff
   - black-jupyter
   - isort
   - pre-commit
-  - pylint
 
 # vim: filetype=yaml tabstop=2 shiftwidth=2 expandtab
 EOF
@@ -2371,15 +2372,16 @@ fi
 
 # Install Conda packages
 export PATH="${PATH:+"${PATH}":}${HOME}/${CONDA_DIR}/condabin"
+source "${HOME}/${CONDA_DIR}/etc/profile.d/conda.sh"
 source "${HOME}/${CONDA_DIR}/bin/activate"
-exec_cmd 'conda install mamba --yes'
-exec_cmd 'conda update conda mamba --yes'
+exec_cmd 'conda update conda --name base --yes'
+exec_cmd 'conda install mamba --name base --yes'
+exec_cmd 'conda update conda mamba --name base --yes'
 exec_cmd 'conda install pip ipython ipdb \
-	jupyter notebook jupyterlab jupyter_contrib_nbextensions \
+	jupyter jupyterlab jupyter-lsp jupyterlab-lsp \
 	numpy matplotlib-base pandas rich tqdm \
-	black-jupyter isort pre-commit pylint --yes'
+	ruff black-jupyter isort pre-commit --name base --yes'
 exec_cmd 'conda clean --all --yes'
-exec_cmd "\"\${HOME}/${CONDA_DIR}/bin/jupyter\" contrib nbextension install --user &>/dev/null"
 if ${SET_MIRRORS}; then
 	exec_cmd "\"\${HOME}/${CONDA_DIR}/bin/pip\" config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple"
 fi

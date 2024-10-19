@@ -29,16 +29,17 @@ create_default_packages:
   - ipython
   - ipdb
   - jupyter
-  - notebook
   - jupyterlab
+  - jupyter-lsp
+  - jupyterlab-lsp
   - numpy
   - matplotlib-base
   - pandas
   - rich
   - tqdm
+  - ruff
   - black-jupyter
   - isort
   - pre-commit
-  - pylint
 
 # vim: filetype=yaml tabstop=2 shiftwidth=2 expandtab

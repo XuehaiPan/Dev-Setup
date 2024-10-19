@@ -114,10 +114,28 @@ handle_extension() {
             pandoc -s -t markdown -- "${FILE_PATH}" && exit 5
             ;;
 
+        ## JSON Lines
+        jsonl)
+            local jsonl
+            if [ "$(wc -l < "${FILE_PATH}")" -gt 40 ]; then
+                jsonl="$(
+                    head -n 20 "${FILE_PATH}"
+                    echo '{"...": "..."}'
+                    echo '{"...": "..."}'
+                    tail -n 18 "${FILE_PATH}"
+                )"
+            else
+                jsonl="$(cat "${FILE_PATH}")"
+            fi
+            echo "${jsonl}" | jq --compact-output --color-output . - && exit 4
+            echo "${jsonl}" | python3 -m json.tool --compact --json-lines --no-ensure-ascii -- - && exit 4
+            echo "${jsonl}" && exit 4
+            ;;
+
         ## JSON
         json)
-            jq --color-output . "${FILE_PATH}" && exit 5
-            python3 -m json.tool --indent 2 -- "${FILE_PATH}" && exit 5
+            jq --indent 2 --color-output . "${FILE_PATH}" && exit 5
+            python3 -m json.tool --indent 2 --no-ensure-ascii -- "${FILE_PATH}" && exit 5
             ;;
 
         ## Jupyter Notebooks
@@ -125,8 +143,8 @@ handle_extension() {
             jupyter nbconvert --to markdown "${FILE_PATH}" --stdout |
                 env COLORTERM=8bit bat --color=always --style=plain --language=markdown && exit 5
             jupyter nbconvert --to markdown "${FILE_PATH}" --stdout && exit 5
-            jq --color-output . "${FILE_PATH}" && exit 5
-            python3 -m json.tool --indent 2 -- "${FILE_PATH}" && exit 5
+            jq --indent 2 --color-output . "${FILE_PATH}" && exit 5
+            python3 -m json.tool --indent 2 --no-ensure-ascii -- "${FILE_PATH}" && exit 5
             ;;
 
         ## Direct Stream Digital/Transfer (DSDIFF) and wavpack aren't detected
@@ -419,8 +437,8 @@ handle_mime() {
 
         ## JSON
         application/json)
-            jq --color-output . "${FILE_PATH}" && exit 5
-            python3 -m json.tool --indent 2 -- "${FILE_PATH}" && exit 5
+            jq --indent 2 --color-output . "${FILE_PATH}" && exit 5
+            python3 -m json.tool --indent 2 --no-ensure-ascii -- "${FILE_PATH}" && exit 5
             exit 2;;
 
         ## Text

@@ -7,7 +7,7 @@
 # A simple command for demonstration purposes follows.
 # -----------------------------------------------------------------------------
 
-from __future__ import (absolute_import, division, print_function)
+from __future__ import absolute_import, division, print_function
 
 # You can import any python module as needed.
 import os
@@ -70,9 +70,11 @@ class yank_content(Command):
 
         if not file.is_binary():
             for command in clipboard_commands:
-                with open(file.path, mode='r') as fd:
+                with open(file.path, mode='r', encoding='utf-8') as fd:
                     self.fm.execute_command(command, universal_newlines=True, stdin=fd)
-            self.fm.notify("The content of '{}' is copied to the clipboard.".format(file.relative_path))
+            self.fm.notify(
+                "The content of '{}' is copied to the clipboard.".format(file.relative_path),
+            )
         else:
             self.fm.notify("'{}' is not a text file.".format(file.relative_path))
 
@@ -101,33 +103,46 @@ class fzf_select(Command):
             fd = 'fd'
 
         if fd is not None:
-            hidden = ('--hidden' if self.fm.settings.show_hidden else '')
-            exclude = "--no-ignore-vcs --exclude '.git' --exclude '*.py[co]' --exclude '__pycache__'"
-            only_directories = ('--type directory' if self.quantifier else '')
+            hidden = '--hidden' if self.fm.settings.show_hidden else ''
+            exclude = (
+                "--no-ignore-vcs --exclude '.git' --exclude '*.py[co]' --exclude '__pycache__'"
+            )
+            only_directories = '--type directory' if self.quantifier else ''
             fzf_default_command = '{} --follow {} {} {} --color=always'.format(
-                fd, hidden, exclude, only_directories
+                fd,
+                hidden,
+                exclude,
+                only_directories,
             )
         else:
-            hidden = ('-false' if self.fm.settings.show_hidden else r"-path '*/\.*' -prune")
+            hidden = '-false' if self.fm.settings.show_hidden else r"-path '*/\.*' -prune"
             exclude = r"\( -name '\.git' -o -iname '\.*py[co]' -o -fstype 'dev' -o -fstype 'proc' \) -prune"
-            only_directories = ('-type d' if self.quantifier else '')
-            fzf_default_command = 'find -L . -mindepth 1 {} -o {} -o {} -print | cut -b3-'.format(
-                hidden, exclude, only_directories
+            only_directories = '-type d' if self.quantifier else ''
+            fzf_default_command = 'find -L . -mindepth 1 {} -o {} -o {} -print | cut -c3-'.format(
+                hidden,
+                exclude,
+                only_directories,
             )
 
         env = os.environ.copy()
         env['FZF_DEFAULT_COMMAND'] = fzf_default_command
-        env['FZF_DEFAULT_OPTS'] = '--height=40% --layout=reverse --ansi --preview="{}"'.format('''
+        env['FZF_DEFAULT_OPTS'] = '--height=40% --layout=reverse --ansi --preview="{}"'.format(
+            '''
             (
                 batcat --color=always {} ||
                 bat --color=always {} ||
                 cat {} ||
                 tree -ahpCL 3 -I '.git' -I '*.py[co]' -I '__pycache__' {}
             ) 2>/dev/null | head -n 100
-        ''')
+        ''',
+        )
 
-        fzf = self.fm.execute_command('fzf --no-multi', env=env,
-                                      universal_newlines=True, stdout=subprocess.PIPE)
+        fzf = self.fm.execute_command(
+            'fzf --no-multi',
+            env=env,
+            universal_newlines=True,
+            stdout=subprocess.PIPE,
+        )
         stdout, _ = fzf.communicate()
         if fzf.returncode == 0:
             selected = os.path.abspath(stdout.strip())
@@ -175,11 +190,9 @@ class fd_search(Command):
             self.fm.notify(':fd_search needs a query.', bad=True)
             return
 
-        hidden = ('--hidden' if self.fm.settings.show_hidden else '')
+        hidden = '--hidden' if self.fm.settings.show_hidden else ''
         exclude = "--no-ignore-vcs --exclude '.git' --exclude '*.py[co]' --exclude '__pycache__'"
-        command = '{} --follow {} {} {} --print0 {}'.format(
-            fd, depth, hidden, exclude, target
-        )
+        command = '{} --follow {} {} {} --print0 {}'.format(fd, depth, hidden, exclude, target)
         fd = self.fm.execute_command(command, universal_newlines=True, stdout=subprocess.PIPE)
         stdout, _ = fd.communicate()
 
@@ -187,12 +200,22 @@ class fd_search(Command):
             results = filter(None, stdout.split('\0'))
             if not self.fm.settings.show_hidden and self.fm.settings.hidden_filter:
                 hidden_filter = re.compile(self.fm.settings.hidden_filter)
-                results = filter(lambda res: not hidden_filter.search(os.path.basename(res)), results)
-            results = map(lambda res: os.path.abspath(os.path.join(self.fm.thisdir.path, res)), results)
+                results = filter(
+                    lambda res: not hidden_filter.search(os.path.basename(res)),
+                    results,
+                )
+            results = map(
+                lambda res: os.path.abspath(os.path.join(self.fm.thisdir.path, res)),
+                results,
+            )
             self.SEARCH_RESULTS.extend(sorted(results, key=str.lower))
             if len(self.SEARCH_RESULTS) > 0:
-                self.fm.notify('Found {} result{}.'.format(len(self.SEARCH_RESULTS),
-                                                           ('s' if len(self.SEARCH_RESULTS) > 1 else '')))
+                self.fm.notify(
+                    'Found {} result{}.'.format(
+                        len(self.SEARCH_RESULTS),
+                        ('s' if len(self.SEARCH_RESULTS) > 1 else ''),
+                    ),
+                )
                 self.fm.select_file(self.SEARCH_RESULTS[0])
             else:
                 self.fm.notify('No results found.')

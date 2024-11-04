@@ -139,7 +139,7 @@ function upgrade_ohmyzsh() {
 	done < <(
 		cd "${ZSH_CUSTOM}" &&
 			find -L . -mindepth 3 -maxdepth 3 -not -empty -type d -name '.git' -prune -exec dirname {} \; |
-			cut -b3-
+			cut -c3-
 	)
 
 	# Remove old zcompdump file

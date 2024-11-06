@@ -213,18 +213,14 @@ exec_cmd "eval \"\$(${HOMEBREW_PREFIX}/bin/brew shellenv)\""
 exec_cmd 'brew update'
 
 if ${SET_MIRRORS}; then
-	for tap in cask{-fonts,-versions} command-not-found; do
-		exec_cmd "brew tap --custom-remote --force-auto-update homebrew/${tap} https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-${tap}.git"
-	done
+	exec_cmd "brew tap --custom-remote --force-auto-update homebrew/command-not-found https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-command-not-found.git"
 else
-	for tap in cask{-fonts,-versions} command-not-found; do
-		exec_cmd "brew tap --force-auto-update homebrew/${tap}"
-	done
+	exec_cmd "brew tap --force-auto-update homebrew/command-not-found"
 fi
 exec_cmd 'brew update --verbose'
 
 # Install and setup shells
-exec_cmd 'brew install zsh bash'
+exec_cmd 'brew install --formula zsh bash'
 
 if ! grep -qF "${HOMEBREW_PREFIX}/bin/bash" /etc/shells; then
 	exec_cmd "echo '${HOMEBREW_PREFIX}/bin/bash' | sudo tee -a /etc/shells"
@@ -236,16 +232,16 @@ fi
 
 # Install packages
 if [[ "$(uname -m)" == "arm64" ]]; then
-	exec_cmd 'brew install gcc llvm make cmake automake autoconf'
+	exec_cmd 'brew install --formula gcc llvm make cmake automake autoconf'
 else
-	exec_cmd 'brew install gcc gdb llvm make cmake automake autoconf'
+	exec_cmd 'brew install --formula gcc gdb llvm make cmake automake autoconf'
 fi
-exec_cmd 'brew install bash-completion wget curl git git-lfs macvim tmux'
-exec_cmd 'brew install coreutils ranger fd bat highlight ripgrep git-extras'
-exec_cmd 'brew install jq shfmt shellcheck diffutils colordiff diff-so-fancy'
-exec_cmd 'brew install htop openssh atool tree reattach-to-user-namespace libarchive'
+exec_cmd 'brew install --formula bash-completion wget curl git git-lfs macvim tmux'
+exec_cmd 'brew install --formula coreutils ranger fd bat highlight ripgrep git-extras'
+exec_cmd 'brew install --formula jq shfmt shellcheck diffutils colordiff diff-so-fancy'
+exec_cmd 'brew install --formula htop openssh atool tree reattach-to-user-namespace libarchive'
 
-exec_cmd 'brew install ruby perl'
+exec_cmd 'brew install --formula ruby perl'
 export PATH="${HOMEBREW_PREFIX}/opt/ruby/bin${PATH:+:"${PATH}"}"
 export PATH="$(ruby -r rubygems -e 'puts Gem.dir')/bin${PATH:+:"${PATH}"}"
 export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin${PATH:+:"${PATH}"}"

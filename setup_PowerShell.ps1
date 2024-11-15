@@ -84,8 +84,6 @@ Function Reset-Proxy() {
 }
 "@ | Set-Content -Path $PROFILE.CurrentUserAllHosts -Encoding utf8
 
-Update-SessionEnvironment
-
 # Install Chocolatey packages
 choco install vim --params="'/InstallDir:$Env:ChocolateyToolsLocation\Vim /NoDesktopShortcuts'" --yes
 choco install python3 --params="'/InstallDir:$Env:ChocolateyToolsLocation\Python3'" --yes

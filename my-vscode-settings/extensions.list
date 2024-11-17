@@ -29,9 +29,6 @@ golang.go
 oderwat.indent-rainbow
 k--kato.intellij-idea-keybindings
 redhat.java
-ms-toolsai.jupyter
-ms-toolsai.jupyter-keymap
-ms-toolsai.jupyter-renderers
 james-yu.latex-workshop
 tecosaur.latex-utilities
 ritwickdey.liveserver
@@ -63,9 +60,15 @@ ms-python.isort
 ms-python.pylint
 charliermarsh.ruff
 ms-python.mypy-type-checker
+ms-toolsai.jupyter
+ms-toolsai.jupyter-keymap
+ms-toolsai.jupyter-renderers
 ms-toolsai.vscode-jupyter-cell-tags
 ms-toolsai.vscode-jupyter-powertoys
 ms-toolsai.vscode-jupyter-slideshow
+ms-toolsai.python-ds-extension-pack
+ms-toolsai.datawrangler
+ms-toolsai.tensorboard
 mechatroner.rainbow-csv
 ms-vscode-remote.vscode-remote-extensionpack
 ms-vscode-remote.remote-containers
@@ -97,10 +100,10 @@ ms-dotnettools.vscode-dotnet-runtime
 hediet.vscode-drawio
 janisdd.vscode-edit-csv
 dbaeumer.vscode-eslint
-vscode-icons-team.vscode-icons
 vscjava.vscode-java-pack
 vscjava.vscode-java-debug
 vscjava.vscode-java-dependency
+vscjava.vscode-java-test
 vscjava.vscode-gradle
 vscjava.vscode-maven
 ms-kubernetes-tools.vscode-kubernetes-tools

@@ -968,7 +968,13 @@
         "--exclude='^(.*/)?setup\\.py$'",
         "--exclude='^(.*/)?test_.*\\.py$'",
         "--exclude='^(.*/)?test/.*\\.py$'",
-        "--exclude='^(.*/)?tests/.*\\.py$'",
+        "--exclude='^(.*/)?tests/.*\\.py$'"
+    ],
+    "mypy-type-checker.ignorePatterns": [
+        "setup.py",
+        "test_*.py",
+        "test/**/*.py",
+        "tests/**/*.py"
     ],
 
     //* Remote */

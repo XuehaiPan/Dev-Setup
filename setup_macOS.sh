@@ -1648,7 +1648,7 @@ set wildmode=longest:list,full
 set completeopt=longest,menu
 set background=dark
 set t_Co=256
-set guifont=DejaVuSansM\ Nerd\ Font\ Mono:h13
+set guifont=DejaVuSansM\ Nerd\ Font\ Mono\ 13
 colorscheme monokai
 
 if has('mouse')

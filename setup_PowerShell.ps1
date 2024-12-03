@@ -29,8 +29,8 @@ chcp 65001
 Import-Module -Name PSReadLine -Force -ErrorAction:Ignore
 Import-Module -Name posh-git -ErrorAction:Ignore
 Import-Module -Name Get-ChildItemColor -ErrorAction:Ignore
-if (Test-Path -Path ~\Miniconda3\shell\condabin\conda-hook.ps1) {
-    . ~\Miniconda3\shell\condabin\conda-hook.ps1
+if (Test-Path -Path "~\Miniconda3\shell\condabin\conda-hook.ps1") {
+    & "~\Miniconda3\shell\condabin\conda-hook.ps1"
 }
 
 `$Env:POSH_PREFIX = (Split-Path -Resolve -Parent -Path (Split-Path -Parent -Path (Get-Command oh-my-posh).Source))
@@ -44,27 +44,32 @@ Set-PSReadLineKeyHandler -Key Tab -Function Complete
 Set-Alias -Name ls -Value Get-ChildItemColorFormatWide -Option AllScope
 Set-Alias -Name ll -Value Get-ChildItemColor -Option AllScope
 Set-Alias -Name which -Value Get-Command -Option AllScope
-Function Set-Proxy(`$proxyHost = "127.0.0.1",
-                   `$httpPort = 7890, `$httpsPort = 7890,
-                   `$ftpPort = 7890, `$socksPort = 7891) {
-    `$Env:http_proxy = "http://`${proxyHost}:`${httpPort}"
-    `$Env:https_proxy = "http://`${proxyHost}:`${httpsPort}"
-    `$Env:ftp_proxy = "http://`${proxyHost}:`${ftpPort}"
-    `$Env:all_proxy = "socks5://`${proxyHost}:`${socksPort}"
-    `$Env:HTTP_PROXY = "http://`${proxyHost}:`${httpPort}"
-    `$Env:HTTPS_PROXY = "http://`${proxyHost}:`${httpsPort}"
-    `$Env:FTP_PROXY = "http://`${proxyHost}:`${ftpPort}"
-    `$Env:ALL_PROXY = "socks5://`${proxyHost}:`${socksPort}"
-    [Environment]::SetEnvironmentVariable('http_proxy', "http://`${proxyHost}:`${httpPort}", 'User')
-    [Environment]::SetEnvironmentVariable('https_proxy', "http://`${proxyHost}:`${httpsPort}", 'User')
-    [Environment]::SetEnvironmentVariable('ftp_proxy', "http://`${proxyHost}:`${ftpPort}", 'User')
-    [Environment]::SetEnvironmentVariable('all_proxy', "socks5://`${proxyHost}:`${socksPort}", 'User')
+Function Set-Proxy {
+    Param(
+        [string]`$ProxyHost = "127.0.0.1",
+        [int]`$HttpPort = 7890,
+        [int]`$HttpsPort = 7890,
+        [int]`$FtpPort = 7890,
+        [int]`$SocksPort = 7891
+    )
+    `$Env:http_proxy = "http://`${ProxyHost}:`${HttpPort}"
+    `$Env:https_proxy = "http://`${ProxyHost}:`${HttpsPort}"
+    `$Env:ftp_proxy = "http://`${ProxyHost}:`${FtpPort}"
+    `$Env:all_proxy = "socks5://`${ProxyHost}:`${SocksPort}"
+    `$Env:HTTP_PROXY = "http://`${ProxyHost}:`${HttpPort}"
+    `$Env:HTTPS_PROXY = "http://`${ProxyHost}:`${HttpsPort}"
+    `$Env:FTP_PROXY = "http://`${ProxyHost}:`${FtpPort}"
+    `$Env:ALL_PROXY = "socks5://`${ProxyHost}:`${SocksPort}"
+    [Environment]::SetEnvironmentVariable('http_proxy', "http://`${ProxyHost}:`${HttpPort}", 'User')
+    [Environment]::SetEnvironmentVariable('https_proxy', "http://`${ProxyHost}:`${HttpsPort}", 'User')
+    [Environment]::SetEnvironmentVariable('ftp_proxy', "http://`${ProxyHost}:`${FtpPort}", 'User')
+    [Environment]::SetEnvironmentVariable('all_proxy', "socks5://`${ProxyHost}:`${SocksPort}", 'User')
 
     `$regKey = "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings"
     Set-ItemProperty -Path `$regKey -Name ProxyEnable -Value 1
-    Set-ItemProperty -Path `$regKey -Name ProxyServer -Value "`${proxyHost}:`${httpPort}"
+    Set-ItemProperty -Path `$regKey -Name ProxyServer -Value "`${ProxyHost}:`${HttpPort}"
 }
-Function Reset-Proxy() {
+Function Reset-Proxy {
     Remove-Item -Path Env:\http_proxy -ErrorAction:Ignore
     Remove-Item -Path Env:\https_proxy -ErrorAction:Ignore
     Remove-Item -Path Env:\ftp_proxy -ErrorAction:Ignore
@@ -86,7 +91,7 @@ Function Reset-Proxy() {
 
 # Install Chocolatey packages
 choco install vim --params="'/InstallDir:$Env:ChocolateyToolsLocation\Vim /NoDesktopShortcuts'" --yes
-choco install python3 --params="'/InstallDir:$Env:ChocolateyToolsLocation\Python3'" --yes
+choco install python312 --params="'/InstallDir:$Env:ChocolateyToolsLocation\Python312'" --yes
 choco install cmake --installargs="'ADD_CMAKE_TO_PATH=System'" --yes
 choco install vscode conemu mobaxterm oh-my-posh vcxsrv --yes
 choco install fzf bat ripgrep shellcheck wget mingw --yes

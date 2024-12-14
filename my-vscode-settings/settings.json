@@ -178,7 +178,7 @@
     //* Integrated Terminal */
     "terminal.explorerKind": "integrated",
     "terminal.integrated.fontSize": 14,
-    "terminal.integrated.fontFamily": "'DejaVuSansM Nerd Font Mono', 'DejaVuSansM NFM', Menlo, 'Microsoft YaHei Mono'",
+    "terminal.integrated.fontFamily": "'DejaVuSansM Nerd Font Mono', Menlo, 'Microsoft YaHei Mono'",
     "terminal.integrated.tabs.enabled": true,
     "terminal.integrated.showExitAlert": true,
     "terminal.integrated.confirmOnExit": "hasChildProcesses",
@@ -192,7 +192,7 @@
     "terminal.integrated.detectLocale": "auto",
     "terminal.integrated.defaultProfile.linux": "zsh",
     "terminal.integrated.defaultProfile.osx": "zsh",
-    "terminal.integrated.defaultProfile.windows": "PowerShell",
+    "terminal.integrated.defaultProfile.windows": "VsDevShell",
     "terminal.integrated.profiles.linux": {
         "zsh": {
             "path": "/usr/bin/zsh"
@@ -200,9 +200,17 @@
     },
     "terminal.integrated.profiles.osx": {
         "zsh": {
-            "path": "/bin/zsh",
+            "path": "/bin/zsh"
+        }
+    },
+    "terminal.integrated.profiles.windows": {
+        "VsDevShell": {
+            "source": "PowerShell",
+            "icon": "terminal-powershell",
             "args": [
-                "-l"
+                "-NoExit",
+                "-Command",
+                "$__VsDevShell = (Get-ChildItem -Path \"${env:ProgramFiles}\\Microsoft Visual Studio\\*\\*\\*\\Tools\\Launch-VsDevShell.ps1\").FullName; if ($__VsDevShell) { & \"$__VsDevShell\" -SkipAutomaticLocation }; Remove-Variable -Name __VsDevShell -Force"
             ]
         }
     },
@@ -509,8 +517,9 @@
     },
 
     //* Go */
-    "go.gopath": "/usr/local/opt/go",
-    "go.goroot": "/usr/local/opt/go/libexec",
+    "go.gopath": "${env:HOMEBREW_PREFIX}/opt/go",
+    "go.goroot": "${env:HOMEBREW_PREFIX}/opt/go/libexec",
+    "go.inferGopath": true,
     "go.buildOnSave": "package",
     "go.lintOnSave": "package",
     "go.installDependenciesWhenBuilding": true,
@@ -529,7 +538,7 @@
     "indentRainbow.updateDelay": 25,
 
     //* Java Extension Pack */
-    "java.autobuild.enabled": true,
+    "java.autobuild.enabled": false,
     "java.completion.enabled": true,
     "java.completion.guessMethodArguments": true,
     "java.signatureHelp.enabled": true,

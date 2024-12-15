@@ -489,6 +489,10 @@ handle_mime() {
         application/x-executable | application/x-pie-executable | \
             application/x-sharedlib | application/x-mach-binary)
             echo "ldd: ${FILE_PATH}" && ldd "${FILE_PATH}"
+            if [[ -x "$(command -v patchelf)" ]]; then
+                echo
+                echo "RPATH: $(patchelf --print-rpath "${FILE_PATH}" | sed 's|:|\n       |g')"
+            fi
             objdump --demangle --syms "${FILE_PATH}" && exit 5
             readelf -WCa "${FILE_PATH}" && exit 5
             nm --demangle "${FILE_PATH}" && exit 5

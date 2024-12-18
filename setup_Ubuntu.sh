@@ -2,6 +2,7 @@
 
 # Options
 export SET_MIRRORS="${SET_MIRRORS:-false}"
+export FORCE_PER_USER_HOMEBREW="${FORCE_PER_USER_HOMEBREW:-false}"
 
 # Set USER
 export USER="${USER:-"$(whoami)"}"
@@ -406,7 +407,10 @@ if ${SET_MIRRORS}; then
 fi
 if [[ ! -x "$(command -v brew)" ]]; then
 	HOMEBREW_PREFIX="/home/linuxbrew/.linuxbrew"
-	if have_sudo_access && [[ ! -d "${HOMEBREW_PREFIX}" || "$(/usr/bin/stat --printf "%u" "${HOMEBREW_PREFIX}")" == "${UID}" ]]; then
+	if (
+		[[ ! -d "${HOMEBREW_PREFIX}" || "$(/usr/bin/stat --printf "%u" "${HOMEBREW_PREFIX}")" == "${UID}" ]] &&
+			have_sudo_access && ! ${FORCE_PER_USER_HOMEBREW}
+	); then
 		if ${SET_MIRRORS}; then
 			exec_cmd "git clone --depth=1 https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/install.git \"${TMP_DIR}/brew-install\""
 			exec_cmd "NONINTERACTIVE=1 /bin/bash \"${TMP_DIR}/brew-install/install.sh\""

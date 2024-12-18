@@ -27,6 +27,9 @@ elif [[ "$(uname -s)" == "Linux" ]]; then
 	if grep -qiE 'ID.*ubuntu' /etc/*-release; then
 		OS_NAME="Ubuntu"
 		PACKAGE_MANAGER="APT, Homebrew"
+	elif grep -qiE 'ID.*debian' /etc/*-release; then
+		OS_NAME="Debian"
+		PACKAGE_MANAGER="APT, Homebrew"
 	elif grep -qiE 'ID.*manjaro' /etc/*-release; then
 		OS_NAME="Manjaro"
 		PACKAGE_MANAGER="Pacman, Homebrew"
@@ -34,7 +37,7 @@ elif [[ "$(uname -s)" == "Linux" ]]; then
 fi
 
 if [[ -z "${OS_NAME}" ]]; then
-	echo -e "${BOLD}${RED}The operating system is not supported yet. ${YELLOW}Only macOS, Ubuntu Linux, and Manjaro Linux are supported.${RESET}" >&2
+	echo -e "${BOLD}${RED}The operating system is not supported yet. ${YELLOW}Only macOS, Debian/Ubuntu Linux, and Manjaro Linux are supported.${RESET}" >&2
 	exit 1
 fi
 

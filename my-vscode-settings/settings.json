@@ -235,14 +235,14 @@
     "[dockerfile][latex][markdown][yaml]": {
         "editor.tabSize": 2
     },
-    "[c][cpp]": {
+    "[c][cpp][cuda-cpp]": {
         "editor.defaultFormatter": "ms-vscode.cpptools"
+    },
+    "[css][graphql][html][javascript][typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
     "[dockerfile]": {
         "editor.defaultFormatter": "ms-azuretools.vscode-docker"
-    },
-    "[html]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
     "[json][jsonc]": {
         "editor.defaultFormatter": "vscode.json-language-features"
@@ -967,6 +967,10 @@
     "mypy-type-checker.importStrategy": "fromEnvironment",
     "mypy-type-checker.preferDaemon": true,
     "mypy-type-checker.reportingScope": "workspace",
+    "mypy-type-checker.severity": {
+        "error": "Warning",
+        "note": "Information"
+    },
     "mypy-type-checker.args": [
         "--warn-redundant-casts",
         "--warn-unused-ignores",

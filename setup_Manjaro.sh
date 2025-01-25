@@ -2214,8 +2214,8 @@ auto_update_conda: true
 
 channels:
   - pytorch
-  - defaults
   - conda-forge
+  - defaults
 EOF
 if ${SET_MIRRORS}; then
 	cat >>.dotfiles/.condarc <<'EOF'

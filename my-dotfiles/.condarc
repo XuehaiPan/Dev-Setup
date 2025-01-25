@@ -3,8 +3,8 @@ auto_update_conda: true
 
 channels:
   - pytorch
-  - defaults
   - conda-forge
+  - defaults
 default_channels:
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r

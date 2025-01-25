@@ -2213,7 +2213,6 @@ auto_activate_base: false
 auto_update_conda: true
 
 channels:
-  - pytorch
   - conda-forge
   - defaults
 EOF

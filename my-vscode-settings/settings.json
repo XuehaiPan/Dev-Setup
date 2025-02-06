@@ -179,6 +179,7 @@
     "terminal.explorerKind": "integrated",
     "terminal.integrated.fontSize": 14,
     "terminal.integrated.fontFamily": "'DejaVuSansM Nerd Font Mono', Menlo, 'Microsoft YaHei Mono'",
+    "terminal.integrated.tabs.title": "${process}${progress}${separator}${cwdFolder}",
     "terminal.integrated.tabs.enabled": true,
     "terminal.integrated.showExitAlert": true,
     "terminal.integrated.confirmOnExit": "hasChildProcesses",
@@ -496,6 +497,7 @@
         "ms-python.vscode-pylance"
     ],
     "github.copilot.editor.enableAutoCompletions": true,
+    "github.copilot.nextEditSuggestions.enabled": true,
     "github.copilot.enable": {
         "*": true,
         "markdown": true,
@@ -515,6 +517,7 @@
     "gitlens.advanced.messages": {
         "suppressIntegrationRequestTimedOutWarning": true
     },
+    "gitlens.graph.layout": "editor",
 
     //* Go */
     "go.gopath": "${env:HOMEBREW_PREFIX}/opt/go",
@@ -540,7 +543,7 @@
     //* Java Extension Pack */
     "java.autobuild.enabled": false,
     "java.completion.enabled": true,
-    "java.completion.guessMethodArguments": true,
+    "java.completion.guessMethodArguments": "auto",
     "java.signatureHelp.enabled": true,
     "java.format.enabled": true,
     "java.format.onType.enabled": true,
@@ -963,6 +966,11 @@
     "ruff.lint.args": [
         "--line-length=100"
     ],
+    "ruff.format.args": [
+        "--line-length=100",
+        "--config",
+        "format.quote-style='preserve'"
+    ],
     "ruff.organizeImports": false,
     "mypy-type-checker.importStrategy": "fromEnvironment",
     "mypy-type-checker.preferDaemon": true,
@@ -1027,7 +1035,7 @@
 
     //* Tabnine */
     "tabnine.codeLensEnabled": false,
-    "tabnine.experimentalAutoImports": true,
+    "tabnine.experimentalAutoImports": false,
 
     //* Todo Tree */
     "todo-tree.general.tags": [

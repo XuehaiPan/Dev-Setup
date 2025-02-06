@@ -179,7 +179,7 @@
     "terminal.explorerKind": "integrated",
     "terminal.integrated.fontSize": 14,
     "terminal.integrated.fontFamily": "'DejaVuSansM Nerd Font Mono', Menlo, 'Microsoft YaHei Mono'",
-    "terminal.integrated.tabs.title": "${process}${progress}${separator}${cwdFolder}",
+    "terminal.integrated.tabs.title": "${process}${progress}",
     "terminal.integrated.tabs.enabled": true,
     "terminal.integrated.showExitAlert": true,
     "terminal.integrated.confirmOnExit": "hasChildProcesses",

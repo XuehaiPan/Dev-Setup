@@ -497,7 +497,6 @@
         "ms-python.vscode-pylance"
     ],
     "github.copilot.editor.enableAutoCompletions": true,
-    "github.copilot.nextEditSuggestions.enabled": true,
     "github.copilot.enable": {
         "*": true,
         "markdown": true,
@@ -963,14 +962,7 @@
         "--max-line-length=120"
     ],
     "ruff.importStrategy": "fromEnvironment",
-    "ruff.lint.args": [
-        "--line-length=100"
-    ],
-    "ruff.format.args": [
-        "--line-length=100",
-        "--config",
-        "format.quote-style='preserve'"
-    ],
+    "ruff.lineLength": 100,
     "ruff.organizeImports": false,
     "mypy-type-checker.importStrategy": "fromEnvironment",
     "mypy-type-checker.preferDaemon": true,

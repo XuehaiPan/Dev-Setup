@@ -2489,8 +2489,8 @@ chmod 755 "${HOME}/${CONDA_DIR}/etc/init-envs.sh"
 
 # Setup IPython
 exec_cmd "\"\${HOME}/${CONDA_DIR}/bin/ipython\" profile create"
-exec_cmd "sed -i -E 's/^\\s*#?\\s*(c.InteractiveShell.colors).*\$/\\1 = \"Linux\"/g' \"\${HOME}/.ipython/profile_default/ipython_config.py\""
-exec_cmd "sed -i -E 's/^\\s*#?\\s*(c.InteractiveShell.colors).*\$/\\1 = \"Linux\"/g' \"\${HOME}/.ipython/profile_default/ipython_kernel_config.py\""
+exec_cmd "sed -i -E 's/^\\s*#?\\s*(c.InteractiveShell.colors).*\$/\\1 = \"linux\"/g' \"\${HOME}/.ipython/profile_default/ipython_config.py\""
+exec_cmd "sed -i -E 's/^\\s*#?\\s*(c.InteractiveShell.colors).*\$/\\1 = \"linux\"/g' \"\${HOME}/.ipython/profile_default/ipython_kernel_config.py\""
 
 mkdir -p "${HOME}/.ipython/profile_default/startup"
 

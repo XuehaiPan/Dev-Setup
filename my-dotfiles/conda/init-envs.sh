@@ -84,6 +84,7 @@ except ImportError:
 else:
     rich.pretty.install(indent_guides=True)
     rich.traceback.install(indent_guides=True, width=None, show_locals=True)
+	del rich
 EOS
 	fi
 

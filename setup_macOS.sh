@@ -1493,12 +1493,9 @@ exec_cmd "plutil -replace 'Custom Color Presets.SpaceGray Eighties' \\
 	\"\${HOME}/Library/Preferences/com.googlecode.iterm2.plist\""
 
 # iTerm2 shell integration and utilities
-ITERM_UTILITIES=(
-	imgcat imgls it2api it2attention
-	it2check it2copy it2dl it2getvar
-	it2git it2setcolor it2setkeylabel
-	it2ul it2universion
-)
+exec_cmd "mkdir -p \"\${HOME}/.iterm2/bin\""
+exec_cmd "wget -O - https://github.com/gnachman/iTerm2/raw/HEAD/Resources/utilities/utilities.tgz | tar -xz -C \"\${HOME}/.iterm2/bin\""
+ITERM_UTILITIES=($(find "${HOME}/.iterm2/bin" -type f -exec basename "{}" +))
 
 function join_by() {
 	local sep="$1"
@@ -1514,9 +1511,7 @@ for utility in "${ITERM_UTILITIES[@]}"; do
 done
 
 ALIASES="$(join_by '; ' "${ALIASES_ARRAY[@]}")"
-ITERM_UTILITIES_ARRAY="$(join_by ',' "${ITERM_UTILITIES[@]}")"
 
-exec_cmd "wget -N -P \"\${HOME}/.iterm2/bin\" https://iterm2.com/utilities/{${ITERM_UTILITIES_ARRAY}}"
 for shell in "bash" "zsh"; do
 	exec_cmd "wget -O \"\${HOME}/.iterm2/.iterm2_shell_integration.${shell}\" \"https://iterm2.com/shell_integration/${shell}\" && chmod 755 \"\${HOME}/.iterm2/.iterm2_shell_integration.${shell}\""
 	printf "\n# Utilities\n" >>"${HOME}/.iterm2/.iterm2_shell_integration.${shell}"

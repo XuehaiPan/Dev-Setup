@@ -550,6 +550,9 @@
     "java.format.settings.profile": "GoogleStyle",
     "java.format.settings.url": "https://github.com/google/styleguide/raw/gh-pages/eclipse-java-google-style.xml",
 
+    //* Julia */
+    "julia.symbolCacheDownload": true,
+
     //* Kubernetes */
     "vs-kubernetes": {
         "vscode-kubernetes.helm-path-linux": "~/.local/state/vs-kubernetes/tools/helm/linux-amd64/helm",
@@ -1004,9 +1007,6 @@
         "yzhang.markdown-all-in-one",
         "ryu1kn.partial-diff",
         "christian-kohler.path-intellisense",
-        "ms-python.python",
-        "ms-python.vscode-pylance",
-        "ms-toolsai.jupyter"
     ],
 
     //* reStructuredText */

@@ -67,6 +67,7 @@ if [[ -f "${__COMMAND_NOT_FOUND_HANDLER}" ]]; then
 	source "${__COMMAND_NOT_FOUND_HANDLER}"
 fi
 unset __COMMAND_NOT_FOUND_HANDLER
+brew() { \command brew "$@"; \local rc="$?"; \builtin hash -r &>/dev/null; \return "${rc}"; }
 
 # Anaconda
 # >>> conda initialize >>>

@@ -446,7 +446,8 @@ __COMMAND_NOT_FOUND_HANDLER="$(brew --repository homebrew/command-not-found)/han
 if [[ -f "${__COMMAND_NOT_FOUND_HANDLER}" ]]; then
 	source "${__COMMAND_NOT_FOUND_HANDLER}"
 fi
-unset __COMMAND_NOT_FOUND_HANDLER'
+unset __COMMAND_NOT_FOUND_HANDLER
+brew() { \command brew "$@"; \local rc="$?"; \builtin hash -r &>/dev/null; \return "${rc}"; }'
 cat >.dotfiles/.zshrc <<'EOF'
 # Source global definitions
 # Include /etc/zprofile if it exists

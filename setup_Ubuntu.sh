@@ -2479,7 +2479,7 @@ except ImportError:
 else:
     rich.pretty.install(indent_guides=True)
     rich.traceback.install(indent_guides=True, width=None, show_locals=True)
-	del rich
+    del rich
 EOS
 	fi
 
@@ -2505,7 +2505,7 @@ except ImportError:
 else:
     rich.pretty.install(indent_guides=True)
     rich.traceback.install(indent_guides=True, width=None)
-	del rich
+    del rich
 EOF
 
 # Install fonts

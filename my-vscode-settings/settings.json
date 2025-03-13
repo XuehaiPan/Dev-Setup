@@ -337,6 +337,7 @@
     "cmake.buildDirectory": "${workspaceFolder}/cmake-build-${variant:buildType}",
     "cmake.configureOnEdit": true,
     "cmake.clearOutputBeforeBuild": true,
+    "cmake.deleteBuildDirOnCleanConfigure": true,
     "cmake.saveBeforeBuild": true,
     "cmake.buildBeforeRun": true,
     "cmake.exportCompileCommandsFile": true,

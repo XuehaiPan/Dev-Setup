@@ -95,6 +95,7 @@
     "workbench.localHistory.mergeWindow": 60,
 
     //* Window */
+    "window.zoomLevel": 0.0,
     "window.closeWhenEmpty": false,
     "window.newWindowDimensions": "maximized",
     "window.openFilesInNewWindow": "default",

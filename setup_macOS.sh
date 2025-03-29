@@ -248,7 +248,7 @@ export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin${PATH:+:"${PATH}"}"
 
 # Install casks and fonts
 exec_cmd 'brew install --cask iterm2 xquartz'
-exec_cmd 'brew install --cask font-dejavu-sans-mono-nerd-font font-cascadia{-code,-mono}{,-pl}'
+exec_cmd 'brew install --cask font-dejavu-sans-mono-nerd-font font-cascadia{-code,-mono}{,-pl,-nf}'
 exec_cmd 'brew install --cask visual-studio-code'
 exec_cmd 'brew install --cask keka typora iina google-chrome'
 

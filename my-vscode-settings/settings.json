@@ -95,8 +95,8 @@
     "workbench.localHistory.mergeWindow": 60,
 
     //* Window */
-    "window.zoomLevel": 0.0,
     "window.closeWhenEmpty": false,
+    "window.zoomLevel": 0.0,
     "window.newWindowDimensions": "maximized",
     "window.openFilesInNewWindow": "default",
     "window.openFoldersInNewWindow": "default",
@@ -551,9 +551,6 @@
     "java.format.comments.enabled": true,
     "java.format.settings.profile": "GoogleStyle",
     "java.format.settings.url": "https://github.com/google/styleguide/raw/gh-pages/eclipse-java-google-style.xml",
-
-    //* Julia */
-    "julia.symbolCacheDownload": true,
 
     //* Kubernetes */
     "vs-kubernetes": {

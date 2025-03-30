@@ -37,7 +37,8 @@ export CLICOLOR=1
 export LSCOLORS="GxFxCxDxBxegedabagaced"
 
 # Locale
-export LC_ALL="en_US.UTF-8"
+export LC_ALL="C.UTF-8"
+export LANGUAGE="C:en"
 
 # Homebrew
 eval "$(/usr/local/bin/brew shellenv)"
@@ -70,9 +71,18 @@ else
 fi
 unset __conda_setup
 
-if [[ -f "${HOME}/Miniconda3/etc/profile.d/mamba.sh" ]]; then
-	source "${HOME}/Miniconda3/etc/profile.d/mamba.sh"
+# >>> mamba initialize >>>
+# !! Contents within this block are managed by 'mamba shell init' !!
+export MAMBA_ROOT_PREFIX="${HOME}/Miniconda3/bin";
+export MAMBA_EXE="${MAMBA_ROOT_PREFIX}/bin/mamba";
+__mamba_setup="$("${MAMBA_EXE}" shell hook --shell zsh --root-prefix "${MAMBA_ROOT_PREFIX}" 2>/dev/null)"
+if [[ $? -eq 0 ]]; then
+    eval "${__mamba_setup}"
+else
+    alias mamba="${MAMBA_EXE}"
 fi
+unset __mamba_setup
+# <<< mamba initialize <<<
 
 __CONDA_PREFIX="${CONDA_PREFIX}"
 while [[ -n "${CONDA_PREFIX}" ]]; do

@@ -174,12 +174,12 @@ function upgrade_conda() {
 	local env cmds
 
 	# Upgrade Conda and Mamba
-	exec_cmd 'conda update conda mamba --name base --yes'
+	exec_cmd 'conda update conda mamba --name=base --yes'
 
 	# Upgrade Conda packages in each environment
 	while read -r env; do
 		cmds="conda update --all --yes"
-		if conda list --full-name anaconda --name "${env}" | grep -q '^anaconda[^-]'; then
+		if conda list --full-name anaconda --name="${env}" | grep -q '^anaconda[^-]'; then
 			cmds="${cmds}; conda update anaconda --yes"
 		fi
 		exec_cmd "conda activate ${env}; ${cmds}; conda deactivate"
@@ -261,7 +261,7 @@ function available_cuda_devices() {
 			break
 		fi
 		pids=$(nvidia-smi --id="${index}" --query-compute-apps=pid --format=csv,noheader | xargs echo -n)
-		if [[ -n "${pids}" ]] && (ps -o user -p ${pids} | tail -n +2 | grep -qvF "${USER}") &&
+		if [[ -n "${pids}" ]] && (ps -o user -p "${pids}" | tail -n +2 | grep -qvF "${USER}") &&
 			((memused >= 3072 || memfree <= 6144 || utilization >= 20)); then
 			continue
 		fi

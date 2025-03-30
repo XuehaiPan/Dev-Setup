@@ -554,6 +554,7 @@ export LESS="-R -M -i -j5"
 
 # Locale
 export LC_ALL="C.UTF-8"
+export LANGUAGE="C:en"
 
 EOF
 cat >>.dotfiles/.zshrc <<EOF
@@ -574,9 +575,18 @@ else
 fi
 unset __conda_setup
 
-if [[ -f "\${HOME}/${CONDA_DIR}/etc/profile.d/mamba.sh" ]]; then
-	source "\${HOME}/${CONDA_DIR}/etc/profile.d/mamba.sh"
+# >>> mamba initialize >>>
+# !! Contents within this block are managed by 'mamba shell init' !!
+export MAMBA_ROOT_PREFIX="\${HOME}/${CONDA_DIR}/bin";
+export MAMBA_EXE="\${MAMBA_ROOT_PREFIX}/bin/mamba";
+__mamba_setup="\$("\${MAMBA_EXE}" shell hook --shell zsh --root-prefix "\${MAMBA_ROOT_PREFIX}" 2>/dev/null)"
+if [[ \$? -eq 0 ]]; then
+    eval "\${__mamba_setup}"
+else
+    alias mamba="\${MAMBA_EXE}"
 fi
+unset __mamba_setup
+# <<< mamba initialize <<<
 
 __CONDA_PREFIX="\${CONDA_PREFIX}"
 while [[ -n "\${CONDA_PREFIX}" ]]; do
@@ -1163,12 +1173,12 @@ function upgrade_conda() {
 	local env cmds
 
 	# Upgrade Conda and Mamba
-	exec_cmd 'conda update conda mamba --name base --yes'
+	exec_cmd 'conda update conda mamba --name=base --yes'
 
 	# Upgrade Conda packages in each environment
 	while read -r env; do
 		cmds="conda update --all --yes"
-		if conda list --full-name anaconda --name "${env}" | grep -q '^anaconda[^-]'; then
+		if conda list --full-name anaconda --name="${env}" | grep -q '^anaconda[^-]'; then
 			cmds="${cmds}; conda update anaconda --yes"
 		fi
 		exec_cmd "conda activate ${env}; ${cmds}; conda deactivate"
@@ -1403,6 +1413,7 @@ fi
 
 # Locale
 export LC_ALL="C.UTF-8"
+export LANGUAGE="C:en"
 
 EOF
 cat >>.dotfiles/.bash_profile <<EOF
@@ -1423,9 +1434,18 @@ else
 fi
 unset __conda_setup
 
-if [[ -f "\${HOME}/${CONDA_DIR}/etc/profile.d/mamba.sh" ]]; then
-	source "\${HOME}/${CONDA_DIR}/etc/profile.d/mamba.sh"
+# >>> mamba initialize >>>
+# !! Contents within this block are managed by 'mamba shell init' !!
+export MAMBA_ROOT_PREFIX="\${HOME}/${CONDA_DIR}/bin";
+export MAMBA_EXE="\${MAMBA_ROOT_PREFIX}/bin/mamba";
+__mamba_setup="\$("\${MAMBA_EXE}" shell hook --shell bash --root-prefix "\${MAMBA_ROOT_PREFIX}" 2>/dev/null)"
+if [[ \$? -eq 0 ]]; then
+    eval "\${__mamba_setup}"
+else
+    alias mamba="\${MAMBA_EXE}"
 fi
+unset __mamba_setup
+# <<< mamba initialize <<<
 
 __CONDA_PREFIX="\${CONDA_PREFIX}"
 while [[ -n "\${CONDA_PREFIX}" ]]; do
@@ -2279,16 +2299,16 @@ fi
 export PATH="${PATH:+"${PATH}":}${HOME}/${CONDA_DIR}/condabin"
 source "${HOME}/${CONDA_DIR}/etc/profile.d/conda.sh"
 source "${HOME}/${CONDA_DIR}/bin/activate"
-exec_cmd 'conda update conda --name base --yes'
-exec_cmd 'conda install mamba --name base --yes'
-exec_cmd 'conda update conda mamba --name base --yes'
+exec_cmd 'conda update conda --name=base --yes'
+exec_cmd 'conda install mamba --name=base --yes'
+exec_cmd 'conda update conda mamba --name=base --yes'
 exec_cmd 'conda install pip ipython ipdb \
 	jupyter jupyterlab jupyter-lsp jupyterlab-lsp \
 	numpy matplotlib-base pandas rich tqdm \
-	ruff black-jupyter isort pre-commit --name base --yes'
+	ruff black-jupyter isort pre-commit --name=base --yes'
 exec_cmd 'conda clean --all --yes'
 if ${SET_MIRRORS}; then
-	exec_cmd "\"\${HOME}/${CONDA_DIR}/bin/pip\" config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple"
+	exec_cmd "conda run --name=base pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple"
 fi
 
 # Add Conda Environment Initialization Script
@@ -2391,7 +2411,7 @@ EOF
 chmod 755 "${HOME}/${CONDA_DIR}/etc/init-envs.sh"
 
 # Setup IPython
-exec_cmd "\"\${HOME}/${CONDA_DIR}/bin/ipython\" profile create"
+exec_cmd "conda run --name=base ipython profile create"
 exec_cmd "sed -i -E 's/^\\s*#?\\s*(c.InteractiveShell.colors).*\$/\\1 = \"linux\"/g' \"\${HOME}/.ipython/profile_default/ipython_config.py\""
 exec_cmd "sed -i -E 's/^\\s*#?\\s*(c.InteractiveShell.colors).*\$/\\1 = \"linux\"/g' \"\${HOME}/.ipython/profile_default/ipython_kernel_config.py\""
 

@@ -47,8 +47,6 @@ christian-kohler.npm-intellisense
 nvidia.nsight-vscode-edition
 ryu1kn.partial-diff
 christian-kohler.path-intellisense
-jebbs.plantuml
-mxschmitt.postscript
 ms-vscode.powershell
 esbenp.prettier-vscode
 ms-python.python
@@ -88,8 +86,6 @@ foxundermoon.shell-format
 timonwong.shellcheck
 trond-snekvik.simple-rst
 gruntfuggly.todo-tree
-octref.vetur
-dunstontc.viml
 bazelbuild.vscode-bazel
 mitaki28.vscode-clang
 llvm-vs-code-extensions.vscode-clangd

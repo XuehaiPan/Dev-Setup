@@ -894,12 +894,6 @@
         ]
     },
 
-    //* PlantUML */
-    "plantuml.jar": "/usr/local/opt/plantuml/libexec/plantuml.jar",
-    "plantuml.previewAutoUpdate": true,
-    "plantuml.render": "PlantUMLServer",
-    "plantuml.server": "https://www.plantuml.com/plantuml",
-
     //* PowerShell */
     "powershell.codeFolding.enable": true,
     "powershell.codeFolding.showLastLine": true,

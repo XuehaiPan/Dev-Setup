@@ -918,13 +918,13 @@
     "powershell.scriptAnalysis.enable": true,
 
     //* Python */
-    "python.analysis.autoImportCompletions": true,
-    "python.analysis.autoSearchPaths": true,
-    "python.analysis.completeFunctionParens": true,
-    "python.analysis.useLibraryCodeForTypes": true,
     "python.defaultInterpreterPath": "python3",
-    "python.terminal.activateEnvironment": false,
     "python.languageServer": "Pylance",
+    "python.analysis.autoImportCompletions": true,
+    "python.analysis.completeFunctionParens": true,
+    "python.terminal.activateEnvironment": false,
+    "python.analysis.inlayHints.callArgumentNames": "off",
+    "python.analysis.inlayHints.functionReturnTypes": true,
     "debugpy.debugJustMyCode": false,
     "debugpy.showPythonInlineValues": true,
     "jupyter.interactiveWindow.cellMarker.default": "# %%",

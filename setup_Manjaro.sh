@@ -1230,28 +1230,28 @@ function upgrade_packages() {
 }
 
 function set_proxy() {
-	local PROXY_HOST="${1:-"127.0.0.1"}"
-	local HTTP_PORT="${2:-"7890"}"
-	local HTTPS_PORT="${3:-"7890"}"
-	local FTP_PORT="${4:-"7890"}"
-	local SOCKS_PORT="${5:-"7891"}"
+	local proxy_host="${1:-"127.0.0.1"}"
+	local http_port="${2:-"7890"}"
+	local https_port="${3:-"7890"}"
+	local ftp_port="${4:-"7890"}"
+	local socks_port="${5:-"7891"}"
 
 	if [[ -x "$(command -v /usr/bin/gsettings)" && -n "${DISPLAY}" ]]; then
 		/usr/bin/gsettings set org.gnome.system.proxy mode 'manual'
-		/usr/bin/gsettings set org.gnome.system.proxy.http host "${PROXY_HOST}"
-		/usr/bin/gsettings set org.gnome.system.proxy.http port "${HTTP_PORT}"
-		/usr/bin/gsettings set org.gnome.system.proxy.https host "${PROXY_HOST}"
-		/usr/bin/gsettings set org.gnome.system.proxy.https port "${HTTPS_PORT}"
-		/usr/bin/gsettings set org.gnome.system.proxy.ftp host "${PROXY_HOST}"
-		/usr/bin/gsettings set org.gnome.system.proxy.ftp port "${FTP_PORT}"
-		/usr/bin/gsettings set org.gnome.system.proxy.socks host "${PROXY_HOST}"
-		/usr/bin/gsettings set org.gnome.system.proxy.socks port "${SOCKS_PORT}"
+		/usr/bin/gsettings set org.gnome.system.proxy.http host "${proxy_host}"
+		/usr/bin/gsettings set org.gnome.system.proxy.http port "${http_port}"
+		/usr/bin/gsettings set org.gnome.system.proxy.https host "${proxy_host}"
+		/usr/bin/gsettings set org.gnome.system.proxy.https port "${https_port}"
+		/usr/bin/gsettings set org.gnome.system.proxy.ftp host "${proxy_host}"
+		/usr/bin/gsettings set org.gnome.system.proxy.ftp port "${ftp_port}"
+		/usr/bin/gsettings set org.gnome.system.proxy.socks host "${proxy_host}"
+		/usr/bin/gsettings set org.gnome.system.proxy.socks port "${socks_port}"
 	fi
 
-	export http_proxy="http://${PROXY_HOST}:${HTTP_PORT}"
-	export https_proxy="http://${PROXY_HOST}:${HTTPS_PORT}"
-	export ftp_proxy="http://${PROXY_HOST}:${FTP_PORT}"
-	export all_proxy="socks5://${PROXY_HOST}:${SOCKS_PORT}"
+	export http_proxy="http://${proxy_host}:${http_port}"
+	export https_proxy="http://${proxy_host}:${https_port}"
+	export ftp_proxy="http://${proxy_host}:${ftp_port}"
+	export all_proxy="socks5://${proxy_host}:${socks_port}"
 	export HTTP_PROXY="${http_proxy}"
 	export HTTPS_PROXY="${https_proxy}"
 	export FTP_PROXY="${ftp_proxy}"

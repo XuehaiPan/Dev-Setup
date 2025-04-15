@@ -225,16 +225,16 @@ function upgrade_packages() {
 }
 
 function set_proxy() {
-	local PROXY_HOST="${1:-"127.0.0.1"}"
-	local HTTP_PORT="${2:-"7890"}"
-	local HTTPS_PORT="${3:-"7890"}"
-	local FTP_PORT="${4:-"7890"}"
-	local SOCKS_PORT="${5:-"7891"}"
+	local proxy_host="${1:-"127.0.0.1"}"
+	local http_port="${2:-"7890"}"
+	local https_port="${3:-"7890"}"
+	local ftp_port="${4:-"7890"}"
+	local socks_port="${5:-"7891"}"
 
-	export http_proxy="http://${PROXY_HOST}:${HTTP_PORT}"
-	export https_proxy="http://${PROXY_HOST}:${HTTPS_PORT}"
-	export ftp_proxy="http://${PROXY_HOST}:${FTP_PORT}"
-	export all_proxy="socks5://${PROXY_HOST}:${SOCKS_PORT}"
+	export http_proxy="http://${proxy_host}:${http_port}"
+	export https_proxy="http://${proxy_host}:${https_port}"
+	export ftp_proxy="http://${proxy_host}:${ftp_port}"
+	export all_proxy="socks5://${proxy_host}:${socks_port}"
 	export HTTP_PROXY="${http_proxy}"
 	export HTTPS_PROXY="${https_proxy}"
 	export FTP_PROXY="${ftp_proxy}"
@@ -261,7 +261,7 @@ function available_cuda_devices() {
 			break
 		fi
 		pids=$(nvidia-smi --id="${index}" --query-compute-apps=pid --format=csv,noheader | xargs echo -n)
-		if [[ -n "${pids}" ]] && (ps -o user -p "${pids}" | tail -n +2 | grep -qvF "${USER}") &&
+		if [[ -n "${pids}" ]] && (ps -o user -p ${pids} | tail -n +2 | grep -qvF "${USER}") &&
 			((memused >= 3072 || memfree <= 6144 || utilization >= 20)); then
 			continue
 		fi
@@ -300,28 +300,40 @@ function auto_reannounce_trackers() {
 }
 
 function pull_projects() {
-	local BASE_DIRS BASE_DIR PROJ_DIR HEAD_HASH
+	local base_dirs base_dir proj_dir
+	local head_hash old_head_hash branch remote remote_hash push_remote push_remote_hash
 
 	# Project directories
 	if [[ "$#" -gt 0 ]]; then
-		BASE_DIRS=("$@")
+		base_dirs=("$@")
 	else
-		BASE_DIRS=("${HOME}/VSCodeProjects" "${HOME}/PycharmProjects" "${HOME}/ClionProjects" "${HOME}/IdeaProjects")
+		base_dirs=("${HOME}/Projects")
 	fi
 
 	# Fetch and pull
-	for BASE_DIR in "${BASE_DIRS[@]}"; do
-		while read -r PROJ_DIR; do
-			if [[ -n "$(git -C "${PROJ_DIR}" remote)" ]]; then
-				exec_cmd "git -C \"${PROJ_DIR/#${HOME}/\${HOME\}}\" fetch --all --prune"
-				HEAD_HASH="$(git -C "${PROJ_DIR}" rev-parse HEAD)"
-				exec_cmd "git -C \"${PROJ_DIR/#${HOME}/\${HOME\}}\" pull --ff-only"
-				if [[ "${HEAD_HASH}" != "$(git -C "${PROJ_DIR}" rev-parse HEAD)" ]]; then
-					exec_cmd "git -C \"${PROJ_DIR/#${HOME}/\${HOME\}}\" gc --aggressive"
+	for base_dir in "${base_dirs[@]}"; do
+		while read -r proj_dir; do
+			branch="$(git -C "${proj_dir}" branch --show-current)"
+			remote="$(git -C "${proj_dir}" config get branch."${branch}".remote)"
+			if [[ -z "${branch}" || -z "${remote}" ]]; then
+				continue
+			fi
+			exec_cmd "git -C \"${proj_dir/#${HOME}/\${HOME\}}\" fetch --all --prune"
+			old_head_hash="$(git -C "${proj_dir}" rev-parse "${branch}")"
+			head_hash="$(git -C "${proj_dir}" rev-parse "${remote}/${branch}")"
+			if [[ "${head_hash}" != "${old_head_hash}" ]]; then
+				exec_cmd "git -C \"${proj_dir/#${HOME}/\${HOME\}}\" pull ${remote} ${branch} --ff-only"
+				exec_cmd "git -C \"${proj_dir/#${HOME}/\${HOME\}}\" gc --aggressive"
+			fi
+			push_remote="$(git -C "${proj_dir}" config get branch."${branch}".pushremote)"
+			if [[ -n "${push_remote}" ]]; then
+				push_remote_hash="$(git -C "${proj_dir}" rev-parse "${push_remote}/${branch}")"
+				if [[ "${head_hash}" != "${push_remote_hash}" ]]; then
+					exec_cmd "git -C \"${proj_dir/#${HOME}/\${HOME\}}\" push ${push_remote} ${branch} || true"
 				fi
 			fi
 		done < <(
-			find -L "${BASE_DIR}" -maxdepth 5 -not -empty -type d -name '.git' -prune -exec dirname {} \;
+			find -L "${base_dir}" -maxdepth 5 -not -empty -type d -name '.git' -prune -exec dirname '{}' +
 		)
 	done
 }

@@ -186,6 +186,10 @@ function get_latest_version() {
 	local TIME=0 INTERVAL=1 t
 
 	echo "Checking latest version of ${REPO}..." >&2
+	if [[ -x "$(command -v gh)" ]] && gh auth status &>/dev/null; then
+		gh release list --repo="${REPO}" --limit=1 --json tagName --jq '.[].tagName'
+		return "$?"
+	fi
 	while true; do
 		((TIME > 0)) && echo "Retrying..." >&2
 

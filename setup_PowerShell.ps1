@@ -12,7 +12,10 @@ $Env:ChocolateyToolsLocation = 'C:\Tools'
 [Environment]::SetEnvironmentVariable('ChocolateyToolsLocation', 'C:\Tools', 'Machine')
 
 # Install PowerShell Core
-choco install powershell-core git --yes
+winget install Git.Git GitHub.cli --scope=machine
+winget install JanDeDobbeleer.OhMyPosh --scope=machine
+winget install Microsoft.VisualStudioCode --scope=machine
+winget install Microsoft.WindowsTerminal --scope=machine
 
 # Setup PowerShell
 Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
@@ -90,10 +93,9 @@ Function Reset-Proxy {
 "@ | Set-Content -Path $PROFILE.CurrentUserAllHosts -Encoding utf8
 
 # Install Chocolatey packages
-choco install vim --params="'/InstallDir:$Env:ChocolateyToolsLocation\Vim /NoDesktopShortcuts'" --yes
-choco install python312 --params="'/InstallDir:$Env:ChocolateyToolsLocation\Python312'" --yes
+winget install vim.vim --scope=machine
+winget install Python.Python.3.13 --scope=machine
 choco install cmake --installargs="'ADD_CMAKE_TO_PATH=System'" --yes
-choco install vscode conemu mobaxterm oh-my-posh vcxsrv --yes
 choco install fzf bat ripgrep shellcheck wget mingw --yes
 
 # Setup Vim

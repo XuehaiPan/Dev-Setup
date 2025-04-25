@@ -212,7 +212,7 @@
             "args": [
                 "-NoExit",
                 "-Command",
-                "$__VsDevShell = (Get-ChildItem -Path \"${env:ProgramFiles}\\Microsoft Visual Studio\\*\\*\\*\\Tools\\Launch-VsDevShell.ps1\" 2>$null).FullName; if ($__VsDevShell) { & \"$__VsDevShell\" -SkipAutomaticLocation }; Remove-Variable -Name __VsDevShell -Force"
+                "$__VsDevShell = (Get-ChildItem -Path \"${env:ProgramFiles}*\\Microsoft Visual Studio\\*\\*\\*\\Tools\\Launch-VsDevShell.ps1\" 2>$null | Select-Object -First 1).FullName; if ($__VsDevShell) { & \"$__VsDevShell\" -SkipAutomaticLocation }; Remove-Variable -Name __VsDevShell -Force"
             ]
         }
     },

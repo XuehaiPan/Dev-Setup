@@ -37,8 +37,12 @@ export CLICOLOR=1
 export LSCOLORS="GxFxCxDxBxegedabagaced"
 
 # Locale
-export LC_ALL="C.UTF-8"
-export LANGUAGE="C:en"
+export LANG="en_US.UTF-8"
+export LANGUAGE="en:C"
+if [[ -x "$(command -v locale)" ]]; then
+	eval "$(printf "export %s\n" $(LC_ALL="" LC_TIME="C.UTF-8" locale))"
+fi
+export LC_ALL="${LANG}"
 
 # Homebrew
 eval "$(/usr/local/bin/brew shellenv)"

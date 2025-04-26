@@ -557,8 +557,12 @@ export TERM="xterm-256color"
 export LESS="-R -M -i -j5"
 
 # Locale
-export LC_ALL="C.UTF-8"
-export LANGUAGE="C:en"
+export LANG="en_US.UTF-8"
+export LANGUAGE="en:C"
+if [[ -x "$(command -v locale)" ]]; then
+	eval "$(printf "export %s\n" $(LC_ALL="" LC_TIME="C.UTF-8" locale))"
+fi
+export LC_ALL="${LANG}"
 
 EOF
 cat >>.dotfiles/.zshrc <<EOF
@@ -1416,8 +1420,12 @@ else
 fi
 
 # Locale
-export LC_ALL="C.UTF-8"
-export LANGUAGE="C:en"
+export LANG="en_US.UTF-8"
+export LANGUAGE="en:C"
+if [[ -x "$(command -v locale)" ]]; then
+	eval "$(printf "export %s\n" $(LC_ALL="" LC_TIME="C.UTF-8" locale))"
+fi
+export LC_ALL="${LANG}"
 
 EOF
 cat >>.dotfiles/.bash_profile <<EOF

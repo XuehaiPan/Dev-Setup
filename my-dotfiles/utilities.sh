@@ -138,7 +138,7 @@ function upgrade_ohmyzsh() {
 		exec_cmd "git -C \"\${ZSH_CUSTOM}/${repo}\" gc --prune=all"
 	done < <(
 		cd "${ZSH_CUSTOM}" &&
-			find -L . -mindepth 3 -maxdepth 3 -not -empty -type d -name '.git' -prune -exec dirname '{}' + |
+			find -L . -mindepth 3 -maxdepth 3 -not -empty -type d -name '.git' -prune -exec dirname '{}' ';' |
 			cut -c3-
 	)
 
@@ -333,7 +333,7 @@ function pull_projects() {
 				fi
 			fi
 		done < <(
-			find -L "${base_dir}" -maxdepth 5 -not -empty -type d -name '.git' -prune -exec dirname '{}' +
+			find -L "${base_dir}" -maxdepth 5 -not -empty -type d -name '.git' -prune -exec dirname '{}' ';'
 		)
 	done
 }

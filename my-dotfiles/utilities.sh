@@ -314,7 +314,7 @@ function pull_projects() {
 	for base_dir in "${base_dirs[@]}"; do
 		while read -r proj_dir; do
 			branch="$(git -C "${proj_dir}" branch --show-current)"
-			remote="$(git -C "${proj_dir}" config get branch."${branch}".remote)"
+			remote="$(git -C "${proj_dir}" config branch."${branch}".remote)"
 			if [[ -z "${branch}" || -z "${remote}" ]]; then
 				continue
 			fi
@@ -325,7 +325,7 @@ function pull_projects() {
 				exec_cmd "git -C \"${proj_dir/#${HOME}/\${HOME\}}\" pull ${remote} ${branch} --ff-only"
 				exec_cmd "git -C \"${proj_dir/#${HOME}/\${HOME\}}\" gc --aggressive"
 			fi
-			push_remote="$(git -C "${proj_dir}" config get branch."${branch}".pushremote)"
+			push_remote="$(git -C "${proj_dir}" config branch."${branch}".pushremote)"
 			if [[ -n "${push_remote}" ]]; then
 				push_remote_hash="$(git -C "${proj_dir}" rev-parse "${push_remote}/${branch}")"
 				if [[ "${head_hash}" != "${push_remote_hash}" ]]; then

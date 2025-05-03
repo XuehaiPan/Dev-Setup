@@ -1232,7 +1232,7 @@ function upgrade_ohmyzsh() {
 		exec_cmd "git -C \"\${ZSH_CUSTOM}/${repo}\" gc --prune=all"
 	done < <(
 		cd "${ZSH_CUSTOM}" &&
-			find -L . -mindepth 3 -maxdepth 3 -not -empty -type d -name '.git' -prune -exec dirname {} \; |
+			find -L . -mindepth 3 -maxdepth 3 -not -empty -type d -name '.git' -prune -exec dirname '{}' + |
 			cut -c3-
 	)
 
@@ -2557,11 +2557,11 @@ done
 mkdir -p "${HOME}/.local/share/fonts"
 exec_cmd "find -L \"${TMP_DIR}/fonts\" -not -empty -type f -name '*.[ot]t[fc]' \\
 	-printf '==> cp -f \"%p\" \"\${HOME}/.local/share/fonts\"\n' \\
-	-exec cp -f '{}' \"\${HOME}/.local/share/fonts\" \\;"
+	-exec cp -f '{}' \"\${HOME}/.local/share/fonts\" +"
 if ${IN_WSL} && [[ -w "/mnt/c/Windows/Fonts" ]]; then
 	exec_cmd "find -L \"${TMP_DIR}/fonts\" -not -empty -type f -name '*.ttf' \\
 		-printf '==> cp -f \"%p\" \"/mnt/c/Windows/Fonts\"\n' \\
-		-exec cp -f '{}' \"/mnt/c/Windows/Fonts\" \\;"
+		-exec cp -f '{}' \"/mnt/c/Windows/Fonts\" +"
 	REGKEY='HKLM\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Fonts'
 	exec_cmd "find -L \"${TMP_DIR}/fonts\" -not -empty -type f -name '*.tt[fc]' -print0 | \\
 		xargs -0 -I '{}' bash -c 'file=\"{}\"; font=\${file##*/}; \\

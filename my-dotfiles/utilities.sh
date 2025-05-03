@@ -138,7 +138,7 @@ function upgrade_ohmyzsh() {
 		exec_cmd "git -C \"\${ZSH_CUSTOM}/${repo}\" gc --prune=all"
 	done < <(
 		cd "${ZSH_CUSTOM}" &&
-			find -L . -mindepth 3 -maxdepth 3 -not -empty -type d -name '.git' -prune -exec dirname {} \; |
+			find -L . -mindepth 3 -maxdepth 3 -not -empty -type d -name '.git' -prune -exec dirname '{}' + |
 			cut -c3-
 	)
 
@@ -261,7 +261,7 @@ function available_cuda_devices() {
 			break
 		fi
 		pids=$(nvidia-smi --id="${index}" --query-compute-apps=pid --format=csv,noheader | xargs echo -n)
-		if [[ -n "${pids}" ]] && (ps -o user -p ${pids} | tail -n +2 | grep -qvF "${USER}") &&
+		if [[ -n "${pids}" ]] && (ps -o user -p "${pids}" | tail -n +2 | grep -qvF "${USER}") &&
 			((memused >= 3072 || memfree <= 6144 || utilization >= 20)); then
 			continue
 		fi

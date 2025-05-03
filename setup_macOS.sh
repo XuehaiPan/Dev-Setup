@@ -1061,7 +1061,7 @@ function upgrade_ohmyzsh() {
 		exec_cmd "git -C \"\${ZSH_CUSTOM}/${repo}\" gc --prune=all"
 	done < <(
 		cd "${ZSH_CUSTOM}" &&
-			find -L . -mindepth 3 -maxdepth 3 -not -empty -type d -name '.git' -prune -exec dirname {} \; |
+			find -L . -mindepth 3 -maxdepth 3 -not -empty -type d -name '.git' -prune -exec dirname '{}' + |
 			cut -c3-
 	)
 
@@ -1524,7 +1524,7 @@ exec_cmd "plutil -replace 'Custom Color Presets.SpaceGray Eighties' \\
 # iTerm2 shell integration and utilities
 exec_cmd "mkdir -p \"\${HOME}/.iterm2/bin\""
 exec_cmd "wget -O - https://github.com/gnachman/iTerm2/raw/HEAD/Resources/utilities/utilities.tgz | tar -xz -C \"\${HOME}/.iterm2/bin\""
-ITERM_UTILITIES=($(find "${HOME}/.iterm2/bin" -type f -exec basename "{}" +))
+ITERM_UTILITIES=($(find "${HOME}/.iterm2/bin" -type f -exec basename '{}' +))
 
 function join_by() {
 	local sep="$1"

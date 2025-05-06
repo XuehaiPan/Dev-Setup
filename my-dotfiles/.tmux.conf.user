@@ -2,6 +2,8 @@
 set-option -gs default-terminal "tmux-256color"
 set-option -gsa terminal-overrides ",*-256color:Tc"
 set-option -gs default-command 'P10K_LEAN_STYLE=true "${SHELL}"'
+set-environment -g LANG "C.UTF-8"
+set-environment -g LC_ALL "C.UTF-8"
 
 # Automatically set window title
 set-option -gs automatic-rename on

@@ -125,7 +125,7 @@ export PATH="$(ruby -r rubygems -e 'puts Gem.dir')/bin${PATH:+:"${PATH}"}"
 export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin${PATH:+:"${PATH}"}"
 
 # Perl
-eval "$(perl -I"${HOMEBREW_PREFIX}/opt/perl/lib/perl5" -Mlocal::lib="${HOMEBREW_PREFIX}/opt/perl")"
+eval "$(LC_ALL="C" perl -I"${HOMEBREW_PREFIX}/opt/perl/lib/perl5" -Mlocal::lib="${HOMEBREW_PREFIX}/opt/perl")"
 
 # Mono
 export MONO_GAC_PREFIX="${HOMEBREW_PREFIX}"

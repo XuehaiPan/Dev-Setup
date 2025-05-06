@@ -488,7 +488,7 @@ if ${SET_MIRRORS}; then
 	fi
 fi
 exec_cmd 'PERL_MM_OPT="INSTALL_BASE=\"${HOME}/.perl\"" cpan -i -T local::lib'
-exec_cmd 'eval "$(perl -I${HOME}/.perl/lib/perl5 -Mlocal::lib=${HOME}/.perl)"'
+exec_cmd 'eval "$(LC_ALL="C" perl -I${HOME}/.perl/lib/perl5 -Mlocal::lib=${HOME}/.perl)"'
 exec_cmd "cpan -i CPAN"
 exec_cmd "AUTOMATED_TESTING=1 cpan -i Term::ReadLine::Perl Term::ReadKey"
 
@@ -635,7 +635,7 @@ if [[ -x "$(command -v ruby)" && -x "$(command -v gem)" ]]; then
 fi
 
 # Perl
-eval "$(perl -I"${HOME}/.perl/lib/perl5" -Mlocal::lib="${HOME}/.perl")"
+eval "$(LC_ALL="C" perl -I"${HOME}/.perl/lib/perl5" -Mlocal::lib="${HOME}/.perl")"
 
 # fzf
 if [[ -f "${HOME}/.fzf.zsh" ]]; then
@@ -1495,7 +1495,7 @@ if [[ -x "$(command -v ruby)" && -x "$(command -v gem)" ]]; then
 fi
 
 # Perl
-eval "$(perl -I"${HOME}/.perl/lib/perl5" -Mlocal::lib="${HOME}/.perl")"
+eval "$(LC_ALL="C" perl -I"${HOME}/.perl/lib/perl5" -Mlocal::lib="${HOME}/.perl")"
 
 # fzf
 if [[ -f "${HOME}/.fzf.bash" ]]; then
@@ -1888,6 +1888,8 @@ cat >.dotfiles/.tmux.conf.user <<'EOF'
 set-option -gs default-terminal "tmux-256color"
 set-option -gsa terminal-overrides ",*-256color:Tc"
 set-option -gs default-command 'P10K_LEAN_STYLE=true "${SHELL}"'
+set-environment -g LANG "C.UTF-8"
+set-environment -g LC_ALL "C.UTF-8"
 
 # Automatically set window title
 set-option -gs automatic-rename on

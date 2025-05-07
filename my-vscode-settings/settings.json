@@ -331,9 +331,12 @@
 
     //* Cmake Tools */
     "cmake.preferredGenerators": [
-        "Unix Makefiles",
-        "Ninja"
+        "Ninja",
+        "Unix Makefiles"
     ],
+    "cmake.configureEnvironment": {
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+    },
     "cmake.sourceDirectory": "${workspaceFolder}",
     "cmake.buildDirectory": "${workspaceFolder}/cmake-build-${variant:buildType}",
     "cmake.configureOnEdit": true,
@@ -343,11 +346,6 @@
     "cmake.buildBeforeRun": true,
     "cmake.exportCompileCommandsFile": true,
     "cmake.copyCompileCommands": "${workspaceFolder}/.vscode/compile_commands.json",
-    "cmake.pinnedCommands": [
-        "workbench.action.tasks.configureTaskRunner",
-        "workbench.action.tasks.runTask"
-    ],
-    "cmake.showOptionsMovedNotification": false,
 
     //* Code Runner */
     "code-runner.clearPreviousOutput": false,
@@ -455,6 +453,16 @@
     //* Code Spell Checker */
     "cSpell.language": "en,en-US",
     "cSpell.showStatus": false,
+
+    //* Data Wrangler */
+    "dataWrangler.enabledFileTypes": {
+        "csv": true,
+        "tsv": true,
+        "parquet": true,
+        "xlsx": true,
+        "xls": true,
+        "jsonl": true
+    },
 
     //* Git */
     "git.enabled": true,

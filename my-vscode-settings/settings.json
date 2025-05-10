@@ -453,6 +453,18 @@
     //* Code Spell Checker */
     "cSpell.language": "en,en-US",
     "cSpell.showStatus": false,
+    "cSpell.customDictionaries": {
+        "spelling-wordlist-docs-source": {
+            "name": "spelling-wordlist-docs-source",
+            "path": "${workspaceFolder}/docs/source/spelling_wordlist.txt",
+            "addWords": false
+        },
+        "spelling-wordlist-docs": {
+            "name": "spelling-wordlist-docs",
+            "path": "${workspaceFolder}/docs/spelling_wordlist.txt",
+            "addWords": false
+        }
+    },
 
     //* Data Wrangler */
     "dataWrangler.enabledFileTypes": {

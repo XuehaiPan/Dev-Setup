@@ -323,7 +323,9 @@ function pull_projects() {
 			head_hash="$(git -C "${proj_dir}" rev-parse "${remote}/${branch}")"
 			if [[ "${head_hash}" != "${old_head_hash}" ]]; then
 				exec_cmd "git -C \"${proj_dir/#${HOME}/\${HOME\}}\" pull ${remote} ${branch} --ff-only"
-				exec_cmd "git -C \"${proj_dir/#${HOME}/\${HOME\}}\" gc --aggressive"
+				if (("$(git -C "${project_dir}" rev-list --count --all)" <= 10000 )); then
+					exec_cmd "git -C \"${proj_dir/#${HOME}/\${HOME\}}\" gc --aggressive"
+				fi
 			fi
 			push_remote="$(git -C "${proj_dir}" config branch."${branch}".pushremote)"
 			if [[ -n "${push_remote}" ]]; then

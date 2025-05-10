@@ -1006,6 +1006,7 @@
     "redhat.telemetry.enabled": false,
 
     //* Remote */
+    "remote.SSH.localServerDownload": "always",
     "remote.SSH.connectTimeout": 300,
     "remote.SSH.defaultExtensions": [
         "ms-ceintl.vscode-language-pack-zh-hans",

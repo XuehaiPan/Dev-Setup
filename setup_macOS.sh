@@ -422,7 +422,7 @@ if ${SET_MIRRORS}; then
 	fi
 fi
 exec_cmd 'PERL_MM_OPT="INSTALL_BASE=\"${HOMEBREW_PREFIX}/opt/perl\"" cpan -i -T local::lib'
-exec_cmd 'eval "$(LC_ALL="C" perl -I${HOMEBREW_PREFIX}/opt/perl/lib/perl5 -Mlocal::lib=${HOMEBREW_PREFIX}/opt/perl)"'
+exec_cmd 'eval "$(LC_ALL='C' perl -I${HOMEBREW_PREFIX}/opt/perl/lib/perl5 -Mlocal::lib=${HOMEBREW_PREFIX}/opt/perl)"'
 exec_cmd "cpan -i CPAN"
 exec_cmd "AUTOMATED_TESTING=1 cpan -i Term::ReadLine::Perl Term::ReadKey"
 

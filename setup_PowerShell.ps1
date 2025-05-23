@@ -93,9 +93,9 @@ Function Reset-Proxy {
 "@ | Set-Content -Path $PROFILE.CurrentUserAllHosts -Encoding utf8
 
 # Install Chocolatey packages
-winget install vim.vim --scope=machine
 winget install Python.Python.3.13 --scope=machine
 choco install cmake --installargs="'ADD_CMAKE_TO_PATH=System'" --yes
+choco install vim --params="'/InstallDir:$Env:ChocolateyToolsLocation\Vim /NoDesktopShortcuts'" --yes
 choco install fzf bat ripgrep shellcheck wget mingw --yes
 
 # Setup Vim

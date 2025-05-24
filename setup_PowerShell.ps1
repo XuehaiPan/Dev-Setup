@@ -36,6 +36,7 @@ if (Test-Path -Path "~\Miniconda3\shell\condabin\conda-hook.ps1") {
     & "~\Miniconda3\shell\condabin\conda-hook.ps1"
 }
 
+`$Env:YAZI_FILE_ONE = "`$Env:ProgramFiles\Git\usr\bin\file.exe"
 `$Env:POSH_PREFIX = (Split-Path -Resolve -Parent -Path (Split-Path -Parent -Path (Get-Command oh-my-posh).Source))
 `$Env:POSH_THEMES_PATH = (Join-Path -Resolve -Path "`$Env:POSH_PREFIX" -Child "themes")
 oh-my-posh init pwsh --config (Join-Path -Path "`$Env:POSH_THEMES_PATH" -Child "ys.omp.json") | Invoke-Expression
@@ -96,7 +97,7 @@ Function Reset-Proxy {
 winget install Python.Python.3.13 --scope=machine
 choco install cmake --installargs="'ADD_CMAKE_TO_PATH=System'" --yes
 choco install vim --params="'/InstallDir:$Env:ChocolateyToolsLocation\Vim /NoDesktopShortcuts'" --yes
-choco install fzf bat ripgrep shellcheck wget mingw --yes
+choco install fzf bat ripgrep yazi shellcheck wget mingw --yes
 
 # Setup Vim
 New-Item -Path "~\vimfiles\autoload" -Type Directory -Force

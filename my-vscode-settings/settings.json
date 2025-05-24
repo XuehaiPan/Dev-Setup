@@ -139,7 +139,7 @@
         "**/.settings": true,
         "**/.idea": true,
         "**/.history": true,
-        "**/*.py[cod]": true,
+        "**/*.py[co]": true,
         "**/__pycache__": true,
         "**/*_cache/": true
     },
@@ -945,6 +945,7 @@
     "python.terminal.activateEnvironment": false,
     "python.analysis.inlayHints.callArgumentNames": "off",
     "python.analysis.inlayHints.functionReturnTypes": true,
+    "python.analysis.typeCheckingMode": "off",
     "debugpy.debugJustMyCode": false,
     "debugpy.showPythonInlineValues": true,
     "jupyter.interactiveWindow.cellMarker.default": "# %%",

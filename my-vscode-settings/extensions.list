@@ -90,7 +90,7 @@ bazelbuild.vscode-bazel
 mitaki28.vscode-clang
 llvm-vs-code-extensions.vscode-clangd
 llvm-vs-code-extensions.vscode-mlir
-ms-azuretools.vscode-docker
+ms-azuretools.vscode-containers
 ms-dotnettools.vscode-dotnet-runtime
 hediet.vscode-drawio
 janisdd.vscode-edit-csv

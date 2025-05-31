@@ -304,7 +304,7 @@
     "C_Cpp.workspaceSymbols": "All",
     "C_Cpp.clang_format_sortIncludes": false,
     "C_Cpp.clang_format_style": "file",
-    "C_Cpp.clang_format_fallbackStyle": "{ BasedOnStyle: Google, IndentWidth: 4, AccessModifierOffset: -3, ColumnLimit: 100, BinPackArguments: false, BinPackParameters: false }",
+    "C_Cpp.clang_format_fallbackStyle": "{ BasedOnStyle: Google, IndentWidth: 4, AccessModifierOffset: -4, ColumnLimit: 100, BinPackArguments: false, BinPackParameters: false }",
     "C_Cpp.codeAnalysis.clangTidy.enabled": true,
     "C_Cpp.codeAnalysis.clangTidy.useBuildPath": true,
 
@@ -346,6 +346,9 @@
     "cmake.buildBeforeRun": true,
     "cmake.exportCompileCommandsFile": true,
     "cmake.copyCompileCommands": "${workspaceFolder}/.vscode/compile_commands.json",
+
+    //* CodeLLDB */
+    "lldb.suppressUpdateNotifications": true,
 
     //* Code Runner */
     "code-runner.clearPreviousOutput": false,

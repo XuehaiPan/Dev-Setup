@@ -992,6 +992,12 @@
     "ruff.importStrategy": "fromEnvironment",
     "ruff.lineLength": 100,
     "ruff.organizeImports": false,
+    "ruff.configurationPreference": "filesystemFirst",
+    "ruff.configuration": {
+        "format": {
+            "quote-style": "single"
+        }
+    },
     "mypy-type-checker.importStrategy": "fromEnvironment",
     "mypy-type-checker.preferDaemon": true,
     "mypy-type-checker.reportingScope": "workspace",

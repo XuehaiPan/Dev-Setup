@@ -224,8 +224,6 @@ ln -sf .dotfiles/<CFG_FILE> .
 | [lldb](http://lldb.llvm.org)                                                                                                     |   ✔   |      ✔       |       ✔       |
 | [make](https://www.gnu.org/software/make)                                                                                        |   ✔   |      ✔       |       ✔       |
 | [cmake](https://cmake.org)                                                                                                       |   ✔   |      ✔       |       ✔       |
-| [automake](https://www.gnu.org/software/automake)                                                                                |   ✔   |      ✔       |       ✔       |
-| [autoconf](https://www.gnu.org/software/autoconf)                                                                                |   ✔   |      ✔       |       ✔       |
 |                                                                                                                                  |       |              |               |
 | [DejaVu Sans Mono Nerd Font](https://github.com/ryanoasis/nerd-fonts/blob/HEAD/patched-fonts/DejaVuSansMono)                     |   ✔   |      ✔       |       ✔       |
 | [Cascadia Code Font](https://github.com/microsoft/cascadia-code)                                                                 |   ✔   |      ✔       |       ✔       |

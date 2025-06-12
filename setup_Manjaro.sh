@@ -249,7 +249,7 @@ if have_sudo_access; then
 	exec_cmd "yes '' | sudo pacman -S bash-completion wget curl git git-lfs gvim tmux --needed"
 	exec_cmd "yes '' | sudo pacman -S ranger fd bat highlight ripgrep git-extras jq shfmt shellcheck --needed"
 	exec_cmd "yes '' | sudo pacman -S htop openssh net-tools atool tree colordiff diff-so-fancy xclip --needed"
-	exec_cmd "yes '' | sudo pacman -S gcc gdb clang llvm lldb make cmake automake autoconf ruby --needed"
+	exec_cmd "yes '' | sudo pacman -S gcc gdb clang llvm lldb make cmake ruby --needed"
 	exec_cmd 'yes | sudo pacman -Scc'
 
 	exec_cmd 'sudo systemctl start sshd'

@@ -231,11 +231,7 @@ if ! grep -qF "${HOMEBREW_PREFIX}/bin/zsh" /etc/shells; then
 fi
 
 # Install packages
-if [[ "$(uname -m)" == "arm64" ]]; then
-	exec_cmd 'brew install --formula gcc llvm make cmake automake autoconf'
-else
-	exec_cmd 'brew install --formula gcc gdb llvm make cmake automake autoconf'
-fi
+exec_cmd 'brew install --formula gcc gdb llvm make cmake'
 exec_cmd 'brew install --formula bash-completion wget curl git git-lfs macvim tmux'
 exec_cmd 'brew install --formula coreutils ranger fd bat highlight ripgrep git-extras'
 exec_cmd 'brew install --formula jq shfmt shellcheck diffutils colordiff diff-so-fancy'

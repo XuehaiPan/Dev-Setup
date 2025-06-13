@@ -118,13 +118,18 @@
     "files.trimFinalNewlines": true,
     "files.trimTrailingWhitespace": true,
     "files.associations": {
-        ".flake8": "properties",
-        ".coveragerc": "properties",
+        ".clang-format": "yaml",
+        ".clang-tidy": "yaml",
+        ".flake8": "ini",
+        ".coveragerc": "ini",
+        "*.py.in": "python",
+        "*.pyi.in": "python",
         "*requirements*.txt": "pip-requirements",
         "*requirements*.in": "pip-requirements",
+        "*.cpp.in": "cpp",
+        "*.h.in": "cpp",
+        "*.cmake.in": "cmake",
         "Makefile.*": "makefile",
-        ".clang-format": "yaml",
-        ".clang-tidy": "yaml"
     },
     "files.exclude": {
         "**/.git": true,
@@ -1001,10 +1006,6 @@
     "mypy-type-checker.importStrategy": "fromEnvironment",
     "mypy-type-checker.preferDaemon": true,
     "mypy-type-checker.reportingScope": "workspace",
-    "mypy-type-checker.severity": {
-        "error": "Warning",
-        "note": "Information"
-    },
     "mypy-type-checker.args": [
         "--warn-redundant-casts",
         "--warn-unused-ignores",

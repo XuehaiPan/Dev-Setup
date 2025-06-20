@@ -217,7 +217,7 @@
             "args": [
                 "-NoExit",
                 "-Command",
-                "$__VsDevShell = (Get-ChildItem -Path \"${env:ProgramFiles}*\\Microsoft Visual Studio\\*\\*\\*\\Tools\\Launch-VsDevShell.ps1\" 2>$null | Select-Object -First 1).FullName; $__OldVscmdTgtArch = $Env:VSCMD_ARG_TGT_ARCH; if ($__VsDevShell) { & \"$__VsDevShell\" -SkipAutomaticLocation }; if ($__OldVscmdTgtArch) { $Env:VSCMD_ARG_TGT_ARCH = $__OldVscmdTgtArch }; Remove-Variable -Name __OldVscmdTgtArch -Force; Remove-Variable -Name __VsDevShell -Force"
+                "$__VsDevShell = (Get-ChildItem -Path \"${env:ProgramFiles}*\\Microsoft Visual Studio\\*\\*\\*\\Tools\\Launch-VsDevShell.ps1\" 2>$null | Select-Object -First 1).FullName; $__OldVscmdTgtArch = $Env:VSCMD_ARG_TGT_ARCH; if ($__VsDevShell) { & \"$__VsDevShell\" -SkipAutomaticLocation }; if ($__OldVscmdTgtArch) { $Env:VSCMD_ARG_TGT_ARCH = $__OldVscmdTgtArch }; Remove-Variable -Name @('__OldVscmdTgtArch', '__VsDevShell') -Force"
             ]
         }
     },

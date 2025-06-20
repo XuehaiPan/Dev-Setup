@@ -96,7 +96,7 @@
 
     //* Window */
     "window.closeWhenEmpty": false,
-    "window.zoomLevel": 0.0,
+    "window.zoomLevel": 0.1,
     "window.newWindowDimensions": "maximized",
     "window.openFilesInNewWindow": "default",
     "window.openFoldersInNewWindow": "default",

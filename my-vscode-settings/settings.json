@@ -908,6 +908,7 @@
     //* Makefile Tools */
     "makefile.configureOnEdit": false,
     "makefile.configureOnOpen": false,
+    "makefile.compileCommandsPath": "${workspaceFolder}/.vscode/compile_commands.json",
 
     //* Markdown All in One */
     "markdown.extension.list.indentationSize": "inherit",

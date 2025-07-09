@@ -1,6 +1,5 @@
 {
     "recommendations": [
-        "ms-vscode.azure-repos",
         "rogalmic.bash-debug",
         "aaron-bond.better-comments",
         "jeff-hykin.better-cpp-syntax",

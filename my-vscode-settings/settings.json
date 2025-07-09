@@ -289,9 +289,6 @@
     },
 
     //! Extension settings */
-    //* Azure Machine Learning */
-    // "ai.homepage.openOnStartup": false,
-
     //* Better Comments */
     "better-comments.highlightPlainText": true,
     "better-comments.multilineComments": true,

@@ -212,6 +212,7 @@ ln -sf .dotfiles/<CFG_FILE> .
 | [diffutils](https://www.gnu.org/software/diffutils)                                                                              |   ✔   |      ✔       |       ✔       |
 | [colordiff](https://www.colordiff.org)                                                                                           |   ✔   |      ✔       |       ✔       |
 | [diff-so-fancy](https://github.com/so-fancy/diff-so-fancy)                                                                       |   ✔   |      ✔       |       ✔       |
+| [delta](https://github.com/dandavison/delta)                                                                                     |   ✔   |      ✔       |       ✔       |
 | [jq](https://stedolan.github.io/jq)                                                                                              |   ✔   |      ✔       |       ✔       |
 | [shfmt](https://github.com/mvdan/sh)                                                                                             |   ✔   |      ✔       |       ✔       |
 | [shellcheck](https://www.shellcheck.net)                                                                                         |   ✔   |      ✔       |       ✔       |

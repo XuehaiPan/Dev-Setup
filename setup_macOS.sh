@@ -234,7 +234,7 @@ fi
 exec_cmd 'brew install --formula gcc gdb llvm make cmake'
 exec_cmd 'brew install --formula bash-completion wget curl git git-lfs macvim tmux'
 exec_cmd 'brew install --formula coreutils ranger fd bat highlight ripgrep git-extras'
-exec_cmd 'brew install --formula jq shfmt shellcheck diffutils colordiff diff-so-fancy'
+exec_cmd 'brew install --formula jq shfmt shellcheck diffutils colordiff diff-so-fancy git-delta'
 exec_cmd 'brew install --formula htop openssh atool tree reattach-to-user-namespace libarchive'
 
 exec_cmd 'brew install --formula ruby perl'
@@ -294,20 +294,27 @@ git config --global alias.list-ignored '! cd -- "${GIT_PREFIX:-.}" && git ls-fil
 git config --global alias.config-push-remote '! cd -- "${GIT_PREFIX:-.}" && GIT_BRANCH="${1:-"$(git branch --show-current)"}" && git config branch."${GIT_BRANCH}".remote upstream; git config branch."${GIT_BRANCH}".pushremote origin;'
 git config --global alias.sync-remote '! cd -- "${GIT_PREFIX:-.}"; git status --porcelain && (GIT_CURRENT_BRANCH="$(git branch --show-current)"; GIT_BRANCH="${1:-"${GIT_CURRENT_BRANCH}"}"; GIT_REMOTE="$(git remote show | grep -E "^upstream$" || echo "origin")"; [ "${GIT_CURRENT_BRANCH}" != "${GIT_BRANCH}" ] && gut checkout "${GIT_BRANCH}"; git fetch --all --tags --prune --force --jobs=16; git pull --ff-only "${GIT_REMOTE}" "${GIT_BRANCH}"; [ "${GIT_REMOTE}" != "origin" ] && git push origin "${GIT_BRANCH}:${GIT_BRANCH}"; [ "${GIT_CURRENT_BRANCH}" != "${GIT_BRANCH}" ] && gut checkout "${GIT_CURRENT_BRANCH}")'
 git config --global color.ui true
-git config --global color.diff-highlight.oldNormal 'red bold'
-git config --global color.diff-highlight.oldHighlight 'red bold 52'
-git config --global color.diff-highlight.newNormal 'green bold'
-git config --global color.diff-highlight.newHighlight 'green bold 22'
-git config --global color.diff.meta 'yellow'
-git config --global color.diff.frag 'magenta bold'
-git config --global color.diff.func '146 bold'
-git config --global color.diff.commit 'yellow bold'
-git config --global color.diff.old 'red bold'
-git config --global color.diff.new 'green bold'
-git config --global color.diff.whitespace 'red reverse'
-if [[ -x "$(command -v diff-so-fancy)" ]]; then
+if [[ -x "$(command -v delta)" ]]; then
+	git config --global core.pager delta
+	git config --global interactive.diffFilter 'delta --color-only'
+	git config --global delta.navigate true
+	git config --global delta.dark true
+	git config --global delta.line-numbers true
+	git config --global delta.side-by-side true
+elif [[ -x "$(command -v diff-so-fancy)" ]]; then
 	git config --global core.pager 'diff-so-fancy | less --tabs=4 -RFX'
 	git config --global interactive.diffFilter 'diff-so-fancy --patch'
+	git config --global color.diff-highlight.oldNormal 'red bold'
+	git config --global color.diff-highlight.oldHighlight 'red bold 52'
+	git config --global color.diff-highlight.newNormal 'green bold'
+	git config --global color.diff-highlight.newHighlight 'green bold 22'
+	git config --global color.diff.meta 'yellow'
+	git config --global color.diff.frag 'magenta bold'
+	git config --global color.diff.func '146 bold'
+	git config --global color.diff.commit 'yellow bold'
+	git config --global color.diff.old 'red bold'
+	git config --global color.diff.new 'green bold'
+	git config --global color.diff.whitespace 'red reverse'
 fi
 
 mv -f .gitconfig .dotfiles/.gitconfig

@@ -297,7 +297,6 @@ call plug#begin('~/vimfiles/plugged')
     Plug 'vim-autoformat/vim-autoformat'
     Plug 'vim-syntastic/syntastic'
     Plug 'github/copilot.vim'
-    Plug 'SirVer/ultisnips'
     Plug 'honza/vim-snippets'
     Plug 'PProvost/vim-ps1'
     Plug 'elzr/vim-json'

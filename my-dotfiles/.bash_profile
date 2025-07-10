@@ -59,7 +59,7 @@ fi
 export LC_ALL="${LANG}"
 
 # Homebrew
-eval "$(/usr/local/bin/brew shellenv)"
+eval "$(/opt/homebrew/bin/brew shellenv)"
 export HOMEBREW_EDITOR="vim"
 export HOMEBREW_BAT=true
 export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"

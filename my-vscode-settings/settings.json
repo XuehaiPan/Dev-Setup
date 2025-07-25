@@ -492,6 +492,7 @@
     "git.pruneOnFetch": true,
     "git.pullTags": true,
     "git.replaceTagsWhenPull": true,
+    "git.openRepositoryInParentFolders": "always",
 
     //* Git Graph */
     "git-graph.repository.commits.order": "date",

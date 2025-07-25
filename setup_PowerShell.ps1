@@ -12,7 +12,8 @@ $Env:ChocolateyToolsLocation = 'C:\Tools'
 [Environment]::SetEnvironmentVariable('ChocolateyToolsLocation', 'C:\Tools', 'Machine')
 
 # Install PowerShell Core
-winget install Git.Git GitHub.cli --scope=machine
+winget source update
+winget install Git.Git Git.MinGit GitHub.cli --scope=machine
 winget install JanDeDobbeleer.OhMyPosh --scope=machine
 winget install Microsoft.VisualStudioCode --scope=machine
 winget install Microsoft.WindowsTerminal --scope=machine

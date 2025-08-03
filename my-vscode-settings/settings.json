@@ -1028,7 +1028,7 @@
     "redhat.telemetry.enabled": false,
 
     //* Remote */
-    "remote.SSH.localServerDownload": "auto",
+    "remote.SSH.localServerDownload": "always",
     "remote.SSH.connectTimeout": 300,
     "remote.SSH.defaultExtensions": [
         "ms-ceintl.vscode-language-pack-zh-hans",
@@ -1043,6 +1043,9 @@
         "ryu1kn.partial-diff",
         "christian-kohler.path-intellisense",
     ],
+    "remote.SSH.remotePlatform": {
+        "*": "linux"
+    },
 
     //* reStructuredText */
     "restructuredtext.languageServer.disabled": true,

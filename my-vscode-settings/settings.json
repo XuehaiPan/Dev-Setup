@@ -59,6 +59,7 @@
         "comments": true,
         "strings": true
     },
+    "editor.aiStats.enabled": true,
     "diffEditor.ignoreTrimWhitespace": false,
     "diffEditor.renderIndicators": true,
     "diffEditor.renderSideBySide": true,
@@ -180,6 +181,10 @@
     "debug.inlineValues": "on",
     "debug.showVariableTypes": true,
     "debug.openExplorerOnEnd": true,
+
+    //* Testing */
+    "testing.coverageToolbarEnabled": true,
+    "testing.defaultGutterClickAction": "runWithCoverage",
 
     //* Integrated Terminal */
     "terminal.explorerKind": "integrated",
@@ -947,12 +952,16 @@
     //* Python */
     "python.defaultInterpreterPath": "python3",
     "python.languageServer": "Pylance",
+    "python.terminal.activateEnvironment": false,
+    "python.terminal.shellIntegration.enabled": true,
     "python.analysis.autoImportCompletions": true,
     "python.analysis.completeFunctionParens": true,
     "python.analysis.inlayHints.callArgumentNames": "off",
     "python.analysis.inlayHints.functionReturnTypes": true,
+    "python.analysis.inlayHints.pytestParameters": true,
     "python.analysis.typeCheckingMode": "off",
-    "python.terminal.activateEnvironment": false,
+    "python.analysis.enablePytestSupport": true,
+    "python.analysis.supportAllPythonDocuments": true,
     "debugpy.debugJustMyCode": false,
     "debugpy.showPythonInlineValues": true,
     "jupyter.interactiveWindow.cellMarker.default": "# %%",

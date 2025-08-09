@@ -37,7 +37,6 @@ create_default_packages:
   - rich
   - tqdm
   - ruff
-  - black-jupyter
   - isort
   - pre-commit
 

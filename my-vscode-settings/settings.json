@@ -281,7 +281,7 @@
     },
     "[python]": {
         "editor.formatOnSave": false,
-        "editor.defaultFormatter": "ms-python.black-formatter"
+        "editor.defaultFormatter": "charliermarsh.ruff"
     },
     "[restructuredtext]": {
         "editor.tabSize": 4
@@ -977,12 +977,6 @@
     "notebook.output.minimalErrorRendering": true,
     "notebook.output.scrolling": true,
     "notebook.output.textLineLimit": 40,
-    "black-formatter.importStrategy": "fromEnvironment",
-    "black-formatter.args": [
-        "--safe",
-        "--line-length=100",
-        "--skip-string-normalization"
-    ],
     "isort.importStrategy": "fromEnvironment",
     "isort.args": [
         "--atomic",

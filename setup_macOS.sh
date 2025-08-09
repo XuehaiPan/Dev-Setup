@@ -2365,7 +2365,6 @@ create_default_packages:
   - rich
   - tqdm
   - ruff
-  - black-jupyter
   - isort
   - pre-commit
 
@@ -2395,7 +2394,7 @@ exec_cmd 'conda update conda mamba --name=base --yes'
 exec_cmd 'conda install pip ipython ipdb \
 	jupyter jupyterlab jupyter-lsp jupyterlab-lsp \
 	numpy matplotlib-base pandas rich tqdm \
-	ruff black-jupyter isort pre-commit --name=base --yes'
+	ruff isort pre-commit --name=base --yes'
 exec_cmd 'conda clean --all --yes'
 if ${SET_MIRRORS}; then
 	exec_cmd "conda run --name=base pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple"

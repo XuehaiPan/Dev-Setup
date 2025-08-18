@@ -391,7 +391,6 @@ if [[ -x "$(command -v delta)" ]]; then
 	git config --global delta.navigate true
 	git config --global delta.dark true
 	git config --global delta.line-numbers true
-	git config --global delta.side-by-side true
 elif [[ -x "$(command -v diff-so-fancy)" ]]; then
 	git config --global core.pager 'diff-so-fancy | less --tabs=4 -RFX'
 	git config --global interactive.diffFilter 'diff-so-fancy --patch'

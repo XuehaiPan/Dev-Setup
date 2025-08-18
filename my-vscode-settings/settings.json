@@ -515,17 +515,17 @@
     //* GitHub */
     "github.gitProtocol": "ssh",
     "github.codespaces.defaultExtensions": [
-        "GitHub.codespaces",
-        "GitHub.vscode-pull-request-github",
-        "GitHub.copilot",
-        "EditorConfig.EditorConfig",
+        "github.codespaces",
+        "github.vscode-pull-request-github",
+        "github.copilot",
+        "editorconfig.editorconfig",
         "mhutchie.git-graph",
         "donjayamanne.githistory",
         "eamodio.gitlens",
         "k--kato.intellij-idea-keybindings",
         "ryu1kn.partial-diff",
         "alefragnani.separators",
-        "Gruntfuggly.todo-tree",
+        "gruntfuggly.todo-tree",
         "ms-python.python",
         "ms-python.vscode-pylance"
     ],

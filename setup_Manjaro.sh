@@ -1420,9 +1420,12 @@ export LESS="-R -M -i -j5"
 if [[ -f "${HOME}/.dotfiles/gitstatus/gitstatus.prompt.sh" ]]; then
 	GITSTATUS_NUM_THREADS=4 source "${HOME}/.dotfiles/gitstatus/gitstatus.prompt.sh"
 elif [[ -n "${SSH_CONNECTION}" ]]; then
-	export PS1='[\[\e[1;33m\]\u\[\e[0m\]@\[\e[1;32m\]\h\[\e[0m\]:\[\e[1;35m\]\w\[\e[0m\]]\$ '
+	export PS1='[\[\e[1;33m\]\u\[\e[0m\]@\[\e[1;32m\]\H\[\e[0m\]:\[\e[1;35m\]\w\[\e[0m\]]\$ '
 else
 	export PS1='[\[\e[1;33m\]\u\[\e[0m\]:\[\e[1;35m\]\w\[\e[0m\]]\$ '
+fi
+if [[ "${PS1}" != *HOST* ]]; then
+	export PS1="${PS1//\\[hH]/\$\{HOST:-\\H\}}"
 fi
 
 # Locale

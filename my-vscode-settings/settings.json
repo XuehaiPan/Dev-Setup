@@ -22,6 +22,7 @@
     "editor.guides.indentation": false,
     "editor.guides.highlightActiveIndentation": true,
     "editor.bracketPairColorization.enabled": true,
+    "editor.defaultColorDecorators": "always",
     "editor.wordWrapColumn": 120,
     "editor.rulers": [
         80,
@@ -239,6 +240,12 @@
 
     //* Update */
     "update.mode": "default",
+
+    //* Telemetry */
+    "telemetry.telemetryLevel": "off",
+    "telemetry.feedback.enabled": false,
+    "telemetry.editStats.enabled": true,
+    "telemetry.editStats.details.enabled": false,
 
     //! Default Configuration Overrides */
     "[go][makefile][shellscript]": {
@@ -550,6 +557,7 @@
         "suppressIntegrationRequestTimedOutWarning": true
     },
     "gitlens.graph.layout": "editor",
+    "gitlens.telemetry.enabled": false,
 
     //* Go */
     "go.gopath": "${env:HOMEBREW_PREFIX}/opt/go",
@@ -950,10 +958,11 @@
     "powershell.scriptAnalysis.enable": true,
 
     //* Python */
-    "python.defaultInterpreterPath": "python3",
+    "python.defaultInterpreterPath": "${workspaceFolder}/venv/bin/python3",
     "python.languageServer": "Pylance",
     "python.terminal.activateEnvironment": false,
     "python.terminal.shellIntegration.enabled": true,
+    "python.analysis.autoFormatStrings": true,
     "python.analysis.autoImportCompletions": true,
     "python.analysis.completeFunctionParens": true,
     "python.analysis.inlayHints.callArgumentNames": "off",
@@ -962,6 +971,8 @@
     "python.analysis.typeCheckingMode": "off",
     "python.analysis.enablePytestSupport": true,
     "python.analysis.supportAllPythonDocuments": true,
+    "python.analysis.diagnosticMode": "workspace",
+    "python.experiments.enabled": false,
     "debugpy.debugJustMyCode": false,
     "debugpy.showPythonInlineValues": true,
     "jupyter.interactiveWindow.cellMarker.default": "# %%",
@@ -977,6 +988,7 @@
     "notebook.output.minimalErrorRendering": true,
     "notebook.output.scrolling": true,
     "notebook.output.textLineLimit": 40,
+    "notebook.defaultFormatter": "charliermarsh.ruff",
     "isort.importStrategy": "fromEnvironment",
     "isort.args": [
         "--atomic",

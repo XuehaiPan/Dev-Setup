@@ -971,7 +971,6 @@
     "python.analysis.typeCheckingMode": "off",
     "python.analysis.enablePytestSupport": true,
     "python.analysis.supportAllPythonDocuments": true,
-    "python.analysis.diagnosticMode": "workspace",
     "python.experiments.enabled": false,
     "debugpy.debugJustMyCode": false,
     "debugpy.showPythonInlineValues": true,

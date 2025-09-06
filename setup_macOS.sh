@@ -22,6 +22,7 @@ chmod 755 "${HOME}/.dotfiles"
 
 # Set temporary directory
 TMP_DIR="$(mktemp -d -t dev-setup)"
+trap 'rm -rf "${TMP_DIR}"' EXIT
 
 # Set default Conda installation directory
 CONDA_DIR=''

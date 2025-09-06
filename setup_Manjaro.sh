@@ -16,6 +16,7 @@ chmod 755 "${HOME}/.dotfiles"
 
 # Set temporary directory
 TMP_DIR="$(mktemp -d -t dev-setup.XXXXXX)"
+trap 'rm -rf "${TMP_DIR}"' EXIT
 
 # Check if in WSL
 IN_WSL=false
@@ -182,7 +183,7 @@ function get_latest_version() {
 	# Usage: get_latest_version repo timeout
 	local REPO="$1" VERSION=""
 	local URL="https://api.github.com/repos/${REPO}/releases/latest"
-	local TIMEOUT="${2:-300}"
+	local TIMEOUT="${2:-150}"
 	local TIME=0 INTERVAL=1 t
 
 	echo "Checking latest version of ${REPO}..." >&2
@@ -376,14 +377,14 @@ else
 	HOMEBREW_BREW="\"\${HOME}/${HOMEBREW_PREFIX/#${HOME}\//}/bin/brew\""
 fi
 exec_cmd "eval \"\$(${HOMEBREW_BREW} shellenv)\""
-exec_cmd 'brew update --verbose'
+exec_cmd 'brew update'
 
 if ${SET_MIRRORS}; then
 	exec_cmd "brew tap --custom-remote homebrew/command-not-found https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-command-not-found.git"
 else
 	exec_cmd 'brew tap homebrew/command-not-found'
 fi
-exec_cmd 'brew update --force --verbose'
+exec_cmd 'brew update --verbose'
 
 # Install Oh-My-Zsh
 export ZSH="${ZSH:-"${HOME}/.oh-my-zsh"}"

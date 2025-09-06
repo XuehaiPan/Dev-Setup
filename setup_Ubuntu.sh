@@ -16,6 +16,7 @@ chmod 755 "${HOME}/.dotfiles"
 
 # Set temporary directory
 TMP_DIR="$(mktemp -d -t dev-setup.XXXXXX)"
+trap 'rm -rf "${TMP_DIR}"' EXIT
 
 # Check if in WSL
 IN_WSL=false
@@ -182,7 +183,7 @@ function get_latest_version() {
 	# Usage: get_latest_version repo timeout
 	local REPO="$1" VERSION=""
 	local URL="https://api.github.com/repos/${REPO}/releases/latest"
-	local TIMEOUT="${2:-300}"
+	local TIMEOUT="${2:-150}"
 	local TIME=0 INTERVAL=1 t
 
 	echo "Checking latest version of ${REPO}..." >&2
@@ -280,6 +281,10 @@ EOS
 	fi
 
 	# Install packages
+	ARCH="amd64"
+	if [[ "$(uname -m)" == "aarch64" || "$(uname -m)" == "arm64" ]]; then
+		ARCH="arm64"
+	fi
 	exec_cmd 'sudo apt-get install bash-completion curl git git-lfs vim tmux --yes'
 	exec_cmd 'sudo apt-get install ranger highlight shellcheck git-extras jq --yes'
 	if [[ -n "$(apt-cache search '^fd-find$' --names-only)" ]]; then
@@ -288,8 +293,8 @@ EOS
 	if [[ $? -ne 0 || -z "$(apt-cache search '^fd-find$' --names-only)" ]]; then
 		LATEST_FD_VERSION="$(get_latest_version "sharkdp/fd")"
 		if [[ -n "${LATEST_FD_VERSION}" ]] && ! check_binary fd "${LATEST_FD_VERSION}" && ! check_binary fdfind "${LATEST_FD_VERSION}"; then
-			exec_cmd "wget -N -P \"${TMP_DIR}\" https://github.com/sharkdp/fd/releases/download/${LATEST_FD_VERSION}/fd_${LATEST_FD_VERSION#v}_amd64.deb"
-			exec_cmd "sudo dpkg -i \"${TMP_DIR}/fd_${LATEST_FD_VERSION#v}_amd64.deb\""
+			exec_cmd "wget -N -P \"${TMP_DIR}\" https://github.com/sharkdp/fd/releases/download/${LATEST_FD_VERSION}/fd_${LATEST_FD_VERSION#v}_${ARCH}.deb"
+			exec_cmd "sudo dpkg -i \"${TMP_DIR}/fd_${LATEST_FD_VERSION#v}_${ARCH}.deb\""
 		fi
 	fi
 	if [[ -n "$(apt-cache search '^bat$' --names-only)" ]]; then
@@ -298,8 +303,8 @@ EOS
 	if [[ $? -ne 0 || -z "$(apt-cache search '^bat$' --names-only)" ]]; then
 		LATEST_BAT_VERSION="$(get_latest_version "sharkdp/bat")"
 		if [[ -n "${LATEST_BAT_VERSION}" ]] && ! check_binary bat "${LATEST_BAT_VERSION}" && ! check_binary batcat "${LATEST_BAT_VERSION}"; then
-			exec_cmd "wget -N -P \"${TMP_DIR}\" https://github.com/sharkdp/bat/releases/download/${LATEST_BAT_VERSION}/bat_${LATEST_BAT_VERSION#v}_amd64.deb"
-			exec_cmd "sudo dpkg -i \"${TMP_DIR}/bat_${LATEST_BAT_VERSION#v}_amd64.deb\""
+			exec_cmd "wget -N -P \"${TMP_DIR}\" https://github.com/sharkdp/bat/releases/download/${LATEST_BAT_VERSION}/bat_${LATEST_BAT_VERSION#v}_${ARCH}.deb"
+			exec_cmd "sudo dpkg -i \"${TMP_DIR}/bat_${LATEST_BAT_VERSION#v}_${ARCH}.deb\""
 		fi
 	fi
 	if [[ -n "$(apt-cache search '^ripgrep$' --names-only)" ]]; then
@@ -308,8 +313,8 @@ EOS
 	if [[ $? -ne 0 || -z "$(apt-cache search '^ripgrep$' --names-only)" ]]; then
 		LATEST_RIPGREP_VERSION="$(get_latest_version "BurntSushi/ripgrep")"
 		if [[ -n "${LATEST_RIPGREP_VERSION}" ]] && ! check_binary ripgrep "${LATEST_RIPGREP_VERSION}"; then
-			exec_cmd "wget -N -P \"${TMP_DIR}\" https://github.com/BurntSushi/ripgrep/releases/download/${LATEST_RIPGREP_VERSION}/ripgrep_${LATEST_RIPGREP_VERSION}_amd64.deb"
-			exec_cmd "sudo dpkg -i \"${TMP_DIR}/ripgrep_${LATEST_RIPGREP_VERSION}_amd64.deb\""
+			exec_cmd "wget -N -P \"${TMP_DIR}\" https://github.com/BurntSushi/ripgrep/releases/download/${LATEST_RIPGREP_VERSION}/ripgrep_${LATEST_RIPGREP_VERSION}_${ARCH}.deb"
+			exec_cmd "sudo dpkg -i \"${TMP_DIR}/ripgrep_${LATEST_RIPGREP_VERSION}_${ARCH}.deb\""
 		fi
 	fi
 	LATEST_SHFMT_VERSION="$(get_latest_version "mvdan/sh")"
@@ -317,8 +322,8 @@ EOS
 		exec_cmd 'sudo mkdir -p "/usr/local/bin"'
 	fi
 	if [[ -n "${LATEST_SHFMT_VERSION}" ]] && ! check_binary shfmt "${LATEST_SHFMT_VERSION}"; then
-		exec_cmd "wget -N -P \"${TMP_DIR}\" https://github.com/mvdan/sh/releases/download/${LATEST_SHFMT_VERSION}/shfmt_${LATEST_SHFMT_VERSION}_linux_amd64"
-		exec_cmd "sudo mv -f \"${TMP_DIR}/shfmt_${LATEST_SHFMT_VERSION}_linux_amd64\" /usr/local/bin/shfmt"
+		exec_cmd "wget -N -P \"${TMP_DIR}\" https://github.com/mvdan/sh/releases/download/${LATEST_SHFMT_VERSION}/shfmt_${LATEST_SHFMT_VERSION}_linux_${ARCH}"
+		exec_cmd "sudo mv -f \"${TMP_DIR}/shfmt_${LATEST_SHFMT_VERSION}_linux_${ARCH}\" /usr/local/bin/shfmt"
 		exec_cmd 'sudo chmod 755 /usr/local/bin/shfmt'
 		exec_cmd 'sudo chown root:root /usr/local/bin/shfmt'
 	fi

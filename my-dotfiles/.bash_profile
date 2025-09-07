@@ -47,12 +47,12 @@ if [[ -f "${HOME}/.dotfiles/gitstatus/gitstatus.prompt.sh" ]]; then
 	GITSTATUS_NUM_THREADS=4 source "${HOME}/.dotfiles/gitstatus/gitstatus.prompt.sh"
 fi
 shopt -s promptvars
-PS1='\[\e[1;36m\]\u\[\e[0m\]'                                  # cyan user
-PS1+='\[\e[1;37m\]@\[\e[0m\]\[\e[1;33m\]${HOST:-\H}\[\e[0m\] ' # @ yellow host
-PS1+='\[\e[1;34m\]\w\[\e[0m\]'                                 # blue current working directory
-PS1+='${GITSTATUS_PROMPT:+ "${GITSTATUS_PROMPT}"}'             # git status (requires promptvars option)
-PS1+='\n\[\e[1;$((31+!$?))m\]\$\[\e[0m\] '                     # green/red (success/error) $/# (normal/root)
-PS1+='\[\e]0;\u@\h: \w\a\]'                                    # terminal title: user@host: directory
+PS1='\[\e[1;36m\]\u\[\e[0m\]'                      # cyan user
+PS1+='\[\e[0m\]@\[\e[32m\]${HOST:-\H}\[\e[0m\] '   # @ green host
+PS1+='\[\e[1;34m\]\w\[\e[0m\]'                     # blue current working directory
+PS1+='${GITSTATUS_PROMPT:+ "${GITSTATUS_PROMPT}"}' # git status (requires promptvars option)
+PS1+='\n\[\e[1;$((31+!$?))m\]\$\[\e[0m\] '         # green/red (success/error) $/# (normal/root)
+PS1+='\[\e]0;\u@\h: \w\a\]'                        # terminal title: user@host: directory
 export PS1
 
 # Locale
@@ -77,7 +77,12 @@ if [[ -f "${__COMMAND_NOT_FOUND_HANDLER}" ]]; then
 	source "${__COMMAND_NOT_FOUND_HANDLER}"
 fi
 unset __COMMAND_NOT_FOUND_HANDLER
-brew() { \command brew "$@"; \local rc="$?"; \builtin hash -r &>/dev/null; \return "${rc}"; }
+brew() {
+	\command brew "$@"
+	\local rc="$?"
+	\builtin hash -r &>/dev/null
+	\return "${rc}"
+}
 
 # Anaconda
 # >>> conda initialize >>>

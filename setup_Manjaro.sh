@@ -1418,7 +1418,6 @@ fi
 # User specific environment and startup programs
 export TERM="xterm-256color"
 export LESS="-R -M -i -j5"
-export GREP_OPTIONS='--color=auto'
 export CLICOLOR=1
 export LSCOLORS="${LSCOLORS:-"GxFxCxDxBxegedabagaced"}"
 GITSTATUS_PROMPT=""

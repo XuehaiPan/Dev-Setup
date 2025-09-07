@@ -167,7 +167,6 @@ call plug#begin('~/.vim/plugged')
     Plug 'mbbill/undotree'
     Plug 'airblade/vim-gitgutter'
     Plug 'tpope/vim-fugitive'
-    Plug 'liuchengxu/vista.vim'
     Plug 'junegunn/fzf', { 'dir': '~/.fzf' }
     Plug 'junegunn/fzf.vim'
     Plug 'vim-autoformat/vim-autoformat'
@@ -180,5 +179,4 @@ call plug#begin('~/.vim/plugged')
     Plug 'plasticboy/vim-markdown'
     Plug 'iamcco/markdown-preview.nvim'
     Plug 'lervag/vimtex'
-    Plug 'vim/killersheep'
 call plug#end()

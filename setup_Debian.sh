@@ -654,13 +654,13 @@ unset __conda_setup
 
 # >>> mamba initialize >>>
 # !! Contents within this block are managed by 'mamba shell init' !!
-export MAMBA_ROOT_PREFIX="\${HOME}/${CONDA_DIR}/bin";
-export MAMBA_EXE="\${MAMBA_ROOT_PREFIX}/mamba";
+export MAMBA_ROOT_PREFIX="\${HOME}/${CONDA_DIR}/bin"
+export MAMBA_EXE="\${MAMBA_ROOT_PREFIX}/mamba"
 __mamba_setup="\$("\${MAMBA_EXE}" shell hook --shell zsh --root-prefix "\${MAMBA_ROOT_PREFIX}" 2>/dev/null)"
 if [[ \$? -eq 0 ]]; then
-    eval "\${__mamba_setup}"
+	eval "\${__mamba_setup}"
 else
-    alias mamba="\${MAMBA_EXE}"
+	alias mamba="\${MAMBA_EXE}"
 fi
 unset __mamba_setup
 # <<< mamba initialize <<<
@@ -1537,13 +1537,13 @@ unset __conda_setup
 
 # >>> mamba initialize >>>
 # !! Contents within this block are managed by 'mamba shell init' !!
-export MAMBA_ROOT_PREFIX="\${HOME}/${CONDA_DIR}/bin";
-export MAMBA_EXE="\${MAMBA_ROOT_PREFIX}/mamba";
+export MAMBA_ROOT_PREFIX="\${HOME}/${CONDA_DIR}/bin"
+export MAMBA_EXE="\${MAMBA_ROOT_PREFIX}/mamba"
 __mamba_setup="\$("\${MAMBA_EXE}" shell hook --shell bash --root-prefix "\${MAMBA_ROOT_PREFIX}" 2>/dev/null)"
 if [[ \$? -eq 0 ]]; then
-    eval "\${__mamba_setup}"
+	eval "\${__mamba_setup}"
 else
-    alias mamba="\${MAMBA_EXE}"
+	alias mamba="\${MAMBA_EXE}"
 fi
 unset __mamba_setup
 # <<< mamba initialize <<<

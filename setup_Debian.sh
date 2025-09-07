@@ -1492,18 +1492,21 @@ fi
 # User specific environment and startup programs
 export TERM="xterm-256color"
 export LESS="-R -M -i -j5"
+export GREP_OPTIONS='--color=auto'
+export CLICOLOR=1
+export LSCOLORS="${LSCOLORS:-"GxFxCxDxBxegedabagaced"}"
+GITSTATUS_PROMPT=""
 if [[ -f "${HOME}/.dotfiles/gitstatus/gitstatus.prompt.sh" ]]; then
 	GITSTATUS_NUM_THREADS=4 source "${HOME}/.dotfiles/gitstatus/gitstatus.prompt.sh"
-	export PS1="${PS1/@/\\[\\e[0m\\e[1;37m\\]@}"
-	export PS1="${PS1/\\[hH]/\\[\\e[0m\\e[1;36m\\]\\H}"
-elif [[ -n "${SSH_CONNECTION}" ]]; then
-	export PS1='[\[\e[1;33m\]\u\[\e[0m\]@\[\e[1;32m\]\H\[\e[0m\]:\[\e[1;35m\]\w\[\e[0m\]]\$ '
-else
-	export PS1='[\[\e[1;33m\]\u\[\e[0m\]:\[\e[1;35m\]\w\[\e[0m\]]\$ '
 fi
-if [[ "${PS1}" != *HOST* ]]; then
-	export PS1="${PS1//\\[hH]/\$\{HOST:-\\H\}}"
-fi
+shopt -s promptvars
+PS1='\[\e[1;36m\]\u\[\e[0m\]'                                  # cyan user
+PS1+='\[\e[1;37m\]@\[\e[0m\]\[\e[1;33m\]${HOST:-\H}\[\e[0m\] ' # @ yellow host
+PS1+='\[\e[1;34m\]\w\[\e[0m\]'                                 # blue current working directory
+PS1+='${GITSTATUS_PROMPT:+ "${GITSTATUS_PROMPT}"}'             # git status (requires promptvars option)
+PS1+='\n\[\e[1;$((31+!$?))m\]\$\[\e[0m\] '                     # green/red (success/error) $/# (normal/root)
+PS1+='\[\e]0;\u@\h: \w\a\]'                                    # terminal title: user@host: directory
+export PS1
 
 # Locale
 export LANG="en_US.UTF-8"

@@ -453,7 +453,7 @@ if [[ -f "${__COMMAND_NOT_FOUND_HANDLER}" ]]; then
 	source "${__COMMAND_NOT_FOUND_HANDLER}"
 fi
 unset __COMMAND_NOT_FOUND_HANDLER
-brew() { \command brew "$@"; \local rc="$?"; \builtin hash -r &>/dev/null; \return "${rc}"; }'
+function brew() { \command brew "$@"; \local rc="$?"; \builtin hash -r &>/dev/null; \return "${rc}"; }'
 cat >.dotfiles/.zshrc <<'EOF'
 # Source global definitions
 # Include /etc/zprofile if it exists
@@ -608,23 +608,30 @@ unset __CONDA_PREFIX
 
 # Remove duplicate entries
 function __remove_duplicate() {
-	local SEP="$1" NAME="$2" VALUE
-	VALUE="$(
-		eval "printf \"%s%s\" \"\$${NAME}\" \"${SEP}\"" |
-			/usr/bin/awk -v RS="${SEP}" 'BEGIN { idx = 0; }
+	local sep name value
+	sep="$1"
+	shift
+	while [[ $# -gt 0 ]]; do
+		name="$1"
+		shift
+		if [[ -z "${name}" ]]; then
+			break
+		fi
+		value="$(
+			eval "printf \"%s%s\" \"\$${name}\" \"${sep}\"" |
+				/usr/bin/awk -v RS="${sep}" 'BEGIN { idx = 0; }
 				{ if (!(exists[$0]++)) printf("%s%s", (!(idx++) ? "" : RS), $0); }'
-	)"
-	if [[ -n "${VALUE}" ]]; then
-		export "${NAME}"="${VALUE}"
-	else
-		unset "${NAME}"
-	fi
+		)"
+		if [[ -n "${value}" ]]; then
+			export "${name}"="${value}"
+		else
+			unset "${name}"
+		fi
+	done
 }
 __remove_duplicate ':' PATH
-__remove_duplicate ':' C_INCLUDE_PATH
-__remove_duplicate ':' CPLUS_INCLUDE_PATH
-__remove_duplicate ':' LIBRARY_PATH
-__remove_duplicate ':' DYLD_LIBRARY_PATH
+__remove_duplicate ':' {C,CPLUS}_INCLUDE_PATH
+__remove_duplicate ':' {,DYLD_}LIBRARY_PATH
 unset -f __remove_duplicate
 
 # Utilities
@@ -1477,23 +1484,30 @@ unset __CONDA_PREFIX
 
 # Remove duplicate entries
 function __remove_duplicate() {
-	local SEP="$1" NAME="$2" VALUE
-	VALUE="$(
-		eval "printf \"%s%s\" \"\$${NAME}\" \"${SEP}\"" |
-			/usr/bin/awk -v RS="${SEP}" 'BEGIN { idx = 0; }
+	local sep name value
+	sep="$1"
+	shift
+	while [[ $# -gt 0 ]]; do
+		name="$1"
+		shift
+		if [[ -z "${name}" ]]; then
+			break
+		fi
+		value="$(
+			eval "printf \"%s%s\" \"\$${name}\" \"${sep}\"" |
+				/usr/bin/awk -v RS="${sep}" 'BEGIN { idx = 0; }
 				{ if (!(exists[$0]++)) printf("%s%s", (!(idx++) ? "" : RS), $0); }'
-	)"
-	if [[ -n "${VALUE}" ]]; then
-		export "${NAME}"="${VALUE}"
-	else
-		unset "${NAME}"
-	fi
+		)"
+		if [[ -n "${value}" ]]; then
+			export "${name}"="${value}"
+		else
+			unset "${name}"
+		fi
+	done
 }
 __remove_duplicate ':' PATH
-__remove_duplicate ':' C_INCLUDE_PATH
-__remove_duplicate ':' CPLUS_INCLUDE_PATH
-__remove_duplicate ':' LIBRARY_PATH
-__remove_duplicate ':' DYLD_LIBRARY_PATH
+__remove_duplicate ':' {C,CPLUS}_INCLUDE_PATH
+__remove_duplicate ':' {,DYLD_}LIBRARY_PATH
 unset -f __remove_duplicate
 
 # Utilities

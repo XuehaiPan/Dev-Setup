@@ -27,7 +27,6 @@ golang.go
 ms-vscode.hexeditor
 oderwat.indent-rainbow
 k--kato.intellij-idea-keybindings
-redhat.java
 james-yu.latex-workshop
 tecosaur.latex-utilities
 ritwickdey.liveserver
@@ -93,18 +92,11 @@ ms-dotnettools.vscode-dotnet-runtime
 hediet.vscode-drawio
 janisdd.vscode-edit-csv
 dbaeumer.vscode-eslint
-vscjava.vscode-java-pack
-vscjava.vscode-java-debug
-vscjava.vscode-java-dependency
-vscjava.vscode-java-test
-vscjava.vscode-gradle
-vscjava.vscode-maven
 ms-kubernetes-tools.vscode-kubernetes-tools
 ms-ceintl.vscode-language-pack-zh-hans
 vadimcn.vscode-lldb
 davidanson.vscode-markdownlint
 ms-vscode.vscode-typescript-next
 redhat.vscode-yaml
-visualstudioexptteam.vscodeintellicode
 ms-vsliveshare.vsliveshare
 dotjoshjohnson.xml

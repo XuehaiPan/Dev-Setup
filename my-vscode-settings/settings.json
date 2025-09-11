@@ -580,17 +580,6 @@
     "indentRainbow.lightIndicatorStyleLineWidth": 2,
     "indentRainbow.updateDelay": 25,
 
-    //* Java Extension Pack */
-    "java.autobuild.enabled": false,
-    "java.completion.enabled": true,
-    "java.completion.guessMethodArguments": "auto",
-    "java.signatureHelp.enabled": true,
-    "java.format.enabled": true,
-    "java.format.onType.enabled": true,
-    "java.format.comments.enabled": true,
-    "java.format.settings.profile": "GoogleStyle",
-    "java.format.settings.url": "https://github.com/google/styleguide/raw/gh-pages/eclipse-java-google-style.xml",
-
     //* Kubernetes */
     "vs-kubernetes": {
         "vscode-kubernetes.helm-path-linux": "~/.local/state/vs-kubernetes/tools/helm/linux-amd64/helm",

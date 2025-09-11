@@ -123,11 +123,6 @@ export OMPI_CC="${CC}" MPICH_CC="${CC}"
 export OMPI_CXX="${CXX}" MPICH_CXX="${CXX}"
 export OMPI_FC="${FC}" MPICH_FC="${FC}"
 
-# Java
-export JAVA_HOME="$(/usr/libexec/java_home)"
-export CLASSPATH=".:${JAVA_HOME}/lib/tools.jar:${JAVA_HOME}/lib/dt.jar"
-export PATH="${JAVA_HOME}/bin${PATH:+:"${PATH}"}"
-
 # Go
 export GOPATH="${HOMEBREW_PREFIX}/opt/go"
 export GOBIN="${GOPATH}/bin"

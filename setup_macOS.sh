@@ -27,7 +27,6 @@ trap 'rm -rf "${TMP_DIR}"' EXIT
 # Set default Conda installation directory
 CONDA_DIR=''
 CONDA_BASE_PREFIX=''
-CONDA_BASE_PREFIX_EXIST=true
 if [[ -d "${HOME}/Miniconda3" || -L "${HOME}/Miniconda3" ]]; then
 	CONDA_BASE_PREFIX="${HOME}/Miniconda3"
 elif [[ -d "${HOME}/miniconda3" || -L "${HOME}/miniconda3" ]]; then
@@ -51,7 +50,6 @@ elif [[ -d "${HOMEBREW_PREFIX}/Caskroom/anaconda/base" ]]; then
 fi
 if [[ -z "${CONDA_BASE_PREFIX}" ]]; then
 	CONDA_BASE_PREFIX="${HOME}/Miniconda3"
-	CONDA_BASE_PREFIX_EXIST=false
 fi
 if [[ "${CONDA_BASE_PREFIX/#${HOME}\//}" == "${CONDA_BASE_PREFIX}" ]]; then
 	CONDA_DIR="${CONDA_BASE_PREFIX}"
@@ -2476,7 +2474,7 @@ ln -sf .dotfiles/.condarc .
 chmod 644 .dotfiles/.condarc
 
 # Install Miniconda
-if ! ${CONDA_BASE_PREFIX_EXIST}; then
+if [[ ! -x "${CONDA_BASE_PREFIX}/condabin/conda" ]]; then
 	if ${SET_MIRRORS}; then
 		exec_cmd "wget -N -P \"${TMP_DIR}\" https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-latest-MacOSX-$(uname -m).sh"
 	else
@@ -2486,19 +2484,19 @@ if ! ${CONDA_BASE_PREFIX_EXIST}; then
 fi
 
 # Install Conda packages
-export PATH="${PATH:+"${PATH}":}${CONDA_BASE_PREFIX}/bin"
+export PATH="${CONDA_BASE_PREFIX}/condabin${PATH:+:"${PATH}"}"
 source "${CONDA_BASE_PREFIX}/etc/profile.d/conda.sh"
 source "${CONDA_BASE_PREFIX}/bin/activate"
-exec_cmd 'conda update conda --name=base --yes'
-exec_cmd 'conda install mamba --name=base --yes'
-exec_cmd 'conda update conda mamba --name=base --yes'
-exec_cmd 'conda install pip ipython ipdb \
+exec_cmd "\"${CONDA_DIR}/condabin/conda\""' update conda --name=base --yes'
+exec_cmd "\"${CONDA_DIR}/condabin/conda\""' install mamba --name=base --yes'
+exec_cmd "\"${CONDA_DIR}/condabin/conda\""' update conda mamba --name=base --yes'
+exec_cmd "\"${CONDA_DIR}/condabin/conda\""' install pip ipython ipdb \
 	jupyter jupyterlab jupyter-lsp jupyterlab-lsp \
 	numpy matplotlib-base pandas rich tqdm \
 	ruff isort pre-commit --name=base --yes'
-exec_cmd 'conda clean --all --yes'
+exec_cmd "\"${CONDA_DIR}/condabin/conda\""' clean --all --yes'
 if ${SET_MIRRORS}; then
-	exec_cmd "conda run --name=base pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple"
+	exec_cmd "\"${CONDA_DIR}/condabin/conda\" run --name=base pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple"
 fi
 
 # Add Conda Environment Initialization Script
@@ -2601,7 +2599,7 @@ EOF
 chmod 755 "${CONDA_BASE_PREFIX}/etc/init-envs.sh"
 
 # Setup IPython
-exec_cmd "conda run --name=base ipython profile create"
+exec_cmd "\"${CONDA_DIR}/condabin/conda\" run --name=base ipython profile create"
 exec_cmd "sed -i \"\" -E 's/^ *#? *(c.InteractiveShell.colors).*\$/\\1 = \"linux\"/g' \"\${HOME}/.ipython/profile_default/ipython_config.py\""
 exec_cmd "sed -i \"\" -E 's/^ *#? *(c.InteractiveShell.colors).*\$/\\1 = \"linux\"/g' \"\${HOME}/.ipython/profile_default/ipython_kernel_config.py\""
 

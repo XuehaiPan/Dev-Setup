@@ -549,6 +549,12 @@ export OMPI_CC="${CC}" MPICH_CC="${CC}"
 export OMPI_CXX="${CXX}" MPICH_CXX="${CXX}"
 export OMPI_FC="${FC}" MPICH_FC="${FC}"
 
+# Go
+export GOPATH="${HOME}/.go"
+export GOBIN="${GOPATH}/bin"
+export GOROOT="${GOPATH}/libexec"
+export PATH="${GOBIN}${PATH:+:"${PATH}"}"
+
 # Rust
 if [[ -f "${HOME}/.cargo/env" ]]; then
 	source "${HOME}/.cargo/env"
@@ -1485,6 +1491,12 @@ export FC="${FC:-"${HOMEBREW_PREFIX}/bin/gfortran"}"
 export OMPI_CC="${CC}" MPICH_CC="${CC}"
 export OMPI_CXX="${CXX}" MPICH_CXX="${CXX}"
 export OMPI_FC="${FC}" MPICH_FC="${FC}"
+
+# Go
+export GOPATH="${HOME}/.go"
+export GOBIN="${GOPATH}/bin"
+export GOROOT="${GOPATH}/libexec"
+export PATH="${GOBIN}${PATH:+:"${PATH}"}"
 
 # Rust
 if [[ -f "${HOME}/.cargo/env" ]]; then

@@ -560,8 +560,8 @@
     "gitlens.telemetry.enabled": false,
 
     //* Go */
-    "go.gopath": "${env:HOMEBREW_PREFIX}/opt/go",
-    "go.goroot": "${env:HOMEBREW_PREFIX}/opt/go/libexec",
+    "go.gopath": "~/.go",
+    "go.goroot": "~/.go/libexec",
     "go.inferGopath": true,
     "go.buildOnSave": "package",
     "go.lintOnSave": "package",

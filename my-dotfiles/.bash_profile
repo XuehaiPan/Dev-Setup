@@ -124,7 +124,7 @@ export OMPI_CXX="${CXX}" MPICH_CXX="${CXX}"
 export OMPI_FC="${FC}" MPICH_FC="${FC}"
 
 # Go
-export GOPATH="${HOMEBREW_PREFIX}/opt/go"
+export GOPATH="${HOME}/.go"
 export GOBIN="${GOPATH}/bin"
 export GOROOT="${GOPATH}/libexec"
 export PATH="${GOBIN}${PATH:+:"${PATH}"}"

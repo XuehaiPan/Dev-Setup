@@ -637,6 +637,12 @@ fi
 # Zsh
 export FPATH="${HOMEBREW_PREFIX}/share/zsh/site-functions${FPATH:+:"${FPATH}"}:${HOMEBREW_PREFIX}/share/zsh/functions"
 
+# Go
+export GOPATH="${HOME}/.go"
+export GOBIN="${GOPATH}/bin"
+export GOROOT="${GOPATH}/libexec"
+export PATH="${GOBIN}${PATH:+:"${PATH}"}"
+
 # Rust
 if [[ -f "${HOME}/.cargo/env" ]]; then
 	source "${HOME}/.cargo/env"
@@ -1566,6 +1572,12 @@ if [[ -d "${CUDA_HOME}" || -L "${CUDA_HOME}" ]]; then
 else
 	unset CUDA_HOME
 fi
+
+# Go
+export GOPATH="${HOME}/.go"
+export GOBIN="${GOPATH}/bin"
+export GOROOT="${GOPATH}/libexec"
+export PATH="${GOBIN}${PATH:+:"${PATH}"}"
 
 # Rust
 if [[ -f "${HOME}/.cargo/env" ]]; then

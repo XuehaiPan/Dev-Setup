@@ -637,6 +637,11 @@ fi
 # Zsh
 export FPATH="${HOMEBREW_PREFIX}/share/zsh/site-functions${FPATH:+:"${FPATH}"}:${HOMEBREW_PREFIX}/share/zsh/functions"
 
+# Rust
+if [[ -f "${HOME}/.cargo/env" ]]; then
+	source "${HOME}/.cargo/env"
+fi
+
 # Ruby
 if [[ -x "$(command -v ruby)" && -x "$(command -v gem)" ]]; then
 	export RUBYOPT="-W0"
@@ -889,7 +894,7 @@ plugins=(
 	git-auto-fetch
 	python
 	pip
-	pylint
+	rust
 	docker
 	tmux
 	brew
@@ -1560,6 +1565,11 @@ if [[ -d "${CUDA_HOME}" || -L "${CUDA_HOME}" ]]; then
 	export LD_LIBRARY_PATH="${CUDA_HOME}/lib64:${CUDA_HOME}/extras/CUPTI/lib64${LD_LIBRARY_PATH:+:"${LD_LIBRARY_PATH}"}"
 else
 	unset CUDA_HOME
+fi
+
+# Rust
+if [[ -f "${HOME}/.cargo/env" ]]; then
+	source "${HOME}/.cargo/env"
 fi
 
 # Ruby

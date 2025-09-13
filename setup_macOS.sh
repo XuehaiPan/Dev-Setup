@@ -549,6 +549,11 @@ export OMPI_CC="${CC}" MPICH_CC="${CC}"
 export OMPI_CXX="${CXX}" MPICH_CXX="${CXX}"
 export OMPI_FC="${FC}" MPICH_FC="${FC}"
 
+# Rust
+if [[ -f "${HOME}/.cargo/env" ]]; then
+	source "${HOME}/.cargo/env"
+fi
+
 # Ruby
 export RUBYOPT="-W0"
 export PATH="${HOMEBREW_PREFIX}/opt/ruby/bin${PATH:+:"${PATH}"}"
@@ -831,7 +836,7 @@ plugins=(
 	git-auto-fetch
 	python
 	pip
-	pylint
+	rust
 	docker
 	tmux
 	brew
@@ -1480,6 +1485,11 @@ export FC="${FC:-"${HOMEBREW_PREFIX}/bin/gfortran"}"
 export OMPI_CC="${CC}" MPICH_CC="${CC}"
 export OMPI_CXX="${CXX}" MPICH_CXX="${CXX}"
 export OMPI_FC="${FC}" MPICH_FC="${FC}"
+
+# Rust
+if [[ -f "${HOME}/.cargo/env" ]]; then
+	source "${HOME}/.cargo/env"
+fi
 
 # Ruby
 export RUBYOPT="-W0"

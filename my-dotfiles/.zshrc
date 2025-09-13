@@ -403,7 +403,7 @@ plugins=(
 	git-auto-fetch
 	python
 	pip
-	pylint
+	rust
 	docker
 	tmux
 	brew

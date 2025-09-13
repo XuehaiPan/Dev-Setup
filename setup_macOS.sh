@@ -851,6 +851,7 @@ plugins=(
 
 ZSH_COLORIZE_STYLE="monokai"
 ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+PYTHON_AUTO_VRUN="true"
 
 source "${ZSH}/oh-my-zsh.sh"
 

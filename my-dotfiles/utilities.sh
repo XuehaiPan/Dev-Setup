@@ -207,7 +207,7 @@ function upgrade_packages() {
 	upgrade_vim
 	upgrade_gems
 	# upgrade_cpan
-	upgrade_texlive
+	# upgrade_texlive
 	# upgrade_conda
 
 	if [[ -n "${ZSH_VERSION}" ]]; then
@@ -299,6 +299,15 @@ function auto_reannounce_trackers() {
 	echo -ne "\033[K\033[?25h"
 }
 
+function pykill() {
+	local pids
+	pids="$(pgrep -f -d ',' -P 1 -U "${USER}" '[Pp]ython3?' || true)"
+	if [[ -n "${pids}" ]]; then
+		exec_cmd "ps -o pid,user,ppid,pgid,%cpu,%mem,rss,pri,nice,state,time,etime,command -p ${pids}"
+		exec_cmd "kill -KILL ${pids}"
+	fi
+}
+
 function pull_projects() {
 	local base_dirs base_dir proj_dir
 	local head_hash old_head_hash branch remote push_remote push_remote_hash commit_count
@@ -324,7 +333,7 @@ function pull_projects() {
 			if [[ "${head_hash}" != "${old_head_hash}" ]]; then
 				exec_cmd "git -C \"${proj_dir/#${HOME}/\${HOME\}}\" pull ${remote} ${branch} --ff-only"
 				commit_count="$(git -C "${proj_dir}" rev-list --count --all)"
-				if [[ -z "${commit_count}" ]] || ((commit_count <= 10000 )); then
+				if [[ -z "${commit_count}" ]] || ((commit_count <= 10000)); then
 					exec_cmd "git -C \"${proj_dir/#${HOME}/\${HOME\}}\" gc --aggressive"
 				fi
 			fi

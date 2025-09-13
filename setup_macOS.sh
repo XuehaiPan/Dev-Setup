@@ -631,7 +631,7 @@ function __remove_duplicate() {
 }
 __remove_duplicate ':' PATH
 __remove_duplicate ':' {C,CPLUS}_INCLUDE_PATH
-__remove_duplicate ':' {,DYLD_}LIBRARY_PATH
+__remove_duplicate ':' {,DYLD_{,FALLBACK_}}LIBRARY_PATH
 unset -f __remove_duplicate
 
 # Utilities
@@ -1102,6 +1102,10 @@ function upgrade_cpan() {
 	exec_cmd 'cpan -u'
 }
 
+function upgrade_texlive() {
+	exec_cmd 'sudo tlmgr update --self --all'
+}
+
 function upgrade_conda() {
 	local env cmds
 
@@ -1139,6 +1143,7 @@ function upgrade_packages() {
 	upgrade_vim
 	upgrade_gems
 	# upgrade_cpan
+	# upgrade_texlive
 	# upgrade_conda
 
 	if [[ -n "${ZSH_VERSION}" ]]; then
@@ -1228,6 +1233,57 @@ function auto_reannounce_trackers() {
 	done
 
 	echo -ne "\033[K\033[?25h"
+}
+
+function pykill() {
+	local pids
+	pids="$(pgrep -f -d ',' -P 1 -U "${USER}" '[Pp]ython3?' || true)"
+	if [[ -n "${pids}" ]]; then
+		exec_cmd "ps -o pid,user,ppid,pgid,%cpu,%mem,rss,pri,nice,state,time,etime,command -p ${pids}"
+		exec_cmd "kill -KILL ${pids}"
+	fi
+}
+
+function pull_projects() {
+	local base_dirs base_dir proj_dir
+	local head_hash old_head_hash branch remote push_remote push_remote_hash commit_count
+
+	# Project directories
+	if [[ "$#" -gt 0 ]]; then
+		base_dirs=("$@")
+	else
+		base_dirs=("${HOME}/Projects")
+	fi
+
+	# Fetch and pull
+	for base_dir in "${base_dirs[@]}"; do
+		while read -r proj_dir; do
+			branch="$(git -C "${proj_dir}" branch --show-current)"
+			remote="$(git -C "${proj_dir}" config branch."${branch}".remote)"
+			if [[ -z "${branch}" || -z "${remote}" ]]; then
+				continue
+			fi
+			exec_cmd "git -C \"${proj_dir/#${HOME}/\${HOME\}}\" fetch --all --prune"
+			old_head_hash="$(git -C "${proj_dir}" rev-parse "${branch}")"
+			head_hash="$(git -C "${proj_dir}" rev-parse "${remote}/${branch}")"
+			if [[ "${head_hash}" != "${old_head_hash}" ]]; then
+				exec_cmd "git -C \"${proj_dir/#${HOME}/\${HOME\}}\" pull ${remote} ${branch} --ff-only"
+				commit_count="$(git -C "${proj_dir}" rev-list --count --all)"
+				if [[ -z "${commit_count}" ]] || ((commit_count <= 10000)); then
+					exec_cmd "git -C \"${proj_dir/#${HOME}/\${HOME\}}\" gc --aggressive"
+				fi
+			fi
+			push_remote="$(git -C "${proj_dir}" config branch."${branch}".pushremote)"
+			if [[ -n "${push_remote}" ]]; then
+				push_remote_hash="$(git -C "${proj_dir}" rev-parse "${push_remote}/${branch}")"
+				if [[ "${head_hash}" != "${push_remote_hash}" ]]; then
+					exec_cmd "git -C \"${proj_dir/#${HOME}/\${HOME\}}\" push ${push_remote} ${branch} || true"
+				fi
+			fi
+		done < <(
+			find -L "${base_dir}" -maxdepth 5 -not -empty -type d -name '.git' -prune -exec dirname '{}' ';'
+		)
+	done
 }
 EOF
 
@@ -1507,7 +1563,7 @@ function __remove_duplicate() {
 }
 __remove_duplicate ':' PATH
 __remove_duplicate ':' {C,CPLUS}_INCLUDE_PATH
-__remove_duplicate ':' {,DYLD_}LIBRARY_PATH
+__remove_duplicate ':' {,DYLD_{,FALLBACK_}}LIBRARY_PATH
 unset -f __remove_duplicate
 
 # Utilities

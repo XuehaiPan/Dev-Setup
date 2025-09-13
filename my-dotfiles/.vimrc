@@ -45,7 +45,6 @@ set completeopt=longest,menu
 set background=dark
 set t_Co=256
 set guifont=DejaVuSansM\ Nerd\ Font\ Mono\ 13
-set linespace=2
 colorscheme monokai
 
 if has('mouse')
@@ -57,7 +56,7 @@ if &term =~ 'xterm'
     let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 endif
 
-autocmd GUIEnter * set lines=45 columns=160
+autocmd GUIEnter * set lines=50 columns=160
 
 autocmd GUIEnter * set spell spelllang=en_us
 

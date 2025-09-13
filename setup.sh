@@ -11,10 +11,10 @@ YELLOW="\033[33m"
 WHITE="\033[37m"
 
 # Start logging
-LOG_FILE="${PWD}/dev-setup.log"
-if [[ -f "${LOG_FILE}" ]]; then
-	mv -f "${LOG_FILE}" "${LOG_FILE}.old"
-fi
+export DEV_SETUP_BACKUP_DIR="${HOME}/.dotfiles/backups/$(date +"%Y-%m-%d-%T")"
+mkdir -p "${DEV_SETUP_BACKUP_DIR}/.dotfiles"
+chmod 755 "${HOME}/.dotfiles"
+LOG_FILE="${DEV_SETUP_BACKUP_DIR}/dev-setup.log"
 exec 2> >(tee -a "${LOG_FILE}" >&2)
 echo -e "${BOLD}${WHITE}The script output will be logged to file ${YELLOW}\"${LOG_FILE}\"${WHITE}.${RESET}" >&2
 

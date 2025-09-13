@@ -8,15 +8,17 @@ export FORCE_PER_USER_HOMEBREW="${FORCE_PER_USER_HOMEBREW:-false}"
 export USER="${USER:-"$(whoami)"}"
 
 # Set configuration backup directory
-DATETIME="$(date +"%Y-%m-%d-%T")"
-BACKUP_DIR="${HOME}/.dotfiles/backups/${DATETIME}"
-mkdir -p "${BACKUP_DIR}/.dotfiles"
-ln -sfn "${DATETIME}" "${HOME}/.dotfiles/backups/latest"
+if [[ -z "${DEV_SETUP_BACKUP_DIR}" ]]; then
+	DEV_SETUP_BACKUP_DIR="${HOME}/.dotfiles/backups/$(date +"%Y-%m-%d-%T")"
+fi
+mkdir -p "${DEV_SETUP_BACKUP_DIR}/.dotfiles"
+ln -sfn "$(basename "${DEV_SETUP_BACKUP_DIR}")" "${HOME}/.dotfiles/backups/latest"
 chmod 755 "${HOME}/.dotfiles"
 
 # Set temporary directory
 TMP_DIR="$(mktemp -d -t dev-setup.XXXXXX)"
-trap 'rm -rf "${TMP_DIR}"' EXIT
+ln -sfn "${TMP_DIR}" "${DEV_SETUP_BACKUP_DIR}/tmp"
+trap 'rm -rf "${TMP_DIR}" "${DEV_SETUP_BACKUP_DIR}/tmp"' EXIT
 
 # Check if in WSL
 IN_WSL=false
@@ -165,7 +167,7 @@ function backup_dotfiles() {
 				rm -f "${file}"
 				cp -rf "${original_file}" "${file}"
 			fi
-			cp -rf "${file}" "${BACKUP_DIR}/${file}"
+			cp -rf "${file}" "${DEV_SETUP_BACKUP_DIR}/${file}"
 		fi
 	done
 }

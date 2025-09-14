@@ -108,7 +108,6 @@ export OMPI_FC="${FC}" MPICH_FC="${FC}"
 # Go
 export GOPATH="${HOME}/.go"
 export GOBIN="${GOPATH}/bin"
-export GOROOT="${GOPATH}/libexec"
 export PATH="${GOBIN}${PATH:+:"${PATH}"}"
 
 # Rust

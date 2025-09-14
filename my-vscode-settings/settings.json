@@ -561,7 +561,6 @@
 
     //* Go */
     "go.gopath": "~/.go",
-    "go.goroot": "~/.go/libexec",
     "go.inferGopath": true,
     "go.buildOnSave": "package",
     "go.lintOnSave": "package",

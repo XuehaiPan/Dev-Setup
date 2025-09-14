@@ -762,7 +762,6 @@ export FPATH="${HOMEBREW_PREFIX}/share/zsh/site-functions${FPATH:+:"${FPATH}"}:$
 # Go
 export GOPATH="${HOME}/.go"
 export GOBIN="${GOPATH}/bin"
-export GOROOT="${GOPATH}/libexec"
 export PATH="${GOBIN}${PATH:+:"${PATH}"}"
 
 # Rust
@@ -1711,7 +1710,6 @@ fi
 # Go
 export GOPATH="${HOME}/.go"
 export GOBIN="${GOPATH}/bin"
-export GOROOT="${GOPATH}/libexec"
 export PATH="${GOBIN}${PATH:+:"${PATH}"}"
 
 # Rust

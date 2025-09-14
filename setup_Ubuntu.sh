@@ -268,15 +268,37 @@ EOS
 	fi
 
 	exec_cmd 'sudo apt-get update'
-	exec_cmd 'sudo apt-get install software-properties-common apt-transport-https wget --yes'
+	exec_cmd 'sudo apt-get install software-properties-common apt-transport-https gpg wget --yes'
 	exec_cmd 'sudo add-apt-repository ppa:graphics-drivers/ppa --yes'
-	exec_cmd 'wget -qO - https://packages.microsoft.com/keys/microsoft.asc | sudo tee /etc/apt/trusted.gpg.d/microsoft.asc 1>/dev/null'
+
+	# Install Microsoft signing key and setup VS Code repository
+	if [[ ! -f /usr/share/keyrings/microsoft.gpg ]]; then
+		exec_cmd 'wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | sudo tee /usr/share/keyrings/microsoft.gpg 1>/dev/null'
+		exec_cmd 'sudo chmod 644 /usr/share/keyrings/microsoft.gpg'
+	fi
+
+	# Create VS Code sources file if it doesn't exist or is outdated
+	VSCODE_SOURCES="/etc/apt/sources.list.d/vscode.sources"
 	if ! grep -qF 'packages.microsoft.com/repos/code' /etc/apt/sources.list; then
+		if [[ -f "${VSCODE_SOURCES}" ]]; then
+			exec_cmd "sudo cp -f \"${VSCODE_SOURCES}\" \"${VSCODE_SOURCES}.save\""
+		fi
+		# Remove old .list format if exists
 		if [[ -f /etc/apt/sources.list.d/vscode.list ]]; then
 			exec_cmd "sudo cp -f /etc/apt/sources.list.d/vscode.list /etc/apt/sources.list.d/vscode.list.save"
+			exec_cmd 'sudo rm -f /etc/apt/sources.list.d/vscode.list'
 		fi
-		exec_cmd 'echo "deb [arch=amd64,arm64,armhf] https://packages.microsoft.com/repos/code stable main" | sudo tee /etc/apt/sources.list.d/vscode.list'
+		exec_cmd "sudo tee \"${VSCODE_SOURCES}\" > /dev/null <<'EOF'
+Types: deb
+URIs: https://packages.microsoft.com/repos/code
+Suites: stable
+Components: main
+Architectures: amd64,arm64,armhf
+Signed-By: /usr/share/keyrings/microsoft.gpg
+EOF"
 	fi
+
+	# Install Google Chrome signing key and setup repository
 	exec_cmd 'wget -qO - https://dl.google.com/linux/linux_signing_key.pub | sudo tee /etc/apt/trusted.gpg.d/google.asc 1>/dev/null'
 	if [[ "$(uname -m)" == "x86_64" ]] && ! grep -qF 'dl.google.com/linux/chrome/deb' /etc/apt/sources.list; then
 		if [[ -f /etc/apt/sources.list.d/google-chrome.list ]]; then
@@ -284,6 +306,8 @@ EOS
 		fi
 		exec_cmd 'echo "deb [arch=amd64] https://dl.google.com/linux/chrome/deb stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list'
 	fi
+
+	# Install Node.js signing key and setup repository
 	exec_cmd 'wget -qO - https://deb.nodesource.com/setup_lts.x | sudo -E bash -'
 
 	# Install and setup shells

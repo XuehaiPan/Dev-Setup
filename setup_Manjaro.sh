@@ -578,6 +578,8 @@ fi
 # User specific environment
 export TERM="xterm-256color"
 export LESS="-R -M -i -j5"
+export CLICOLOR=1
+export LSCOLORS="${LSCOLORS:-"GxFxCxDxBxegedabagaced"}"
 
 # Locale
 export LANG="en_US.UTF-8"
@@ -651,8 +653,8 @@ fi
 export FPATH="${HOMEBREW_PREFIX}/share/zsh/site-functions${FPATH:+:"${FPATH}"}:${HOMEBREW_PREFIX}/share/zsh/functions"
 
 # Go
-export GOPATH="${HOME}/.go"
-export GOBIN="${GOPATH}/bin"
+export GOPATH="${GOPATH:-"${HOME}/.go"}"
+export GOBIN="${GOBIN:-"${GOPATH}/bin"}"
 export PATH="${GOBIN}${PATH:+:"${PATH}"}"
 
 # Rust
@@ -1587,8 +1589,8 @@ else
 fi
 
 # Go
-export GOPATH="${HOME}/.go"
-export GOBIN="${GOPATH}/bin"
+export GOPATH="${GOPATH:-"${HOME}/.go"}"
+export GOBIN="${GOBIN:-"${GOPATH}/bin"}"
 export PATH="${GOBIN}${PATH:+:"${PATH}"}"
 
 # Rust

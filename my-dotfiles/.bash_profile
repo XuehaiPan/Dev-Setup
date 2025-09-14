@@ -124,8 +124,8 @@ export OMPI_CXX="${CXX}" MPICH_CXX="${CXX}"
 export OMPI_FC="${FC}" MPICH_FC="${FC}"
 
 # Go
-export GOPATH="${HOME}/.go"
-export GOBIN="${GOPATH}/bin"
+export GOPATH="${GOPATH:-"${HOME}/.go"}"
+export GOBIN="${GOBIN:-"${GOPATH}/bin"}"
 export PATH="${GOBIN}${PATH:+:"${PATH}"}"
 
 # Rust

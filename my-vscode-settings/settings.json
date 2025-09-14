@@ -28,7 +28,7 @@
         80,
         100,
         120,
-        140
+        140,
     ],
     "editor.cursorStyle": "line",
     "editor.cursorSmoothCaretAnimation": "explicit",
@@ -49,7 +49,7 @@
     "editor.formatOnSave": true,
     "editor.formatOnSaveMode": "modifications",
     "editor.codeActionsOnSave": {
-        "source.fixAll": "explicit"
+        "source.fixAll": "explicit",
     },
     "editor.inlineSuggest.enabled": true,
     "editor.suggestSelection": "first",
@@ -58,7 +58,7 @@
     "editor.quickSuggestions": {
         "other": true,
         "comments": true,
-        "strings": true
+        "strings": true,
     },
     "editor.aiStats.enabled": true,
     "diffEditor.ignoreTrimWhitespace": false,
@@ -86,10 +86,10 @@
         "editorBracketHighlight.foreground4": "#ff8c00",
         "editorBracketHighlight.foreground5": "#32cd32",
         "editorBracketHighlight.foreground6": "#ee82ee",
-        "editorBracketHighlight.unexpectedBracket.foreground": "#ffffff"
+        "editorBracketHighlight.unexpectedBracket.foreground": "#ffffff",
     },
     "workbench.editorAssociations": {
-        "*.ipynb": "jupyter-notebook"
+        "*.ipynb": "jupyter-notebook",
     },
     "workbench.editorLargeFileConfirmation": 64,
     "workbench.localHistory.enabled": true,
@@ -148,7 +148,7 @@
         "**/.history": true,
         "**/*.py[co]": true,
         "**/__pycache__": true,
-        "**/*_cache/": true
+        "**/*_cache/": true,
     },
 
     //* File Explorer */
@@ -169,7 +169,7 @@
         "**/bower_components": true,
         "**/*.code-search": true,
         "**/cmake-build*": true,
-        "**/.history": true
+        "**/.history": true,
     },
 
     //* Outline */
@@ -208,13 +208,13 @@
     "terminal.integrated.defaultProfile.windows": "VsDevShell",
     "terminal.integrated.profiles.linux": {
         "zsh": {
-            "path": "/usr/bin/zsh"
-        }
+            "path": "/usr/bin/zsh",
+        },
     },
     "terminal.integrated.profiles.osx": {
         "zsh": {
-            "path": "/bin/zsh"
-        }
+            "path": "/bin/zsh",
+        },
     },
     "terminal.integrated.profiles.windows": {
         "VsDevShell": {
@@ -223,15 +223,15 @@
             "args": [
                 "-NoExit",
                 "-Command",
-                "$__VsDevShell = (Get-ChildItem -Path \"${env:ProgramFiles}*\\Microsoft Visual Studio\\*\\*\\*\\Tools\\Launch-VsDevShell.ps1\" 2>$null | Select-Object -First 1).FullName; $__OldVscmdTgtArch = $Env:VSCMD_ARG_TGT_ARCH; if ($__VsDevShell) { & \"$__VsDevShell\" -SkipAutomaticLocation }; if ($__OldVscmdTgtArch) { $Env:VSCMD_ARG_TGT_ARCH = $__OldVscmdTgtArch }; Remove-Variable -Name @('__OldVscmdTgtArch', '__VsDevShell') -Force"
-            ]
-        }
+                "$__VsDevShell = (Get-ChildItem -Path \"${env:ProgramFiles}*\\Microsoft Visual Studio\\*\\*\\*\\Tools\\Launch-VsDevShell.ps1\" 2>$null | Select-Object -First 1).FullName; $__OldVscmdTgtArch = $Env:VSCMD_ARG_TGT_ARCH; if ($__VsDevShell) { & \"$__VsDevShell\" -SkipAutomaticLocation }; if ($__OldVscmdTgtArch) { $Env:VSCMD_ARG_TGT_ARCH = $__OldVscmdTgtArch }; Remove-Variable -Name @('__OldVscmdTgtArch', '__VsDevShell') -Force",
+            ],
+        },
     },
 
     //* External Terminal */
     "terminal.external.linuxExec": "x-terminal-emulator",
     "terminal.external.osxExec": "iTerm.app",
-    "terminal.external.windowsExec": "C:\\Program Files\\PowerShell\\7\\pwsh.exe",
+    "terminal.external.windowsExec": "wt.exe",
 
     //* Extensions */
     "extensions.autoCheckUpdates": true,
@@ -249,55 +249,55 @@
 
     //! Default Configuration Overrides */
     "[go][makefile][shellscript]": {
-        "editor.insertSpaces": false
+        "editor.insertSpaces": false,
     },
     "[dockerfile][latex][markdown][yaml]": {
-        "editor.tabSize": 2
+        "editor.tabSize": 2,
     },
     "[c][cpp][cuda-cpp]": {
-        "editor.defaultFormatter": "ms-vscode.cpptools"
+        "editor.defaultFormatter": "ms-vscode.cpptools",
     },
     "[css][graphql][html][javascript][typescript]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
     },
     "[dockerfile]": {
-        "editor.defaultFormatter": "ms-azuretools.vscode-docker"
+        "editor.defaultFormatter": "ms-azuretools.vscode-docker",
     },
     "[json][jsonc]": {
-        "editor.defaultFormatter": "vscode.json-language-features"
+        "editor.defaultFormatter": "vscode.json-language-features",
     },
     "[latex][markdown][restructuredtext]": {
         "editor.detectIndentation": false,
         "editor.wordWrap": "bounded",
-        "editor.renderWhitespace": "all"
+        "editor.renderWhitespace": "all",
     },
     "[latex]": {
         "editor.formatOnSave": false,
-        "editor.suggestSelection": "recentlyUsedByPrefix"
+        "editor.suggestSelection": "recentlyUsedByPrefix",
     },
     "[markdown][restructuredtext]": {
         "editor.quickSuggestions": {
             "comments": "on",
             "strings": "on",
-            "other": "on"
+            "other": "on",
         },
-        "editor.acceptSuggestionOnEnter": "off"
+        "editor.acceptSuggestionOnEnter": "off",
     },
     "[markdown]": {
-        "editor.defaultFormatter": "yzhang.markdown-all-in-one"
+        "editor.defaultFormatter": "yzhang.markdown-all-in-one",
     },
     "[python]": {
         "editor.formatOnSave": false,
-        "editor.defaultFormatter": "charliermarsh.ruff"
+        "editor.defaultFormatter": "charliermarsh.ruff",
     },
     "[restructuredtext]": {
-        "editor.tabSize": 4
+        "editor.tabSize": 4,
     },
     "[toml]": {
-        "editor.defaultFormatter": "tamasfe.even-better-toml"
+        "editor.defaultFormatter": "tamasfe.even-better-toml",
     },
     "[yaml]": {
-        "editor.defaultFormatter": "redhat.vscode-yaml"
+        "editor.defaultFormatter": "redhat.vscode-yaml",
     },
 
     //! Extension settings */
@@ -325,10 +325,10 @@
     //* C/C++ Clang Command Adapter */
     "clang.executable": "clang",
     "clang.cflags": [
-        "-std=c11"
+        "-std=c11",
     ],
     "clang.cxxflags": [
-        "-std=c++17"
+        "-std=c++17",
     ],
     "clang.objcflags": [],
     "clang.completion.completeMacros": true,
@@ -339,17 +339,17 @@
     "clangd.arguments": [
         "--compile-commands-dir=${workspaceFolder}/.vscode",
         "--all-scopes-completion",
-        "--clang-tidy"
+        "--clang-tidy",
     ],
     "clangd.detectExtensionConflicts": false,
 
     //* Cmake Tools */
     "cmake.preferredGenerators": [
         "Ninja",
-        "Unix Makefiles"
+        "Unix Makefiles",
     ],
     "cmake.configureEnvironment": {
-        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
     },
     "cmake.sourceDirectory": "${workspaceFolder}",
     "cmake.buildDirectory": "${workspaceFolder}/cmake-build-${variant:buildType}",
@@ -426,7 +426,7 @@
         "erlang": "escript",
         "spwn": "spwn build",
         "pkl": "cd $dirWithoutTrailingSlash && pkl eval -f yaml \"$fileName\" -o \"$fileNameWithoutExt\".yaml",
-        "gleam": "gleam run -m \"$fileNameWithoutExt\""
+        "gleam": "gleam run -m \"$fileNameWithoutExt\"",
     },
     "code-runner.executorMapByFileExtension": {
         ".vb": "cd $dirWithoutTrailingSlash && vbc /nologo \"$fileName\" && { ./\"$fileNameWithoutExt\"; rm \"$fileNameWithoutExt\" }",
@@ -464,7 +464,7 @@
         ".erl": "escript",
         ".spwn": "spwn build",
         ".pkl": "cd $dirWithoutTrailingSlash && pkl eval -f yaml \"$fileName\" -o \"$fileNameWithoutExt\".yaml",
-        ".gleam": "gleam run -m \"$fileNameWithoutExt\""
+        ".gleam": "gleam run -m \"$fileNameWithoutExt\"",
     },
 
     //* Code Spell Checker */
@@ -474,13 +474,13 @@
         "spelling-wordlist-docs-source": {
             "name": "spelling-wordlist-docs-source",
             "path": "${workspaceFolder}/docs/source/spelling_wordlist.txt",
-            "addWords": false
+            "addWords": false,
         },
         "spelling-wordlist-docs": {
             "name": "spelling-wordlist-docs",
             "path": "${workspaceFolder}/docs/spelling_wordlist.txt",
-            "addWords": false
-        }
+            "addWords": false,
+        },
     },
 
     //* Data Wrangler */
@@ -490,7 +490,7 @@
         "parquet": true,
         "xlsx": true,
         "xls": true,
-        "jsonl": true
+        "jsonl": true,
     },
 
     //* Git */
@@ -534,14 +534,14 @@
         "alefragnani.separators",
         "gruntfuggly.todo-tree",
         "ms-python.python",
-        "ms-python.vscode-pylance"
+        "ms-python.vscode-pylance",
     ],
     "github.copilot.editor.enableAutoCompletions": true,
     "github.copilot.enable": {
         "*": true,
         "markdown": true,
         "plaintext": false,
-        "scminput": false
+        "scminput": false,
     },
 
     //* GitHub Pull Requests and Issues */
@@ -554,7 +554,7 @@
     "gitlens.defaultDateFormat": "MMMM Do, YYYY HH:mm",
     "gitlens.defaultDateShortFormat": "MMMM D, YYYY",
     "gitlens.advanced.messages": {
-        "suppressIntegrationRequestTimedOutWarning": true
+        "suppressIntegrationRequestTimedOutWarning": true,
     },
     "gitlens.graph.layout": "editor",
     "gitlens.telemetry.enabled": false,
@@ -574,7 +574,7 @@
         "rgba(255,255,64,0.15)",
         "rgba(127,255,127,0.15)",
         "rgba(255,127,255,0.15)",
-        "rgba(79,236,236,0.15)"
+        "rgba(79,236,236,0.15)",
     ],
     "indentRainbow.errorColor": "rgba(128,32,32,0.2)",
     "indentRainbow.lightIndicatorStyleLineWidth": 2,
@@ -584,7 +584,7 @@
     "vs-kubernetes": {
         "vscode-kubernetes.helm-path-linux": "~/.local/state/vs-kubernetes/tools/helm/linux-amd64/helm",
         "vscode-kubernetes.kubectl-path-linux": "~/.local/state/vs-kubernetes/tools/kubectl/kubectl",
-        "vscode-kubernetes.minikube-path-linux": "~/.local/state/vs-kubernetes/tools/minikube/linux-amd64/minikube"
+        "vscode-kubernetes.minikube-path-linux": "~/.local/state/vs-kubernetes/tools/minikube/linux-amd64/minikube",
     },
 
     //* LaTeX Workshop */
@@ -605,13 +605,13 @@
     "latex-workshop.view.pdf.external.viewer.command": "okular",
     "latex-workshop.view.pdf.external.viewer.args": [
         "--unique",
-        "%PDF%"
+        "%PDF%",
     ],
     "latex-workshop.view.pdf.external.synctex.command": "okular",
     "latex-workshop.view.pdf.external.synctex.args": [
         "--noraise",
         "--unique",
-        "%PDF%#src:%LINE%%TEX%"
+        "%PDF%#src:%LINE%%TEX%",
     ],
     "latex-workshop.latex.outDir": "%DIR%/out",
     "latex-workshop.latex.magic.args": [
@@ -620,11 +620,11 @@
         "-interaction=nonstopmode",
         "-file-line-error",
         "-output-directory=%OUTDIR%",
-        "%DOC%"
+        "%DOC%",
     ],
     "latex-workshop.latex.magic.bib.args": [
         "--output-directory=%OUTDIR%",
-        "%DOCFILE%"
+        "%DOCFILE%",
     ],
     "latex-workshop.latex.tools": [
         {
@@ -637,9 +637,9 @@
                 "-interaction=nonstopmode",
                 "-file-line-error",
                 "-output-directory=%OUTDIR%",
-                "%DOC%"
+                "%DOC%",
             ],
-            "env": {}
+            "env": {},
         },
         {
             "name": "xelatexmk",
@@ -651,9 +651,9 @@
                 "-interaction=nonstopmode",
                 "-file-line-error",
                 "-output-directory=%OUTDIR%",
-                "%DOC%"
+                "%DOC%",
             ],
-            "env": {}
+            "env": {},
         },
         {
             "name": "lualatexmk",
@@ -665,9 +665,9 @@
                 "-interaction=nonstopmode",
                 "-file-line-error",
                 "-output-directory=%OUTDIR%",
-                "%DOC%"
+                "%DOC%",
             ],
-            "env": {}
+            "env": {},
         },
         {
             "name": "pdflatex",
@@ -678,9 +678,9 @@
                 "-interaction=nonstopmode",
                 "-file-line-error",
                 "-output-directory=%OUTDIR%",
-                "%DOC%"
+                "%DOC%",
             ],
-            "env": {}
+            "env": {},
         },
         {
             "name": "xelatex",
@@ -691,9 +691,9 @@
                 "-interaction=nonstopmode",
                 "-file-line-error",
                 "-output-directory=%OUTDIR%",
-                "%DOC%"
+                "%DOC%",
             ],
-            "env": {}
+            "env": {},
         },
         {
             "name": "lualatex",
@@ -704,78 +704,78 @@
                 "-interaction=nonstopmode",
                 "-file-line-error",
                 "-output-directory=%OUTDIR%",
-                "%DOC%"
+                "%DOC%",
             ],
-            "env": {}
+            "env": {},
         },
         {
             "name": "biber",
             "command": "biber",
             "args": [
                 "--output-directory=%OUTDIR%",
-                "%DOCFILE%"
+                "%DOCFILE%",
             ],
-            "env": {}
+            "env": {},
         },
         {
             "name": "bibtex",
             "command": "bibtex",
             "args": [
-                "out/%DOCFILE%"
+                "out/%DOCFILE%",
             ],
             "env": {
-                "BIBINPUTS": "%OUTDIR%:"
-            }
-        }
+                "BIBINPUTS": "%OUTDIR%:",
+            },
+        },
     ],
     "latex-workshop.latex.recipes": [
         {
             "name": "Latexmk (XeLaTeX)",
             "tools": [
-                "xelatexmk"
-            ]
+                "xelatexmk",
+            ],
         },
         {
             "name": "Latexmk (LuaLaTeX)",
             "tools": [
-                "lualatexmk"
-            ]
+                "lualatexmk",
+            ],
         },
         {
             "name": "Latexmk (PDFLaTeX)",
             "tools": [
-                "pdflatexmk"
-            ]
+                "pdflatexmk",
+            ],
         },
         {
             "name": "XeLaTeX",
             "tools": [
-                "xelatex"
-            ]
+                "xelatex",
+            ],
         },
         {
             "name": "LuaLaTeX",
             "tools": [
-                "lualatex"
-            ]
+                "lualatex",
+            ],
         },
         {
             "name": "PDFLaTeX",
             "tools": [
-                "pdflatex"
-            ]
+                "pdflatex",
+            ],
         },
         {
             "name": "Biber",
             "tools": [
-                "biber"
-            ]
+                "biber",
+            ],
         },
         {
             "name": "BibTeX",
             "tools": [
-                "bibtex"
-            ]
+                "bibtex",
+            ],
         },
         {
             "name": "XeLaTeX ➞ Biber ➞ XeLaTeX × 2",
@@ -783,8 +783,8 @@
                 "xelatex",
                 "biber",
                 "xelatex",
-                "xelatex"
-            ]
+                "xelatex",
+            ],
         },
         {
             "name": "LuaLaTeX ➞ Biber ➞ LuaLaTeX × 2",
@@ -792,8 +792,8 @@
                 "lualatex",
                 "biber",
                 "lualatex",
-                "lualatex"
-            ]
+                "lualatex",
+            ],
         },
         {
             "name": "PDFLaTeX ➞ Biber ➞ PDFLaTeX × 2",
@@ -801,8 +801,8 @@
                 "pdflatex",
                 "biber",
                 "pdflatex",
-                "pdflatex"
-            ]
+                "pdflatex",
+            ],
         },
         {
             "name": "XeLaTeX ➞ BibTeX ➞ XeLaTeX × 2",
@@ -810,8 +810,8 @@
                 "xelatex",
                 "bibtex",
                 "xelatex",
-                "xelatex"
-            ]
+                "xelatex",
+            ],
         },
         {
             "name": "LuaLaTeX ➞ BibTeX ➞ LuaLaTeX × 2",
@@ -819,8 +819,8 @@
                 "lualatex",
                 "bibtex",
                 "lualatex",
-                "lualatex"
-            ]
+                "lualatex",
+            ],
         },
         {
             "name": "PDFLaTeX ➞ BibTeX ➞ PDFLaTeX × 2",
@@ -828,16 +828,16 @@
                 "pdflatex",
                 "bibtex",
                 "pdflatex",
-                "pdflatex"
-            ]
-        }
+                "pdflatex",
+            ],
+        },
     ],
     "latex-workshop.latexindent.args": [
         "-c",
         "%DIR%",
         "%TMPFILE%",
         "-y",
-        "defaultIndent: '%INDENT%', verbatimEnvironments:nameAsRegex:name: '\\w+code\\*?'"
+        "defaultIndent: '%INDENT%', verbatimEnvironments:nameAsRegex:name: '\\w+code\\*?'",
     ],
     "latex-workshop.latex.clean.fileTypes": [
         "*.xdv",
@@ -868,14 +868,14 @@
         "*.synctex(busy)",
         "*.synctex.gz(busy)",
         "_minted-*/**",
-        "_minted-*/"
+        "_minted-*/",
     ],
 
     //* LaTeX Utilities */
     "latex-utilities.countWord.format": "${words} Words (${wordsBody} in Body)",
     "latex-utilities.countWord.args": [
         "-merge",
-        "%DOC%"
+        "%DOC%",
     ],
     "latex-utilities.formattedPaste.tableBooktabsStyle": true,
     "latex-utilities.formattedPaste.image.template": "\\includegraphics[width=\\linewidth]{${imageFilePath}}",
@@ -919,8 +919,8 @@
     "markdown.extension.toc.levels": "2..6",
     "markdown.extension.toc.omittedFromToc": {
         "README.md": [
-            "## Table of Contents"
-        ]
+            "## Table of Contents",
+        ],
     },
 
     //* PowerShell */
@@ -983,17 +983,17 @@
         "--line-length=100",
         "--lines-after-imports=2",
         "--remove-redundant-aliases",
-        "--extra-builtin=typing_extensions"
+        "--extra-builtin=typing_extensions",
     ],
     "flake8.importStrategy": "fromEnvironment",
     "flake8.args": [
         "--max-line-length=120",
-        "--max-doc-length=120"
+        "--max-doc-length=120",
     ],
     "pylint.importStrategy": "fromEnvironment",
     "pylint.args": [
         "--generated-members=numpy.*,torch.*",
-        "--max-line-length=120"
+        "--max-line-length=120",
     ],
     "ruff.importStrategy": "fromEnvironment",
     "ruff.lineLength": 100,
@@ -1001,8 +1001,8 @@
     "ruff.configurationPreference": "filesystemFirst",
     "ruff.configuration": {
         "format": {
-            "quote-style": "single"
-        }
+            "quote-style": "single",
+        },
     },
     "mypy-type-checker.importStrategy": "fromEnvironment",
     "mypy-type-checker.preferDaemon": true,
@@ -1017,13 +1017,13 @@
         "--exclude='^(.*/)?setup\\.py$'",
         "--exclude='^(.*/)?test_.*\\.py$'",
         "--exclude='^(.*/)?test/.*\\.py$'",
-        "--exclude='^(.*/)?tests/.*\\.py$'"
+        "--exclude='^(.*/)?tests/.*\\.py$'",
     ],
     "mypy-type-checker.ignorePatterns": [
         "setup.py",
         "test_*.py",
         "test/**/*.py",
-        "tests/**/*.py"
+        "tests/**/*.py",
     ],
 
     //* Redhat */
@@ -1046,7 +1046,7 @@
         "christian-kohler.path-intellisense",
     ],
     "remote.SSH.remotePlatform": {
-        "*": "linux"
+        "*": "linux",
     },
 
     //* reStructuredText */
@@ -1059,7 +1059,7 @@
     "shellcheck.run": "onSave",
     "shellcheck.customArgs": [
         "--shell=bash",
-        "--enable=all"
+        "--enable=all",
     ],
 
     //* Shell-format */
@@ -1074,7 +1074,7 @@
         "TODO",
         "XXX",
         "[ ]",
-        "[x]"
+        "[x]",
     ],
     "todo-tree.regex.regex": "(//|#|<!--|;|/\\*|^|^\\s*(-|\\d+.))\\s*($TAGS)",
 }

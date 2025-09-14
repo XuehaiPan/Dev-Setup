@@ -2525,7 +2525,7 @@ ln -sf .dotfiles/.condarc .
 chmod 644 .dotfiles/.condarc
 
 # Install Miniconda
-if [[ ! -d "${HOME}/${CONDA_DIR}" ]]; then
+if [[ ! -x "${CONDA_BASE_PREFIX}/condabin/conda" ]]; then
 	if ${SET_MIRRORS}; then
 		exec_cmd "wget -N -P \"${TMP_DIR}\" https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-latest-Linux-$(uname -m).sh"
 	else

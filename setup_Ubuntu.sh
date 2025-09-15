@@ -288,14 +288,13 @@ EOS
 			exec_cmd "sudo cp -f /etc/apt/sources.list.d/vscode.list /etc/apt/sources.list.d/vscode.list.save"
 			exec_cmd 'sudo rm -f /etc/apt/sources.list.d/vscode.list'
 		fi
-		exec_cmd "sudo tee \"${VSCODE_SOURCES}\" > /dev/null <<'EOF'
-Types: deb
-URIs: https://packages.microsoft.com/repos/code
-Suites: stable
-Components: main
-Architectures: amd64,arm64,armhf
-Signed-By: /usr/share/keyrings/microsoft.gpg
-EOF"
+		exec_cmd "printf \"%s\\n\" "'\
+			"Types: deb" \
+			"URIs: https://packages.microsoft.com/repos/code" \
+			"Suites: stable" \
+			"Components: main" \
+			"Architectures: amd64,arm64,armhf" \
+			"Signed-By: /usr/share/keyrings/microsoft.gpg"'" | sudo tee \"${VSCODE_SOURCES}\""
 	fi
 
 	# Install Google Chrome signing key and setup repository

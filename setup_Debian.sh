@@ -1019,7 +1019,6 @@ plugins=(
 
 ZSH_COLORIZE_STYLE="monokai"
 ZSH_AUTOSUGGEST_STRATEGY=(history completion)
-PYTHON_AUTO_VRUN="true"
 if [[ "${EUID:-"${UID}"}" == "0" ]]; then
 	ZSH_DISABLE_COMPFIX=true
 fi

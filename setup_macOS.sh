@@ -189,7 +189,11 @@ function backup_dotfiles() {
 }
 
 function wget() {
-	command wget --no-verbose --timeout=10 --show-progress --progress=bar:force:noscroll "$@"
+	command wget --no-verbose --timeout=300 --show-progress --progress=bar:force:noscroll "$@"
+}
+
+function curl() {
+	command curl --fail --show-error --location --max-time 300 --retry 3 "$@"
 }
 
 # Install and setup Homebrew

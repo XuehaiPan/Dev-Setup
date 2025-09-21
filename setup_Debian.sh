@@ -476,13 +476,6 @@ else
 	HOMEBREW_BREW="\"\${HOME}/${HOMEBREW_PREFIX/#${HOME}\//}/bin/brew\""
 fi
 exec_cmd "eval \"\$(${HOMEBREW_BREW} shellenv)\""
-exec_cmd 'brew update'
-
-if ${SET_MIRRORS}; then
-	exec_cmd "brew tap --custom-remote homebrew/command-not-found https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-command-not-found.git"
-else
-	exec_cmd 'brew tap homebrew/command-not-found'
-fi
 exec_cmd 'brew update --verbose'
 
 # Install Oh-My-Zsh
@@ -617,7 +610,7 @@ HOMEBREW_SETTINGS+='
 if [[ -d "$(brew --repository homebrew/core)/.git" ]]; then
 	export HOMEBREW_NO_INSTALL_FROM_API=true
 fi
-__COMMAND_NOT_FOUND_HANDLER="$(brew --repository homebrew/command-not-found)/handler.sh"
+__COMMAND_NOT_FOUND_HANDLER="$(brew --repository)/Library/Homebrew/command-not-found/handler.sh"
 if [[ -f "${__COMMAND_NOT_FOUND_HANDLER}" ]]; then
 	source "${__COMMAND_NOT_FOUND_HANDLER}"
 fi

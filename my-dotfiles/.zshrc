@@ -56,7 +56,7 @@ export HOMEBREW_PIP_INDEX_URL="https://pypi.tuna.tsinghua.edu.cn/simple"
 if [[ -d "$(brew --repository homebrew/core)/.git" ]]; then
 	export HOMEBREW_NO_INSTALL_FROM_API=true
 fi
-__COMMAND_NOT_FOUND_HANDLER="$(brew --repository homebrew/command-not-found)/handler.sh"
+__COMMAND_NOT_FOUND_HANDLER="$(brew --repository)/Library/Homebrew/command-not-found/handler.sh"
 if [[ -f "${__COMMAND_NOT_FOUND_HANDLER}" ]]; then
 	source "${__COMMAND_NOT_FOUND_HANDLER}"
 fi

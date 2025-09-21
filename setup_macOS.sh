@@ -197,6 +197,7 @@ function curl() {
 }
 
 # Install and setup Homebrew
+exec_cmd 'export HOMEBREW_FORCE_VENDOR_RUBY=true'
 if ${SET_MIRRORS}; then
 	exec_cmd 'export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"'
 	exec_cmd 'export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git"'
@@ -432,7 +433,8 @@ backup_dotfiles .dotfiles/.zshrc
 HOMEBREW_SETTINGS='# Homebrew
 '"eval \"\$(${HOMEBREW_PREFIX}/bin/brew shellenv)\""'
 export HOMEBREW_EDITOR="vim"
-export HOMEBREW_BAT=true'
+export HOMEBREW_BAT=true
+export HOMEBREW_FORCE_VENDOR_RUBY=true'
 if ${SET_MIRRORS}; then
 	HOMEBREW_SETTINGS+='
 export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"

@@ -431,6 +431,7 @@ ln -sf .dotfiles/.gitconfig .
 chmod 644 .dotfiles/.gitconfig
 
 # Install and setup Homebrew
+exec_cmd 'export HOMEBREW_DOWNLOAD_CONCURRENCY="auto"'
 exec_cmd 'export HOMEBREW_FORCE_VENDOR_RUBY=true'
 if ${SET_MIRRORS}; then
 	exec_cmd 'export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"'
@@ -597,9 +598,12 @@ backup_dotfiles .dotfiles/.zshrc
 
 HOMEBREW_SETTINGS='# Homebrew
 '"eval \"\$(${HOMEBREW_BREW} shellenv)\""'
-export HOMEBREW_EDITOR="vim"
 export HOMEBREW_BAT=true
-export HOMEBREW_FORCE_VENDOR_RUBY=true'
+export HOMEBREW_CLEANUP_MAX_AGE_DAYS=7
+export HOMEBREW_DOWNLOAD_CONCURRENCY="auto"
+export HOMEBREW_EDITOR="vim"
+export HOMEBREW_FORCE_VENDOR_RUBY=true
+export HOMEBREW_NO_ANALYTICS=true'
 if ${SET_MIRRORS}; then
 	HOMEBREW_SETTINGS+='
 export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"
@@ -612,7 +616,7 @@ HOMEBREW_SETTINGS+='
 if [[ -d "$(brew --repository homebrew/core)/.git" ]]; then
 	export HOMEBREW_NO_INSTALL_FROM_API=true
 fi
-__COMMAND_NOT_FOUND_HANDLER="$(brew --repository)/Library/Homebrew/command-not-found/handler.sh"
+__COMMAND_NOT_FOUND_HANDLER="${HOMEBREW_REPOSITORY}/Library/Homebrew/command-not-found/handler.sh"
 if [[ -f "${__COMMAND_NOT_FOUND_HANDLER}" ]]; then
 	source "${__COMMAND_NOT_FOUND_HANDLER}"
 fi

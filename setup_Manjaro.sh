@@ -981,7 +981,7 @@ source "${ZSH}/oh-my-zsh.sh"
 
 # Set personal aliases
 alias bubo='brew update --verbose && brew outdated'
-alias bubc='brew upgrade && brew cleanup -s --prune 7'
+alias bubc='brew upgrade && brew cleanup --scrub --prune 7'
 alias lsa='ls -A'
 alias l='ls -alh'
 alias ll='ls -lh'
@@ -1182,7 +1182,7 @@ function upgrade_homebrew() {
 	exec_cmd 'brew autoremove --verbose'
 
 	# Clean up Homebrew cache
-	exec_cmd 'brew cleanup -s --prune 7'
+	exec_cmd 'brew cleanup --scrub --prune 7'
 }
 
 function upgrade_ohmyzsh() {

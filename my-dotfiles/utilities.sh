@@ -114,7 +114,7 @@ function upgrade_homebrew() {
 	exec_cmd 'brew autoremove --verbose'
 
 	# Clean up Homebrew cache
-	exec_cmd 'brew cleanup -s --prune 7'
+	exec_cmd 'brew cleanup --scrub --prune 7'
 }
 
 function upgrade_ohmyzsh() {

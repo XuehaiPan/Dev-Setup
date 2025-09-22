@@ -1,8 +1,34 @@
 #!/usr/bin/env bash
 
+# Colors
+RESET="\033[0m"
+BOLD="\033[1m"
+RED="\033[31m"
+GREEN="\033[32m"
+YELLOW="\033[33m"
+BLUE="\033[34m"
+WHITE="\033[37m"
+
+if [[ -z "${BASH_VERSION}" ]]; then
+	echo -e "${BOLD}${RED}ERROR: ${WHITE}Please run this script using ${GREEN}bash${WHITE}, not ${YELLOW}sh or other shells${WHITE}.${RESET}" >&2
+	exit 1
+fi
+
 # Options
-export SET_MIRRORS="${SET_MIRRORS:-false}"
-export FORCE_PER_USER_HOMEBREW="${FORCE_PER_USER_HOMEBREW:-false}"
+function boolify() {
+	local value="${1:-}"
+	if [[ -z "${value}" || "${value}" =~ (0|no|No|NO|false|False|FALSE|off|Off|OFF) ]]; then
+		echo ""
+	elif [[ "${value}" =~ (1|yes|Yes|YES|true|True|TRUE|on|On|ON) ]]; then
+		echo true
+	else
+		echo -e "${BOLD}${YELLOW}Warning: Unknown boolean value: '${value}'.${RESET}" >&2
+		echo ""
+	fi
+}
+
+export SET_MIRRORS="$(boolify "${SET_MIRRORS:-false}")"
+export FORCE_PER_USER_HOMEBREW="$(boolify "${FORCE_PER_USER_HOMEBREW:-false}")"
 
 # Set USER
 export USER="${USER:-"$(whoami)"}"
@@ -21,7 +47,7 @@ ln -sfn "${TMP_DIR}" "${DEV_SETUP_BACKUP_DIR}/tmp"
 trap 'rm -rf "${TMP_DIR}" "${DEV_SETUP_BACKUP_DIR}/tmp"' EXIT
 
 # Check if in WSL
-IN_WSL=false
+IN_WSL=''
 if [[ -n "${WSL_DISTRO_NAME}" ]] || (uname -r | grep -qiF 'microsoft'); then
 	IN_WSL=true
 fi
@@ -145,11 +171,6 @@ function have_sudo_access() {
 	fi
 
 	if [[ -z "${HAVE_SUDO_ACCESS-}" ]]; then
-		local RESET="\033[0m"
-		local BOLD="\033[1m"
-		local YELLOW="\033[33m"
-		local BLUE="\033[34m"
-		local WHITE="\033[37m"
 		echo -e "${BOLD}${BLUE}==> ${WHITE}Checking sudo access (press ${YELLOW}Ctrl+C${WHITE} to run as normal user).${RESET}" >&2
 		exec_cmd "${SUDO[*]} -v && ${SUDO[*]} -l mkdir &>/dev/null"
 		HAVE_SUDO_ACCESS="$?"
@@ -227,7 +248,7 @@ function get_latest_version() {
 
 if have_sudo_access; then
 	# Setup Pacman configurations
-	if ${SET_MIRRORS}; then
+	if [[ -n "${SET_MIRRORS}" ]]; then
 		for repo in "arch4edu" "archlinuxcn"; do
 			if ! grep -qF "[${repo}]" /etc/pacman.conf; then
 				exec_cmd "printf \"\\n%s\\n%s\\n\" '[${repo}]' 'Server = https://mirrors.tuna.tsinghua.edu.cn/${repo}/\${arch}' \\
@@ -240,12 +261,12 @@ if have_sudo_access; then
 		exec_cmd "sudo sed -i -E 's/^(\\s*)#\\s*Color$/\\1Color/g' /etc/pacman.conf"
 	fi
 
-	if ${SET_MIRRORS}; then
+	if [[ -n "${SET_MIRRORS}" ]]; then
 		exec_cmd 'sudo pacman-mirrors --country China --method rank'
 	fi
 	exec_cmd 'sudo pacman -Syy'
 
-	if ${SET_MIRRORS}; then
+	if [[ -n "${SET_MIRRORS}" ]]; then
 		exec_cmd 'sudo pacman-key --recv-keys 7931B6D628C8D3BA'
 		exec_cmd 'sudo pacman-key --finger 7931B6D628C8D3BA'
 		exec_cmd 'sudo pacman-key --lsign-key 7931B6D628C8D3BA'
@@ -347,7 +368,7 @@ chmod 644 .dotfiles/.gitconfig
 # Install and setup Homebrew
 exec_cmd 'export HOMEBREW_DOWNLOAD_CONCURRENCY="auto"'
 exec_cmd 'export HOMEBREW_FORCE_VENDOR_RUBY=true'
-if ${SET_MIRRORS}; then
+if [[ -n "${SET_MIRRORS}" ]]; then
 	exec_cmd 'export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"'
 	exec_cmd 'export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git"'
 	exec_cmd 'export HOMEBREW_API_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/api"'
@@ -357,10 +378,11 @@ fi
 if [[ ! -x "$(command -v brew)" ]]; then
 	HOMEBREW_PREFIX="/home/linuxbrew/.linuxbrew"
 	if (
-		[[ ! -d "${HOMEBREW_PREFIX}" || "$(/usr/bin/stat --printf "%u" "${HOMEBREW_PREFIX}")" == "${UID}" ]] &&
-			have_sudo_access && ! ${FORCE_PER_USER_HOMEBREW}
+		[[ -z "${FORCE_PER_USER_HOMEBREW}" ]] &&
+			[[ ! -d "${HOMEBREW_PREFIX}" || "$(/usr/bin/stat --printf "%u" "${HOMEBREW_PREFIX}")" == "${UID}" ]] &&
+			have_sudo_access
 	); then
-		if ${SET_MIRRORS}; then
+		if [[ -n "${SET_MIRRORS}" ]]; then
 			exec_cmd "git clone --depth=1 https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/install.git \"${TMP_DIR}/brew-install\""
 			exec_cmd "NONINTERACTIVE=1 /bin/bash \"${TMP_DIR}/brew-install/install.sh\""
 		else
@@ -465,7 +487,7 @@ cat >.dotfiles/.gemrc <<'EOF'
 :verbose: true
 :concurrent_downloads: 8
 EOF
-if ${SET_MIRRORS}; then
+if [[ -n "${SET_MIRRORS}" ]]; then
 	cat >>.dotfiles/.gemrc <<-'EOF'
 		:sources:
 		- https://mirrors.tuna.tsinghua.edu.cn/rubygems/
@@ -492,7 +514,7 @@ exec_cmd "PERL_MM_USE_DEFAULT=1 http_proxy=\"\" https_proxy=\"\" ftp_proxy=\"\" 
 exec_cmd "perl -MCPAN -e 'CPAN::HandleConfig->load();' \\
 	-e 'CPAN::HandleConfig->edit(\"cleanup_after_install\", \"1\");' \\
 	-e 'CPAN::HandleConfig->commit()'"
-if ${SET_MIRRORS}; then
+if [[ -n "${SET_MIRRORS}" ]]; then
 	if ! (
 		perl -MCPAN -e 'CPAN::HandleConfig->load();' -e 'CPAN::HandleConfig->prettyprint("urllist")' |
 			grep -qF 'https://mirrors.tuna.tsinghua.edu.cn/CPAN/'
@@ -518,7 +540,7 @@ export HOMEBREW_DOWNLOAD_CONCURRENCY="auto"
 export HOMEBREW_EDITOR="vim"
 export HOMEBREW_FORCE_VENDOR_RUBY=true
 export HOMEBREW_NO_ANALYTICS=true'
-if ${SET_MIRRORS}; then
+if [[ -n "${SET_MIRRORS}" ]]; then
 	HOMEBREW_SETTINGS+='
 export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"
 export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git"
@@ -2366,7 +2388,7 @@ channels:
   - conda-forge
   - defaults
 EOF
-if ${SET_MIRRORS}; then
+if [[ -n "${SET_MIRRORS}" ]]; then
 	cat >>.dotfiles/.condarc <<'EOF'
 default_channels:
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
@@ -2415,7 +2437,7 @@ chmod 644 .dotfiles/.condarc
 
 # Install Miniconda
 if [[ ! -x "${CONDA_BASE_PREFIX}/condabin/conda" ]]; then
-	if ${SET_MIRRORS}; then
+	if [[ -n "${SET_MIRRORS}" ]]; then
 		exec_cmd "wget -N -P \"${TMP_DIR}\" https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-latest-Linux-$(uname -m).sh"
 	else
 		exec_cmd "wget -N -P \"${TMP_DIR}\" https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-$(uname -m).sh"
@@ -2435,7 +2457,7 @@ exec_cmd "\"${CONDA_DIR}/condabin/conda\""' install pip ipython ipdb \
 	numpy matplotlib-base pandas rich tqdm \
 	ruff isort pre-commit --name=base --yes'
 exec_cmd "\"${CONDA_DIR}/condabin/conda\""' clean --all --yes'
-if ${SET_MIRRORS}; then
+if [[ -n "${SET_MIRRORS}" ]]; then
 	exec_cmd "\"${CONDA_DIR}/condabin/conda\" run --name=base pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple"
 fi
 
@@ -2575,7 +2597,7 @@ mkdir -p "${HOME}/.local/share/fonts"
 exec_cmd "find -L \"${TMP_DIR}/fonts\" -not -empty -type f -name '*.[ot]t[fc]' \\
 	-printf '==> cp -f \"%p\" \"\${HOME}/.local/share/fonts\"\n' \\
 	-exec cp -f '{}' \"\${HOME}/.local/share/fonts\" ';'"
-if ${IN_WSL} && [[ -w "/mnt/c/Windows/Fonts" ]]; then
+if [[ -n "${IN_WSL}" && -w "/mnt/c/Windows/Fonts" ]]; then
 	exec_cmd "find -L \"${TMP_DIR}/fonts\" -not -empty -type f -name '*.ttf' \\
 		-printf '==> cp -f \"%p\" \"/mnt/c/Windows/Fonts\"\n' \\
 		-exec cp -f '{}' \"/mnt/c/Windows/Fonts\" ';'"

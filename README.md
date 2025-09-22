@@ -50,11 +50,11 @@ Options:
 
 - `SET_MIRRORS` (default `false`): set the source of package managers to open source mirrors at [TUNA (@China)](https://mirrors.tuna.tsinghua.edu.cn) to speed up downloading. (see [Packages](#packages) for more details). If you want to bypass the prompt, run:
 
-  ```bash
-  # Bypass the prompt
-  SET_MIRRORS=true bash setup.sh    # set mirrors to TUNA (@China) (recommended for users in China)
-  SET_MIRRORS=false bash setup.sh   # do not modify mirror settings
-  ```
+```bash
+# Bypass the prompt
+bash setup.sh --set-mirrors     # set mirrors to TUNA (@China) (recommended for users in China)
+bash setup.sh --no-set-mirrors  # do not modify mirror settings
+```
 
 **Note**: If you are using **WSL on Windows**, you need to run [Windows Terminal](https://github.com/Microsoft/Terminal) as **administrator** to get the permissions to copy fonts to `C:\Windows\Fonts`. Otherwise, the fonts will not be installed successfully on Windows. You can download them from [nerdfonts.com](https://www.nerdfonts.com) and install them manually. See [Font Settings](#font-settings) for more details.
 
@@ -133,7 +133,7 @@ which do not need additional font settings.
 ```bash
 find -L ~/.local/share/fonts -not -empty -type f -name '*.tt[fc]' -print0 | xargs -0 -I '{}' bash -c \
     'file="{}"
-    font=${file##*/}
+    font="${file##*/}"
     echo "Installing \"${font}\" to \"/mnt/c/Windows/Fonts\""
     cp -f "${file}" /mnt/c/Windows/Fonts
     /mnt/c/Windows/System32/reg.exe add "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Fonts" \

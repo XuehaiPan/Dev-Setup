@@ -1,7 +1,33 @@
 #!/usr/bin/env bash
 
+# Colors
+RESET="\033[0m"
+BOLD="\033[1m"
+RED="\033[31m"
+GREEN="\033[32m"
+YELLOW="\033[33m"
+BLUE="\033[34m"
+WHITE="\033[37m"
+
+if [[ -z "${BASH_VERSION}" ]]; then
+	echo -e "${BOLD}${RED}ERROR: ${WHITE}Please run this script using ${GREEN}bash${WHITE}, not ${YELLOW}sh or other shells${WHITE}.${RESET}" >&2
+	exit 1
+fi
+
 # Options
-export SET_MIRRORS="${SET_MIRRORS:-false}"
+function boolify() {
+	local value="${1:-}"
+	if [[ -z "${value}" || "${value}" =~ (0|no|No|NO|false|False|FALSE|off|Off|OFF) ]]; then
+		echo ""
+	elif [[ "${value}" =~ (1|yes|Yes|YES|true|True|TRUE|on|On|ON) ]]; then
+		echo true
+	else
+		echo -e "${BOLD}${YELLOW}Warning: Unknown boolean value: '${value}'.${RESET}" >&2
+		echo ""
+	fi
+}
+
+export SET_MIRRORS="$(boolify "${SET_MIRRORS:-false}")"
 
 # Set PATH
 export HOMEBREW_PREFIX="/usr/local"
@@ -153,10 +179,6 @@ function have_sudo_access() {
 	fi
 
 	if [[ -z "${HAVE_SUDO_ACCESS-}" ]]; then
-		local RESET="\033[0m"
-		local BOLD="\033[1m"
-		local BLUE="\033[34m"
-		local WHITE="\033[37m"
 		echo -e "${BOLD}${BLUE}==> ${WHITE}Checking sudo access.${RESET}" >&2
 		exec_cmd "${SUDO[*]} -v && ${SUDO[*]} -l mkdir &>/dev/null"
 		HAVE_SUDO_ACCESS="$?"
@@ -199,7 +221,7 @@ function curl() {
 # Install and setup Homebrew
 exec_cmd 'export HOMEBREW_DOWNLOAD_CONCURRENCY="auto"'
 exec_cmd 'export HOMEBREW_FORCE_VENDOR_RUBY=true'
-if ${SET_MIRRORS}; then
+if [[ -n "${SET_MIRRORS}" ]]; then
 	exec_cmd 'export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"'
 	exec_cmd 'export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git"'
 	exec_cmd 'export HOMEBREW_API_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/api"'
@@ -208,7 +230,7 @@ if ${SET_MIRRORS}; then
 fi
 if [[ ! -x "${HOMEBREW_PREFIX}/bin/brew" ]]; then
 	exec_cmd 'xcode-select --install'
-	if ${SET_MIRRORS}; then
+	if [[ -n "${SET_MIRRORS}" ]]; then
 		exec_cmd "git clone --depth=1 https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/install.git \"${TMP_DIR}/brew-install\""
 		exec_cmd "NONINTERACTIVE=1 /bin/bash \"${TMP_DIR}/brew-install/install.sh\""
 	else
@@ -391,7 +413,7 @@ cat >.dotfiles/.gemrc <<'EOF'
 :verbose: true
 :concurrent_downloads: 8
 EOF
-if ${SET_MIRRORS}; then
+if [[ -n "${SET_MIRRORS}" ]]; then
 	cat >>.dotfiles/.gemrc <<-'EOF'
 		:sources:
 		- https://mirrors.tuna.tsinghua.edu.cn/rubygems/
@@ -413,7 +435,7 @@ exec_cmd "PERL_MM_USE_DEFAULT=1 http_proxy=\"\" https_proxy=\"\" ftp_proxy=\"\" 
 exec_cmd "perl -MCPAN -e 'CPAN::HandleConfig->load();' \\
 	-e 'CPAN::HandleConfig->edit(\"cleanup_after_install\", \"1\");' \\
 	-e 'CPAN::HandleConfig->commit()'"
-if ${SET_MIRRORS}; then
+if [[ -n "${SET_MIRRORS}" ]]; then
 	if ! (
 		perl -MCPAN -e 'CPAN::HandleConfig->load();' -e 'CPAN::HandleConfig->prettyprint("urllist")' |
 			grep -qF 'https://mirrors.tuna.tsinghua.edu.cn/CPAN/'
@@ -439,7 +461,7 @@ export HOMEBREW_DOWNLOAD_CONCURRENCY="auto"
 export HOMEBREW_EDITOR="vim"
 export HOMEBREW_FORCE_VENDOR_RUBY=true
 export HOMEBREW_NO_ANALYTICS=true'
-if ${SET_MIRRORS}; then
+if [[ -n "${SET_MIRRORS}" ]]; then
 	HOMEBREW_SETTINGS+='
 export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"
 export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git"
@@ -2428,7 +2450,7 @@ channels:
   - conda-forge
   - defaults
 EOF
-if ${SET_MIRRORS}; then
+if [[ -n "${SET_MIRRORS}" ]]; then
 	cat >>.dotfiles/.condarc <<'EOF'
 default_channels:
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
@@ -2477,7 +2499,7 @@ chmod 644 .dotfiles/.condarc
 
 # Install Miniconda
 if [[ ! -x "${CONDA_BASE_PREFIX}/condabin/conda" ]]; then
-	if ${SET_MIRRORS}; then
+	if [[ -n "${SET_MIRRORS}" ]]; then
 		exec_cmd "wget -N -P \"${TMP_DIR}\" https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-latest-MacOSX-$(uname -m).sh"
 	else
 		exec_cmd "wget -N -P \"${TMP_DIR}\" https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-$(uname -m).sh"
@@ -2497,7 +2519,7 @@ exec_cmd "\"${CONDA_DIR}/condabin/conda\""' install pip ipython ipdb \
 	numpy matplotlib-base pandas rich tqdm \
 	ruff isort pre-commit --name=base --yes'
 exec_cmd "\"${CONDA_DIR}/condabin/conda\""' clean --all --yes'
-if ${SET_MIRRORS}; then
+if [[ -n "${SET_MIRRORS}" ]]; then
 	exec_cmd "\"${CONDA_DIR}/condabin/conda\" run --name=base pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple"
 fi
 

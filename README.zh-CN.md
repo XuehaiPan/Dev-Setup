@@ -50,11 +50,11 @@ cd Dev-Setup
 
 - `SET_MIRRORS` (默认值 `false`)：将软件包管理器的源设置为开源镜像 [TUNA (@China)](https://mirrors.tuna.tsinghua.edu.cn) 以加速下载（更多信息请参见 [软件包列表](#软件包列表)）。如果你想跳过询问步骤，请运行：
 
-  ```bash
-  # Bypass the prompt
-  SET_MIRRORS=true bash setup.sh    # set mirrors to TUNA (@China) (recommended for users in China)
-  SET_MIRRORS=false bash setup.sh   # do not modify mirror settings
-  ```
+```bash
+# Bypass the prompt
+bash setup.sh --set-mirrors     # set mirrors to TUNA (@China) (recommended for users in China)
+bash setup.sh --no-set-mirrors  # do not modify mirror settings
+```
 
 **注**：如果你使用的是 Windows 上的 **WSL (Windows Subsystem for Linux)**，你需要以 **管理员权限** 运行 [Windows Terminal](https://github.com/Microsoft/Terminal)，用以获得权限将字体文件拷贝至文件夹 `C:\Windows\Fonts`，否则将无法在 Windows 上正确安装字体文件。你可以从 [nerdfonts.com](https://www.nerdfonts.com) 下载字体并手动安装，更多信息请参见 [字体设置](#字体设置)。
 
@@ -133,7 +133,7 @@ chsh -s /usr/local/bin/zsh-lean   # change the login shell
 ```bash
 find -L ~/.local/share/fonts -not -empty -type f -name '*.tt[fc]' -print0 | xargs -0 -I '{}' bash -c \
     'file="{}"
-    font=${file##*/}
+    font="${file##*/}"
     echo "Installing \"${font}\" to \"/mnt/c/Windows/Fonts\""
     cp -f "${file}" /mnt/c/Windows/Fonts
     /mnt/c/Windows/System32/reg.exe add "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Fonts" \

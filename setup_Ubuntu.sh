@@ -94,7 +94,7 @@ function exec_cmd() {
 			idx = 0;
 			in_string = 0;
 			double_quoted = 1;
-			printf("%s$", BOLD WHITE);
+			printf("%s$", RESET BOLD WHITE);
 		}
 		{
 			for (i = 1; i <= NF; ++i) {
@@ -1188,7 +1188,7 @@ function exec_cmd() {
 			idx = 0;
 			in_string = 0;
 			double_quoted = 1;
-			printf("%s$", BOLD WHITE);
+			printf("%s$", RESET BOLD WHITE);
 		}
 		{
 			for (i = 1; i <= NF; ++i) {

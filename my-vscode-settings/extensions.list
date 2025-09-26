@@ -74,7 +74,6 @@ ms-vscode-remote.remote-ssh
 ms-vscode-remote.remote-ssh-edit
 ms-vscode-remote.remote-wsl
 lextudio.restructuredtext
-stkb.rewrap
 shopify.ruby-lsp
 rust-lang.rust-analyzer
 alefragnani.separators

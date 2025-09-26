@@ -261,7 +261,7 @@ function available_cuda_devices() {
 			break
 		fi
 		pids=$(nvidia-smi --id="${index}" --query-compute-apps=pid --format=csv,noheader | xargs echo -n)
-		if [[ -n "${pids}" ]] && (ps -o user -p "${pids}" | tail -n +2 | grep -qvF "${USER}") &&
+		if [[ -n "${pids}" ]] && (ps -o user -p ${pids} | tail -n +2 | grep -qvF "${USER}") &&
 			((memused >= 3072 || memfree <= 6144 || utilization >= 20)); then
 			continue
 		fi

@@ -831,6 +831,7 @@
             ],
         },
     ],
+    "latex-workshop.formatting.latex": "latexindent",
     "latex-workshop.latexindent.args": [
         "-c",
         "%DIR%",

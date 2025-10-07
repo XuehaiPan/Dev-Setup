@@ -235,10 +235,6 @@ function set_proxy() {
 	export https_proxy="http://${proxy_host}:${https_port}"
 	export ftp_proxy="http://${proxy_host}:${ftp_port}"
 	export all_proxy="socks5://${proxy_host}:${socks_port}"
-	export HTTP_PROXY="${http_proxy}"
-	export HTTPS_PROXY="${https_proxy}"
-	export FTP_PROXY="${ftp_proxy}"
-	export ALL_PROXY="${all_proxy}"
 }
 
 function reset_proxy() {
@@ -246,10 +242,6 @@ function reset_proxy() {
 	unset http_proxy
 	unset ftp_proxy
 	unset all_proxy
-	unset HTTPS_PROXY
-	unset HTTP_PROXY
-	unset FTP_PROXY
-	unset ALL_PROXY
 }
 
 function available_cuda_devices() {

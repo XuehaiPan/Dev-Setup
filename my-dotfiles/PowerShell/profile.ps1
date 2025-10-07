@@ -25,10 +25,6 @@ Function Set-Proxy($proxyHost = "127.0.0.1",
     $Env:https_proxy = "http://${proxyHost}:${httpsPort}"
     $Env:ftp_proxy = "http://${proxyHost}:${ftpPort}"
     $Env:all_proxy = "socks5://${proxyHost}:${socksPort}"
-    $Env:HTTP_PROXY = "http://${proxyHost}:${httpPort}"
-    $Env:HTTPS_PROXY = "http://${proxyHost}:${httpsPort}"
-    $Env:FTP_PROXY = "http://${proxyHost}:${ftpPort}"
-    $Env:ALL_PROXY = "socks5://${proxyHost}:${socksPort}"
     [Environment]::SetEnvironmentVariable('http_proxy', "http://${proxyHost}:${httpPort}", 'User')
     [Environment]::SetEnvironmentVariable('https_proxy', "http://${proxyHost}:${httpsPort}", 'User')
     [Environment]::SetEnvironmentVariable('ftp_proxy', "http://${proxyHost}:${ftpPort}", 'User')
@@ -43,10 +39,6 @@ Function Reset-Proxy() {
     Remove-Item -Path Env:\https_proxy -ErrorAction:Ignore
     Remove-Item -Path Env:\ftp_proxy -ErrorAction:Ignore
     Remove-Item -Path Env:\all_proxy -ErrorAction:Ignore
-    Remove-Item -Path Env:\HTTP_PROXY -ErrorAction:Ignore
-    Remove-Item -Path Env:\HTTPS_PROXY -ErrorAction:Ignore
-    Remove-Item -Path Env:\FTP_PROXY -ErrorAction:Ignore
-    Remove-Item -Path Env:\ALL_PROXY -ErrorAction:Ignore
     [Environment]::SetEnvironmentVariable('http_proxy', $null, 'User')
     [Environment]::SetEnvironmentVariable('https_proxy', $null, 'User')
     [Environment]::SetEnvironmentVariable('ftp_proxy', $null, 'User')

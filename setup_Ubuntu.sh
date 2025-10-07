@@ -285,7 +285,7 @@ if have_sudo_access; then
 	     //packages.linuxmint.com             //mirrors.tuna.tsinghua.edu.cn/linuxmint
 	http://mirrors.tuna.tsinghua.edu.cn https://mirrors.tuna.tsinghua.edu.cn
 EOS
-		done < <(find -L /etc/apt -type f -name '*.list')
+		done < <(find -L /etc/apt -type f -name '*.list' -or -name '*.sources')
 	fi
 
 	exec_cmd 'sudo apt-get update'

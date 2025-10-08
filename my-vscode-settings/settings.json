@@ -261,7 +261,7 @@
         "editor.defaultFormatter": "esbenp.prettier-vscode",
     },
     "[dockerfile]": {
-        "editor.defaultFormatter": "ms-azuretools.vscode-docker",
+        "editor.defaultFormatter": "ms-azuretools.vscode-containers",
     },
     "[github-actions-workflow]": {
         "editor.defaultFormatter": "redhat.vscode-yaml"

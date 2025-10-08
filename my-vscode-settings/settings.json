@@ -263,6 +263,9 @@
     "[dockerfile]": {
         "editor.defaultFormatter": "ms-azuretools.vscode-docker",
     },
+    "[github-actions-workflow]": {
+        "editor.defaultFormatter": "redhat.vscode-yaml"
+    },
     "[json][jsonc]": {
         "editor.defaultFormatter": "vscode.json-language-features",
     },

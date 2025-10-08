@@ -56,6 +56,8 @@ function print_help() {
 		echo
 		echo -e "  ${GREEN}--force-per-user-homebrew${RESET}   Force to install Homebrew in per-user mode even if running as sudoers (Linux only)."
 		echo
+		echo -e "  ${GREEN}--non-interactive${RESET}           Run the script in non-interactive mode (Linux only)."
+		echo
 		echo -e "  ${GREEN}--help, -h${RESET}                  Show this help message and exit."
 		echo
 		echo -e "${BOLD}${WHITE}If no option is provided for setting mirrors, the script will prompt for confirmation.${RESET}"
@@ -84,6 +86,10 @@ while (("$#" > 0)); do
 		;;
 	--force-per-user-homebrew)
 		export FORCE_PER_USER_HOMEBREW=true
+		shift
+		;;
+	--non-interactive)
+		export NONINTERACTIVE=true
 		shift
 		;;
 	--help | -h)

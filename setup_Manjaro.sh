@@ -29,6 +29,7 @@ function boolify() {
 
 export SET_MIRRORS="$(boolify "${SET_MIRRORS:-false}")"
 export FORCE_PER_USER_HOMEBREW="$(boolify "${FORCE_PER_USER_HOMEBREW:-false}")"
+export NONINTERACTIVE="$(boolify "${NONINTERACTIVE:-false}")"
 
 # Set USER
 export USER="${USER:-"$(whoami)"}"
@@ -169,6 +170,9 @@ function have_sudo_access() {
 	if [[ -n "${SUDO_ASKPASS-}" ]]; then
 		SUDO+=("-A")
 	fi
+	if [[ -n "${NONINTERACTIVE-}" ]]; then
+		SUDO+=("-n")
+	fi
 
 	if [[ -z "${HAVE_SUDO_ACCESS-}" ]]; then
 		echo -e "${BOLD}${BLUE}==> ${WHITE}Checking sudo access (press ${YELLOW}Ctrl+C${WHITE} to run as normal user).${RESET}" >&2
@@ -297,10 +301,12 @@ if [[ "$(basename "${SHELL}")" != "zsh" ]]; then
 	if have_sudo_access; then
 		CHSH="sudo chsh"
 	fi
-	if grep -qF '/usr/bin/zsh' /etc/shells; then
-		exec_cmd "${CHSH} --shell /usr/bin/zsh ${USER}"
-	elif grep -qF '/bin/zsh' /etc/shells; then
-		exec_cmd "${CHSH} --shell /bin/zsh ${USER}"
+	if [[ -z "${NONINTERACTIVE}" || "${CHSH}" == "sudo "* ]]; then
+		if grep -qF '/usr/bin/zsh' /etc/shells; then
+			exec_cmd "${CHSH} --shell /usr/bin/zsh ${USER}"
+		elif grep -qF '/bin/zsh' /etc/shells; then
+			exec_cmd "${CHSH} --shell /bin/zsh ${USER}"
+		fi
 	fi
 fi
 
@@ -384,9 +390,9 @@ if [[ ! -x "$(command -v brew)" ]]; then
 	); then
 		if [[ -n "${SET_MIRRORS}" ]]; then
 			exec_cmd "git clone --depth=1 https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/install.git \"${TMP_DIR}/brew-install\""
-			exec_cmd "NONINTERACTIVE=1 /bin/bash \"${TMP_DIR}/brew-install/install.sh\""
+			exec_cmd "NONINTERACTIVE=true /bin/bash \"${TMP_DIR}/brew-install/install.sh\""
 		else
-			exec_cmd 'NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://github.com/Homebrew/install/raw/HEAD/install.sh)"'
+			exec_cmd 'NONINTERACTIVE=true /bin/bash -c "$(curl -fsSL https://github.com/Homebrew/install/raw/HEAD/install.sh)"'
 		fi
 	else
 		HOMEBREW_PREFIX="${HOME}/.linuxbrew"

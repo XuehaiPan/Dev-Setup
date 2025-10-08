@@ -232,9 +232,9 @@ if [[ ! -x "${HOMEBREW_PREFIX}/bin/brew" ]]; then
 	exec_cmd 'xcode-select --install'
 	if [[ -n "${SET_MIRRORS}" ]]; then
 		exec_cmd "git clone --depth=1 https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/install.git \"${TMP_DIR}/brew-install\""
-		exec_cmd "NONINTERACTIVE=1 /bin/bash \"${TMP_DIR}/brew-install/install.sh\""
+		exec_cmd "NONINTERACTIVE=true /bin/bash \"${TMP_DIR}/brew-install/install.sh\""
 	else
-		exec_cmd 'NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://github.com/Homebrew/install/raw/HEAD/install.sh)"'
+		exec_cmd 'NONINTERACTIVE=true /bin/bash -c "$(curl -fsSL https://github.com/Homebrew/install/raw/HEAD/install.sh)"'
 	fi
 fi
 

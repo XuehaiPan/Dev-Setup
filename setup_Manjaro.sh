@@ -344,6 +344,7 @@ git config --global filter.lfs.required true
 git config --global alias.list-ignored '! cd -- "${GIT_PREFIX:-.}" && git ls-files -v "${1:-.}" | sed -n -e "s,^[a-z] \\(.*\\)\$,${GIT_PREFIX:-./}\\1,p" && git status --ignored --porcelain "${1:-.}" 2>/dev/null | sed -n -e "s/^\\(\\!\\! \\)\\(.*\\)$/\\2/p";'
 git config --global alias.config-push-remote '! cd -- "${GIT_PREFIX:-.}" && GIT_BRANCH="${1:-"$(git branch --show-current)"}" && git config branch."${GIT_BRANCH}".remote upstream; git config branch."${GIT_BRANCH}".pushremote origin;'
 git config --global alias.sync-remote '! cd -- "${GIT_PREFIX:-.}"; git status --porcelain && (GIT_CURRENT_BRANCH="$(git branch --show-current)"; GIT_BRANCH="${1:-"${GIT_CURRENT_BRANCH}"}"; GIT_REMOTE="$(git remote show | grep -E "^upstream$" || echo "origin")"; [ "${GIT_CURRENT_BRANCH}" != "${GIT_BRANCH}" ] && gut checkout "${GIT_BRANCH}"; git fetch --all --tags --prune --force --jobs=16; git pull --ff-only "${GIT_REMOTE}" "${GIT_BRANCH}"; [ "${GIT_REMOTE}" != "origin" ] && git push origin "${GIT_BRANCH}:${GIT_BRANCH}"; [ "${GIT_CURRENT_BRANCH}" != "${GIT_BRANCH}" ] && gut checkout "${GIT_CURRENT_BRANCH}")'
+git config --global alias.add-non-eolws-changes '! cd -- "${GIT_PREFIX:-.}"; git diff --no-color --unified=0 --ignore-submodules=all --ignore-space-at-eol | git apply --cached --allow-empty --unidiff-zero --ignore-space-change --whitespace=nowarn -'
 git config --global color.ui true
 if [[ -x "$(command -v delta)" ]]; then
 	git config --global core.pager delta

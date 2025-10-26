@@ -1265,11 +1265,15 @@ function auto_reannounce_trackers() {
 
 function pykill() {
 	local pids
-	pids="$(pgrep -f -d ' ' -P 1 -U "${USER}" '[Pp]ython3?' || true)"
-	if [[ -n "${pids}" ]]; then
-		exec_cmd "ps -o pid,user,ppid,pgid,%cpu,%mem,rss,pri,nice,state,time,etime,command -p ${pids}"
+	while true; do
+		pids="$(pgrep -f -d ' ' -P 1 -U "${USER}" '[Pp]ython3?' || true)"
+		if [[ -z "${pids}" ]]; then
+			break
+		fi
+		exec_cmd "ps -o 'pid,user,ppid,pgid,%cpu,%mem,rss,pri,nice,state,time,etime,command' -p ${pids}"
 		exec_cmd "kill -KILL ${pids}"
-	fi
+		sleep 1
+	done
 }
 
 function pull_projects() {

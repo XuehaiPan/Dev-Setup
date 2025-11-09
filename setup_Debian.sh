@@ -327,6 +327,9 @@ if have_sudo_access; then
 	fi
 	exec_cmd 'sudo apt-get install bash-completion curl git git-lfs vim tmux --yes'
 	exec_cmd 'sudo apt-get install ranger highlight shellcheck git-extras jq --yes'
+	if [[ -n "$(apt-cache search '^eza$' --names-only)" ]]; then
+		exec_cmd 'sudo apt-get install eza --yes'
+	fi
 	if [[ -n "$(apt-cache search '^fd-find$' --names-only)" ]]; then
 		exec_cmd 'sudo apt-get install fd-find --yes'
 	fi
@@ -590,15 +593,6 @@ fi
 
 ln -sf .dotfiles/.gemrc .
 chmod 644 .dotfiles/.gemrc
-
-# Install Color LS
-if [[ -x "$(command -v ruby)" && -x "$(command -v gem)" ]]; then
-	export RUBYOPT="-W0"
-	export PATH="$(ruby -r rubygems -e 'puts Gem.dir')/bin${PATH:+:"${PATH}"}"
-	export PATH="$(ruby -r rubygems -e 'puts Gem.user_dir')/bin${PATH:+:"${PATH}"}"
-	exec_cmd 'gem install colorls --user-install'
-	exec_cmd 'gem cleanup --user-install'
-fi
 
 # Configurations for Perl
 export PERL_MB_OPT="--install_base \"${HOME}/.perl\""
@@ -1092,12 +1086,9 @@ alias ll='ls -lh'
 alias la='ls -Alh'
 
 if [[ -z "${P10K_LEAN_STYLE}" ]]; then
-	# Setup Color LS
-	if [[ -x "$(command -v ruby)" && -x "$(command -v gem)" ]]; then
-		if gem list --silent --installed colorls; then
-			source "$(dirname "$(gem which colorls)")"/tab_complete.sh
-			alias ls='colorls --sort-dirs --git-status'
-		fi
+	# Setup eza
+	if [[ -x "$(command -v eza)" ]]; then
+		alias ls='eza --header --group-directories-first --group --binary --color=auto --classify=auto --icons=auto --git'
 	fi
 else
 	# Use Powerlevel10k Lean style
@@ -1386,9 +1377,7 @@ function upgrade_packages() {
 	if [[ -x "$(command -v vim)" ]]; then
 		upgrade_vim
 	fi
-	if [[ -x "$(command -v ruby)" && -x "$(command -v gem)" ]]; then
-		upgrade_gems
-	fi
+	# upgrade_gems
 	# upgrade_cpan
 	# upgrade_conda
 

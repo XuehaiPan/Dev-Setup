@@ -205,7 +205,7 @@ function upgrade_packages() {
 	upgrade_ohmyzsh
 	upgrade_fzf
 	upgrade_vim
-	upgrade_gems
+	# upgrade_gems
 	# upgrade_cpan
 	# upgrade_texlive
 	# upgrade_conda

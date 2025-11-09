@@ -255,7 +255,7 @@ fi
 # Install packages
 exec_cmd 'brew install --formula gcc gdb llvm make cmake'
 exec_cmd 'brew install --formula bash-completion wget curl git git-lfs macvim tmux'
-exec_cmd 'brew install --formula coreutils ranger fd bat highlight ripgrep git-extras'
+exec_cmd 'brew install --formula coreutils ranger eza fd bat highlight ripgrep git-extras'
 exec_cmd 'brew install --formula jq shfmt shellcheck diffutils colordiff diff-so-fancy git-delta'
 exec_cmd 'brew install --formula htop openssh atool tree reattach-to-user-namespace libarchive'
 
@@ -423,10 +423,6 @@ fi
 
 ln -sf .dotfiles/.gemrc .
 chmod 644 .dotfiles/.gemrc
-
-# Install Color LS
-exec_cmd 'gem install colorls'
-exec_cmd 'gem cleanup'
 
 # Configurations for Perl
 export PERL_MB_OPT="--install_base \"${HOMEBREW_PREFIX}/opt/perl\""
@@ -917,9 +913,10 @@ alias ll='ls -lh'
 alias la='ls -Alh'
 
 if [[ -z "${P10K_LEAN_STYLE}" ]]; then
-	# Setup Color LS
-	source "$(dirname "$(gem which colorls)")"/tab_complete.sh
-	alias ls='colorls --sort-dirs --git-status'
+	# Setup eza
+	if [[ -x "$(command -v eza)" ]]; then
+		alias ls='eza --header --group-directories-first --group --binary --color=auto --classify=auto --icons=auto --git'
+	fi
 else
 	# Use Powerlevel10k Lean style
 	source "${ZSH_CUSTOM}/themes/powerlevel10k/config/p10k-lean.zsh"
@@ -1177,7 +1174,7 @@ function upgrade_packages() {
 	upgrade_ohmyzsh
 	upgrade_fzf
 	upgrade_vim
-	upgrade_gems
+	# upgrade_gems
 	# upgrade_cpan
 	# upgrade_texlive
 	# upgrade_conda

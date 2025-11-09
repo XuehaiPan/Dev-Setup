@@ -456,9 +456,10 @@ alias ll='ls -lh'
 alias la='ls -Alh'
 
 if [[ -z "${P10K_LEAN_STYLE}" ]]; then
-	# Setup Color LS
-	source "$(dirname "$(gem which colorls)")"/tab_complete.sh
-	alias ls='colorls --sort-dirs --git-status'
+	# Setup eza
+	if [[ -x "$(command -v eza)" ]]; then
+		alias ls='eza --header --group-directories-first --group --binary --color=auto --classify=auto --icons=auto --git'
+	fi
 else
 	# Use Powerlevel10k Lean style
 	source "${ZSH_CUSTOM}/themes/powerlevel10k/config/p10k-lean.zsh"

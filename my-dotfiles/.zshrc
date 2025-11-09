@@ -168,6 +168,11 @@ export FZF_CTRL_T_COMMAND="${FZF_DEFAULT_COMMAND}"
 FZF_PREVIEW_COMMAND="(bat --color=always {} || highlight -O ansi {} || cat {}) 2>/dev/null | head -100"
 export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --ansi --preview='${FZF_PREVIEW_COMMAND}'"
 
+# eza
+if [[ -x "$(command -v eza)" ]]; then
+	alias ls='eza --header --group-directories-first --group --binary --color=auto --classify=auto --icons=never --git'
+fi
+
 # bat
 export BAT_THEME="Monokai Extended"
 

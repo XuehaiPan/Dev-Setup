@@ -802,11 +802,6 @@ else
 fi
 export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --ansi --preview='${FZF_PREVIEW_COMMAND}'"
 
-# eza
-if [[ -x "$(command -v eza)" ]]; then
-	alias ls='eza --header --group-directories-first --group --binary --time-style="+%Y-%m-%d %H:%M:%S" --color=auto --classify=auto --icons=never --git'
-fi
-
 # bat
 export BAT_THEME="Monokai Extended"
 
@@ -1096,6 +1091,10 @@ if [[ -z "${P10K_LEAN_STYLE}" ]]; then
 		alias ls='eza --header --group-directories-first --group --binary --time-style="+%Y-%m-%d %H:%M:%S" --color=auto --classify=auto --icons=auto --git'
 	fi
 else
+	# Setup eza
+	if [[ -x "$(command -v eza)" ]]; then
+		alias ls='eza --header --group-directories-first --group --binary --time-style="+%Y-%m-%d %H:%M:%S" --color=auto --classify=auto --icons=never --git'
+	fi
 	# Use Powerlevel10k Lean style
 	source "${ZSH_CUSTOM}/themes/powerlevel10k/config/p10k-lean.zsh"
 	POWERLEVEL9K_MODE="compatible"

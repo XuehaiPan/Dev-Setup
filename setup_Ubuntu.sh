@@ -826,7 +826,7 @@ export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --ansi --preview='${FZF_P
 
 # eza
 if [[ -x "$(command -v eza)" ]]; then
-	alias ls='eza --header --group-directories-first --group --binary --color=auto --classify=auto --icons=never --git'
+	alias ls='eza --header --group-directories-first --group --binary --time-style="+%Y-%m-%d %H:%M:%S" --color=auto --classify=auto --icons=never --git'
 fi
 
 # bat
@@ -1115,7 +1115,7 @@ alias la='ls -Alh'
 if [[ -z "${P10K_LEAN_STYLE}" ]]; then
 	# Setup eza
 	if [[ -x "$(command -v eza)" ]]; then
-		alias ls='eza --header --group-directories-first --group --binary --color=auto --classify=auto --icons=auto --git'
+		alias ls='eza --header --group-directories-first --group --binary --time-style="+%Y-%m-%d %H:%M:%S" --color=auto --classify=auto --icons=auto --git'
 	fi
 else
 	# Use Powerlevel10k Lean style
@@ -1769,7 +1769,7 @@ export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --ansi --preview='${FZF_P
 
 # eza
 if [[ -x "$(command -v eza)" ]]; then
-	alias ls='eza --header --group-directories-first --group --binary --color=auto --classify=auto --icons=never --git'
+	alias ls='eza --header --group-directories-first --group --binary --time-style="+%Y-%m-%d %H:%M:%S" --color=auto --classify=auto --icons=never --git'
 fi
 
 # bat

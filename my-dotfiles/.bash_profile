@@ -188,7 +188,7 @@ export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --ansi --preview='${FZF_P
 
 # eza
 if [[ -x "$(command -v eza)" ]]; then
-	alias ls='eza --header --group-directories-first --group --binary --color=auto --classify=auto --icons=never --git'
+	alias ls='eza --header --group-directories-first --group --binary --time-style="+%Y-%m-%d %H:%M:%S" --color=auto --classify=auto --icons=never --git'
 fi
 
 # bat

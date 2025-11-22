@@ -255,7 +255,7 @@ fi
 # Install packages
 exec_cmd 'brew install --formula gcc gdb llvm make cmake'
 exec_cmd 'brew install --formula bash-completion wget curl git git-lfs macvim tmux'
-exec_cmd 'brew install --formula coreutils ranger eza fd bat highlight ripgrep git-extras'
+exec_cmd 'brew install --formula coreutils gnu-sed ranger eza fd bat highlight ripgrep git-extras'
 exec_cmd 'brew install --formula jq shfmt shellcheck diffutils colordiff diff-so-fancy git-delta'
 exec_cmd 'brew install --formula htop openssh atool tree reattach-to-user-namespace libarchive'
 

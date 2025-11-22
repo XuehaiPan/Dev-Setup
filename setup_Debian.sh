@@ -2555,26 +2555,27 @@ if [[ ! -x "${CONDA_BASE_PREFIX}/condabin/conda" ]]; then
 	exec_cmd "/bin/sh \"${TMP_DIR}/Miniconda3-latest-Linux-$(uname -m).sh\" -b -p \"${CONDA_DIR}\""
 fi
 
-# Install Conda packages
-export PATH="${CONDA_BASE_PREFIX}/condabin${PATH:+:"${PATH}"}"
-source "${CONDA_BASE_PREFIX}/etc/profile.d/conda.sh"
-source "${CONDA_BASE_PREFIX}/bin/activate"
-exec_cmd "\"${CONDA_DIR}/condabin/conda\""' update conda --name=base --yes'
-exec_cmd "\"${CONDA_DIR}/condabin/conda\""' install mamba --name=base --yes'
-exec_cmd "\"${CONDA_DIR}/condabin/conda\""' update conda mamba --name=base --yes'
-exec_cmd "\"${CONDA_DIR}/condabin/conda\""' install pip ipython ipdb \
+if [[ -x "${CONDA_BASE_PREFIX}/condabin/conda" ]]; then
+	# Install Conda packages
+	export PATH="${CONDA_BASE_PREFIX}/condabin${PATH:+:"${PATH}"}"
+	source "${CONDA_BASE_PREFIX}/etc/profile.d/conda.sh"
+	source "${CONDA_BASE_PREFIX}/bin/activate"
+	exec_cmd "\"${CONDA_DIR}/condabin/conda\""' update conda --name=base --yes'
+	exec_cmd "\"${CONDA_DIR}/condabin/conda\""' install mamba --name=base --yes'
+	exec_cmd "\"${CONDA_DIR}/condabin/conda\""' update conda mamba --name=base --yes'
+	exec_cmd "\"${CONDA_DIR}/condabin/conda\""' install pip ipython ipdb \
 	jupyter jupyterlab jupyter-lsp jupyterlab-lsp \
 	numpy matplotlib-base pandas rich tqdm \
 	ruff isort pre-commit --name=base --yes'
-exec_cmd "\"${CONDA_DIR}/condabin/conda\""' clean --all --yes'
-if [[ -n "${SET_MIRRORS}" ]]; then
-	exec_cmd "\"${CONDA_DIR}/condabin/conda\" run --name=base pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple"
-fi
+	exec_cmd "\"${CONDA_DIR}/condabin/conda\""' clean --all --yes'
+	if [[ -n "${SET_MIRRORS}" ]]; then
+		exec_cmd "\"${CONDA_DIR}/condabin/conda\" run --name=base pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple"
+	fi
 
-# Add Conda Environment Initialization Script
-mkdir -p "${CONDA_BASE_PREFIX}/etc"
+	# Add Conda Environment Initialization Script
+	mkdir -p "${CONDA_BASE_PREFIX}/etc"
 
-cat >"${CONDA_BASE_PREFIX}/etc/init-envs.sh" <<'EOF'
+	cat >"${CONDA_BASE_PREFIX}/etc/init-envs.sh" <<'EOF'
 #!/usr/bin/env bash
 
 while read -r env CONDA_PREFIX; do
@@ -2668,16 +2669,16 @@ EOS
 done < <(conda info --envs | awk 'NF > 0 && $0 !~ /^#.*/ { printf("%s %s\n", $1, $NF) }')
 EOF
 
-chmod 755 "${CONDA_BASE_PREFIX}/etc/init-envs.sh"
+	chmod 755 "${CONDA_BASE_PREFIX}/etc/init-envs.sh"
 
-# Setup IPython
-exec_cmd "\"${CONDA_DIR}/condabin/conda\" run --name=base ipython profile create"
-exec_cmd "sed -i -E 's/^\\s*#?\\s*(c.InteractiveShell.colors).*\$/\\1 = \"linux\"/g' \"\${HOME}/.ipython/profile_default/ipython_config.py\""
-exec_cmd "sed -i -E 's/^\\s*#?\\s*(c.InteractiveShell.colors).*\$/\\1 = \"linux\"/g' \"\${HOME}/.ipython/profile_default/ipython_kernel_config.py\""
+	# Setup IPython
+	exec_cmd "\"${CONDA_DIR}/condabin/conda\" run --name=base ipython profile create"
+	exec_cmd "sed -i -E 's/^\\s*#?\\s*(c.InteractiveShell.colors).*\$/\\1 = \"linux\"/g' \"\${HOME}/.ipython/profile_default/ipython_config.py\""
+	exec_cmd "sed -i -E 's/^\\s*#?\\s*(c.InteractiveShell.colors).*\$/\\1 = \"linux\"/g' \"\${HOME}/.ipython/profile_default/ipython_kernel_config.py\""
 
-mkdir -p "${HOME}/.ipython/profile_default/startup"
+	mkdir -p "${HOME}/.ipython/profile_default/startup"
 
-cat >"${HOME}/.ipython/profile_default/startup/00-rich.py" <<'EOF'
+	cat >"${HOME}/.ipython/profile_default/startup/00-rich.py" <<'EOF'
 try:
     from rich import print
     import rich.pretty
@@ -2689,6 +2690,7 @@ else:
     rich.traceback.install(indent_guides=True, width=None)
     del rich
 EOF
+fi
 
 # Install fonts
 URL_LIST=("https://github.com/ryanoasis/nerd-fonts/releases/latest/download/DejaVuSansMono.zip")

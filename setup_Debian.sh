@@ -1506,6 +1506,7 @@ function pykill() {
 function pull_projects() {
 	local base_dirs base_dir proj_dir
 	local head_hash old_head_hash branch remote push_remote push_remote_hash commit_count
+	local last_timestamp timestamp
 
 	# Project directories
 	if [[ "$#" -gt 0 ]]; then
@@ -1513,6 +1514,8 @@ function pull_projects() {
 	else
 		base_dirs=("${HOME}/Projects")
 	fi
+
+	timestamp="$(date +"%s")"
 
 	# Fetch and pull
 	for base_dir in "${base_dirs[@]}"; do
@@ -1527,9 +1530,13 @@ function pull_projects() {
 			head_hash="$(git -C "${proj_dir}" rev-parse "${remote}/${branch}")"
 			if [[ "${head_hash}" != "${old_head_hash}" ]]; then
 				exec_cmd "git -C \"${proj_dir/#${HOME}/\${HOME\}}\" pull ${remote} ${branch} --ff-only"
-				commit_count="$(git -C "${proj_dir}" rev-list --count --all)"
-				if [[ -z "${commit_count}" ]] || ((commit_count <= 10000)); then
-					exec_cmd "git -C \"${proj_dir/#${HOME}/\${HOME\}}\" gc --aggressive"
+				last_timestamp="$(git -C "${proj_dir}" config gc.lasttimestamp 2>/dev/null || echo "0")"
+				if ((timestamp - last_timestamp >= 3600 * 24 * 3)); then
+					commit_count="$(git -C "${proj_dir}" rev-list --count --all)"
+					if [[ -z "${commit_count}" ]] || ((commit_count <= 10000)); then
+						exec_cmd "git -C \"${proj_dir/#${HOME}/\${HOME\}}\" gc --aggressive"
+					fi
+					git -C "${proj_dir}" config gc.lasttimestamp "${timestamp}" &>/dev/null || true
 				fi
 			fi
 			push_remote="$(git -C "${proj_dir}" config branch."${branch}".pushremote)"

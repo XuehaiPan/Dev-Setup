@@ -402,7 +402,7 @@ EOS
 	exec_cmd 'sudo apt-get install htop ssh net-tools atool tree colordiff xclip --yes'
 	exec_cmd 'sudo apt-get install make cmake build-essential gcc g++ gdb --yes'
 	exec_cmd 'sudo apt-get install clang clang-format llvm lldb --yes'
-	exec_cmd 'sudo apt-get install ruby-full libssl-dev libreadline-dev libyaml-dev zlib1g-dev --yes'
+	exec_cmd 'sudo apt-get install ruby-full perl libssl-dev libreadline-dev libyaml-dev zlib1g-dev --yes'
 	exec_cmd 'sudo apt-get autoremove --purge --yes'
 	exec_cmd 'sudo apt-get autoclean'
 fi

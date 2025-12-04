@@ -301,7 +301,8 @@ if have_sudo_access; then
 	exec_cmd 'sudo dnf install make cmake gcc gcc-c++ gdb --assumeyes'
 	exec_cmd 'sudo dnf groupinstall "Development Tools" --assumeyes'
 	exec_cmd 'sudo dnf install clang clang-tools-extra llvm lldb --assumeyes'
-	exec_cmd 'sudo dnf install ruby ruby-devel openssl-devel readline-devel libyaml-devel zlib-devel --assumeyes'
+	exec_cmd 'sudo dnf install ruby ruby-devel perl cpan --assumeyes'
+	exec_cmd 'sudo dnf install openssl-devel readline-devel libyaml-devel zlib-devel --assumeyes'
 	exec_cmd 'sudo dnf autoremove --assumeyes'
 	exec_cmd 'sudo dnf clean all'
 fi

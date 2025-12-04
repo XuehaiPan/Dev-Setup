@@ -159,11 +159,13 @@ fi
 if [[ -x "$(command -v wget)" ]]; then
 	echo -e "${BOLD}${WHITE}Download and run script via ${GREEN}wget${WHITE}.${RESET}" >&2
 	echo
-	exec /bin/bash -c "$(wget --progress=bar:force:noscroll -O - "https://github.com/XuehaiPan/Dev-Setup/raw/HEAD/setup_${OS_NAME}.sh")"
+	wget --progress=bar:force:noscroll -O "${DEV_SETUP_BACKUP_DIR}/setup_${OS_NAME}.sh" "https://github.com/XuehaiPan/Dev-Setup/raw/HEAD/setup_${OS_NAME}.sh"
+	exec /bin/bash "${DEV_SETUP_BACKUP_DIR}/setup_${OS_NAME}.sh"
 elif [[ -x "$(command -v curl)" ]]; then
 	echo -e "${BOLD}${WHITE}Download and run script via ${GREEN}curl${WHITE}.${RESET}" >&2
 	echo
-	exec /bin/bash -c "$(curl -fL# "https://github.com/XuehaiPan/Dev-Setup/raw/HEAD/setup_${OS_NAME}.sh")"
+	curl -fL# -o "${DEV_SETUP_BACKUP_DIR}/setup_${OS_NAME}.sh" "https://github.com/XuehaiPan/Dev-Setup/raw/HEAD/setup_${OS_NAME}.sh"
+	exec /bin/bash "${DEV_SETUP_BACKUP_DIR}/setup_${OS_NAME}.sh"
 elif [[ -x "$(command -v git)" ]]; then
 	echo -e "${BOLD}${WHITE}Download and run script via ${GREEN}git${WHITE}.${RESET}" >&2
 	echo

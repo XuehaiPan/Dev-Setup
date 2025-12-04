@@ -292,7 +292,7 @@ if have_sudo_access; then
 			exec_cmd "sudo cp -f /etc/apt/sources.list.d/vscode.list /etc/apt/sources.list.d/vscode.list.save"
 			exec_cmd 'sudo rm -f /etc/apt/sources.list.d/vscode.list'
 		fi
-		exec_cmd "printf \"%s\\n\" "'\
+		exec_cmd 'printf "%s\n" \
 			"Types: deb" \
 			"URIs: https://packages.microsoft.com/repos/code" \
 			"Suites: stable" \

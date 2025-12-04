@@ -30,7 +30,6 @@ function boolify() {
 export SET_MIRRORS="$(boolify "${SET_MIRRORS:-false}")"
 export FORCE_PER_USER_HOMEBREW="$(boolify "${FORCE_PER_USER_HOMEBREW:-false}")"
 export NONINTERACTIVE="$(boolify "${NONINTERACTIVE:-false}")"
-export DEBIAN_FRONTEND=noninteractive
 
 # Set USER
 export USER="${USER:-"$(whoami)"}"
@@ -251,160 +250,60 @@ function get_latest_version() {
 	[[ -n "${VERSION}" ]]
 }
 
-function check_binary() {
-	local CMD="$1" OPT REQUIRED="${2#v}" VERSION
-	for OPT in "--version" "-v" "-V"; do
-		VERSION="$("${CMD}" "${OPT}" 2>&1)"
-		if [[ $? -eq 0 && "${VERSION}" == *"${REQUIRED}"* ]]; then
-			return 0
-		fi
-	done
-	return 1
-}
-
 if have_sudo_access; then
 	# Install sudo command
 	if [[ "${EUID:-"${UID}"}" == "0" && ! -x "/usr/bin/sudo" ]]; then
-		exec_cmd 'apt-get update && apt-get install sudo --yes'
+		exec_cmd 'dnf install sudo --assumeyes'
 	fi
 
 	# Update ca-certificates
-	exec_cmd 'sudo apt-get update && sudo apt-get install --only-upgrade ca-certificates --yes'
+	exec_cmd 'sudo dnf upgrade ca-certificates --assumeyes'
 
-	# Setup APT sources
-	if [[ -n "${SET_MIRRORS}" ]]; then
-		while read -r sources_list; do
-			unbackup=true
-			while read -r url target_url; do
-				if grep -qF "${url}" "${sources_list}"; then
-					if [[ -n "${unbackup}" ]]; then
-						exec_cmd "sudo cp -f ${sources_list} ${sources_list}.save"
-						unbackup=''
-					fi
-					exec_cmd "sudo sed -i 's|${url}|${target_url}|g' ${sources_list}"
-				fi
-			done <<EOS
-	     //cn.archive.ubuntu.com              //mirrors.tuna.tsinghua.edu.cn
-	     //archive.ubuntu.com                 //mirrors.tuna.tsinghua.edu.cn
-	     //security.ubuntu.com                //mirrors.tuna.tsinghua.edu.cn
-	     //packages.linuxmint.com             //mirrors.tuna.tsinghua.edu.cn/linuxmint
-	http://mirrors.tuna.tsinghua.edu.cn https://mirrors.tuna.tsinghua.edu.cn
-EOS
-		done < <(find -L /etc/apt -type f -name '*.list' -or -name '*.sources')
-	fi
-
-	exec_cmd 'sudo apt-get update'
-	exec_cmd 'sudo apt-get install software-properties-common apt-transport-https gpg wget --yes'
-	exec_cmd 'sudo add-apt-repository ppa:graphics-drivers/ppa --yes'
+	exec_cmd 'sudo dnf makecache'
+	exec_cmd 'sudo dnf install dnf-plugins-core gpg wget --assumeyes'
 
 	# Install Microsoft signing key and setup VS Code repository
-	if [[ ! -f /usr/share/keyrings/microsoft.gpg ]]; then
-		exec_cmd 'wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | sudo tee /usr/share/keyrings/microsoft.gpg 1>/dev/null'
-		exec_cmd 'sudo chmod 644 /usr/share/keyrings/microsoft.gpg'
-	fi
-
-	# Create VS Code sources file if it doesn't exist or is outdated
-	VSCODE_SOURCES="/etc/apt/sources.list.d/vscode.sources"
-	if ! grep -qF 'packages.microsoft.com/repos/code' /etc/apt/sources.list; then
-		if [[ -f "${VSCODE_SOURCES}" ]]; then
-			exec_cmd "sudo cp -f \"${VSCODE_SOURCES}\" \"${VSCODE_SOURCES}.save\""
-		fi
-		# Remove old .list format if exists
-		if [[ -f /etc/apt/sources.list.d/vscode.list ]]; then
-			exec_cmd "sudo cp -f /etc/apt/sources.list.d/vscode.list /etc/apt/sources.list.d/vscode.list.save"
-			exec_cmd 'sudo rm -f /etc/apt/sources.list.d/vscode.list'
-		fi
+	if [[ ! -f /etc/yum.repos.d/vscode.repo ]]; then
+		exec_cmd 'sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc'
 		exec_cmd 'printf "%s\n" \
-			"Types: deb" \
-			"URIs: https://packages.microsoft.com/repos/code" \
-			"Suites: stable" \
-			"Components: main" \
-			"Architectures: amd64,arm64,armhf" \
-			"Signed-By: /usr/share/keyrings/microsoft.gpg"'" | sudo tee \"${VSCODE_SOURCES}\""
+			"[code]" \
+			"name=Visual Studio Code" \
+			"baseurl=https://packages.microsoft.com/yumrepos/vscode" \
+			"enabled=1" \
+			"gpgcheck=1" \
+			"gpgkey=https://packages.microsoft.com/keys/microsoft.asc" | sudo tee /etc/yum.repos.d/vscode.repo'
 	fi
 
 	# Install Google Chrome signing key and setup repository
-	exec_cmd 'wget -qO - https://dl.google.com/linux/linux_signing_key.pub | sudo tee /etc/apt/trusted.gpg.d/google.asc 1>/dev/null'
-	if [[ "$(uname -m)" == "x86_64" ]] && ! grep -qF 'dl.google.com/linux/chrome/deb' /etc/apt/sources.list; then
-		if [[ -f /etc/apt/sources.list.d/google-chrome.list ]]; then
-			exec_cmd "sudo cp -f /etc/apt/sources.list.d/google-chrome.list /etc/apt/sources.list.d/google-chrome.list.save"
-		fi
-		exec_cmd 'echo "deb [arch=amd64] https://dl.google.com/linux/chrome/deb stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list'
+	if [[ "$(uname -m)" == "x86_64" ]] && [[ ! -f /etc/yum.repos.d/google-chrome.repo ]]; then
+		exec_cmd 'printf "%s\n" \
+			"[google-chrome]" \
+			"name=Google Chrome" \
+			"baseurl=https://dl.google.com/linux/chrome/rpm/stable/x86_64" \
+			"enabled=1" \
+			"gpgcheck=1" \
+			"gpgkey=https://dl.google.com/linux/linux_signing_key.pub" | sudo tee /etc/yum.repos.d/google-chrome.repo'
 	fi
 
-	# Install Node.js signing key and setup repository
-	exec_cmd 'wget -qO - https://deb.nodesource.com/setup_lts.x | sudo -E bash -'
-
 	# Install and setup shells
-	exec_cmd 'sudo apt-get install zsh --yes'
+	exec_cmd 'sudo dnf install zsh util-linux-user --assumeyes'
 
 	if ! grep -qF '/usr/bin/zsh' /etc/shells; then
 		exec_cmd 'echo "/usr/bin/zsh" | sudo tee -a /etc/shells'
 	fi
 
 	# Install packages
-	ARCH="amd64"
-	if [[ "$(uname -m)" == "aarch64" || "$(uname -m)" == "arm64" ]]; then
-		ARCH="arm64"
-	fi
-	exec_cmd 'sudo apt-get install bash-completion curl git git-lfs vim tmux --yes'
-	exec_cmd 'sudo apt-get install ranger highlight shellcheck git-extras jq --yes'
-	if [[ -n "$(apt-cache search '^eza$' --names-only)" ]]; then
-		exec_cmd 'sudo apt-get install eza --yes'
-	fi
-	if [[ -n "$(apt-cache search '^fd-find$' --names-only)" ]]; then
-		exec_cmd 'sudo apt-get install fd-find --yes'
-	fi
-	if [[ $? -ne 0 || -z "$(apt-cache search '^fd-find$' --names-only)" ]]; then
-		LATEST_FD_VERSION="$(get_latest_version "sharkdp/fd")"
-		if [[ -n "${LATEST_FD_VERSION}" ]] && ! check_binary fd "${LATEST_FD_VERSION}" && ! check_binary fdfind "${LATEST_FD_VERSION}"; then
-			exec_cmd "wget -N -P \"${TMP_DIR}\" https://github.com/sharkdp/fd/releases/download/${LATEST_FD_VERSION}/fd_${LATEST_FD_VERSION#v}_${ARCH}.deb"
-			exec_cmd "sudo dpkg -i \"${TMP_DIR}/fd_${LATEST_FD_VERSION#v}_${ARCH}.deb\""
-		fi
-	fi
-	if [[ -n "$(apt-cache search '^bat$' --names-only)" ]]; then
-		exec_cmd 'sudo apt-get install bat --yes'
-	fi
-	if [[ $? -ne 0 || -z "$(apt-cache search '^bat$' --names-only)" ]]; then
-		LATEST_BAT_VERSION="$(get_latest_version "sharkdp/bat")"
-		if [[ -n "${LATEST_BAT_VERSION}" ]] && ! check_binary bat "${LATEST_BAT_VERSION}" && ! check_binary batcat "${LATEST_BAT_VERSION}"; then
-			exec_cmd "wget -N -P \"${TMP_DIR}\" https://github.com/sharkdp/bat/releases/download/${LATEST_BAT_VERSION}/bat_${LATEST_BAT_VERSION#v}_${ARCH}.deb"
-			exec_cmd "sudo dpkg -i \"${TMP_DIR}/bat_${LATEST_BAT_VERSION#v}_${ARCH}.deb\""
-		fi
-	fi
-	if [[ -n "$(apt-cache search '^ripgrep$' --names-only)" ]]; then
-		exec_cmd 'sudo apt-get install ripgrep --yes'
-	fi
-	if [[ $? -ne 0 || -z "$(apt-cache search '^ripgrep$' --names-only)" ]]; then
-		LATEST_RIPGREP_VERSION="$(get_latest_version "BurntSushi/ripgrep")"
-		if [[ -n "${LATEST_RIPGREP_VERSION}" ]] && ! check_binary ripgrep "${LATEST_RIPGREP_VERSION}"; then
-			exec_cmd "wget -N -P \"${TMP_DIR}\" https://github.com/BurntSushi/ripgrep/releases/download/${LATEST_RIPGREP_VERSION}/ripgrep_${LATEST_RIPGREP_VERSION}_${ARCH}.deb"
-			exec_cmd "sudo dpkg -i \"${TMP_DIR}/ripgrep_${LATEST_RIPGREP_VERSION}_${ARCH}.deb\""
-		fi
-	fi
-	LATEST_SHFMT_VERSION="$(get_latest_version "mvdan/sh")"
-	if [[ ! -d "/usr/local/bin" ]]; then
-		exec_cmd 'sudo mkdir -p "/usr/local/bin"'
-	fi
-	if [[ -n "${LATEST_SHFMT_VERSION}" ]] && ! check_binary shfmt "${LATEST_SHFMT_VERSION}"; then
-		exec_cmd "wget -N -P \"${TMP_DIR}\" https://github.com/mvdan/sh/releases/download/${LATEST_SHFMT_VERSION}/shfmt_${LATEST_SHFMT_VERSION}_linux_${ARCH}"
-		exec_cmd "sudo mv -f \"${TMP_DIR}/shfmt_${LATEST_SHFMT_VERSION}_linux_${ARCH}\" /usr/local/bin/shfmt"
-		exec_cmd 'sudo chmod 755 /usr/local/bin/shfmt'
-		exec_cmd 'sudo chown root:root /usr/local/bin/shfmt'
-	fi
-	if [[ -n "$(apt-cache search '^git-delta$' --names-only)" ]]; then
-		exec_cmd 'sudo apt-get install git-delta --yes'
-	fi
-	exec_cmd "wget -N -P \"${TMP_DIR}\" https://github.com/so-fancy/diff-so-fancy/releases/latest/download/diff-so-fancy"
-	exec_cmd "sudo mv -f \"${TMP_DIR}/diff-so-fancy\" /usr/local/bin/diff-so-fancy"
-	exec_cmd 'sudo chmod 755 /usr/local/bin/diff-so-fancy'
-	exec_cmd 'sudo chown root:root /usr/local/bin/diff-so-fancy'
-	exec_cmd 'sudo apt-get install htop ssh net-tools atool tree colordiff xclip --yes'
-	exec_cmd 'sudo apt-get install make cmake build-essential gcc g++ gdb --yes'
-	exec_cmd 'sudo apt-get install clang clang-format llvm lldb --yes'
-	exec_cmd 'sudo apt-get install ruby-full libssl-dev libreadline-dev libyaml-dev zlib1g-dev --yes'
-	exec_cmd 'sudo apt-get autoremove --purge --yes'
-	exec_cmd 'sudo apt-get autoclean'
+	exec_cmd 'sudo dnf install bash-completion curl git git-lfs vim tmux --assumeyes'
+	exec_cmd 'sudo dnf install ranger highlight shellcheck git-extras jq --assumeyes'
+	exec_cmd 'sudo dnf install rust-eza fd-find bat ripgrep --assumeyes --skip-unavailable'
+	exec_cmd 'sudo dnf install shfmt diff-so-fancy git-delta --assumeyes'
+	exec_cmd 'sudo dnf install htop openssh net-tools atool tree colordiff xclip --assumeyes'
+	exec_cmd 'sudo dnf install make cmake gcc gcc-c++ gdb --assumeyes'
+	exec_cmd 'sudo dnf groupinstall "Development Tools" --assumeyes'
+	exec_cmd 'sudo dnf install clang clang-tools-extra llvm lldb --assumeyes'
+	exec_cmd 'sudo dnf install ruby ruby-devel openssl-devel readline-devel libyaml-devel zlib-devel --assumeyes'
+	exec_cmd 'sudo dnf autoremove --assumeyes'
+	exec_cmd 'sudo dnf clean all'
 fi
 
 # Change the login shell to Zsh
@@ -807,21 +706,11 @@ eval "$(LC_ALL="C" perl -I"${HOME}/.perl/lib/perl5" -Mlocal::lib="${HOME}/.perl"
 if [[ -f "${HOME}/.fzf.zsh" ]]; then
 	source "${HOME}/.fzf.zsh"
 fi
-if [[ -x "$(command -v fdfind)" ]]; then
-	alias fd='fdfind'
-	export FZF_DEFAULT_COMMAND="fdfind --type file --follow --hidden --no-ignore-vcs --exclude '.git' --exclude '[Mm]iniconda3' --exclude '[Aa]naconda3' --color=always"
-elif [[ -x "$(command -v fd)" ]]; then
+if [[ -x "$(command -v fd)" ]]; then
 	export FZF_DEFAULT_COMMAND="fd --type file --follow --hidden --no-ignore-vcs --exclude '.git' --exclude '[Mm]iniconda3' --exclude '[Aa]naconda3' --color=always"
-fi
-if [[ -n "${FZF_DEFAULT_COMMAND}" ]]; then
 	export FZF_CTRL_T_COMMAND="${FZF_DEFAULT_COMMAND}"
 fi
-if [[ -x "$(command -v batcat)" ]]; then
-	alias bat='batcat'
-	FZF_PREVIEW_COMMAND="(batcat --color=always {} || highlight -O ansi {} || cat {}) 2>/dev/null | head -100"
-else
-	FZF_PREVIEW_COMMAND="(bat --color=always {} || highlight -O ansi {} || cat {}) 2>/dev/null | head -100"
-fi
+FZF_PREVIEW_COMMAND="(bat --color=always {} || highlight -O ansi {} || cat {}) 2>/dev/null | head -100"
 export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --ansi --preview='${FZF_PREVIEW_COMMAND}'"
 
 # bat
@@ -1038,7 +927,8 @@ typeset -g POWERLEVEL9K_VCS_CONTENT_EXPANSION='${$((_p9k_gitstatus_formatter()))
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
-	ubuntu
+	dnf
+	yum
 	zsh-syntax-highlighting
 	zsh-autosuggestions
 	zsh-completions
@@ -1279,18 +1169,16 @@ function have_sudo_access() {
 	return "${__HAVE_SUDO_ACCESS}"
 }
 
-function upgrade_ubuntu() {
+function upgrade_fedora() {
 	# Upgrade packages
-	exec_cmd 'sudo apt-get update'
-	exec_cmd 'sudo apt-get dist-upgrade --yes'
-	exec_cmd 'sudo apt-get full-upgrade --yes'
-	exec_cmd 'sudo apt-get upgrade --yes'
+	exec_cmd 'sudo dnf makecache'
+	exec_cmd 'sudo dnf upgrade --assumeyes'
 
 	# Remove unused packages
-	exec_cmd 'sudo apt-get autoremove --purge --yes'
+	exec_cmd 'sudo dnf autoremove --assumeyes'
 
 	# Clean up cache
-	exec_cmd 'sudo apt-get autoclean'
+	exec_cmd 'sudo dnf clean all'
 }
 
 function upgrade_homebrew() {
@@ -1395,7 +1283,7 @@ function upgrade_packages() {
 	unset __HAVE_SUDO_ACCESS
 
 	if have_sudo_access; then
-		upgrade_ubuntu
+		upgrade_fedora
 	fi
 	upgrade_homebrew
 	upgrade_ohmyzsh
@@ -1756,21 +1644,11 @@ eval "$(LC_ALL="C" perl -I"${HOME}/.perl/lib/perl5" -Mlocal::lib="${HOME}/.perl"
 if [[ -f "${HOME}/.fzf.bash" ]]; then
 	source "${HOME}/.fzf.bash"
 fi
-if [[ -x "$(command -v fdfind)" ]]; then
-	alias fd='fdfind'
-	export FZF_DEFAULT_COMMAND="fdfind --type file --follow --hidden --no-ignore-vcs --exclude '.git' --exclude '[Mm]iniconda3' --exclude '[Aa]naconda3' --color=always"
-elif [[ -x "$(command -v fd)" ]]; then
+if [[ -x "$(command -v fd)" ]]; then
 	export FZF_DEFAULT_COMMAND="fd --type file --follow --hidden --no-ignore-vcs --exclude '.git' --exclude '[Mm]iniconda3' --exclude '[Aa]naconda3' --color=always"
-fi
-if [[ -n "${FZF_DEFAULT_COMMAND}" ]]; then
 	export FZF_CTRL_T_COMMAND="${FZF_DEFAULT_COMMAND}"
 fi
-if [[ -x "$(command -v batcat)" ]]; then
-	alias bat='batcat'
-	FZF_PREVIEW_COMMAND="(batcat --color=always {} || highlight -O ansi {} || cat {}) 2>/dev/null | head -100"
-else
-	FZF_PREVIEW_COMMAND="(bat --color=always {} || highlight -O ansi {} || cat {}) 2>/dev/null | head -100"
-fi
+FZF_PREVIEW_COMMAND="(bat --color=always {} || highlight -O ansi {} || cat {}) 2>/dev/null | head -100"
 export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --ansi --preview='${FZF_PREVIEW_COMMAND}'"
 
 # eza

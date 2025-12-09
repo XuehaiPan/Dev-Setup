@@ -1307,7 +1307,8 @@ function pull_projects() {
 				last_timestamp="$(git -C "${proj_dir}" config gc.lasttimestamp 2>/dev/null || echo "0")"
 				if ((timestamp - last_timestamp >= 3600 * 24 * 3)); then
 					commit_count="$(git -C "${proj_dir}" rev-list --count --all || echo "0")"
-					if (("${commit_count:-0}" <= 10000 || timestamp - last_timestamp >= 3600 * 24 * 30)); then
+					commit_count="${commit_count:-0}"
+					if ((commit_count <= 10000 || timestamp - last_timestamp >= 3600 * 24 * 30)); then
 						exec_cmd "git -C \"${proj_dir/#${HOME}/\${HOME\}}\" gc --aggressive"
 						git -C "${proj_dir}" config gc.lasttimestamp "${timestamp}" &>/dev/null || true
 					fi

@@ -2650,6 +2650,8 @@ else:
     rich.traceback.install(indent_guides=True, width=None)
     del rich
 EOF
+elif [[ -d "${CONDA_BASE_PREFIX}" && -z "$(find -L "${CONDA_BASE_PREFIX}" -mindepth 1 -maxdepth 1)" ]]; then
+	exec_cmd "rmdir \"${CONDA_DIR}\""
 fi
 
 # Miscellaneous settings

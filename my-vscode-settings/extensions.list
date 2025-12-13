@@ -10,12 +10,12 @@ formulahendry.code-runner
 streetsidesoftware.code-spell-checker
 github.codespaces
 github.copilot
+github.copilot-chat
 ms-vscode.cpptools
 ms-toolsai.datawrangler
 ms-python.debugpy
 editorconfig.editorconfig
 kaiwood.endwise
-swyddfa.esbonio
 tamasfe.even-better-toml
 ms-python.flake8
 grapecity.gc-excelviewer

@@ -377,6 +377,8 @@ chmod 644 .dotfiles/.gitconfig
 # Install and setup Homebrew
 exec_cmd 'export HOMEBREW_DOWNLOAD_CONCURRENCY="auto"'
 exec_cmd 'export HOMEBREW_FORCE_VENDOR_RUBY=true'
+exec_cmd 'export HOMEBREW_NO_ANALYTICS=true'
+exec_cmd 'export HOMEBREW_NO_AUTOREMOVE=true'
 if [[ -n "${SET_MIRRORS}" ]]; then
 	exec_cmd 'export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"'
 	exec_cmd 'export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git"'
@@ -539,7 +541,8 @@ export HOMEBREW_CLEANUP_MAX_AGE_DAYS=7
 export HOMEBREW_DOWNLOAD_CONCURRENCY="auto"
 export HOMEBREW_EDITOR="vim"
 export HOMEBREW_FORCE_VENDOR_RUBY=true
-export HOMEBREW_NO_ANALYTICS=true'
+export HOMEBREW_NO_ANALYTICS=true
+export HOMEBREW_NO_AUTOREMOVE=true'
 if [[ -n "${SET_MIRRORS}" ]]; then
 	HOMEBREW_SETTINGS+='
 export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"
@@ -551,6 +554,9 @@ fi
 HOMEBREW_SETTINGS+='
 if [[ -d "$(brew --repository homebrew/core)/.git" ]]; then
 	export HOMEBREW_NO_INSTALL_FROM_API=true
+fi
+if [[ -n "${HOMEBREW_NO_INSTALL_FROM_API}" ]]; then
+	export HOMEBREW_VERBOSE=true
 fi
 __COMMAND_NOT_FOUND_HANDLER="${HOMEBREW_REPOSITORY}/Library/Homebrew/command-not-found/handler.sh"
 if [[ -f "${__COMMAND_NOT_FOUND_HANDLER}" ]]; then
@@ -1177,11 +1183,7 @@ function upgrade_homebrew() {
 	exec_cmd 'brew outdated --greedy'
 
 	# Upgrade Homebrew formulae
-	if [[ -n "${HOMEBREW_NO_INSTALL_FROM_API}" ]]; then
-		exec_cmd 'brew upgrade --verbose'
-	else
-		exec_cmd 'brew upgrade'
-	fi
+	exec_cmd 'brew upgrade'
 
 	# Uninstall formulae that no longer needed
 	exec_cmd 'brew autoremove --verbose'

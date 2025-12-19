@@ -108,11 +108,7 @@ function upgrade_homebrew() {
 	exec_cmd 'brew outdated --greedy'
 
 	# Upgrade Homebrew formulae and casks
-	if [[ -n "${HOMEBREW_NO_INSTALL_FROM_API}" ]]; then
-		exec_cmd 'brew upgrade --verbose'
-	else
-		exec_cmd 'brew upgrade'
-	fi
+	exec_cmd 'brew upgrade'
 
 	# Uninstall formulae that no longer needed
 	exec_cmd 'brew autoremove --verbose'

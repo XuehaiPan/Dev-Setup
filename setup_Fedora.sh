@@ -1187,10 +1187,14 @@ function upgrade_fedora() {
 function upgrade_homebrew() {
 	# Upgrade Homebrew
 	exec_cmd 'brew update --verbose'
-	exec_cmd 'brew outdated'
+	exec_cmd 'brew outdated --greedy'
 
 	# Upgrade Homebrew formulae
-	exec_cmd 'brew upgrade'
+	if [[ -n "${HOMEBREW_NO_INSTALL_FROM_API}" ]]; then
+		exec_cmd 'brew upgrade --verbose'
+	else
+		exec_cmd 'brew upgrade'
+	fi
 
 	# Uninstall formulae that no longer needed
 	exec_cmd 'brew autoremove --verbose'

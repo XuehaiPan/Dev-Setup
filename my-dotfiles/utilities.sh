@@ -105,10 +105,14 @@ function have_sudo_access() {
 function upgrade_homebrew() {
 	# Upgrade Homebrew
 	exec_cmd 'brew update --verbose'
-	exec_cmd 'brew outdated'
+	exec_cmd 'brew outdated --greedy'
 
 	# Upgrade Homebrew formulae and casks
-	exec_cmd 'brew upgrade'
+	if [[ -n "${HOMEBREW_NO_INSTALL_FROM_API}" ]]; then
+		exec_cmd 'brew upgrade --verbose'
+	else
+		exec_cmd 'brew upgrade'
+	fi
 
 	# Uninstall formulae that no longer needed
 	exec_cmd 'brew autoremove --verbose'
@@ -253,7 +257,7 @@ function available_cuda_devices() {
 			break
 		fi
 		pids=$(nvidia-smi --id="${index}" --query-compute-apps=pid --format=csv,noheader | xargs echo -n)
-		if [[ -n "${pids}" ]] && (ps -o user -p ${pids} | tail -n +2 | grep -qvF "${USER}") &&
+		if [[ -n "${pids}" ]] && (ps -o user -p "${pids}" | tail -n +2 | grep -qvF "${USER}") &&
 			((memused >= 3072 || memfree <= 6144 || utilization >= 20)); then
 			continue
 		fi

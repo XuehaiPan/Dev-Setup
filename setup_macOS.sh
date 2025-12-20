@@ -28,6 +28,7 @@ function boolify() {
 }
 
 export SET_MIRRORS="$(boolify "${SET_MIRRORS:-false}")"
+export NONINTERACTIVE="$(boolify "${NONINTERACTIVE:-false}")"
 
 # Set PATH
 export HOMEBREW_PREFIX="/usr/local"
@@ -177,6 +178,9 @@ function have_sudo_access() {
 	if [[ -n "${SUDO_ASKPASS-}" ]]; then
 		SUDO+=("-A")
 	fi
+	if [[ -n "${NONINTERACTIVE-}" ]]; then
+		SUDO+=("-n")
+	fi
 
 	if [[ -z "${HAVE_SUDO_ACCESS-}" ]]; then
 		echo -e "${BOLD}${BLUE}==> ${WHITE}Checking sudo access.${RESET}" >&2
@@ -192,8 +196,10 @@ function have_sudo_access() {
 	return "${HAVE_SUDO_ACCESS}"
 }
 
+have_sudo_access
+
 function realpath() {
-	/usr/bin/python3 -c "import os,sys; print(os.path.realpath(sys.argv[1]))" "$1"
+	/usr/bin/python3 -c "import os, sys; print(os.path.realpath(sys.argv[1]))" "$1"
 }
 
 function backup_dotfiles() {

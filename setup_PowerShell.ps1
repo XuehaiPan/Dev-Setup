@@ -23,6 +23,7 @@ Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
 Install-Module -Name posh-git -AcceptLicense -Force -Confirm:$false
 Install-Module -Name PSReadLine -SkipPublisherCheck -AcceptLicense -Force -Confirm:$false
 Install-Module -Name Get-ChildItemColor -AllowClobber -AcceptLicense -Force -Confirm:$false
+New-ItemProperty -Path "HKLM:\SOFTWARE\OpenSSH" -Name DefaultShell -Value "${Env:ProgramFiles}\PowerShell\7\pwsh.exe" -PropertyType String -Force
 
 if (!(Test-Path -Path $PROFILE.CurrentUserAllHosts)) {
     New-Item -Path $PROFILE.CurrentUserAllHosts -Type File -Force

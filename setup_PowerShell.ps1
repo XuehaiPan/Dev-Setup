@@ -33,7 +33,7 @@ chcp 65001
 
 Import-Module -Name PSReadLine -Force -ErrorAction:Ignore
 Import-Module -Name posh-git -ErrorAction:Ignore
-Import-Module -Name Get-ChildItemColor -ErrorAction:Ignore
+
 if (Test-Path -Path "~\Miniconda3\shell\condabin\conda-hook.ps1") {
     & "~\Miniconda3\shell\condabin\conda-hook.ps1"
 }
@@ -45,21 +45,50 @@ Set-PSReadLineKeyHandler -Key UpArrow -Function HistorySearchBackward
 Set-PSReadLineKeyHandler -Key DownArrow -Function HistorySearchForward
 Set-PSReadLineKeyHandler -Key Tab -Function Complete
 
-Set-Alias -Name ls -Value Get-ChildItemColorFormatWide -Option AllScope
-Set-Alias -Name ll -Value Get-ChildItemColor -Option AllScope
 Set-Alias -Name which -Value Get-Command -Option AllScope
+if (Get-Command -Name eza -ErrorAction SilentlyContinue) {
+    Function Get-ChildItemEza {
+        eza --header --group-directories-first --group --binary ``
+            --time-style="+%Y-%m-%d %H:%M:%S" ``
+            --color=auto --classify=auto --icons=auto --git ``
+            `$Args
+    }
+    Function Get-ChildItemEzaAll {
+        Get-ChildItemEza -A
+    }
+    Function Get-ChildItemEzaLong {
+        Get-ChildItemEza -lh
+    }
+    Function Get-ChildItemEzaAllLong {
+        Get-ChildItemEza -Alh
+    }
+    Set-Alias -Name ls -Value Get-ChildItemEza -Option AllScope
+    Set-Alias -Name la -Value Get-ChildItemEzaAll -Option AllScope
+    Set-Alias -Name ll -Value Get-ChildItemEzaLong -Option AllScope
+    Set-Alias -Name l -Value Get-ChildItemEzaAllLong -Option AllScope
+} else {
+    Import-Module -Name Get-ChildItemColor -ErrorAction:Ignore
+    Set-Alias -Name ls -Value Get-ChildItemColorFormatWide -Option AllScope
+    Set-Alias -Name ll -Value Get-ChildItemColor -Option AllScope
+}
+
 Function Set-Proxy {
     Param(
         [string]`$ProxyHost = "127.0.0.1",
         [int]`$HttpPort = 7890,
         [int]`$HttpsPort = 7890,
         [int]`$FtpPort = 7890,
-        [int]`$SocksPort = 7891
+        [int]`$SocksPort = 7891,
+        [switch]`$ProcessOnly = `$false
     )
     `$Env:http_proxy = "http://`${ProxyHost}:`${HttpPort}"
     `$Env:https_proxy = "http://`${ProxyHost}:`${HttpsPort}"
     `$Env:ftp_proxy = "http://`${ProxyHost}:`${FtpPort}"
     `$Env:all_proxy = "socks5://`${ProxyHost}:`${SocksPort}"
+    if (`$ProcessOnly) {
+        return
+    }
+
     [Environment]::SetEnvironmentVariable('http_proxy', "http://`${ProxyHost}:`${HttpPort}", 'User')
     [Environment]::SetEnvironmentVariable('https_proxy', "http://`${ProxyHost}:`${HttpsPort}", 'User')
     [Environment]::SetEnvironmentVariable('ftp_proxy', "http://`${ProxyHost}:`${FtpPort}", 'User')
@@ -86,10 +115,10 @@ Function Reset-Proxy {
 "@ | Set-Content -Path $PROFILE.CurrentUserAllHosts -Encoding utf8
 
 # Install Chocolatey packages
-winget install Python.Python.3.13 --scope=machine
+winget install Python.Python.3.14 --scope=machine
 choco install cmake --installargs="'ADD_CMAKE_TO_PATH=System'" --yes
 choco install vim --params="'/InstallDir:${Env:ChocolateyToolsLocation}\Vim /NoDesktopShortcuts'" --yes
-choco install fzf bat ripgrep yazi shellcheck wget mingw --yes
+choco install fzf bat ripgrep yazi eza shellcheck wget mingw --yes
 
 # Setup Vim
 New-Item -Path "~\vimfiles\autoload" -Type Directory -Force

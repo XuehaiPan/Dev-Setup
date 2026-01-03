@@ -1654,11 +1654,11 @@ EOF
 ln -sf .dotfiles/.bash_profile .
 chmod 644 .dotfiles/.bash_profile
 
-# Add 'SpaceGray Eighties' color scheme for iTerm
+# Add 'Spacegray Eighties' color scheme for iTerm
 if [[ ! -s "${HOME}/Library/Preferences/com.googlecode.iterm2.plist" ]]; then
 	# Download the default iTerm configuration file if not exists
 	exec_cmd "wget -O \"\${HOME}/Library/Preferences/com.googlecode.iterm2.plist\" \\
-		https://github.com/gnachman/iTerm2/raw/HEAD/plists/iTerm2.plist"
+		https://github.com/gnachman/iTerm2/raw/HEAD/plists/release-iTerm2.plist"
 fi
 if ! /usr/libexec/PlistBuddy -c 'Print "Custom Color Presets"' \
 	"${HOME}/Library/Preferences/com.googlecode.iterm2.plist" &>/dev/null; then
@@ -1667,8 +1667,8 @@ if ! /usr/libexec/PlistBuddy -c 'Print "Custom Color Presets"' \
 		-json \"{}\" \\
 		\"\${HOME}/Library/Preferences/com.googlecode.iterm2.plist\""
 fi
-exec_cmd "plutil -replace 'Custom Color Presets.SpaceGray Eighties' \\
-	-xml \"\$(wget -O - https://github.com/mbadolato/iTerm2-Color-Schemes/raw/HEAD/schemes/SpaceGray%20Eighties.itermcolors)\" \\
+exec_cmd "plutil -replace 'Custom Color Presets.Spacegray Eighties' \\
+	-xml \"\$(wget -O - https://github.com/mbadolato/iTerm2-Color-Schemes/raw/HEAD/schemes/Spacegray%20Eighties.itermcolors)\" \\
 	\"\${HOME}/Library/Preferences/com.googlecode.iterm2.plist\""
 
 # iTerm2 shell integration and utilities
@@ -1726,7 +1726,7 @@ xterm.*.scrollBar: true
 ! Stop output to terminal from jumping down to bottom of scroll again
 xterm.*.scrollTtyOutput: false
 
-! SpaceGray Eighties color theme...
+! Spacegray Eighties color theme...
 xterm.*.foreground:  #BDBAAE
 xterm.*.background:  #222222
 xterm.*.cursorColor: #BBBBBB

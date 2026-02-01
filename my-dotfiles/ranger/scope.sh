@@ -116,20 +116,44 @@ handle_extension() {
 
         ## JSON Lines
         jsonl)
-            local jsonl
-            if [ "$(wc -l < "${FILE_PATH}")" -gt 40 ]; then
+            local total_lines
+            total_lines="$(($(wc -l < "${FILE_PATH}")))"
+
+            # Handle empty file
+            [ "${total_lines}" -eq 0 ] && exit 2
+
+            # Determine width for line numbers
+            local width="${#total_lines}"
+
+            # Build the content and line numbers
+            local jsonl line_nums
+            if [ "${total_lines}" -gt 40 ]; then
+                local tail_start="$((total_lines - 18))"
                 jsonl="$(
                     head -n 20 "${FILE_PATH}"
                     echo '{"...": "..."}'
-                    echo '{"...": "..."}'
-                    tail -n 18 "${FILE_PATH}"
+                    tail -n 19 "${FILE_PATH}"
+                )"
+                local dots
+                dots="$(printf '.%.0s' $(seq 1 "${width}"))"
+                line_nums="$(
+                    for n in $(seq 1 20); do printf "%0${width}d\n" "${n}"; done
+                    echo "${dots}"
+                    for n in $(seq "${tail_start}" "${total_lines}"); do printf "%0${width}d\n" "${n}"; done
                 )"
             else
                 jsonl="$(cat "${FILE_PATH}")"
+                line_nums="$(for n in $(seq 1 "${total_lines}"); do printf "%0${width}d\n" "${n}"; done)"
             fi
-            echo "${jsonl}" | jq --compact-output --color-output . - && exit 4
-            echo "${jsonl}" | python3 -m json.tool --compact --json-lines --no-ensure-ascii -- - && exit 4
-            echo "${jsonl}" && exit 4
+
+            # Colorize (try jq, then python, then plain)
+            local colorized
+            colorized="$(echo "${jsonl}" | jq --compact-output --color-output . - 2>/dev/null)" ||
+            colorized="$(echo "${jsonl}" | python3 -m json.tool --compact --json-lines --no-ensure-ascii -- - 2>/dev/null)" ||
+            colorized="${jsonl}"
+
+            # Combine line numbers with colorized content
+            paste -d ' ' <(echo "${line_nums}") <(echo "${colorized}") && exit 5
             ;;
 
         ## JSON

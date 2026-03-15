@@ -9,7 +9,6 @@ ms-vscode.cmake-tools
 formulahendry.code-runner
 streetsidesoftware.code-spell-checker
 github.codespaces
-github.copilot
 github.copilot-chat
 ms-vscode.cpptools
 ms-toolsai.datawrangler
@@ -100,5 +99,4 @@ ms-python.vscode-pylance
 ms-vscode-remote.vscode-remote-extensionpack
 ms-vscode.vscode-typescript-next
 redhat.vscode-yaml
-ms-vsliveshare.vsliveshare
 dotjoshjohnson.xml

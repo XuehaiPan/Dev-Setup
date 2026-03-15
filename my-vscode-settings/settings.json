@@ -472,7 +472,6 @@
 
     //* Code Spell Checker */
     "cSpell.language": "en,en-US",
-    "cSpell.showStatus": false,
     "cSpell.customDictionaries": {
         "spelling-wordlist-docs-source": {
             "name": "spelling-wordlist-docs-source",
@@ -527,7 +526,7 @@
     "github.codespaces.defaultExtensions": [
         "github.codespaces",
         "github.vscode-pull-request-github",
-        "github.copilot",
+        "github.copilot-chat",
         "editorconfig.editorconfig",
         "mhutchie.git-graph",
         "donjayamanne.githistory",
@@ -539,7 +538,6 @@
         "ms-python.python",
         "ms-python.vscode-pylance",
     ],
-    "github.copilot.editor.enableAutoCompletions": true,
     "github.copilot.enable": {
         "*": true,
         "markdown": true,
@@ -616,12 +614,15 @@
         "%PDF%#src:%LINE%%TEX%",
     ],
     "latex-workshop.latex.outDir": "%DIR%/out",
+    "latex-workshop.latex.auxDir": "%OUTDIR%/.aux",
     "latex-workshop.latex.magic.args": [
         "-synctex=1",
         "-shell-escape",
         "-interaction=nonstopmode",
         "-file-line-error",
         "-output-directory=%OUTDIR%",
+        "-aux-directory=%AUXDIR%",
+        "-emulate-aux-dir",
         "%DOC%",
     ],
     "latex-workshop.latex.magic.bib.args": [
@@ -639,6 +640,8 @@
                 "-interaction=nonstopmode",
                 "-file-line-error",
                 "-output-directory=%OUTDIR%",
+                "-aux-directory=%AUXDIR%",
+                "-emulate-aux-dir",
                 "%DOC%",
             ],
             "env": {},
@@ -653,6 +656,8 @@
                 "-interaction=nonstopmode",
                 "-file-line-error",
                 "-output-directory=%OUTDIR%",
+                "-aux-directory=%AUXDIR%",
+                "-emulate-aux-dir",
                 "%DOC%",
             ],
             "env": {},
@@ -667,6 +672,8 @@
                 "-interaction=nonstopmode",
                 "-file-line-error",
                 "-output-directory=%OUTDIR%",
+                "-aux-directory=%AUXDIR%",
+                "-emulate-aux-dir",
                 "%DOC%",
             ],
             "env": {},
@@ -835,7 +842,7 @@
         },
     ],
     "latex-workshop.formatting.latex": "latexindent",
-    "latex-workshop.latexindent.args": [
+    "latex-workshop.formatting.latexindent.args": [
         "-c",
         "%DIR%",
         "%TMPFILE%",
@@ -882,23 +889,6 @@
     ],
     "latex-utilities.formattedPaste.tableBooktabsStyle": true,
     "latex-utilities.formattedPaste.image.template": "\\includegraphics[width=\\linewidth]{${imageFilePath}}",
-
-    //* Live Share */
-    "liveshare.alwaysFollowHost": false,
-    "liveshare.connectionMode": "auto",
-    "liveshare.autoShareTerminals": true,
-    "liveshare.autoShareServers": true,
-    "liveshare.codeLens": true,
-    "liveshare.comments": true,
-    "liveshare.nameTagVisibility": "Activity",
-    "liveshare.showReadOnlyUsersInEditor": "whileFollowing",
-    "liveshare.allowGuestTaskControl": true,
-    "liveshare.allowGuestDebugControl": true,
-    "liveshare.languages.allowGuestCommandControl": true,
-    "liveshare.joinDebugSessionOption": "Automatic",
-    "liveshare.populateGitCoAuthors": "always",
-    "liveshare.showInStatusBar": "whileCollaborating",
-    "liveshare.showVerboseNotifications": true,
 
     //* Local History */
     "local-history.enabled": 2,
@@ -950,6 +940,7 @@
     "powershell.scriptAnalysis.enable": true,
 
     //* Python */
+    "python.languageServer": "Default",
     "python.defaultInterpreterPath": "${workspaceFolder}/venv/bin/python3",
     "python.terminal.activateEnvironment": false,
     "python.terminal.shellIntegration.enabled": true,
@@ -1053,8 +1044,8 @@
     },
 
     //* reStructuredText */
-    "restructuredtext.languageServer.disabled": true,
-    "esbonio.server.enabled": false,
+    "restructuredtext.experimental": false,
+    "restructuredtext.trace": "off",
 
     //* Shellcheck */
     "shellcheck.enable": true,
@@ -1066,7 +1057,7 @@
     ],
 
     //* Shell-format */
-    "shellformat.flag": "-i 0 -ci",
+    "shellformat.flag": "--indent=0 --case-indent",
     "shellformat.useEditorConfig": true,
 
     //* Todo Tree */

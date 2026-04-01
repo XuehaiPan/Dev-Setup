@@ -2464,6 +2464,7 @@ if [[ -x "${CONDA_BASE_PREFIX}/condabin/conda" ]]; then
 	export PATH="${CONDA_BASE_PREFIX}/condabin${PATH:+:"${PATH}"}"
 	source "${CONDA_BASE_PREFIX}/etc/profile.d/conda.sh"
 	source "${CONDA_BASE_PREFIX}/bin/activate"
+	exec_cmd "\"${CONDA_DIR}/condabin/conda\""' tos accept'
 	exec_cmd "\"${CONDA_DIR}/condabin/conda\""' update conda --name=base --yes'
 	exec_cmd "\"${CONDA_DIR}/condabin/conda\""' install mamba --name=base --yes'
 	exec_cmd "\"${CONDA_DIR}/condabin/conda\""' update conda mamba --name=base --yes'

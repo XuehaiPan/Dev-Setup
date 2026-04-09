@@ -180,6 +180,16 @@ if [[ -f "${HOME}/.iterm2/.iterm2_shell_integration.zsh" ]]; then
 	source "${HOME}/.iterm2/.iterm2_shell_integration.zsh"
 fi
 
+# Claude Code
+export DISABLE_TELEMETRY="1"
+export DISABLE_ERROR_REPORTING="1"
+export DISABLE_BUG_COMMAND="1"
+export CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY="1"
+export CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC="1"
+export CLAUDE_CODE_EFFORT_LEVEL="high"
+export CLAUDE_CODE_MAX_OUTPUT_TOKENS="64000"
+export CLAUDE_CODE_TMPDIR="/tmp/claude-code"
+
 # Conda
 if [[ -n "${__CONDA_PREFIX}" ]]; then
 	conda activate "${__CONDA_PREFIX}"

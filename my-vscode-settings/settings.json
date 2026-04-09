@@ -558,6 +558,7 @@
         "suppressIntegrationRequestTimedOutWarning": true,
     },
     "gitlens.graph.layout": "editor",
+    "gitlens.rebaseEditor.openOnPausedRebase": false,
     "gitlens.telemetry.enabled": false,
 
     //* Go */

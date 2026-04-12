@@ -91,6 +91,13 @@ handle_extension() {
             pandoc -s -t markdown -- "${FILE_PATH}" && exit 5
             exit 1;;
 
+        ## Property List (macOS)
+        plist)
+            plutil -p -- "${FILE_PATH}" && exit 5
+            plutil -convert xml1 -o - -- "${FILE_PATH}" && exit 5
+            /usr/libexec/PlistBuddy -c 'Print' "${FILE_PATH}" && exit 5
+            exit 1;;
+
         ## CSV
         csv)
             python3 -c "import pandas as pd; print(pd.read_csv('${FILE_PATH}').to_markdown())" && exit 5

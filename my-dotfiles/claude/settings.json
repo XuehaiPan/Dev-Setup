@@ -15,6 +15,7 @@
   },
   "permissions": {
     "allow": [
+      "Bash(*/claude-plugins-official/plugins/ralph-loop/scripts/setup-ralph-loop.sh*)",
       "Bash(*/openai-codex/*/codex-companion.mjs* adversarial-review \"*\")",
       "Bash(*/openai-codex/*/codex-companion.mjs* review \"*\")",
       "Bash(arch)",
@@ -145,6 +146,7 @@
       "Bash(git -C * stash list*)",
       "Bash(git -C * stash show*)",
       "Bash(git -C * status*)",
+      "Bash(git -C * wip*)",
       "Bash(git blame*)",
       "Bash(git diff*)",
       "Bash(git fetch*)",
@@ -161,6 +163,7 @@
       "Bash(git stash list*)",
       "Bash(git stash show*)",
       "Bash(git status*)",
+      "Bash(git wip*)",
       "Bash(grep *)",
       "Bash(gsed -n *)",
       "Bash(head *)",
@@ -408,7 +411,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash -c 'cd \"${CLAUDE_PROJECT_DIR}\" && mkdir -p .claude/plans && [[ ! -e .claude/.gitignore ]] && printf \"%s\\n\" \".gitignore\" \"plans/\" \"settings.local.json\" \"*.session\" \"*.log\" > .claude/.gitignore || true'"
+            "command": "bash -c 'cd \"${CLAUDE_PROJECT_DIR}\" && mkdir -p .claude/plans && [[ ! -e .claude/.gitignore ]] && printf \"%s\\n\" \".gitignore\" \"plans/\" \"*.local.*\" \"*.session\" \"*.log\" > .claude/.gitignore || true'"
+          },
+          {
+            "type": "command",
+            "command": "bash -c 'cd \"${CLAUDE_PROJECT_DIR}\" && git config alias.wip \"! cd -- \\\"\\${GIT_PREFIX:-.}\\\"; git add --all && git diff --cached --quiet || git commit -m \\\"wip\\\"\" || true'"
           }
         ]
       }

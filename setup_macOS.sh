@@ -326,6 +326,7 @@ git config --global alias.diff-remote 'diff @{upstream}'
 git config --global alias.diff-push-remote '! cd -- "${GIT_PREFIX:-.}"; GIT_BRANCH="$(git branch --show-current)"; GIT_PUSH_REMOTE="$(git config --get branch."${GIT_BRANCH}".pushremote || git config --get branch."${GIT_BRANCH}".remote || echo "origin")"; GIT_PUSH_REF="$(git rev-parse --abbrev-ref @{push} 2>/dev/null || echo "${GIT_PUSH_REMOTE}/${GIT_BRANCH}")"; git diff "${GIT_PUSH_REF}" ${1}'
 git config --global alias.sync-remote '! cd -- "${GIT_PREFIX:-.}"; git status --porcelain && (GIT_CURRENT_BRANCH="$(git branch --show-current)"; GIT_BRANCH="${1:-"${GIT_CURRENT_BRANCH}"}"; GIT_REMOTE="$(git remote show | grep -E "^upstream$" || echo "origin")"; [ "${GIT_CURRENT_BRANCH}" != "${GIT_BRANCH}" ] && gut checkout "${GIT_BRANCH}"; git fetch --all --tags --prune --force --jobs=16; git pull --ff-only "${GIT_REMOTE}" "${GIT_BRANCH}"; [ "${GIT_REMOTE}" != "origin" ] && git push origin "${GIT_BRANCH}:${GIT_BRANCH}"; [ "${GIT_CURRENT_BRANCH}" != "${GIT_BRANCH}" ] && gut checkout "${GIT_CURRENT_BRANCH}")'
 git config --global alias.add-non-eolws-changes '! cd -- "${GIT_PREFIX:-.}"; git diff --no-color --unified=0 --ignore-submodules=all --ignore-space-at-eol | git apply --cached --allow-empty --unidiff-zero --ignore-space-change --whitespace=nowarn -'
+git config --global alias.wip '! cd -- "${GIT_PREFIX:-.}"; git add --all && git diff --cached --quiet || git commit -m "wip"'
 git config --global color.ui true
 if [[ -x "$(command -v delta)" ]]; then
 	git config --global core.pager delta

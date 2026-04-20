@@ -17,7 +17,9 @@
     "allow": [
       "Bash(*/claude-plugins-official/plugins/ralph-loop/scripts/setup-ralph-loop.sh*)",
       "Bash(*/openai-codex/*/codex-companion.mjs* adversarial-review \"*\")",
+      "Bash(*/openai-codex/*/codex-companion.mjs* result*)",
       "Bash(*/openai-codex/*/codex-companion.mjs* review \"*\")",
+      "Bash(*/openai-codex/*/codex-companion.mjs* status*)",
       "Bash(arch)",
       "Bash(base64 *)",
       "Bash(bash -n *)",
@@ -139,6 +141,7 @@
       "Bash(git -C * lfs status*)",
       "Bash(git -C * log*)",
       "Bash(git -C * ls-tree*)",
+      "Bash(git -C * merge-base *)",
       "Bash(git -C * refs*)",
       "Bash(git -C * rev-parse*)",
       "Bash(git -C * shortlog*)",
@@ -156,6 +159,7 @@
       "Bash(git lfs status*)",
       "Bash(git log*)",
       "Bash(git ls-tree*)",
+      "Bash(git merge-base *)",
       "Bash(git refs*)",
       "Bash(git rev-parse*)",
       "Bash(git shortlog*)",
@@ -317,6 +321,9 @@
       "Bash(xxd *)",
       "Bash(zipinfo *)",
       "Skill(code-review:code-review)",
+      "Skill(codex:adversarial-review)",
+      "Skill(codex:review)",
+      "Skill(ralph-loop:ralph-loop)",
       "WebFetch(domain:docs.python.org)",
       "WebFetch(domain:peps.python.org)",
       "WebSearch"
@@ -337,7 +344,7 @@
       "Bash(gh workflow run*)",
       "Bash(git -C * add*)",
       "Bash(git -C * commit*)",
-      "Bash(git -C * merge*)",
+      "Bash(git -C * merge *)",
       "Bash(git -C * mv*)",
       "Bash(git -C * pull*)",
       "Bash(git -C * rebase*)",
@@ -348,7 +355,7 @@
       "Bash(git -C * switch*)",
       "Bash(git add*)",
       "Bash(git commit*)",
-      "Bash(git merge*)",
+      "Bash(git merge *)",
       "Bash(git mv*)",
       "Bash(git pull*)",
       "Bash(git rebase*)",
@@ -426,7 +433,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash -c 'cd \"${CLAUDE_PROJECT_DIR}\" && [[ -e .pre-commit-config.yaml ]] && FILE_PATH=\"$(jq -r \".tool_input.file_path // empty\")\" && [[ -n \"${FILE_PATH}\" ]] && uvx pre-commit run ruff-check --files \"${FILE_PATH}\" && uvx pre-commit run ruff-format --files \"${FILE_PATH}\" || true'"
+            "command": "bash -c 'cd \"${CLAUDE_PROJECT_DIR}\" && FILE_PATH=\"$(jq -r \".tool_input.file_path // empty\")\" && [[ -n \"${FILE_PATH}\" ]] && [[ \"${FILE_PATH}\" == *.py || \"${FILE_PATH}\" == *.pyi ]] && [[ -x \"$(command -v ruff)\" ]] && ruff check --fix --ignore=F401 \"${FILE_PATH}\" && ruff format \"${FILE_PATH}\" || true'"
           }
         ]
       }

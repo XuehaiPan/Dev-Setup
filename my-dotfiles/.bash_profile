@@ -208,6 +208,7 @@ export CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY="1"
 export CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC="1"
 export CLAUDE_CODE_EFFORT_LEVEL="high"
 export CLAUDE_CODE_MAX_OUTPUT_TOKENS="64000"
+#export CLAUDE_CODE_SUBAGENT_MODEL="best"
 export CLAUDE_CODE_TMPDIR="/tmp/claude-code"
 export DISABLE_BUG_COMMAND="1"
 export DISABLE_ERROR_REPORTING="1"
@@ -250,7 +251,7 @@ unset -f __remove_duplicate
 # Utilities
 if [[ -f "${HOME}/.dotfiles/utilities.sh" ]]; then
 	source "${HOME}/.dotfiles/utilities.sh"
-	if pgrep ClashX &>/dev/null; then
+	if pgrep -i clash &>/dev/null; then
 		set_proxy 127.0.0.1
 	fi
 fi

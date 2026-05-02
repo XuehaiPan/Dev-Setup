@@ -144,6 +144,7 @@
       "Bash(git -C * merge-base *)",
       "Bash(git -C * refs*)",
       "Bash(git -C * rev-parse*)",
+      "Bash(git -C * save*)",
       "Bash(git -C * shortlog*)",
       "Bash(git -C * show*)",
       "Bash(git -C * stash list*)",
@@ -162,6 +163,7 @@
       "Bash(git merge-base *)",
       "Bash(git refs*)",
       "Bash(git rev-parse*)",
+      "Bash(git save*)",
       "Bash(git shortlog*)",
       "Bash(git show*)",
       "Bash(git stash list*)",
@@ -422,7 +424,11 @@
           },
           {
             "type": "command",
-            "command": "bash -c 'cd \"${CLAUDE_PROJECT_DIR}\" && git config alias.wip \"! cd -- \\\"\\${GIT_PREFIX:-.}\\\"; git add --all && git diff --cached --quiet || git commit -m \\\"wip\\\"\" || true'"
+            "command": "bash -c 'cd \"${CLAUDE_PROJECT_DIR}\" && git config alias.save \"! cd -- \\\"\\${GIT_PREFIX:-.}\\\"; message=\\\"\\$*\\\"; message=\\\"\\${message#\\\"\\${message%%[![:space:]]*}\\\"}\\\"; case \\\"\\${message}\\\" in \\\"\\\") message=\\\"wip\\\" ;; wip:*|WIP:*|\\\\[wip\\\\]*|\\\\[WIP\\\\]*) ;; *) message=\\\"wip: \\${message}\\\" ;; esac; git add --all && git diff --cached --quiet || git commit -m \\\"\\${message}\\\"; :\" || true'"
+          },
+          {
+            "type": "command",
+            "command": "bash -c 'cd \"${CLAUDE_PROJECT_DIR}\" && [[ -e .pre-commit-config.yaml ]] && HOOK_PATH=\"$(git rev-parse --git-path hooks/pre-commit 2>/dev/null)\" && [[ -n \"${HOOK_PATH}\" ]] && [[ ! -e \"${HOOK_PATH}\" ]] && { if command -v pre-commit >/dev/null 2>&1; then pre-commit install; elif command -v uvx >/dev/null 2>&1; then uvx pre-commit install; fi; } || true'"
           }
         ]
       }

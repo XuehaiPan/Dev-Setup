@@ -16,9 +16,9 @@
   "permissions": {
     "allow": [
       "Bash(*/claude-plugins-official/plugins/ralph-loop/scripts/setup-ralph-loop.sh*)",
-      "Bash(*/openai-codex/*/codex-companion.mjs* adversarial-review \"*\")",
+      "Bash(*/openai-codex/*/codex-companion.mjs* adversarial-review*)",
       "Bash(*/openai-codex/*/codex-companion.mjs* result*)",
-      "Bash(*/openai-codex/*/codex-companion.mjs* review \"*\")",
+      "Bash(*/openai-codex/*/codex-companion.mjs* review*)",
       "Bash(*/openai-codex/*/codex-companion.mjs* status*)",
       "Bash(arch)",
       "Bash(base64 *)",

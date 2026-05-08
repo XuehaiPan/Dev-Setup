@@ -178,6 +178,11 @@ handle_extension() {
             python3 -m json.tool --indent 2 --no-ensure-ascii -- "${FILE_PATH}" && exit 5
             ;;
 
+        ## HDF5
+        h5 | hdf5 | hdf | he5)
+            h5ls -r "${FILE_PATH}" && exit 5
+            exit 1;;
+
         ## Direct Stream Digital/Transfer (DSDIFF) and wavpack aren't detected
         ## by file(1).
         dff | dsf | wv | wvc)

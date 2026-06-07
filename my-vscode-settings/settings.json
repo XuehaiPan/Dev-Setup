@@ -499,6 +499,7 @@
     "git.enabled": true,
     "git.autoRepositoryDetection": true,
     "git.detectSubmodules": false,
+    "git.detectWorktrees": true,
     "git.confirmSync": true,
     "git.autoStash": true,
     "git.autorefresh": true,
@@ -559,6 +560,7 @@
     },
     "gitlens.graph.layout": "editor",
     "gitlens.rebaseEditor.openOnPausedRebase": false,
+    "gitlens.views.worktrees.showStashes": true,
     "gitlens.telemetry.enabled": false,
 
     //* Go */

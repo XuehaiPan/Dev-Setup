@@ -490,6 +490,7 @@ chmod 644 .dotfiles/.gitconfig
 # Install and setup Homebrew
 exec_cmd 'export HOMEBREW_DOWNLOAD_CONCURRENCY="auto"'
 exec_cmd 'export HOMEBREW_FORCE_VENDOR_RUBY=true'
+exec_cmd 'export HOMEBREW_NO_ASK=true'
 exec_cmd 'export HOMEBREW_NO_ANALYTICS=true'
 exec_cmd 'export HOMEBREW_NO_AUTOREMOVE=true'
 if [[ -n "${SET_MIRRORS}" ]]; then
@@ -654,6 +655,7 @@ export HOMEBREW_CLEANUP_MAX_AGE_DAYS=7
 export HOMEBREW_DOWNLOAD_CONCURRENCY="auto"
 export HOMEBREW_EDITOR="vim"
 export HOMEBREW_FORCE_VENDOR_RUBY=true
+export HOMEBREW_NO_ASK=true
 export HOMEBREW_NO_ANALYTICS=true
 export HOMEBREW_NO_AUTOREMOVE=true'
 if [[ -n "${SET_MIRRORS}" ]]; then

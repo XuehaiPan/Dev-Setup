@@ -330,6 +330,10 @@
       "WebFetch(domain:peps.python.org)",
       "WebSearch"
     ],
+    "deny": [
+      "Bash(git -C * push*)",
+      "Bash(git push*)"
+    ],
     "ask": [
       "Bash(gh issue close*)",
       "Bash(gh issue comment*)",
@@ -369,11 +373,51 @@
       "Bash(gsed -i*)",
       "Bash(sed -i*)"
     ],
-    "deny": [
-      "Bash(git -C * push*)",
-      "Bash(git push*)"
-    ],
     "defaultMode": "acceptEdits"
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'cd \"${CLAUDE_PROJECT_DIR}\" && mkdir -p .claude/plans && [[ ! -e .claude/.gitignore ]] && printf \"%s\\n\" \".gitignore\" \"plans/\" \"*.local.*\" \"*.session\" \"*.log\" > .claude/.gitignore || true'"
+          },
+          {
+            "type": "command",
+            "command": "bash -c 'cd \"${CLAUDE_PROJECT_DIR}\" && git config alias.save \"! cd -- \\\"\\$(git rev-parse --show-toplevel)\\\"; message=\\\"\\$*\\\"; message=\\\"\\${message#\\\"\\${message%%[![:space:]]*}\\\"}\\\"; case \\\"\\${message}\\\" in \\\"\\\") message=\\\"wip\\\" ;; wip:*|WIP:*|\\\\[wip\\\\]*|\\\\[WIP\\\\]*) ;; *) message=\\\"wip: \\${message}\\\" ;; esac; git add --all && git diff --cached --quiet || git commit -m \\\"\\${message}\\\"; :\" || true'"
+          },
+          {
+            "type": "command",
+            "command": "bash -c 'cd \"${CLAUDE_PROJECT_DIR}\" && [[ -e .pre-commit-config.yaml ]] && HOOK_PATH=\"$(git rev-parse --git-path hooks/pre-commit 2>/dev/null)\" && [[ -n \"${HOOK_PATH}\" ]] && [[ ! -e \"${HOOK_PATH}\" ]] && { if command -v pre-commit >/dev/null 2>&1; then pre-commit install; elif command -v uvx >/dev/null 2>&1; then uvx pre-commit install; fi; } || true'"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'cd \"${CLAUDE_PROJECT_DIR}\" && FILE_PATH=\"$(jq -r \".tool_input.file_path // empty\")\" && [[ -n \"${FILE_PATH}\" ]] && [[ \"${FILE_PATH}\" == *.py || \"${FILE_PATH}\" == *.pyi ]] && [[ -x \"$(command -v ruff)\" ]] && ruff check --fix --ignore=F401 \"${FILE_PATH}\" && ruff format \"${FILE_PATH}\" || true'"
+          }
+        ]
+      }
+    ]
+  },
+  "worktree": {
+    "baseRef": "fresh",
+    "symlinkDirectories": [
+      "node_modules",
+      "venv",
+      ".venv"
+    ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "bash ~/.claude/statusline-command.sh"
   },
   "enabledPlugins": {
     "agent-sdk-dev@claude-plugins-official": true,
@@ -416,41 +460,5 @@
   "autoUpdatesChannel": "stable",
   "plansDirectory": "./.claude/plans",
   "skipDangerousModePermissionPrompt": true,
-  "verbose": true,
-  "hooks": {
-    "SessionStart": [
-      {
-        "matcher": "startup",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash -c 'cd \"${CLAUDE_PROJECT_DIR}\" && mkdir -p .claude/plans && [[ ! -e .claude/.gitignore ]] && printf \"%s\\n\" \".gitignore\" \"plans/\" \"*.local.*\" \"*.session\" \"*.log\" > .claude/.gitignore || true'"
-          },
-          {
-            "type": "command",
-            "command": "bash -c 'cd \"${CLAUDE_PROJECT_DIR}\" && git config alias.save \"! cd -- \\\"\\${GIT_PREFIX:-.}\\\"; message=\\\"\\$*\\\"; message=\\\"\\${message#\\\"\\${message%%[![:space:]]*}\\\"}\\\"; case \\\"\\${message}\\\" in \\\"\\\") message=\\\"wip\\\" ;; wip:*|WIP:*|\\\\[wip\\\\]*|\\\\[WIP\\\\]*) ;; *) message=\\\"wip: \\${message}\\\" ;; esac; git add --all && git diff --cached --quiet || git commit -m \\\"\\${message}\\\"; :\" || true'"
-          },
-          {
-            "type": "command",
-            "command": "bash -c 'cd \"${CLAUDE_PROJECT_DIR}\" && [[ -e .pre-commit-config.yaml ]] && HOOK_PATH=\"$(git rev-parse --git-path hooks/pre-commit 2>/dev/null)\" && [[ -n \"${HOOK_PATH}\" ]] && [[ ! -e \"${HOOK_PATH}\" ]] && { if command -v pre-commit >/dev/null 2>&1; then pre-commit install; elif command -v uvx >/dev/null 2>&1; then uvx pre-commit install; fi; } || true'"
-          }
-        ]
-      }
-    ],
-    "PostToolUse": [
-      {
-        "matcher": "Edit|Write",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash -c 'cd \"${CLAUDE_PROJECT_DIR}\" && FILE_PATH=\"$(jq -r \".tool_input.file_path // empty\")\" && [[ -n \"${FILE_PATH}\" ]] && [[ \"${FILE_PATH}\" == *.py || \"${FILE_PATH}\" == *.pyi ]] && [[ -x \"$(command -v ruff)\" ]] && ruff check --fix --ignore=F401 \"${FILE_PATH}\" && ruff format \"${FILE_PATH}\" || true'"
-          }
-        ]
-      }
-    ]
-  },
-  "statusLine": {
-    "type": "command",
-    "command": "bash ~/.claude/statusline-command.sh"
-  }
+  "verbose": true
 }

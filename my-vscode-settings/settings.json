@@ -235,7 +235,7 @@
 
     //* Extensions */
     "extensions.autoCheckUpdates": true,
-    "extensions.autoUpdate": true,
+    "extensions.autoUpdate": "on",
     "extensions.closeExtensionDetailsOnViewChange": true,
 
     //* Update */

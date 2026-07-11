@@ -22,7 +22,7 @@ xterm.*.scrollBar: true
 ! Stop output to terminal from jumping down to bottom of scroll again
 xterm.*.scrollTtyOutput: false
 
-! SpaceGray Eighties color theme...
+! Spacegray Eighties color theme...
 xterm.*.foreground:  #BDBAAE
 xterm.*.background:  #222222
 xterm.*.cursorColor: #BBBBBB

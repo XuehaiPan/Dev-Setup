@@ -2153,10 +2153,13 @@ backup_dotfiles .tmux.conf .dotfiles/.tmux.conf \
 cat >.dotfiles/.tmux.conf.user <<'EOF'
 # Set default terminal
 set-option -gs default-terminal "tmux-256color"
-set-option -gsa terminal-overrides ",*-256color:Tc"
+if-shell -F '#{>=:#{version},3.2}' \
+    'set-option -gsa terminal-features ",*-256color:RGB"' \
+    'set-option -gsa terminal-overrides ",*-256color:Tc"'
 set-option -gs default-command 'REALHOME="$(cd "${HOME}" && pwd -P 2>/dev/null || echo "${HOME}")"; [[ -n "${REALHOME}" && "${REALHOME}" != "${HOME}" && "${PWD}/" == "${REALHOME}/"* ]] && cd "${PWD/#"${REALHOME}"/"${HOME}"}"; P10K_LEAN_STYLE=true exec "${SHELL}"'
 set-environment -g LANG "C.UTF-8"
 set-environment -g LC_ALL "C.UTF-8"
+set-option -ga update-environment " DISPLAY SSH_AUTH_SOCK XAUTHORITY WAYLAND_DISPLAY XDG_RUNTIME_DIR"
 
 # Automatically set window title
 set-option -gs automatic-rename on

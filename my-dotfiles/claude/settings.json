@@ -408,12 +408,12 @@
     ]
   },
   "worktree": {
-    "baseRef": "fresh",
     "symlinkDirectories": [
       "node_modules",
       "venv",
       ".venv"
-    ]
+    ],
+    "baseRef": "fresh"
   },
   "statusLine": {
     "type": "command",

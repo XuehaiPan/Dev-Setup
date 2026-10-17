@@ -4,7 +4,9 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope LocalMachine
 
 # Install Chocolatey
 Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process -Force
-Invoke-Expression -Command (New-Object -TypeName System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1')
+Invoke-Expression -Command (
+    Invoke-WebRequest -Uri 'https://community.chocolatey.org/install.ps1' -ErrorAction Stop
+).Content
 
 choco feature enable --name=useRememberedArgumentsForUpgrades
 choco config set --name=commandExecutionTimeoutSeconds --value=0
@@ -122,12 +124,8 @@ choco install fzf bat ripgrep yazi eza shellcheck wget mingw --yes
 
 # Setup Vim
 New-Item -Path "~\vimfiles\autoload" -Type Directory -Force
-(New-Object -TypeName System.Net.WebClient).DownloadFile(
-    'https://github.com/junegunn/vim-plug/raw/HEAD/plug.vim',
-    $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath(
-        "~\vimfiles\autoload\plug.vim"
-    )
-)
+Invoke-WebRequest -Uri 'https://github.com/junegunn/vim-plug/raw/HEAD/plug.vim' `
+    -OutFile "~\vimfiles\autoload\plug.vim" -ErrorAction Stop
 
 @"
 set nocompatible

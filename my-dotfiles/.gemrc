@@ -5,4 +5,4 @@
 :verbose: true
 :concurrent_downloads: 8
 :sources:
-- https://mirrors.tuna.tsinghua.edu.cn/rubygems/
+- https://mirrors.cernet.edu.cn/rubygems/

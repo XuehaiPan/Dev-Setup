@@ -72,11 +72,11 @@ export HOMEBREW_FORCE_VENDOR_RUBY=true
 export HOMEBREW_NO_ASK=true
 export HOMEBREW_NO_ANALYTICS=true
 export HOMEBREW_NO_AUTOREMOVE=true
-export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"
-export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git"
-export HOMEBREW_API_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/api"
-export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles"
-export HOMEBREW_PIP_INDEX_URL="https://pypi.tuna.tsinghua.edu.cn/simple"
+export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.cernet.edu.cn/homebrew/brew.git"
+export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.cernet.edu.cn/homebrew/homebrew-core.git"
+export HOMEBREW_API_DOMAIN="https://mirrors.cernet.edu.cn/homebrew-bottles/api"
+export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.cernet.edu.cn/homebrew-bottles"
+export HOMEBREW_PIP_INDEX_URL="https://mirrors.cernet.edu.cn/pypi/web/simple"
 if [[ -d "$(brew --repository homebrew/core)/.git" ]]; then
 	export HOMEBREW_NO_INSTALL_FROM_API=true
 fi
@@ -175,6 +175,11 @@ export PATH="${HOMEBREW_PREFIX}/opt/llvm/bin${PATH:+:"${PATH}"}"
 
 # libarchive
 export DYLD_FALLBACK_LIBRARY_PATH="${DYLD_FALLBACK_LIBRARY_PATH:+"${DYLD_FALLBACK_LIBRARY_PATH}":}${HOMEBREW_PREFIX}/opt/libarchive/lib"
+
+# Docker Desktop
+if [[ -d "${HOME}/.docker/bin" ]]; then
+	export PATH="${HOME}/.docker/bin${PATH:+:"${PATH}"}"
+fi
 
 # Wine
 export WINEARCH="win32"

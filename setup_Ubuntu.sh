@@ -278,19 +278,19 @@ if have_sudo_access; then
 			while read -r url target_url; do
 				if grep -qF "${url}" "${sources_list}"; then
 					if [[ -n "${unbackup}" ]]; then
-						exec_cmd "sudo cp -f ${sources_list} ${sources_list}.save"
+						exec_cmd "sudo cp -f \"${sources_list}\" \"${sources_list}.save\""
 						unbackup=''
 					fi
 					exec_cmd "sudo sed -i 's|${url}|${target_url}|g' ${sources_list}"
 				fi
 			done <<EOS
-	     //cn.archive.ubuntu.com              //mirrors.tuna.tsinghua.edu.cn
-	     //archive.ubuntu.com                 //mirrors.tuna.tsinghua.edu.cn
-	     //security.ubuntu.com                //mirrors.tuna.tsinghua.edu.cn
-	     //packages.linuxmint.com             //mirrors.tuna.tsinghua.edu.cn/linuxmint
-	http://mirrors.tuna.tsinghua.edu.cn https://mirrors.tuna.tsinghua.edu.cn
+	     //cn.archive.ubuntu.com         //mirrors.cernet.edu.cn
+	     //archive.ubuntu.com            //mirrors.cernet.edu.cn
+	     //security.ubuntu.com           //mirrors.cernet.edu.cn
+	     //packages.linuxmint.com        //mirrors.cernet.edu.cn/linuxmint
+	http://mirrors.cernet.edu.cn   https://mirrors.cernet.edu.cn
 EOS
-		done < <(find -L /etc/apt -type f -name '*.list' -or -name '*.sources')
+		done < <(find -L /etc/apt -type f '(' -name '*.list' -o -name '*.sources' ')')
 	fi
 
 	exec_cmd 'sudo apt-get update'
@@ -494,11 +494,11 @@ exec_cmd 'export HOMEBREW_NO_ASK=true'
 exec_cmd 'export HOMEBREW_NO_ANALYTICS=true'
 exec_cmd 'export HOMEBREW_NO_AUTOREMOVE=true'
 if [[ -n "${SET_MIRRORS}" ]]; then
-	exec_cmd 'export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"'
-	exec_cmd 'export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git"'
-	exec_cmd 'export HOMEBREW_API_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/api"'
-	exec_cmd 'export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles"'
-	exec_cmd 'export HOMEBREW_PIP_INDEX_URL="https://pypi.tuna.tsinghua.edu.cn/simple"'
+	exec_cmd 'export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.cernet.edu.cn/homebrew/brew.git"'
+	exec_cmd 'export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.cernet.edu.cn/homebrew/homebrew-core.git"'
+	exec_cmd 'export HOMEBREW_API_DOMAIN="https://mirrors.cernet.edu.cn/homebrew-bottles/api"'
+	exec_cmd 'export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.cernet.edu.cn/homebrew-bottles"'
+	exec_cmd 'export HOMEBREW_PIP_INDEX_URL="https://mirrors.cernet.edu.cn/pypi/web/simple"'
 fi
 if [[ ! -x "$(command -v brew)" ]]; then
 	HOMEBREW_PREFIX="/home/linuxbrew/.linuxbrew"
@@ -508,7 +508,7 @@ if [[ ! -x "$(command -v brew)" ]]; then
 			have_sudo_access
 	); then
 		if [[ -n "${SET_MIRRORS}" ]]; then
-			exec_cmd "git clone --depth=1 https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/install.git \"${TMP_DIR}/brew-install\""
+			exec_cmd "git clone --depth=1 https://mirrors.cernet.edu.cn/homebrew/install.git \"${TMP_DIR}/brew-install\""
 			exec_cmd "NONINTERACTIVE=true /bin/bash \"${TMP_DIR}/brew-install/install.sh\""
 		else
 			exec_cmd 'NONINTERACTIVE=true /bin/bash -c "$(curl -fsSL https://github.com/Homebrew/install/raw/HEAD/install.sh)"'
@@ -615,7 +615,7 @@ EOF
 if [[ -n "${SET_MIRRORS}" ]]; then
 	cat >>.dotfiles/.gemrc <<-'EOF'
 		:sources:
-		- https://mirrors.tuna.tsinghua.edu.cn/rubygems/
+		- https://mirrors.cernet.edu.cn/rubygems/
 	EOF
 fi
 
@@ -633,12 +633,15 @@ exec_cmd "perl -MCPAN -e 'CPAN::HandleConfig->load();' \\
 if [[ -n "${SET_MIRRORS}" ]]; then
 	if ! (
 		perl -MCPAN -e 'CPAN::HandleConfig->load();' -e 'CPAN::HandleConfig->prettyprint("urllist")' |
-			grep -qF 'https://mirrors.tuna.tsinghua.edu.cn/CPAN/'
+			grep -qF 'https://mirrors.cernet.edu.cn/CPAN/'
 	); then
 		exec_cmd "perl -MCPAN -e 'CPAN::HandleConfig->load();' \\
-			-e 'CPAN::HandleConfig->edit(\"urllist\", \"unshift\", \"https://mirrors.tuna.tsinghua.edu.cn/CPAN/\");' \\
+			-e 'CPAN::HandleConfig->edit(\"urllist\", \"unshift\", \"https://mirrors.cernet.edu.cn/CPAN/\");' \\
 			-e 'CPAN::HandleConfig->commit()'"
 	fi
+	exec_cmd "perl -MCPAN -e 'CPAN::HandleConfig->load();' \\
+		-e 'CPAN::HandleConfig->edit(\"pushy_https\", 0);' \\
+		-e 'CPAN::HandleConfig->commit()'"
 fi
 exec_cmd 'PERL_MM_OPT="INSTALL_BASE=\"${HOME}/.perl\"" cpan -i -T local::lib'
 exec_cmd 'eval "$(LC_ALL='C' perl -I${HOME}/.perl/lib/perl5 -Mlocal::lib=${HOME}/.perl)"'
@@ -660,11 +663,11 @@ export HOMEBREW_NO_ANALYTICS=true
 export HOMEBREW_NO_AUTOREMOVE=true'
 if [[ -n "${SET_MIRRORS}" ]]; then
 	HOMEBREW_SETTINGS+='
-export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/brew.git"
-export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.tuna.tsinghua.edu.cn/git/homebrew/homebrew-core.git"
-export HOMEBREW_API_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles/api"
-export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles"
-export HOMEBREW_PIP_INDEX_URL="https://pypi.tuna.tsinghua.edu.cn/simple"'
+export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.cernet.edu.cn/homebrew/brew.git"
+export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.cernet.edu.cn/homebrew/homebrew-core.git"
+export HOMEBREW_API_DOMAIN="https://mirrors.cernet.edu.cn/homebrew-bottles/api"
+export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.cernet.edu.cn/homebrew-bottles"
+export HOMEBREW_PIP_INDEX_URL="https://mirrors.cernet.edu.cn/pypi/web/simple"'
 fi
 HOMEBREW_SETTINGS+='
 if [[ -d "$(brew --repository homebrew/core)/.git" ]]; then
@@ -2546,16 +2549,17 @@ EOF
 if [[ -n "${SET_MIRRORS}" ]]; then
 	cat >>.dotfiles/.condarc <<'EOF'
 default_channels:
-  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
-  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r
-  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/msys2
+  - https://mirrors.cernet.edu.cn/anaconda/pkgs/main
+  - https://mirrors.cernet.edu.cn/anaconda/pkgs/r
+  - https://mirrors.cernet.edu.cn/anaconda/pkgs/msys2
 custom_channels:
-  conda-forge: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
-  pytorch: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
-  msys2: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
-  bioconda: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
-  menpo: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
-  simpleitk: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
+  conda-forge: https://mirrors.cernet.edu.cn/anaconda/cloud
+  pytorch: https://mirrors.cernet.edu.cn/anaconda/cloud
+  nvidia: https://mirrors.cernet.edu.cn/anaconda-extra/cloud
+  msys2: https://mirrors.cernet.edu.cn/anaconda/cloud
+  bioconda: https://mirrors.cernet.edu.cn/anaconda/cloud
+  menpo: https://mirrors.cernet.edu.cn/anaconda/cloud
+  simpleitk: https://mirrors.cernet.edu.cn/anaconda/cloud
 EOF
 fi
 cat >>.dotfiles/.condarc <<'EOF'
@@ -2593,7 +2597,7 @@ chmod 644 .dotfiles/.condarc
 # Install Miniconda
 if [[ ! -x "${CONDA_BASE_PREFIX}/condabin/conda" ]]; then
 	if [[ -n "${SET_MIRRORS}" ]]; then
-		exec_cmd "wget -N -P \"${TMP_DIR}\" https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-latest-Linux-$(uname -m).sh"
+		exec_cmd "wget -N -P \"${TMP_DIR}\" https://mirrors.cernet.edu.cn/anaconda/miniconda/Miniconda3-latest-Linux-$(uname -m).sh"
 	else
 		exec_cmd "wget -N -P \"${TMP_DIR}\" https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-$(uname -m).sh"
 	fi
@@ -2615,7 +2619,7 @@ if [[ -x "${CONDA_BASE_PREFIX}/condabin/conda" ]]; then
 	ruff isort pre-commit --name=base --yes'
 	exec_cmd "\"${CONDA_DIR}/condabin/conda\""' clean --all --yes'
 	if [[ -n "${SET_MIRRORS}" ]]; then
-		exec_cmd "\"${CONDA_DIR}/condabin/conda\" run --name=base pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple"
+		exec_cmd "\"${CONDA_DIR}/condabin/conda\" run --name=base pip config set global.index-url https://mirrors.cernet.edu.cn/pypi/web/simple"
 	fi
 
 	# Add Conda Environment Initialization Script

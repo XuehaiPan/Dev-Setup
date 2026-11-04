@@ -48,11 +48,11 @@ cd Dev-Setup
 
 Options:
 
-- `SET_MIRRORS` (default `false`): set the source of package managers to open source mirrors at [TUNA (@China)](https://mirrors.tuna.tsinghua.edu.cn) to speed up downloading. (see [Packages](#packages) for more details). If you want to bypass the prompt, run:
+- `SET_MIRRORS` (default `false`): set the source of package managers to open source mirrors at [CERNET (@China)](https://mirrors.cernet.edu.cn) to speed up downloading. (see [Packages](#packages) for more details). If you want to bypass the prompt, run:
 
 ```bash
 # Bypass the prompt
-bash setup.sh --set-mirrors     # set mirrors to TUNA (@China) (recommended for users in China)
+bash setup.sh --set-mirrors     # set mirrors to CERNET (@China) (recommended for users in China)
 bash setup.sh --no-set-mirrors  # do not modify mirror settings
 ```
 
@@ -169,13 +169,13 @@ ln -sf .dotfiles/<CFG_FILE> .
 
 ## Packages
 
-The source of package managers (Homebrew (macOS), APT (Ubuntu), Pacman (Manjaro), CPAN, Gem, Conda and Pip) will be set to the open source mirrors at [TUNA (@China)](https://mirrors.tuna.tsinghua.edu.cn).
+The source of package managers (Homebrew (macOS), APT (Ubuntu), Pacman (Manjaro), CPAN, Gem, Conda and Pip) will be set to the open source mirrors at [CERNET (@China)](https://mirrors.cernet.edu.cn).
 
 The following packages will be setup:
 
 | Package                                                                                                                          | macOS | Ubuntu Linux | Manjaro Linux |
 | :------------------------------------------------------------------------------------------------------------------------------- | :---: | :----------: | :-----------: |
-| [Mirrors at TUNA (@China)](https://mirrors.tuna.tsinghua.edu.cn)                                                                 |   ✔   |      ✔       |       ✔       |
+| [Mirrors at CERNET (@China)](https://mirrors.cernet.edu.cn)                                                                      |   ✔   |      ✔       |       ✔       |
 | [Homebrew](https://brew.sh)                                                                                                      |   ✔   |      ✔       |       ✔       |
 |                                                                                                                                  |       |              |               |
 | [bash](https://www.gnu.org/software/bash)                                                                                        |   ✔   |      ✔       |       ✔       |

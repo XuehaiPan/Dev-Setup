@@ -48,11 +48,11 @@ cd Dev-Setup
 
 选项：
 
-- `SET_MIRRORS` (默认值 `false`)：将软件包管理器的源设置为开源镜像 [TUNA (@China)](https://mirrors.tuna.tsinghua.edu.cn) 以加速下载（更多信息请参见 [软件包列表](#软件包列表)）。如果你想跳过询问步骤，请运行：
+- `SET_MIRRORS` (默认值 `false`)：将软件包管理器的源设置为开源镜像 [CERNET (@China)](https://mirrors.cernet.edu.cn) 以加速下载（更多信息请参见 [软件包列表](#软件包列表)）。如果你想跳过询问步骤，请运行：
 
 ```bash
 # Bypass the prompt
-bash setup.sh --set-mirrors     # set mirrors to TUNA (@China) (recommended for users in China)
+bash setup.sh --set-mirrors     # set mirrors to CERNET (@China) (recommended for users in China)
 bash setup.sh --no-set-mirrors  # do not modify mirror settings
 ```
 
@@ -169,13 +169,13 @@ ln -sf .dotfiles/<CFG_FILE> .
 
 ## 软件包列表
 
-软件包管理器（Homebrew (macOS)、APT (Ubuntu)、Pacman (Manjaro)、CPAN、Gem、Conda 和 Pip）的源将被设置为 [TUNA (@China)](https://mirrors.tuna.tsinghua.edu.cn) 开源镜像。
+软件包管理器（Homebrew (macOS)、APT (Ubuntu)、Pacman (Manjaro)、CPAN、Gem、Conda 和 Pip）的源将被设置为 [CERNET (@China)](https://mirrors.cernet.edu.cn) 开源镜像。
 
 本脚本将会安装和配置如下软件包：
 
 | Package                                                                                                                          | macOS | Ubuntu Linux | Manjaro Linux |
 | :------------------------------------------------------------------------------------------------------------------------------- | :---: | :----------: | :-----------: |
-| [Mirrors at TUNA (@China)](https://mirrors.tuna.tsinghua.edu.cn)                                                                 |   ✔   |      ✔       |       ✔       |
+| [Mirrors at CERNET (@China)](https://mirrors.cernet.edu.cn)                                                                      |   ✔   |      ✔       |       ✔       |
 | [Homebrew](https://brew.sh)                                                                                                      |   ✔   |      ✔       |       ✔       |
 |                                                                                                                                  |       |              |               |
 | [bash](https://www.gnu.org/software/bash)                                                                                        |   ✔   |      ✔       |       ✔       |

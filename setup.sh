@@ -54,8 +54,8 @@ function print_help() {
 		echo -e "${BOLD}${WHITE}Usage: ${GREEN}/bin/bash setup.sh [options]${RESET}"
 		echo
 		echo -e "${BOLD}${WHITE}Options:${RESET}"
-		echo -e "  ${GREEN}--set-mirrors [yes|no]${RESET}      Set or not set the source of package managers to the open source mirrors at TUNA (@China)."
-		echo -e "  ${GREEN}--no-set-mirrors${RESET}            Do not set the source of package managers to the open source mirrors at TUNA (@China)."
+		echo -e "  ${GREEN}--set-mirrors [yes|no]${RESET}      Set or not set the source of package managers to the open source mirrors at CERNET (@China)."
+		echo -e "  ${GREEN}--no-set-mirrors${RESET}            Do not set the source of package managers to the open source mirrors at CERNET (@China)."
 		echo
 		echo -e "  ${GREEN}--force-per-user-homebrew${RESET}   Force to install Homebrew in per-user mode even if running as sudoers (Linux only)."
 		echo
@@ -121,7 +121,7 @@ else
 		while true; do
 			read -n 1 -p "$(
 				echo -e "${BOLD}${WHITE}Do you wish to set the source of package managers ${GREEN}(${PACKAGE_MANAGER}, CPAN, Gem, Conda, and Pip)${WHITE}"
-				echo -e "to the open source mirrors at ${YELLOW}TUNA (@China) (${UNDERLINE}https://mirrors.tuna.tsinghua.edu.cn${UNDERLINEOFF})${WHITE} [y/N]: ${RESET}"
+				echo -e "to the open source mirrors at ${YELLOW}CERNET (@China) (${UNDERLINE}https://mirrors.cernet.edu.cn${UNDERLINEOFF})${WHITE} [y/N]: ${RESET}"
 			)" answer
 			if [[ -n "${answer}" ]]; then
 				echo

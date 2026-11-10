@@ -2564,6 +2564,9 @@ channel_priority: flexible
 ssl_verify: true
 show_channel_urls: false
 report_errors: false
+anaconda_anon_usage: false
+plugins:
+  anaconda_telemetry: false
 
 force_reinstall: true
 create_default_packages:
@@ -2605,6 +2608,8 @@ if [[ -x "${CONDA_BASE_PREFIX}/condabin/conda" ]]; then
 	export PATH="${CONDA_BASE_PREFIX}/condabin${PATH:+:"${PATH}"}"
 	source "${CONDA_BASE_PREFIX}/etc/profile.d/conda.sh"
 	source "${CONDA_BASE_PREFIX}/bin/activate"
+	exec_cmd "CONDA_PLUGINS_AUTO_ACCEPT_TOS=yes \"${CONDA_DIR}/condabin/conda\""' install \
+		conda-anaconda-tos conda-anaconda-telemetry --name=base --yes'
 	exec_cmd "\"${CONDA_DIR}/condabin/conda\""' tos accept'
 	if "${CONDA_BASE_PREFIX}/condabin/conda" self update --help 2>/dev/null | grep -q -- '--yes'; then
 		exec_cmd "CONDA_CHANNEL_PRIORITY=disabled \"${CONDA_DIR}/condabin/conda\""' self update --yes'

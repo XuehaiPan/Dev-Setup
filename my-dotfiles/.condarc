@@ -21,6 +21,9 @@ channel_priority: flexible
 ssl_verify: true
 show_channel_urls: false
 report_errors: false
+anaconda_anon_usage: false
+plugins:
+  anaconda_telemetry: false
 
 force_reinstall: true
 create_default_packages:

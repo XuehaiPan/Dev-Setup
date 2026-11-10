@@ -175,7 +175,7 @@ function upgrade_conda() {
 
 	# Upgrade Conda and Mamba
 	if conda self update --help 2>/dev/null | grep -q -- '--yes'; then
-		exec_cmd 'conda self update --yes'
+		exec_cmd 'CONDA_CHANNEL_PRIORITY=disabled conda self update --yes'
 		exec_cmd 'conda update mamba --name=base --yes'
 	else
 		exec_cmd 'conda update conda mamba --name=base --yes'

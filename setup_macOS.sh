@@ -1168,7 +1168,7 @@ function upgrade_conda() {
 
 	# Upgrade Conda and Mamba
 	if conda self update --help 2>/dev/null | grep -q -- '--yes'; then
-		exec_cmd 'conda self update --yes'
+		exec_cmd 'CONDA_CHANNEL_PRIORITY=disabled conda self update --yes'
 		exec_cmd 'conda update mamba --name=base --yes'
 	else
 		exec_cmd 'conda update conda mamba --name=base --yes'
@@ -2555,7 +2555,7 @@ if [[ -x "${CONDA_BASE_PREFIX}/condabin/conda" ]]; then
 	source "${CONDA_BASE_PREFIX}/bin/activate"
 	exec_cmd "\"${CONDA_DIR}/condabin/conda\""' tos accept'
 	if "${CONDA_BASE_PREFIX}/condabin/conda" self update --help 2>/dev/null | grep -q -- '--yes'; then
-		exec_cmd "\"${CONDA_DIR}/condabin/conda\""' self update --yes'
+		exec_cmd "CONDA_CHANNEL_PRIORITY=disabled \"${CONDA_DIR}/condabin/conda\""' self update --yes'
 		exec_cmd "\"${CONDA_DIR}/condabin/conda\""' install --update-specs mamba --name=base --yes'
 	else
 		exec_cmd "\"${CONDA_DIR}/condabin/conda\""' update conda --name=base --yes'

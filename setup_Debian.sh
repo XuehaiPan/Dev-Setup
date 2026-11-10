@@ -272,6 +272,13 @@ if have_sudo_access; then
 	exec_cmd 'sudo apt-get update && sudo apt-get install --only-upgrade ca-certificates --yes'
 
 	exec_cmd 'sudo apt-get update'
+
+	exec_cmd 'sudo apt-get install locales locales-all --yes'
+	exec_cmd 'sudo localedef -i en_US -f ISO-8859-1 en_US' || true
+	exec_cmd 'sudo localedef -i en_US -f UTF-8 en_US.UTF-8' || true
+	exec_cmd 'sudo localedef -i C -f ANSI_X3.4-1968 C' || true
+	exec_cmd 'sudo localedef -i C -f UTF-8 C.UTF-8' || true
+
 	exec_cmd 'sudo apt-get install software-properties-common apt-transport-https gpg wget --yes'
 	exec_cmd 'sudo add-apt-repository ppa:graphics-drivers/ppa --yes'
 

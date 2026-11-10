@@ -260,6 +260,13 @@ if have_sudo_access; then
 	exec_cmd 'sudo dnf upgrade ca-certificates --assumeyes'
 
 	exec_cmd 'sudo dnf makecache'
+
+	exec_cmd 'sudo dnf install glibc-all-langpacks glibc-locale-source --assumeyes'
+	exec_cmd 'sudo localedef -i en_US -f ISO-8859-1 en_US' || true
+	exec_cmd 'sudo localedef -i en_US -f UTF-8 en_US.UTF-8' || true
+	exec_cmd 'sudo localedef -i C -f ANSI_X3.4-1968 C' || true
+	exec_cmd 'sudo localedef -i C -f UTF-8 C.UTF-8' || true
+
 	exec_cmd 'sudo dnf install dnf-plugins-core gpg wget --assumeyes'
 
 	# Install Microsoft signing key and setup VS Code repository

@@ -177,7 +177,8 @@ function have_sudo_access() {
 
 	if [[ -z "${HAVE_SUDO_ACCESS-}" ]]; then
 		echo -e "${BOLD}${BLUE}==> ${WHITE}Checking sudo access (press ${YELLOW}Ctrl+C${WHITE} to run as normal user).${RESET}" >&2
-		exec_cmd "${SUDO[*]} -v && ${SUDO[*]} -l mkdir &>/dev/null"
+		# Probe the command itself because `sudo -v` can require a password with `NOPASSWD`.
+		exec_cmd "${SUDO[*]} mkdir -p /"
 		HAVE_SUDO_ACCESS="$?"
 	fi
 

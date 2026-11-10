@@ -269,8 +269,10 @@ if have_sudo_access; then
 		exec_cmd 'apt-get update && apt-get install sudo --yes'
 	fi
 
-	# Update ca-certificates
-	exec_cmd 'sudo apt-get update && sudo apt-get install --only-upgrade ca-certificates --yes'
+	# Install and upgrade ca-certificates
+	exec_cmd 'sudo apt-get update -o APT::Update::Error-Mode=any' || exit 1
+	exec_cmd 'sudo apt-get install ca-certificates --yes' || exit 1
+	exec_cmd 'sudo apt-get install --only-upgrade ca-certificates --yes' || exit 1
 
 	# Setup APT sources
 	if [[ -n "${SET_MIRRORS}" ]]; then
@@ -287,6 +289,7 @@ if have_sudo_access; then
 			done <<EOS
 	     //cn.archive.ubuntu.com         //mirrors.cernet.edu.cn
 	     //archive.ubuntu.com            //mirrors.cernet.edu.cn
+	     //ports.ubuntu.com              //mirrors.cernet.edu.cn
 	     //security.ubuntu.com           //mirrors.cernet.edu.cn
 	     //packages.linuxmint.com        //mirrors.cernet.edu.cn/linuxmint
 	http://mirrors.cernet.edu.cn   https://mirrors.cernet.edu.cn

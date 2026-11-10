@@ -269,10 +269,10 @@ if have_sudo_access; then
 		exec_cmd 'apt-get update && apt-get install sudo --yes'
 	fi
 
-	# Update ca-certificates
-	exec_cmd 'sudo apt-get update && sudo apt-get install --only-upgrade ca-certificates --yes'
-
-	exec_cmd 'sudo apt-get update'
+	# Install and upgrade ca-certificates
+	exec_cmd 'sudo apt-get update -o APT::Update::Error-Mode=any' || exit 1
+	exec_cmd 'sudo apt-get install ca-certificates --yes' || exit 1
+	exec_cmd 'sudo apt-get install --only-upgrade ca-certificates --yes' || exit 1
 
 	exec_cmd 'sudo apt-get install locales locales-all --yes'
 	exec_cmd 'sudo localedef -i en_US -f ISO-8859-1 en_US' || true

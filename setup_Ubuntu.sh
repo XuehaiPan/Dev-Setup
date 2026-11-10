@@ -269,10 +269,15 @@ if have_sudo_access; then
 		exec_cmd 'apt-get update && apt-get install sudo --yes'
 	fi
 
+	PACKAGE_SUDO="sudo"
+	if [[ -n "${NONINTERACTIVE}" ]]; then
+		PACKAGE_SUDO='sudo -n DEBIAN_FRONTEND=noninteractive'
+	fi
+
 	# Install and upgrade ca-certificates
-	exec_cmd 'sudo apt-get update -o APT::Update::Error-Mode=any' || exit 1
-	exec_cmd 'sudo apt-get install ca-certificates --yes' || exit 1
-	exec_cmd 'sudo apt-get install --only-upgrade ca-certificates --yes' || exit 1
+	exec_cmd "${PACKAGE_SUDO} apt-get update -o APT::Update::Error-Mode=any" || exit 1
+	exec_cmd "${PACKAGE_SUDO} apt-get install ca-certificates --yes" || exit 1
+	exec_cmd "${PACKAGE_SUDO} apt-get install --only-upgrade ca-certificates --yes" || exit 1
 
 	# Setup APT sources
 	if [[ -n "${SET_MIRRORS}" ]]; then
@@ -297,15 +302,15 @@ EOS
 		done < <(find -L /etc/apt -type f '(' -name '*.list' -o -name '*.sources' ')')
 	fi
 
-	exec_cmd 'sudo apt-get update'
+	exec_cmd "${PACKAGE_SUDO} apt-get update"
 
-	exec_cmd 'sudo apt-get install locales locales-all --yes'
+	exec_cmd "${PACKAGE_SUDO} apt-get install locales locales-all --yes"
 	exec_cmd 'sudo localedef -i en_US -f ISO-8859-1 en_US' || true
 	exec_cmd 'sudo localedef -i en_US -f UTF-8 en_US.UTF-8' || true
 	exec_cmd 'sudo localedef -i C -f ANSI_X3.4-1968 C' || true
 	exec_cmd 'sudo localedef -i C -f UTF-8 C.UTF-8' || true
 
-	exec_cmd 'sudo apt-get install software-properties-common apt-transport-https gpg wget --yes'
+	exec_cmd "${PACKAGE_SUDO} apt-get install software-properties-common apt-transport-https gpg wget --yes"
 	exec_cmd 'sudo add-apt-repository ppa:graphics-drivers/ppa --yes'
 
 	# Install Microsoft signing key and setup VS Code repository
@@ -347,7 +352,7 @@ EOS
 	exec_cmd 'wget -qO - https://deb.nodesource.com/setup_lts.x | sudo -E bash -'
 
 	# Install and setup shells
-	exec_cmd 'sudo apt-get install zsh --yes'
+	exec_cmd "${PACKAGE_SUDO} apt-get install zsh --yes"
 
 	if ! grep -qF '/usr/bin/zsh' /etc/shells; then
 		exec_cmd 'echo "/usr/bin/zsh" | sudo tee -a /etc/shells'
@@ -358,39 +363,39 @@ EOS
 	if [[ "$(uname -m)" == "aarch64" || "$(uname -m)" == "arm64" ]]; then
 		ARCH="arm64"
 	fi
-	exec_cmd 'sudo apt-get install bash-completion curl git git-lfs vim tmux --yes'
-	exec_cmd 'sudo apt-get install ranger highlight shellcheck git-extras jq --yes'
+	exec_cmd "${PACKAGE_SUDO} apt-get install bash-completion curl git git-lfs vim tmux --yes"
+	exec_cmd "${PACKAGE_SUDO} apt-get install ranger highlight shellcheck git-extras jq --yes"
 	if [[ -n "$(apt-cache search '^eza$' --names-only)" ]]; then
-		exec_cmd 'sudo apt-get install eza --yes'
+		exec_cmd "${PACKAGE_SUDO} apt-get install eza --yes"
 	fi
 	if [[ -n "$(apt-cache search '^fd-find$' --names-only)" ]]; then
-		exec_cmd 'sudo apt-get install fd-find --yes'
+		exec_cmd "${PACKAGE_SUDO} apt-get install fd-find --yes"
 	fi
 	if [[ $? -ne 0 || -z "$(apt-cache search '^fd-find$' --names-only)" ]]; then
 		LATEST_FD_VERSION="$(get_latest_version "sharkdp/fd")"
 		if [[ -n "${LATEST_FD_VERSION}" ]] && ! check_binary fd "${LATEST_FD_VERSION}" && ! check_binary fdfind "${LATEST_FD_VERSION}"; then
 			exec_cmd "wget -N -P \"${TMP_DIR}\" https://github.com/sharkdp/fd/releases/download/${LATEST_FD_VERSION}/fd_${LATEST_FD_VERSION#v}_${ARCH}.deb"
-			exec_cmd "sudo dpkg -i \"${TMP_DIR}/fd_${LATEST_FD_VERSION#v}_${ARCH}.deb\""
+			exec_cmd "${PACKAGE_SUDO} dpkg -i \"${TMP_DIR}/fd_${LATEST_FD_VERSION#v}_${ARCH}.deb\""
 		fi
 	fi
 	if [[ -n "$(apt-cache search '^bat$' --names-only)" ]]; then
-		exec_cmd 'sudo apt-get install bat --yes'
+		exec_cmd "${PACKAGE_SUDO} apt-get install bat --yes"
 	fi
 	if [[ $? -ne 0 || -z "$(apt-cache search '^bat$' --names-only)" ]]; then
 		LATEST_BAT_VERSION="$(get_latest_version "sharkdp/bat")"
 		if [[ -n "${LATEST_BAT_VERSION}" ]] && ! check_binary bat "${LATEST_BAT_VERSION}" && ! check_binary batcat "${LATEST_BAT_VERSION}"; then
 			exec_cmd "wget -N -P \"${TMP_DIR}\" https://github.com/sharkdp/bat/releases/download/${LATEST_BAT_VERSION}/bat_${LATEST_BAT_VERSION#v}_${ARCH}.deb"
-			exec_cmd "sudo dpkg -i \"${TMP_DIR}/bat_${LATEST_BAT_VERSION#v}_${ARCH}.deb\""
+			exec_cmd "${PACKAGE_SUDO} dpkg -i \"${TMP_DIR}/bat_${LATEST_BAT_VERSION#v}_${ARCH}.deb\""
 		fi
 	fi
 	if [[ -n "$(apt-cache search '^ripgrep$' --names-only)" ]]; then
-		exec_cmd 'sudo apt-get install ripgrep --yes'
+		exec_cmd "${PACKAGE_SUDO} apt-get install ripgrep --yes"
 	fi
 	if [[ $? -ne 0 || -z "$(apt-cache search '^ripgrep$' --names-only)" ]]; then
 		LATEST_RIPGREP_VERSION="$(get_latest_version "BurntSushi/ripgrep")"
 		if [[ -n "${LATEST_RIPGREP_VERSION}" ]] && ! check_binary ripgrep "${LATEST_RIPGREP_VERSION}"; then
 			exec_cmd "wget -N -P \"${TMP_DIR}\" https://github.com/BurntSushi/ripgrep/releases/download/${LATEST_RIPGREP_VERSION}/ripgrep_${LATEST_RIPGREP_VERSION}_${ARCH}.deb"
-			exec_cmd "sudo dpkg -i \"${TMP_DIR}/ripgrep_${LATEST_RIPGREP_VERSION}_${ARCH}.deb\""
+			exec_cmd "${PACKAGE_SUDO} dpkg -i \"${TMP_DIR}/ripgrep_${LATEST_RIPGREP_VERSION}_${ARCH}.deb\""
 		fi
 	fi
 	LATEST_SHFMT_VERSION="$(get_latest_version "mvdan/sh")"
@@ -404,18 +409,18 @@ EOS
 		exec_cmd 'sudo chown root:root /usr/local/bin/shfmt'
 	fi
 	if [[ -n "$(apt-cache search '^git-delta$' --names-only)" ]]; then
-		exec_cmd 'sudo apt-get install git-delta --yes'
+		exec_cmd "${PACKAGE_SUDO} apt-get install git-delta --yes"
 	fi
 	exec_cmd "wget -N -P \"${TMP_DIR}\" https://github.com/so-fancy/diff-so-fancy/releases/latest/download/diff-so-fancy"
 	exec_cmd "sudo mv -f \"${TMP_DIR}/diff-so-fancy\" /usr/local/bin/diff-so-fancy"
 	exec_cmd 'sudo chmod 755 /usr/local/bin/diff-so-fancy'
 	exec_cmd 'sudo chown root:root /usr/local/bin/diff-so-fancy'
-	exec_cmd 'sudo apt-get install htop ssh net-tools atool tree colordiff xclip --yes'
-	exec_cmd 'sudo apt-get install make cmake build-essential gcc g++ gdb --yes'
-	exec_cmd 'sudo apt-get install clang clang-format llvm lldb --yes'
-	exec_cmd 'sudo apt-get install ruby-full perl libssl-dev libreadline-dev libyaml-dev zlib1g-dev --yes'
-	exec_cmd 'sudo apt-get autoremove --purge --yes'
-	exec_cmd 'sudo apt-get autoclean'
+	exec_cmd "${PACKAGE_SUDO} apt-get install htop ssh net-tools atool tree colordiff xclip --yes"
+	exec_cmd "${PACKAGE_SUDO} apt-get install make cmake build-essential gcc g++ gdb --yes"
+	exec_cmd "${PACKAGE_SUDO} apt-get install clang clang-format llvm lldb --yes"
+	exec_cmd "${PACKAGE_SUDO} apt-get install ruby-full perl libssl-dev libreadline-dev libyaml-dev zlib1g-dev --yes"
+	exec_cmd "${PACKAGE_SUDO} apt-get autoremove --purge --yes"
+	exec_cmd "${PACKAGE_SUDO} apt-get autoclean"
 fi
 
 # Change the login shell to Zsh

@@ -322,7 +322,7 @@ function pull_projects() {
 	for base_dir in "${base_dirs[@]}"; do
 		while read -r proj_dir; do
 			branch="$(git -C "${proj_dir}" branch --show-current)"
-			remote="$(git -C "${proj_dir}" config branch."${branch}".remote)"
+			remote="$(git -C "${proj_dir}" config --default "" --get branch."${branch}".remote)"
 			if [[ -z "${branch}" || -z "${remote}" ]]; then
 				continue
 			fi
@@ -331,7 +331,7 @@ function pull_projects() {
 			head_hash="$(git -C "${proj_dir}" rev-parse "${remote}/${branch}")"
 			if [[ "${head_hash}" != "${old_head_hash}" ]]; then
 				exec_cmd "git -C \"${proj_dir/#${HOME}/\${HOME\}}\" pull ${remote} ${branch} --ff-only"
-				last_timestamp="$(git -C "${proj_dir}" config gc.lasttimestamp 2>/dev/null || echo "0")"
+				last_timestamp="$(git -C "${proj_dir}" config --default 0 --get gc.lasttimestamp)"
 				if ((timestamp - last_timestamp >= 3600 * 24 * 3)); then
 					commit_count="$(git -C "${proj_dir}" rev-list --count --all || echo "0")"
 					commit_count="${commit_count:-0}"
@@ -341,7 +341,7 @@ function pull_projects() {
 					fi
 				fi
 			fi
-			push_remote="$(git -C "${proj_dir}" config branch."${branch}".pushremote)"
+			push_remote="$(git -C "${proj_dir}" config --default "" --get branch."${branch}".pushremote)"
 			if [[ -n "${push_remote}" ]]; then
 				push_remote_hash="$(git -C "${proj_dir}" rev-parse "${push_remote}/${branch}")"
 				if [[ "${head_hash}" != "${push_remote_hash}" ]]; then

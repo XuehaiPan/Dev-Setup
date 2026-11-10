@@ -434,7 +434,7 @@ git config --global filter.lfs.required true
 git config --global alias.list-ignored '! cd -- "${GIT_PREFIX:-.}" && git ls-files -v "${1:-.}" | sed -n -e "s,^[a-z] \\(.*\\)\$,${GIT_PREFIX:-./}\\1,p" && git status --ignored --porcelain "${1:-.}" 2>/dev/null | sed -n -e "s/^\\(\\!\\! \\)\\(.*\\)$/\\2/p";'
 git config --global alias.config-push-remote '! cd -- "$(git rev-parse --show-toplevel)" && GIT_BRANCH="${1:-"$(git branch --show-current)"}" && git config branch."${GIT_BRANCH}".remote upstream; git config branch."${GIT_BRANCH}".pushremote origin;'
 git config --global alias.diff-remote 'diff @{upstream}'
-git config --global alias.diff-push-remote '! cd -- "$(git rev-parse --show-toplevel)"; GIT_BRANCH="$(git branch --show-current)"; GIT_PUSH_REMOTE="$(git config --get branch."${GIT_BRANCH}".pushremote || git config --get branch."${GIT_BRANCH}".remote || echo "origin")"; GIT_PUSH_REF="$(git rev-parse --abbrev-ref @{push} 2>/dev/null || echo "${GIT_PUSH_REMOTE}/${GIT_BRANCH}")"; git diff "${GIT_PUSH_REF}"'
+git config --global alias.diff-push-remote '! cd -- "$(git rev-parse --show-toplevel)"; GIT_BRANCH="$(git branch --show-current)"; GIT_PUSH_REMOTE="$(git config --default "$(git config --default origin --get branch."${GIT_BRANCH}".remote)" --get branch."${GIT_BRANCH}".pushremote)"; GIT_PUSH_REF="$(git rev-parse --abbrev-ref @{push} 2>/dev/null || echo "${GIT_PUSH_REMOTE}/${GIT_BRANCH}")"; git diff "${GIT_PUSH_REF}"'
 git config --global alias.sync-remote '! cd -- "$(git rev-parse --show-toplevel)"; git status --porcelain && (GIT_CURRENT_BRANCH="$(git branch --show-current)"; GIT_BRANCH="${1:-"${GIT_CURRENT_BRANCH}"}"; GIT_REMOTE="$(git remote show | grep -E "^upstream$" || echo "origin")"; [ "${GIT_CURRENT_BRANCH}" != "${GIT_BRANCH}" ] && gut checkout "${GIT_BRANCH}"; git fetch --all --tags --prune --force --jobs=16; git pull --ff-only "${GIT_REMOTE}" "${GIT_BRANCH}"; [ "${GIT_REMOTE}" != "origin" ] && git push origin "${GIT_BRANCH}:${GIT_BRANCH}"; [ "${GIT_CURRENT_BRANCH}" != "${GIT_BRANCH}" ] && gut checkout "${GIT_CURRENT_BRANCH}")'
 git config --global alias.add-non-eolws-changes '! cd -- "$(git rev-parse --show-toplevel)"; git diff --no-color --unified=0 --ignore-submodules=all --ignore-space-at-eol | git apply --cached --allow-empty --unidiff-zero --ignore-space-change --whitespace=nowarn -'
 git config --global alias.save '! cd -- "$(git rev-parse --show-toplevel)"; message="$*"; message="${message#"${message%%[![:space:]]*}"}"; case "${message}" in "") message="wip" ;; wip:*|WIP:*|\[wip\]*|\[WIP\]*) ;; *) message="wip: ${message}" ;; esac; git add --all && git diff --cached --quiet || git commit -m "${message}"; :'
@@ -1535,7 +1535,7 @@ function pull_projects() {
 	for base_dir in "${base_dirs[@]}"; do
 		while read -r proj_dir; do
 			branch="$(git -C "${proj_dir}" branch --show-current)"
-			remote="$(git -C "${proj_dir}" config branch."${branch}".remote)"
+			remote="$(git -C "${proj_dir}" config --default "" --get branch."${branch}".remote)"
 			if [[ -z "${branch}" || -z "${remote}" ]]; then
 				continue
 			fi
@@ -1544,7 +1544,7 @@ function pull_projects() {
 			head_hash="$(git -C "${proj_dir}" rev-parse "${remote}/${branch}")"
 			if [[ "${head_hash}" != "${old_head_hash}" ]]; then
 				exec_cmd "git -C \"${proj_dir/#${HOME}/\${HOME\}}\" pull ${remote} ${branch} --ff-only"
-				last_timestamp="$(git -C "${proj_dir}" config gc.lasttimestamp 2>/dev/null || echo "0")"
+				last_timestamp="$(git -C "${proj_dir}" config --default 0 --get gc.lasttimestamp)"
 				if ((timestamp - last_timestamp >= 3600 * 24 * 3)); then
 					commit_count="$(git -C "${proj_dir}" rev-list --count --all || echo "0")"
 					commit_count="${commit_count:-0}"
@@ -1554,7 +1554,7 @@ function pull_projects() {
 					fi
 				fi
 			fi
-			push_remote="$(git -C "${proj_dir}" config branch."${branch}".pushremote)"
+			push_remote="$(git -C "${proj_dir}" config --default "" --get branch."${branch}".pushremote)"
 			if [[ -n "${push_remote}" ]]; then
 				push_remote_hash="$(git -C "${proj_dir}" rev-parse "${push_remote}/${branch}")"
 				if [[ "${head_hash}" != "${push_remote_hash}" ]]; then

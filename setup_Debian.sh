@@ -1372,7 +1372,12 @@ function upgrade_conda() {
 	local env cmds
 
 	# Upgrade Conda and Mamba
-	exec_cmd 'conda update conda mamba --name=base --yes'
+	if conda self update --help 2>/dev/null | grep -q -- '--yes'; then
+		exec_cmd 'conda self update --yes'
+		exec_cmd 'conda update mamba --name=base --yes'
+	else
+		exec_cmd 'conda update conda mamba --name=base --yes'
+	fi
 
 	# Upgrade Conda packages in each environment
 	while read -r env; do
@@ -2601,9 +2606,14 @@ if [[ -x "${CONDA_BASE_PREFIX}/condabin/conda" ]]; then
 	source "${CONDA_BASE_PREFIX}/etc/profile.d/conda.sh"
 	source "${CONDA_BASE_PREFIX}/bin/activate"
 	exec_cmd "\"${CONDA_DIR}/condabin/conda\""' tos accept'
-	exec_cmd "\"${CONDA_DIR}/condabin/conda\""' update conda --name=base --yes'
-	exec_cmd "\"${CONDA_DIR}/condabin/conda\""' install mamba --name=base --yes'
-	exec_cmd "\"${CONDA_DIR}/condabin/conda\""' update conda mamba --name=base --yes'
+	if "${CONDA_BASE_PREFIX}/condabin/conda" self update --help 2>/dev/null | grep -q -- '--yes'; then
+		exec_cmd "\"${CONDA_DIR}/condabin/conda\""' self update --yes'
+		exec_cmd "\"${CONDA_DIR}/condabin/conda\""' install --update-specs mamba --name=base --yes'
+	else
+		exec_cmd "\"${CONDA_DIR}/condabin/conda\""' update conda --name=base --yes'
+		exec_cmd "\"${CONDA_DIR}/condabin/conda\""' install mamba --name=base --yes'
+		exec_cmd "\"${CONDA_DIR}/condabin/conda\""' update conda mamba --name=base --yes'
+	fi
 	exec_cmd "\"${CONDA_DIR}/condabin/conda\""' install pip ipython ipdb \
 	jupyter jupyterlab jupyter-lsp jupyterlab-lsp \
 	numpy matplotlib-base pandas rich tqdm \

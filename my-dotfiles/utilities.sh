@@ -174,7 +174,12 @@ function upgrade_conda() {
 	local env cmds
 
 	# Upgrade Conda and Mamba
-	exec_cmd 'conda update conda mamba --name=base --yes'
+	if conda self update --help 2>/dev/null | grep -q -- '--yes'; then
+		exec_cmd 'conda self update --yes'
+		exec_cmd 'conda update mamba --name=base --yes'
+	else
+		exec_cmd 'conda update conda mamba --name=base --yes'
+	fi
 
 	# Upgrade Conda packages in each environment
 	while read -r env; do

@@ -280,21 +280,21 @@ if have_sudo_access; then
 		exec_cmd 'sudo pacman-key --recv-keys 7931B6D628C8D3BA'
 		exec_cmd 'sudo pacman-key --finger 7931B6D628C8D3BA'
 		exec_cmd 'sudo pacman-key --lsign-key 7931B6D628C8D3BA'
-		exec_cmd "yes '' | sudo pacman -S archlinuxcn-keyring --needed"
+		exec_cmd 'sudo pacman -S --needed --noconfirm archlinuxcn-keyring'
 	fi
 
 	# Install and setup shells
-	exec_cmd "yes '' | sudo pacman -S zsh --needed"
+	exec_cmd 'sudo pacman -S --needed --noconfirm zsh'
 
 	if ! grep -qF '/usr/bin/zsh' /etc/shells; then
 		exec_cmd 'echo "/usr/bin/zsh" | sudo tee -a /etc/shells'
 	fi
 
 	# Install packages
-	exec_cmd "yes '' | sudo pacman -S bash-completion wget curl git git-lfs gvim tmux --needed"
-	exec_cmd "yes '' | sudo pacman -S ranger eza fd bat highlight ripgrep git-extras jq shfmt shellcheck --needed"
-	exec_cmd "yes '' | sudo pacman -S htop openssh net-tools atool tree colordiff diff-so-fancy git-delta xclip --needed"
-	exec_cmd "yes '' | sudo pacman -S gcc gdb clang llvm lldb make cmake ruby perl --needed"
+	exec_cmd 'sudo pacman -S --needed --noconfirm bash-completion wget curl git git-lfs gvim tmux'
+	exec_cmd 'sudo pacman -S --needed --noconfirm ranger eza fd bat highlight ripgrep git-extras jq shfmt shellcheck'
+	exec_cmd 'sudo pacman -S --needed --noconfirm htop openssh net-tools atool tree colordiff diff-so-fancy git-delta xclip'
+	exec_cmd 'sudo pacman -S --needed --noconfirm gcc gdb clang llvm lldb make cmake ruby perl'
 	exec_cmd 'yes | sudo pacman -Scc'
 
 	exec_cmd 'sudo systemctl start sshd'
@@ -1180,7 +1180,7 @@ function have_sudo_access() {
 function upgrade_manjaro() {
 	# Upgrade packages
 	exec_cmd 'sudo pacman -Syy'
-	exec_cmd "yes '' | sudo pacman -Syu"
+	exec_cmd 'sudo pacman -Syu --noconfirm'
 
 	# Remove unused packages
 	exec_cmd 'sudo paccache -ruk0'

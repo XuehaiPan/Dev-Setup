@@ -857,6 +857,11 @@ export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --ansi --preview='${FZF_P
 # bat
 export BAT_THEME="Monokai Extended"
 
+# nvitop
+if [[ -x "$(command -v uvx)" ]]; then
+	alias nvitop='uvx nvitop'
+fi
+
 # Conda
 if [[ -n "${__CONDA_PREFIX}" ]]; then
 	conda activate "${__CONDA_PREFIX}"
@@ -1816,6 +1821,11 @@ fi
 
 # bat
 export BAT_THEME="Monokai Extended"
+
+# nvitop
+if [[ -x "$(command -v uvx)" ]]; then
+	alias nvitop='uvx nvitop'
+fi
 
 # Conda
 if [[ -n "${__CONDA_PREFIX}" ]]; then

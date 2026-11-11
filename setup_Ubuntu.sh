@@ -275,7 +275,7 @@ if have_sudo_access; then
 	fi
 
 	# Install and upgrade ca-certificates
-	exec_cmd "${PACKAGE_SUDO} apt-get update -o APT::Update::Error-Mode=any" || exit 1
+	exec_cmd "${PACKAGE_SUDO} apt-get update" || exit 1
 	exec_cmd "${PACKAGE_SUDO} apt-get install ca-certificates --yes" || exit 1
 	exec_cmd "${PACKAGE_SUDO} apt-get install --only-upgrade ca-certificates --yes" || exit 1
 

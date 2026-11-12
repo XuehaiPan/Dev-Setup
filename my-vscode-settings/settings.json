@@ -1060,7 +1060,7 @@
     ],
 
     //* Shell-format */
-    "shellformat.flag": "--indent=0 --case-indent",
+    "shellformat.flag": "--indent=4 --case-indent",
     "shellformat.useEditorConfig": true,
 
     //* Todo Tree */

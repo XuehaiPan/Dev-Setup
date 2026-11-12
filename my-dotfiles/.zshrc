@@ -1,33 +1,33 @@
 # Source global definitions
 # Include /etc/zprofile if it exists
 if [[ -f /etc/zprofile ]]; then
-	source /etc/zprofile
+    source /etc/zprofile
 fi
 
 # Include /etc/zshrc if it exists
 if [[ -f /etc/zshrc ]]; then
-	source /etc/zshrc
+    source /etc/zshrc
 fi
 
 # Set PATH so it includes user's private bin if it exists
 if [[ -d "${HOME}/.local/bin" ]]; then
-	export PATH="${HOME}/.local/bin${PATH:+:"${PATH}"}"
+    export PATH="${HOME}/.local/bin${PATH:+:"${PATH}"}"
 fi
 
 # Set C_INCLUDE_PATH and CPLUS_INCLUDE_PATH so it includes user's private include if it exists
 if [[ -d "${HOME}/.local/include" ]]; then
-	export C_INCLUDE_PATH="${HOME}/.local/include${C_INCLUDE_PATH:+:"${C_INCLUDE_PATH}"}"
-	export CPLUS_INCLUDE_PATH="${HOME}/.local/include${CPLUS_INCLUDE_PATH:+:"${CPLUS_INCLUDE_PATH}"}"
+    export C_INCLUDE_PATH="${HOME}/.local/include${C_INCLUDE_PATH:+:"${C_INCLUDE_PATH}"}"
+    export CPLUS_INCLUDE_PATH="${HOME}/.local/include${CPLUS_INCLUDE_PATH:+:"${CPLUS_INCLUDE_PATH}"}"
 fi
 
 # Set LIBRARY_PATH and DYLD_LIBRARY_PATH so it includes user's private lib if it exists
 if [[ -d "${HOME}/.local/lib" ]]; then
-	export LIBRARY_PATH="${HOME}/.local/lib${LIBRARY_PATH:+:"${LIBRARY_PATH}"}"
-	export DYLD_LIBRARY_PATH="${HOME}/.local/lib${DYLD_LIBRARY_PATH:+:"${DYLD_LIBRARY_PATH}"}"
+    export LIBRARY_PATH="${HOME}/.local/lib${LIBRARY_PATH:+:"${LIBRARY_PATH}"}"
+    export DYLD_LIBRARY_PATH="${HOME}/.local/lib${DYLD_LIBRARY_PATH:+:"${DYLD_LIBRARY_PATH}"}"
 fi
 if [[ -d "${HOME}/.local/lib64" ]]; then
-	export LIBRARY_PATH="${HOME}/.local/lib64${LIBRARY_PATH:+:"${LIBRARY_PATH}"}"
-	export DYLD_LIBRARY_PATH="${HOME}/.local/lib64${DYLD_LIBRARY_PATH:+:"${DYLD_LIBRARY_PATH}"}"
+    export LIBRARY_PATH="${HOME}/.local/lib64${LIBRARY_PATH:+:"${LIBRARY_PATH}"}"
+    export DYLD_LIBRARY_PATH="${HOME}/.local/lib64${DYLD_LIBRARY_PATH:+:"${DYLD_LIBRARY_PATH}"}"
 fi
 
 # User specific environment
@@ -40,7 +40,7 @@ export LSCOLORS="${LSCOLORS:-"GxFxCxDxBxegedabagaced"}"
 export LANG="en_US.UTF-8"
 export LANGUAGE="en:C"
 if [[ -x "$(command -v locale)" ]]; then
-	eval "$(printf "export %s\n" $(LC_ALL="" LC_TIME="C.UTF-8" locale))"
+    eval "$(printf "export %s\n" $(LC_ALL="" LC_TIME="C.UTF-8" locale))"
 fi
 export LC_ALL="${LANG}"
 
@@ -60,14 +60,14 @@ export HOMEBREW_API_DOMAIN="https://mirrors.cernet.edu.cn/homebrew-bottles/api"
 export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.cernet.edu.cn/homebrew-bottles"
 export HOMEBREW_PIP_INDEX_URL="https://mirrors.cernet.edu.cn/pypi/web/simple"
 if [[ -d "$(brew --repository homebrew/core)/.git" ]]; then
-	export HOMEBREW_NO_INSTALL_FROM_API=true
+    export HOMEBREW_NO_INSTALL_FROM_API=true
 fi
 if [[ -n "${HOMEBREW_NO_INSTALL_FROM_API}" ]]; then
-	export HOMEBREW_VERBOSE=true
+    export HOMEBREW_VERBOSE=true
 fi
 __COMMAND_NOT_FOUND_HANDLER="${HOMEBREW_REPOSITORY}/Library/Homebrew/command-not-found/handler.sh"
 if [[ -f "${__COMMAND_NOT_FOUND_HANDLER}" ]]; then
-	source "${__COMMAND_NOT_FOUND_HANDLER}"
+    source "${__COMMAND_NOT_FOUND_HANDLER}"
 fi
 unset __COMMAND_NOT_FOUND_HANDLER
 function brew() { \command brew "$@"; \local rc="$?"; \builtin hash -r &>/dev/null; \return "${rc}"; }
@@ -77,13 +77,13 @@ function brew() { \command brew "$@"; \local rc="$?"; \builtin hash -r &>/dev/nu
 # !! Contents within this block are managed by 'conda init' !!
 __conda_setup="$(CONDA_REPORT_ERRORS=false "${HOME}/Miniconda3/bin/conda" shell.zsh hook 2>/dev/null)"
 if [[ $? -eq 0 ]]; then
-	eval "${__conda_setup}"
+    eval "${__conda_setup}"
 else
-	if [[ -f "${HOME}/Miniconda3/etc/profile.d/conda.sh" ]]; then
-		source "${HOME}/Miniconda3/etc/profile.d/conda.sh"
-	else
-		export PATH="${HOME}/Miniconda3/bin${PATH:+:"${PATH}"}"
-	fi
+    if [[ -f "${HOME}/Miniconda3/etc/profile.d/conda.sh" ]]; then
+        source "${HOME}/Miniconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="${HOME}/Miniconda3/bin${PATH:+:"${PATH}"}"
+    fi
 fi
 unset __conda_setup
 
@@ -93,16 +93,16 @@ export MAMBA_ROOT_PREFIX="${HOME}/Miniconda3/bin"
 export MAMBA_EXE="${MAMBA_ROOT_PREFIX}/mamba"
 __mamba_setup="$("${MAMBA_EXE}" shell hook --shell zsh --root-prefix "${MAMBA_ROOT_PREFIX}" 2>/dev/null)"
 if [[ $? -eq 0 ]]; then
-	eval "${__mamba_setup}"
+    eval "${__mamba_setup}"
 else
-	alias mamba="${MAMBA_EXE}"
+    alias mamba="${MAMBA_EXE}"
 fi
 unset __mamba_setup
 # <<< mamba initialize <<<
 
 __CONDA_PREFIX="${CONDA_PREFIX}"
 while [[ -n "${CONDA_PREFIX}" ]]; do
-	conda deactivate
+    conda deactivate
 done
 # <<< conda initialize <<<
 
@@ -121,7 +121,7 @@ export PATH="${GOBIN}${PATH:+:"${PATH}"}"
 
 # Rust
 if [[ -f "${HOME}/.cargo/env" ]]; then
-	source "${HOME}/.cargo/env"
+    source "${HOME}/.cargo/env"
 fi
 
 # Ruby
@@ -160,7 +160,7 @@ export DYLD_FALLBACK_LIBRARY_PATH="${DYLD_FALLBACK_LIBRARY_PATH:+"${DYLD_FALLBAC
 
 # Docker Desktop
 if [[ -d "${HOME}/.docker/bin" ]]; then
-	export PATH="${HOME}/.docker/bin${PATH:+:"${PATH}"}"
+    export PATH="${HOME}/.docker/bin${PATH:+:"${PATH}"}"
 fi
 
 # Wine
@@ -171,7 +171,7 @@ export DYLD_FALLBACK_LIBRARY_PATH="${DYLD_FALLBACK_LIBRARY_PATH:+"${DYLD_FALLBAC
 
 # fzf
 if [[ -f "${HOME}/.fzf.zsh" ]]; then
-	source "${HOME}/.fzf.zsh"
+    source "${HOME}/.fzf.zsh"
 fi
 export FZF_DEFAULT_COMMAND="fd --type file --follow --hidden --no-ignore-vcs --exclude '.git' --exclude '[Mm]iniconda3' --exclude '[Aa]naconda3' --color=always"
 export FZF_CTRL_T_COMMAND="${FZF_DEFAULT_COMMAND}"
@@ -183,7 +183,7 @@ export BAT_THEME="Monokai Extended"
 
 # iTerm
 if [[ -f "${HOME}/.iterm2/.iterm2_shell_integration.zsh" ]]; then
-	source "${HOME}/.iterm2/.iterm2_shell_integration.zsh"
+    source "${HOME}/.iterm2/.iterm2_shell_integration.zsh"
 fi
 
 # Claude Code
@@ -199,32 +199,32 @@ export DISABLE_TELEMETRY="1"
 
 # Conda
 if [[ -n "${__CONDA_PREFIX}" ]]; then
-	conda activate "${__CONDA_PREFIX}"
+    conda activate "${__CONDA_PREFIX}"
 fi
 unset __CONDA_PREFIX
 
 # Remove duplicate entries
 function __remove_duplicate() {
-	local sep name value
-	sep="$1"
-	shift
-	while [[ $# -gt 0 ]]; do
-		name="$1"
-		shift
-		if [[ -z "${name}" ]]; then
-			break
-		fi
-		value="$(
-			eval "printf \"%s%s\" \"\$${name}\" \"${sep}\"" |
-				/usr/bin/awk -v RS="${sep}" 'BEGIN { idx = 0; }
-				{ if (!(exists[$0]++)) printf("%s%s", (!(idx++) ? "" : RS), $0); }'
-		)"
-		if [[ -n "${value}" ]]; then
-			export "${name}"="${value}"
-		else
-			unset "${name}"
-		fi
-	done
+    local sep name value
+    sep="$1"
+    shift
+    while [[ $# -gt 0 ]]; do
+        name="$1"
+        shift
+        if [[ -z "${name}" ]]; then
+            break
+        fi
+        value="$(
+            eval "printf \"%s%s\" \"\$${name}\" \"${sep}\"" |
+                /usr/bin/awk -v RS="${sep}" 'BEGIN { idx = 0; }
+                { if (!(exists[$0]++)) printf("%s%s", (!(idx++) ? "" : RS), $0); }'
+        )"
+        if [[ -n "${value}" ]]; then
+            export "${name}"="${value}"
+        else
+            unset "${name}"
+        fi
+    done
 }
 __remove_duplicate ':' PATH
 __remove_duplicate ':' {C,CPLUS}_INCLUDE_PATH
@@ -233,10 +233,10 @@ unset -f __remove_duplicate
 
 # Utilities
 if [[ -f "${HOME}/.dotfiles/utilities.sh" ]]; then
-	source "${HOME}/.dotfiles/utilities.sh"
-	if pgrep -i clash &>/dev/null; then
-		set_proxy 127.0.0.1
-	fi
+    source "${HOME}/.dotfiles/utilities.sh"
+    if pgrep -i clash &>/dev/null; then
+        set_proxy 127.0.0.1
+    fi
 fi
 
 # X11
@@ -281,70 +281,70 @@ typeset -g POWERLEVEL9K_VCS_DISABLED_WORKDIR_PATTERN='~'
 # VCS_STATUS_* parameters are set by gitstatus plugin. See reference:
 # https://github.com/romkatv/gitstatus/blob/master/gitstatus.plugin.zsh.
 function _p9k_gitstatus_formatter() {
-	emulate -L zsh
+    emulate -L zsh
 
-	if [[ -n "${P9K_CONTENT}" ]]; then
-		# If P9K_CONTENT is not empty, use it. It's either "loading" or from vcs_info (not from
-		# gitstatus plugin). VCS_STATUS_* parameters are not available in this case.
-		_p9k_gitstatus_format="${P9K_CONTENT}"
-		return
-	fi
+    if [[ -n "${P9K_CONTENT}" ]]; then
+        # If P9K_CONTENT is not empty, use it. It's either "loading" or from vcs_info (not from
+        # gitstatus plugin). VCS_STATUS_* parameters are not available in this case.
+        _p9k_gitstatus_format="${P9K_CONTENT}"
+        return
+    fi
 
-	# Styling for different parts of Git status.
-	local       meta='%7F' # white foreground
-	local      clean='%0F' # black foreground
-	local   modified='%0F' # black foreground
-	local  untracked='%0F' # black foreground
-	local conflicted='%1F' # red foreground
+    # Styling for different parts of Git status.
+    local       meta='%7F' # white foreground
+    local      clean='%0F' # black foreground
+    local   modified='%0F' # black foreground
+    local  untracked='%0F' # black foreground
+    local conflicted='%1F' # red foreground
 
-	local res="${meta}${clean}$(print_icon VCS_COMMIT_ICON)${VCS_STATUS_COMMIT[1,6]}"
+    local res="${meta}${clean}$(print_icon VCS_COMMIT_ICON)${VCS_STATUS_COMMIT[1,6]}"
 
-	if [[ -n "${VCS_STATUS_LOCAL_BRANCH}" ]]; then
-		local branch="${(V)VCS_STATUS_LOCAL_BRANCH}"
-		# If local branch name is at most 9 characters long, show it in full.
-		# Otherwise show the first 4 … the last 4.
-		(( ${#branch} > 9 )) && branch[5,-5]="${(g::)POWERLEVEL9K_VCS_SHORTEN_DELIMITER}"
-		res+=" ${clean}$(print_icon VCS_BRANCH_ICON)${branch//\%/%%}"
-	fi
+    if [[ -n "${VCS_STATUS_LOCAL_BRANCH}" ]]; then
+        local branch="${(V)VCS_STATUS_LOCAL_BRANCH}"
+        # If local branch name is at most 9 characters long, show it in full.
+        # Otherwise show the first 4 … the last 4.
+        (( ${#branch} > 9 )) && branch[5,-5]="${(g::)POWERLEVEL9K_VCS_SHORTEN_DELIMITER}"
+        res+=" ${clean}$(print_icon VCS_BRANCH_ICON)${branch//\%/%%}"
+    fi
 
-	if [[ -n "${VCS_STATUS_TAG}" ]]; then
-		local tag="${(V)VCS_STATUS_TAG}"
-		(( ${#tag} > 9 )) && tag[5,-5]="${(g::)POWERLEVEL9K_VCS_SHORTEN_DELIMITER}"
-		res+=" ${meta}$(print_icon VCS_TAG_ICON)${clean}${tag//\%/%%}"
-	fi
+    if [[ -n "${VCS_STATUS_TAG}" ]]; then
+        local tag="${(V)VCS_STATUS_TAG}"
+        (( ${#tag} > 9 )) && tag[5,-5]="${(g::)POWERLEVEL9K_VCS_SHORTEN_DELIMITER}"
+        res+=" ${meta}$(print_icon VCS_TAG_ICON)${clean}${tag//\%/%%}"
+    fi
 
-	# Show tracking branch name if it differs from local branch.
-	if [[ -n "${VCS_STATUS_REMOTE_BRANCH:#"${VCS_STATUS_LOCAL_BRANCH}"}" ]]; then
-		res+=" ${meta}:${clean}${(V)VCS_STATUS_REMOTE_BRANCH//\%/%%}"
-	fi
+    # Show tracking branch name if it differs from local branch.
+    if [[ -n "${VCS_STATUS_REMOTE_BRANCH:#"${VCS_STATUS_LOCAL_BRANCH}"}" ]]; then
+        res+=" ${meta}:${clean}${(V)VCS_STATUS_REMOTE_BRANCH//\%/%%}"
+    fi
 
-	# Display "wip" if the latest commit's summary contains "wip" or "WIP".
-	if [[ "${VCS_STATUS_COMMIT_SUMMARY}" == (|*[^[:alnum:]])(wip|WIP)(|[^[:alnum:]]*) ]]; then
-		res+=" ${modified}wip"
-	fi
+    # Display "wip" if the latest commit's summary contains "wip" or "WIP".
+    if [[ "${VCS_STATUS_COMMIT_SUMMARY}" == (|*[^[:alnum:]])(wip|WIP)(|[^[:alnum:]]*) ]]; then
+        res+=" ${modified}wip"
+    fi
 
-	# ⇣42 if behind the remote.
-	(( VCS_STATUS_COMMITS_BEHIND )) && res+=" ${clean}$(print_icon VCS_INCOMING_CHANGES_ICON)${VCS_STATUS_COMMITS_BEHIND}"
-	# ⇡42 if ahead of the remote.
-	(( VCS_STATUS_COMMITS_AHEAD  )) && res+=" ${clean}$(print_icon VCS_OUTGOING_CHANGES_ICON)${VCS_STATUS_COMMITS_AHEAD}"
-	# ⇠42 if behind the push remote.
-	(( VCS_STATUS_PUSH_COMMITS_BEHIND )) && res+=" ${clean}$(print_icon VCS_PUSH_INCOMING_CHANGES_ICON)${VCS_STATUS_PUSH_COMMITS_BEHIND}"
-	# ⇢42 if ahead of the push remote.
-	(( VCS_STATUS_PUSH_COMMITS_AHEAD  )) && res+=" ${clean}$(print_icon VCS_PUSH_OUTGOING_CHANGES_ICON)${VCS_STATUS_PUSH_COMMITS_AHEAD}"
-	# *42 if have stashes.
-	(( VCS_STATUS_STASHES        )) && res+=" ${clean}$(print_icon VCS_STASH_ICON)${VCS_STATUS_STASHES}"
-	# 'merge' if the repo is in an unusual state.
-	[[ -n "${VCS_STATUS_ACTION}" ]] && res+=" ${conflicted}${VCS_STATUS_ACTION//\%/%%}"
-	# ~42 if have merge conflicts.
-	(( VCS_STATUS_NUM_CONFLICTED )) && res+=" ${conflicted}${VCS_STATUS_NUM_CONFLICTED}"
-	# +42 if have staged changes.
-	(( VCS_STATUS_NUM_STAGED     )) && res+=" ${modified}$(print_icon VCS_STAGED_ICON)${VCS_STATUS_NUM_STAGED}"
-	# !42 if have unstaged changes.
-	(( VCS_STATUS_NUM_UNSTAGED   )) && res+=" ${modified}$(print_icon VCS_UNSTAGED_ICON)${VCS_STATUS_NUM_UNSTAGED}"
-	(( VCS_STATUS_NUM_UNTRACKED  )) && res+=" ${untracked}$(print_icon VCS_UNTRACKED_ICON)${VCS_STATUS_NUM_UNTRACKED}"
-	(( VCS_STATUS_HAS_UNSTAGED == -1 )) && res+=" ${modified}─"
+    # ⇣42 if behind the remote.
+    (( VCS_STATUS_COMMITS_BEHIND )) && res+=" ${clean}$(print_icon VCS_INCOMING_CHANGES_ICON)${VCS_STATUS_COMMITS_BEHIND}"
+    # ⇡42 if ahead of the remote.
+    (( VCS_STATUS_COMMITS_AHEAD  )) && res+=" ${clean}$(print_icon VCS_OUTGOING_CHANGES_ICON)${VCS_STATUS_COMMITS_AHEAD}"
+    # ⇠42 if behind the push remote.
+    (( VCS_STATUS_PUSH_COMMITS_BEHIND )) && res+=" ${clean}$(print_icon VCS_PUSH_INCOMING_CHANGES_ICON)${VCS_STATUS_PUSH_COMMITS_BEHIND}"
+    # ⇢42 if ahead of the push remote.
+    (( VCS_STATUS_PUSH_COMMITS_AHEAD  )) && res+=" ${clean}$(print_icon VCS_PUSH_OUTGOING_CHANGES_ICON)${VCS_STATUS_PUSH_COMMITS_AHEAD}"
+    # *42 if have stashes.
+    (( VCS_STATUS_STASHES        )) && res+=" ${clean}$(print_icon VCS_STASH_ICON)${VCS_STATUS_STASHES}"
+    # 'merge' if the repo is in an unusual state.
+    [[ -n "${VCS_STATUS_ACTION}" ]] && res+=" ${conflicted}${VCS_STATUS_ACTION//\%/%%}"
+    # ~42 if have merge conflicts.
+    (( VCS_STATUS_NUM_CONFLICTED )) && res+=" ${conflicted}${VCS_STATUS_NUM_CONFLICTED}"
+    # +42 if have staged changes.
+    (( VCS_STATUS_NUM_STAGED     )) && res+=" ${modified}$(print_icon VCS_STAGED_ICON)${VCS_STATUS_NUM_STAGED}"
+    # !42 if have unstaged changes.
+    (( VCS_STATUS_NUM_UNSTAGED   )) && res+=" ${modified}$(print_icon VCS_UNSTAGED_ICON)${VCS_STATUS_NUM_UNSTAGED}"
+    (( VCS_STATUS_NUM_UNTRACKED  )) && res+=" ${untracked}$(print_icon VCS_UNTRACKED_ICON)${VCS_STATUS_NUM_UNTRACKED}"
+    (( VCS_STATUS_HAS_UNSTAGED == -1 )) && res+=" ${modified}─"
 
-	_p9k_gitstatus_format="${res}"
+    _p9k_gitstatus_format="${res}"
 }
 functions -M _p9k_gitstatus_formatter 2>/dev/null
 typeset -g POWERLEVEL9K_VCS_DISABLE_GITSTATUS_FORMATTING=true
@@ -410,28 +410,28 @@ typeset -g POWERLEVEL9K_VCS_CONTENT_EXPANSION='${$((_p9k_gitstatus_formatter()))
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
-	macos
-	zsh-syntax-highlighting
-	zsh-autosuggestions
-	zsh-completions
-	conda-zsh-completion
-	colorize
-	colored-man-pages
-	fzf
-	copyfile
-	copypath
-	cp
-	rsync
-	alias-finder
-	git
-	git-auto-fetch
-	python
-	pip
-	rust
-	docker
-	tmux
-	brew
-	vscode
+    macos
+    zsh-syntax-highlighting
+    zsh-autosuggestions
+    zsh-completions
+    conda-zsh-completion
+    colorize
+    colored-man-pages
+    fzf
+    copyfile
+    copypath
+    cp
+    rsync
+    alias-finder
+    git
+    git-auto-fetch
+    python
+    pip
+    rust
+    docker
+    tmux
+    brew
+    vscode
 )
 
 ZSH_COLORIZE_STYLE="monokai"
@@ -477,33 +477,33 @@ alias ll='ls -lh'
 alias la='ls -Alh'
 
 if [[ -z "${P10K_LEAN_STYLE}" ]]; then
-	# Setup eza
-	if [[ -x "$(command -v eza)" ]]; then
-		alias ls='eza --header --group-directories-first --group --binary --time-style="+%Y-%m-%d %H:%M:%S" --color=auto --classify=auto --icons=auto --git'
-	fi
+    # Setup eza
+    if [[ -x "$(command -v eza)" ]]; then
+        alias ls='eza --header --group-directories-first --group --binary --time-style="+%Y-%m-%d %H:%M:%S" --color=auto --classify=auto --icons=auto --git'
+    fi
 else
-	# Setup eza
-	if [[ -x "$(command -v eza)" ]]; then
-		alias ls='eza --header --group-directories-first --group --binary --time-style="+%Y-%m-%d %H:%M:%S" --color=auto --classify=auto --icons=never --git'
-	fi
-	# Use Powerlevel10k Lean style
-	source "${ZSH_CUSTOM}/themes/powerlevel10k/config/p10k-lean.zsh"
-	POWERLEVEL9K_MODE="compatible"
-	POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(virtualenv anaconda pyenv context root_indicator dir vcs newline prompt_char)
-	POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status command_execution_time background_jobs time ssh)
-	POWERLEVEL9K_MULTILINE_FIRST_PROMPT_GAP_CHAR='·'
-	POWERLEVEL9K_LEFT_PROMPT_LAST_SEGMENT_END_SYMBOL=' '
-	POWERLEVEL9K_RIGHT_PROMPT_FIRST_SEGMENT_START_SYMBOL=' '
-	POWERLEVEL9K_EMPTY_LINE_LEFT_PROMPT_FIRST_SEGMENT_END_SYMBOL='%{%}'
-	POWERLEVEL9K_EMPTY_LINE_RIGHT_PROMPT_FIRST_SEGMENT_START_SYMBOL='%{%}'
-	POWERLEVEL9K_STATUS_ERROR=true
-	POWERLEVEL9K_ANACONDA_SHOW_PYTHON_VERSION=true
-	POWERLEVEL9K_ANACONDA_CONTENT_EXPANSION='${P9K_CONTENT}'
-	POWERLEVEL9K_ANACONDA_LEFT_DELIMITER='('
-	POWERLEVEL9K_ANACONDA_RIGHT_DELIMITER=')'
-	POWERLEVEL9K_VIRTUALENV_SHOW_PYTHON_VERSION=true
-	POWERLEVEL9K_PYENV_CONTENT_EXPANSION='${P9K_CONTENT}'
-	POWERLEVEL9K_VIRTUALENV_LEFT_DELIMITER='('
-	POWERLEVEL9K_VIRTUALENV_RIGHT_DELIMITER=')'
-	p10k reload
+    # Setup eza
+    if [[ -x "$(command -v eza)" ]]; then
+        alias ls='eza --header --group-directories-first --group --binary --time-style="+%Y-%m-%d %H:%M:%S" --color=auto --classify=auto --icons=never --git'
+    fi
+    # Use Powerlevel10k Lean style
+    source "${ZSH_CUSTOM}/themes/powerlevel10k/config/p10k-lean.zsh"
+    POWERLEVEL9K_MODE="compatible"
+    POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(virtualenv anaconda pyenv context root_indicator dir vcs newline prompt_char)
+    POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status command_execution_time background_jobs time ssh)
+    POWERLEVEL9K_MULTILINE_FIRST_PROMPT_GAP_CHAR='·'
+    POWERLEVEL9K_LEFT_PROMPT_LAST_SEGMENT_END_SYMBOL=' '
+    POWERLEVEL9K_RIGHT_PROMPT_FIRST_SEGMENT_START_SYMBOL=' '
+    POWERLEVEL9K_EMPTY_LINE_LEFT_PROMPT_FIRST_SEGMENT_END_SYMBOL='%{%}'
+    POWERLEVEL9K_EMPTY_LINE_RIGHT_PROMPT_FIRST_SEGMENT_START_SYMBOL='%{%}'
+    POWERLEVEL9K_STATUS_ERROR=true
+    POWERLEVEL9K_ANACONDA_SHOW_PYTHON_VERSION=true
+    POWERLEVEL9K_ANACONDA_CONTENT_EXPANSION='${P9K_CONTENT}'
+    POWERLEVEL9K_ANACONDA_LEFT_DELIMITER='('
+    POWERLEVEL9K_ANACONDA_RIGHT_DELIMITER=')'
+    POWERLEVEL9K_VIRTUALENV_SHOW_PYTHON_VERSION=true
+    POWERLEVEL9K_PYENV_CONTENT_EXPANSION='${P9K_CONTENT}'
+    POWERLEVEL9K_VIRTUALENV_LEFT_DELIMITER='('
+    POWERLEVEL9K_VIRTUALENV_RIGHT_DELIMITER=')'
+    p10k reload
 fi

@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 
 while read -r env CONDA_PREFIX; do
-	echo "${env} ${CONDA_PREFIX}"
+    echo "${env} ${CONDA_PREFIX}"
 
-	mkdir -p "${CONDA_PREFIX}/etc/conda/activate.d"
-	mkdir -p "${CONDA_PREFIX}/etc/conda/deactivate.d"
+    mkdir -p "${CONDA_PREFIX}/etc/conda/activate.d"
+    mkdir -p "${CONDA_PREFIX}/etc/conda/deactivate.d"
 
-	if [[ ! -f "${CONDA_PREFIX}/etc/conda/activate.d/env-vars.sh" ]]; then
-		# Create hook script on conda activate
-		cat >"${CONDA_PREFIX}/etc/conda/activate.d/env-vars.sh" <<'EOS'
+    if [[ ! -f "${CONDA_PREFIX}/etc/conda/activate.d/env-vars.sh" ]]; then
+        # Create hook script on conda activate
+        cat >"${CONDA_PREFIX}/etc/conda/activate.d/env-vars.sh" <<'EOS'
 #!/usr/bin/env bash
 
 export CONDA_C_INCLUDE_PATH_BACKUP="${C_INCLUDE_PATH}"
@@ -25,17 +25,17 @@ export LIBRARY_PATH="${CONDA_PREFIX}/lib${LIBRARY_PATH:+:"${LIBRARY_PATH}"}"
 export LD_LIBRARY_PATH="${CONDA_PREFIX}/lib${LD_LIBRARY_PATH:+:"${LD_LIBRARY_PATH}"}"
 export CMAKE_PREFIX_PATH="${CONDA_PREFIX}${CMAKE_PREFIX_PATH:+:"${CMAKE_PREFIX_PATH}"}"
 if [[ -d "${CONDA_PREFIX}/lib/pkgconfig" ]]; then
-	export PKG_CONFIG_PATH="${CONDA_PREFIX}/lib/pkgconfig${PKG_CONFIG_PATH:+:"${PKG_CONFIG_PATH}"}"
+    export PKG_CONFIG_PATH="${CONDA_PREFIX}/lib/pkgconfig${PKG_CONFIG_PATH:+:"${PKG_CONFIG_PATH}"}"
 fi
 if [[ -x "${CONDA_PREFIX}/bin/nvcc" || -f "${CONDA_PREFIX}/lib/libcudart.so" ]]; then
-	export CUDA_HOME="${CONDA_PREFIX}"
+    export CUDA_HOME="${CONDA_PREFIX}"
 fi
 EOS
-	fi
+    fi
 
-	if [[ ! -f "${CONDA_PREFIX}/etc/conda/deactivate.d/env-vars.sh" ]]; then
-		# Create hook script on conda deactivate
-		cat >"${CONDA_PREFIX}/etc/conda/deactivate.d/env-vars.sh" <<'EOS'
+    if [[ ! -f "${CONDA_PREFIX}/etc/conda/deactivate.d/env-vars.sh" ]]; then
+        # Create hook script on conda deactivate
+        cat >"${CONDA_PREFIX}/etc/conda/deactivate.d/env-vars.sh" <<'EOS'
 #!/usr/bin/env bash
 
 export C_INCLUDE_PATH="${CONDA_C_INCLUDE_PATH_BACKUP}"
@@ -62,20 +62,20 @@ unset CONDA_CUDA_HOME_BACKUP
 [[ -z "${PKG_CONFIG_PATH}" ]] && unset PKG_CONFIG_PATH
 [[ -z "${CUDA_HOME}" ]] && unset CUDA_HOME
 EOS
-	fi
+    fi
 
-	# Exit for non-Python environment
-	[[ -x "${CONDA_PREFIX}/bin/python" ]] || continue
+    # Exit for non-Python environment
+    [[ -x "${CONDA_PREFIX}/bin/python" ]] || continue
 
-	# Create usercustomize.py in USER_SITE directory
-	USER_SITE="$("${CONDA_PREFIX}/bin/python" -c 'from __future__ import print_function; import site; print(site.getusersitepackages())')"
-	mkdir -p "${USER_SITE}"
-	if [[ ! -s "${USER_SITE}/usercustomize.py" ]]; then
-		touch "${USER_SITE}/usercustomize.py"
-	fi
-	if ! grep -qE '^\s*(import|from)\s+rich' "${USER_SITE}/usercustomize.py"; then
-		[[ -s "${USER_SITE}/usercustomize.py" ]] && echo >>"${USER_SITE}/usercustomize.py"
-		cat >>"${USER_SITE}/usercustomize.py" <<'EOS'
+    # Create usercustomize.py in USER_SITE directory
+    USER_SITE="$("${CONDA_PREFIX}/bin/python" -c 'from __future__ import print_function; import site; print(site.getusersitepackages())')"
+    mkdir -p "${USER_SITE}"
+    if [[ ! -s "${USER_SITE}/usercustomize.py" ]]; then
+        touch "${USER_SITE}/usercustomize.py"
+    fi
+    if ! grep -qE '^\s*(import|from)\s+rich' "${USER_SITE}/usercustomize.py"; then
+        [[ -s "${USER_SITE}/usercustomize.py" ]] && echo >>"${USER_SITE}/usercustomize.py"
+        cat >>"${USER_SITE}/usercustomize.py" <<'EOS'
 try:
     import rich.pretty
     import rich.traceback
@@ -86,6 +86,6 @@ else:
     rich.traceback.install(indent_guides=True, width=None, show_locals=True)
     del rich
 EOS
-	fi
+    fi
 
 done < <(conda info --envs | awk 'NF > 0 && $0 !~ /^#.*/ { printf("%s %s\n", $1, $NF) }')

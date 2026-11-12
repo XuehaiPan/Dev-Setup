@@ -4,36 +4,36 @@
 # Source global definitions
 # Include /etc/profile if it exists
 if [[ -f /etc/profile ]]; then
-	source /etc/profile
+    source /etc/profile
 fi
 
 # If running bash as login shell
 if [[ -n "${BASH_VERSION}" ]] && shopt -q login_shell; then
-	# Include ~/.bashrc if it exists
-	if [[ -f "${HOME}/.bashrc" ]]; then
-		source "${HOME}/.bashrc"
-	fi
+    # Include ~/.bashrc if it exists
+    if [[ -f "${HOME}/.bashrc" ]]; then
+        source "${HOME}/.bashrc"
+    fi
 fi
 
 # Set PATH so it includes user's private bin if it exists
 if [[ -d "${HOME}/.local/bin" ]]; then
-	export PATH="${HOME}/.local/bin${PATH:+:"${PATH}"}"
+    export PATH="${HOME}/.local/bin${PATH:+:"${PATH}"}"
 fi
 
 # Set C_INCLUDE_PATH and CPLUS_INCLUDE_PATH so it includes user's private include if it exists
 if [[ -d "${HOME}/.local/include" ]]; then
-	export C_INCLUDE_PATH="${HOME}/.local/include${C_INCLUDE_PATH:+:"${C_INCLUDE_PATH}"}"
-	export CPLUS_INCLUDE_PATH="${HOME}/.local/include${CPLUS_INCLUDE_PATH:+:"${CPLUS_INCLUDE_PATH}"}"
+    export C_INCLUDE_PATH="${HOME}/.local/include${C_INCLUDE_PATH:+:"${C_INCLUDE_PATH}"}"
+    export CPLUS_INCLUDE_PATH="${HOME}/.local/include${CPLUS_INCLUDE_PATH:+:"${CPLUS_INCLUDE_PATH}"}"
 fi
 
 # Set LIBRARY_PATH and DYLD_LIBRARY_PATH so it includes user's private lib if it exists
 if [[ -d "${HOME}/.local/lib" ]]; then
-	export LIBRARY_PATH="${HOME}/.local/lib${LIBRARY_PATH:+:"${LIBRARY_PATH}"}"
-	export DYLD_LIBRARY_PATH="${HOME}/.local/lib${DYLD_LIBRARY_PATH:+:"${DYLD_LIBRARY_PATH}"}"
+    export LIBRARY_PATH="${HOME}/.local/lib${LIBRARY_PATH:+:"${LIBRARY_PATH}"}"
+    export DYLD_LIBRARY_PATH="${HOME}/.local/lib${DYLD_LIBRARY_PATH:+:"${DYLD_LIBRARY_PATH}"}"
 fi
 if [[ -d "${HOME}/.local/lib64" ]]; then
-	export LIBRARY_PATH="${HOME}/.local/lib64${LIBRARY_PATH:+:"${LIBRARY_PATH}"}"
-	export DYLD_LIBRARY_PATH="${HOME}/.local/lib64${DYLD_LIBRARY_PATH:+:"${DYLD_LIBRARY_PATH}"}"
+    export LIBRARY_PATH="${HOME}/.local/lib64${LIBRARY_PATH:+:"${LIBRARY_PATH}"}"
+    export DYLD_LIBRARY_PATH="${HOME}/.local/lib64${DYLD_LIBRARY_PATH:+:"${DYLD_LIBRARY_PATH}"}"
 fi
 
 # User specific environment
@@ -43,7 +43,7 @@ export CLICOLOR=1
 export LSCOLORS="${LSCOLORS:-"GxFxCxDxBxegedabagaced"}"
 GITSTATUS_PROMPT=""
 if [[ -f "${HOME}/.dotfiles/gitstatus/gitstatus.prompt.sh" ]]; then
-	GITSTATUS_NUM_THREADS=4 source "${HOME}/.dotfiles/gitstatus/gitstatus.prompt.sh"
+    GITSTATUS_NUM_THREADS=4 source "${HOME}/.dotfiles/gitstatus/gitstatus.prompt.sh"
 fi
 shopt -s promptvars
 PS1='\[\e[1;36m\]\u\[\e[0m\]'                      # cyan user
@@ -58,7 +58,7 @@ export PS1
 export LANG="en_US.UTF-8"
 export LANGUAGE="en:C"
 if [[ -x "$(command -v locale)" ]]; then
-	eval "$(printf "export %s\n" $(LC_ALL="" LC_TIME="C.UTF-8" locale))"
+    eval "$(printf "export %s\n" $(LC_ALL="" LC_TIME="C.UTF-8" locale))"
 fi
 export LC_ALL="${LANG}"
 
@@ -78,14 +78,14 @@ export HOMEBREW_API_DOMAIN="https://mirrors.cernet.edu.cn/homebrew-bottles/api"
 export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.cernet.edu.cn/homebrew-bottles"
 export HOMEBREW_PIP_INDEX_URL="https://mirrors.cernet.edu.cn/pypi/web/simple"
 if [[ -d "$(brew --repository homebrew/core)/.git" ]]; then
-	export HOMEBREW_NO_INSTALL_FROM_API=true
+    export HOMEBREW_NO_INSTALL_FROM_API=true
 fi
 if [[ -n "${HOMEBREW_NO_INSTALL_FROM_API}" ]]; then
-	export HOMEBREW_VERBOSE=true
+    export HOMEBREW_VERBOSE=true
 fi
 __COMMAND_NOT_FOUND_HANDLER="${HOMEBREW_REPOSITORY}/Library/Homebrew/command-not-found/handler.sh"
 if [[ -f "${__COMMAND_NOT_FOUND_HANDLER}" ]]; then
-	source "${__COMMAND_NOT_FOUND_HANDLER}"
+    source "${__COMMAND_NOT_FOUND_HANDLER}"
 fi
 unset __COMMAND_NOT_FOUND_HANDLER
 function brew() { \command brew "$@"; \local rc="$?"; \builtin hash -r &>/dev/null; \return "${rc}"; }
@@ -95,13 +95,13 @@ function brew() { \command brew "$@"; \local rc="$?"; \builtin hash -r &>/dev/nu
 # !! Contents within this block are managed by 'conda init' !!
 __conda_setup="$(CONDA_REPORT_ERRORS=false "${HOME}/Miniconda3/bin/conda" shell.bash hook 2>/dev/null)"
 if [[ $? -eq 0 ]]; then
-	eval "${__conda_setup}"
+    eval "${__conda_setup}"
 else
-	if [[ -f "${HOME}/Miniconda3/etc/profile.d/conda.sh" ]]; then
-		source "${HOME}/Miniconda3/etc/profile.d/conda.sh"
-	else
-		export PATH="${HOME}/Miniconda3/bin${PATH:+:"${PATH}"}"
-	fi
+    if [[ -f "${HOME}/Miniconda3/etc/profile.d/conda.sh" ]]; then
+        source "${HOME}/Miniconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="${HOME}/Miniconda3/bin${PATH:+:"${PATH}"}"
+    fi
 fi
 unset __conda_setup
 
@@ -111,16 +111,16 @@ export MAMBA_ROOT_PREFIX="${HOME}/Miniconda3/bin"
 export MAMBA_EXE="${MAMBA_ROOT_PREFIX}/mamba"
 __mamba_setup="$("${MAMBA_EXE}" shell hook --shell bash --root-prefix "${MAMBA_ROOT_PREFIX}" 2>/dev/null)"
 if [[ $? -eq 0 ]]; then
-	eval "${__mamba_setup}"
+    eval "${__mamba_setup}"
 else
-	alias mamba="${MAMBA_EXE}"
+    alias mamba="${MAMBA_EXE}"
 fi
 unset __mamba_setup
 # <<< mamba initialize <<<
 
 __CONDA_PREFIX="${CONDA_PREFIX}"
 while [[ -n "${CONDA_PREFIX}" ]]; do
-	conda deactivate
+    conda deactivate
 done
 # <<< conda initialize <<<
 
@@ -139,7 +139,7 @@ export PATH="${GOBIN}${PATH:+:"${PATH}"}"
 
 # Rust
 if [[ -f "${HOME}/.cargo/env" ]]; then
-	source "${HOME}/.cargo/env"
+    source "${HOME}/.cargo/env"
 fi
 
 # Ruby
@@ -178,7 +178,7 @@ export DYLD_FALLBACK_LIBRARY_PATH="${DYLD_FALLBACK_LIBRARY_PATH:+"${DYLD_FALLBAC
 
 # Docker Desktop
 if [[ -d "${HOME}/.docker/bin" ]]; then
-	export PATH="${HOME}/.docker/bin${PATH:+:"${PATH}"}"
+    export PATH="${HOME}/.docker/bin${PATH:+:"${PATH}"}"
 fi
 
 # Wine
@@ -189,7 +189,7 @@ export DYLD_FALLBACK_LIBRARY_PATH="${DYLD_FALLBACK_LIBRARY_PATH:+"${DYLD_FALLBAC
 
 # fzf
 if [[ -f "${HOME}/.fzf.bash" ]]; then
-	source "${HOME}/.fzf.bash"
+    source "${HOME}/.fzf.bash"
 fi
 export FZF_DEFAULT_COMMAND="fd --type file --follow --hidden --no-ignore-vcs --exclude '.git' --exclude '[Mm]iniconda3' --exclude '[Aa]naconda3' --color=always"
 export FZF_CTRL_T_COMMAND="${FZF_DEFAULT_COMMAND}"
@@ -198,7 +198,7 @@ export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --ansi --preview='${FZF_P
 
 # eza
 if [[ -x "$(command -v eza)" ]]; then
-	alias ls='eza --header --group-directories-first --group --binary --time-style="+%Y-%m-%d %H:%M:%S" --color=auto --classify=auto --icons=never --git'
+    alias ls='eza --header --group-directories-first --group --binary --time-style="+%Y-%m-%d %H:%M:%S" --color=auto --classify=auto --icons=never --git'
 fi
 
 # bat
@@ -206,7 +206,7 @@ export BAT_THEME="Monokai Extended"
 
 # iTerm
 if [[ -f "${HOME}/.iterm2/.iterm2_shell_integration.bash" ]]; then
-	source "${HOME}/.iterm2/.iterm2_shell_integration.bash"
+    source "${HOME}/.iterm2/.iterm2_shell_integration.bash"
 fi
 
 # Claude Code
@@ -222,32 +222,32 @@ export DISABLE_TELEMETRY="1"
 
 # Conda
 if [[ -n "${__CONDA_PREFIX}" ]]; then
-	conda activate "${__CONDA_PREFIX}"
+    conda activate "${__CONDA_PREFIX}"
 fi
 unset __CONDA_PREFIX
 
 # Remove duplicate entries
 function __remove_duplicate() {
-	local sep name value
-	sep="$1"
-	shift
-	while [[ $# -gt 0 ]]; do
-		name="$1"
-		shift
-		if [[ -z "${name}" ]]; then
-			break
-		fi
-		value="$(
-			eval "printf \"%s%s\" \"\$${name}\" \"${sep}\"" |
-				/usr/bin/awk -v RS="${sep}" 'BEGIN { idx = 0; }
-				{ if (!(exists[$0]++)) printf("%s%s", (!(idx++) ? "" : RS), $0); }'
-		)"
-		if [[ -n "${value}" ]]; then
-			export "${name}"="${value}"
-		else
-			unset "${name}"
-		fi
-	done
+    local sep name value
+    sep="$1"
+    shift
+    while [[ $# -gt 0 ]]; do
+        name="$1"
+        shift
+        if [[ -z "${name}" ]]; then
+            break
+        fi
+        value="$(
+            eval "printf \"%s%s\" \"\$${name}\" \"${sep}\"" |
+                /usr/bin/awk -v RS="${sep}" 'BEGIN { idx = 0; }
+                { if (!(exists[$0]++)) printf("%s%s", (!(idx++) ? "" : RS), $0); }'
+        )"
+        if [[ -n "${value}" ]]; then
+            export "${name}"="${value}"
+        else
+            unset "${name}"
+        fi
+    done
 }
 __remove_duplicate ':' PATH
 __remove_duplicate ':' {C,CPLUS}_INCLUDE_PATH
@@ -256,10 +256,10 @@ unset -f __remove_duplicate
 
 # Utilities
 if [[ -f "${HOME}/.dotfiles/utilities.sh" ]]; then
-	source "${HOME}/.dotfiles/utilities.sh"
-	if pgrep -i clash &>/dev/null; then
-		set_proxy 127.0.0.1
-	fi
+    source "${HOME}/.dotfiles/utilities.sh"
+    if pgrep -i clash &>/dev/null; then
+        set_proxy 127.0.0.1
+    fi
 fi
 
 # X11
@@ -268,5 +268,5 @@ xhost +local: &>/dev/null
 
 # Bash completion
 if [[ -r "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh" ]]; then
-	source "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh"
+    source "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh"
 fi

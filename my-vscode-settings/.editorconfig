@@ -1,0 +1,6 @@
+# https://editorconfig.org/
+
+root = false
+
+[*.json]
+indent_size = 4

@@ -1,0 +1,129 @@
+#!/bin/bash
+#
+# Sync pending writes before dropping the Linux filesystem caches.
+#
+# Usage: sudo bin/drop-caches
+
+# shellcheck disable=SC2292 # This guard must also run under `sh`.
+if [ -z "${BASH_VERSION:-}" ]; then
+    echo "Bash is required to interpret this script." >&2
+    exit 1
+fi
+
+set -euo pipefail
+export PATH="/usr/sbin:/usr/bin:/sbin:/bin"
+
+function abort() {
+    printf "%s\n" "$*" >&2
+    exit 1
+}
+
+function require_debian_root() {
+    # `os-release` supplies the uppercase fields `ID` and `ID_LIKE`.
+    local ID="" ID_LIKE="" release="/etc/os-release"
+    if [[ ! -r "${release}" ]]; then
+        release="/usr/lib/os-release"
+    fi
+    if [[ -r "${release}" ]]; then
+        # shellcheck source=/dev/null
+        source "${release}"
+    fi
+    case " ${ID} ${ID_LIKE} " in
+        *" debian "* | *" ubuntu "*) ;;
+        *) abort "This script requires Debian, Ubuntu, or a derivative." ;;
+    esac
+    if [[ "${EUID}" != "0" ]]; then
+        abort "You must run this script as the root user."
+    fi
+}
+
+# shellcheck disable=SC2294 # Callers pass a shell command with its arguments already quoted.
+function exec_cmd() {
+    printf "%s" "$@" | /usr/bin/awk \
+        'BEGIN {
+            RESET = "\033[0m";
+            BOLD = "\033[1m";
+            UNDERLINE = "\033[4m";
+            UNDERLINEOFF = "\033[24m";
+            RED = "\033[31m";
+            GREEN = "\033[32m";
+            YELLOW = "\033[33m";
+            WHITE = "\033[37m";
+            GRAY = "\033[90m";
+            IDENTIFIER = "[_a-zA-Z][_a-zA-Z0-9]*";
+            idx = 0;
+            in_string = 0;
+            double_quoted = 1;
+            printf("%s$", RESET BOLD WHITE);
+        }
+        {
+            for (i = 1; i <= NF; ++i) {
+                style = WHITE;
+                post_style = WHITE;
+                if (!in_string) {
+                    if ($i ~ /^-/)
+                        style = YELLOW;
+                    else if ($i == "sudo" && idx == 0) {
+                        style = UNDERLINE GREEN;
+                        post_style = UNDERLINEOFF WHITE;
+                    }
+                    else if ($i ~ "^" IDENTIFIER "=" && idx == 0) {
+                        style = GRAY;
+                        '"if (\$i ~ \"^\" IDENTIFIER \"=[\\\"']\") {"'
+                            in_string = 1;
+                            double_quoted = ($i ~ "^" IDENTIFIER "=\"");
+                        }
+                    }
+                    else if ($i ~ /^[12&]?>>?/ || $i == "\\")
+                        style = RED;
+                    else {
+                        ++idx;
+                        '"if (\$i ~ /^[\"']/) {"'
+                            in_string = 1;
+                            double_quoted = ($i ~ /^"/);
+                        }
+                        if (idx == 1)
+                            style = GREEN;
+                    }
+                }
+                if (in_string) {
+                    if (style == WHITE)
+                        style = "";
+                    post_style = "";
+                    '"if ((double_quoted && \$i ~ /\";?\$/ && \$i !~ /\\\\\";?\$/) || (!double_quoted && \$i ~ /';?\$/))"'
+                        in_string = 0;
+                }
+                if (($i ~ /;$/ && $i !~ /\\;$/) || $i == "|" || $i == "||" || $i == "&&") {
+                    if (!in_string) {
+                        idx = 0;
+                        if ($i !~ /;$/)
+                            style = RED;
+                    }
+                }
+                if ($i ~ /;$/ && $i !~ /\\;$/)
+                    printf(" %s%s%s;%s", style, substr($i, 1, length($i) - 1), (in_string ? WHITE : RED), post_style);
+                else
+                    printf(" %s%s%s", style, $i, post_style);
+                if ($i == "\\")
+                    printf("\n\t");
+            }
+        }
+        END {
+            printf("%s\n", RESET);
+        }' >&2 || true
+    eval "$@"
+}
+
+USAGE="Usage: \`sudo bin/drop-caches\`"
+if [[ "$#" -eq 1 && ("$1" == "-h" || "$1" == "--help") ]]; then
+    echo "${USAGE}"
+    exit 0
+fi
+if [[ "$#" -ne 0 ]]; then
+    abort "${USAGE}"
+fi
+
+require_debian_root
+
+exec_cmd "/bin/sync"
+exec_cmd "/sbin/sysctl -w vm.drop_caches=3"

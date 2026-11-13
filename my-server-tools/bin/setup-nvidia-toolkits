@@ -1,0 +1,1102 @@
+#!/bin/bash
+#
+# Provision an Ubuntu GPU server with NVIDIA drivers, Fabric Manager, and the Docker runtime.
+
+# shellcheck disable=SC2292 # This guard must also run under `sh`.
+if [ -z "${BASH_VERSION:-}" ]; then
+    echo "Bash is required to interpret this script." >&2
+    exit 1
+fi
+
+set -euo pipefail
+shopt -s dotglob nullglob
+export PATH="/usr/sbin:/usr/bin:/sbin:/bin"
+
+DOCKER_CONFIG_FILE="/etc/docker/daemon.json"
+DOCKER_SOCKET="/var/run/docker.sock"
+DOCKER_RUNTIME_PENDING="/var/lib/setup-nvidia-toolkits/docker-runtime-pending"
+
+# Command-line options and driver selection.
+SELECTOR=""
+PACKAGE=""
+FAMILY=""
+FLAVOR=""
+UPGRADE=""
+YES=""
+INSTALLED_DRIVER=""
+INSTALLED_FAMILY=""
+INSTALLED_FLAVOR=""
+CANDIDATES=()
+declare -gA TRACK=() VERSIONS=()
+
+# Fabric Manager package and service state.
+FABRIC_PACKAGE=""
+FABRIC_RUNTIME_INSTALLED=""
+FABRIC_ERROR=""
+SUSPEND_FABRIC=""
+OBSOLETE_FABRIC_PACKAGES=()
+UNHELD_FABRIC_PACKAGES=()
+TEMP_HELD_DRIVER=""
+FABRIC_BEFORE=""
+FABRIC_TEMP_MASK=""
+FABRIC_RESTORE=""
+
+# State used by the exit trap.
+STAGE=""
+DOCKER_TEMP=""
+CLEANUP_FAILED="0"
+DOCKER_UNITS=(docker.service docker.socket containerd.service)
+declare -gA DOCKER_WAS_ACTIVE=() DOCKER_FILE_STATE=()
+
+function abort() {
+    printf "%s\n" "$*" >&2
+    exit 1
+}
+
+# shellcheck disable=SC2294 # Callers pass a shell command with its arguments already quoted.
+function exec_cmd() {
+    if [[ -x "/usr/bin/awk" ]]; then
+        printf "%s" "$@" | /usr/bin/awk \
+            'BEGIN {
+                RESET = "\033[0m";
+                BOLD = "\033[1m";
+                UNDERLINE = "\033[4m";
+                UNDERLINEOFF = "\033[24m";
+                RED = "\033[31m";
+                GREEN = "\033[32m";
+                YELLOW = "\033[33m";
+                WHITE = "\033[37m";
+                GRAY = "\033[90m";
+                IDENTIFIER = "[_a-zA-Z][_a-zA-Z0-9]*";
+                idx = 0;
+                in_string = 0;
+                double_quoted = 1;
+                printf("%s$", RESET BOLD WHITE);
+            }
+            {
+                for (i = 1; i <= NF; ++i) {
+                    style = WHITE;
+                    post_style = WHITE;
+                    if (!in_string) {
+                        if ($i ~ /^-/)
+                            style = YELLOW;
+                        else if ($i == "sudo" && idx == 0) {
+                            style = UNDERLINE GREEN;
+                            post_style = UNDERLINEOFF WHITE;
+                        }
+                        else if ($i ~ "^" IDENTIFIER "=" && idx == 0) {
+                            style = GRAY;
+                            '"if (\$i ~ \"^\" IDENTIFIER \"=[\\\"']\") {"'
+                                in_string = 1;
+                                double_quoted = ($i ~ "^" IDENTIFIER "=\"");
+                            }
+                        }
+                        else if ($i ~ /^[12&]?>>?/ || $i == "\\")
+                            style = RED;
+                        else {
+                            ++idx;
+                            '"if (\$i ~ /^[\"']/) {"'
+                                in_string = 1;
+                                double_quoted = ($i ~ /^"/);
+                            }
+                            if (idx == 1)
+                                style = GREEN;
+                        }
+                    }
+                    if (in_string) {
+                        if (style == WHITE)
+                            style = "";
+                        post_style = "";
+                        '"if ((double_quoted && \$i ~ /\";?\$/ && \$i !~ /\\\\\";?\$/) || (!double_quoted && \$i ~ /';?\$/))"'
+                            in_string = 0;
+                    }
+                    if (($i ~ /;$/ && $i !~ /\\;$/) || $i == "|" || $i == "||" || $i == "&&") {
+                        if (!in_string) {
+                            idx = 0;
+                            if ($i !~ /;$/)
+                                style = RED;
+                        }
+                    }
+                    if ($i ~ /;$/ && $i !~ /\\;$/)
+                        printf(" %s%s%s;%s", style, substr($i, 1, length($i) - 1), (in_string ? WHITE : RED), post_style);
+                    else
+                        printf(" %s%s%s", style, $i, post_style);
+                    if ($i == "\\")
+                        printf("\n\t");
+                }
+            }
+            END {
+                printf("%s\n", RESET);
+            }' >&2 || true
+    fi
+    eval "$@"
+}
+
+function cleanup_cmd() {
+    # shellcheck disable=SC2310 # Continue restoring the other units if one cleanup command fails.
+    if ! exec_cmd "$1"; then
+        CLEANUP_FAILED="1"
+    fi
+}
+
+function cleanup() {
+    local status="$?" unit file_state package toolkit_state
+    cleanup_cmd "cd -- /"
+    # shellcheck disable=SC2310 # Keep the marker if the package state cannot be read.
+    if [[ "${status}" != "0" && -f "${DOCKER_RUNTIME_PENDING}" ]] &&
+        toolkit_state="$(container_toolkit_state)" &&
+        [[ "${toolkit_state}" == "not-installed" || "${toolkit_state}" == "config-files" ]]; then
+        # APT never installed the toolkit. A later independent installation owns its configuration.
+        cleanup_cmd "/usr/bin/unlink -- ${DOCKER_RUNTIME_PENDING@Q}"
+    fi
+    for package in "${UNHELD_FABRIC_PACKAGES[@]}"; do
+        # A failed batch purge may already have removed some of its packages.
+        if /usr/bin/dpkg-query -s -- "${package}" >/dev/null 2>&1; then
+            cleanup_cmd "printf '%s hold\n' ${package@Q} | /usr/bin/dpkg --set-selections"
+        fi
+    done
+    if [[ -n "${TEMP_HELD_DRIVER}" ]]; then
+        cleanup_cmd "/usr/bin/apt-mark unhold -- ${TEMP_HELD_DRIVER@Q}"
+    fi
+    if [[ -n "${FABRIC_TEMP_MASK}" ]]; then
+        cleanup_cmd "/usr/bin/systemctl unmask --runtime -- nvidia-fabricmanager.service"
+    fi
+    if [[ -n "${FABRIC_RESTORE}" ]] &&
+        ! /usr/bin/systemctl is-active --quiet -- nvidia-fabricmanager.service; then
+        local current
+        # shellcheck disable=SC2310 # The fingerprint probe returns the failing command status.
+        if current="$(fabric_signature)" && [[ "${current}" == "${FABRIC_BEFORE}" ]]; then
+            cleanup_cmd "/usr/bin/systemctl start -- nvidia-fabricmanager.service"
+        else
+            echo "The driver or fabric packages changed. Check their versions before restarting Fabric Manager." >&2
+            CLEANUP_FAILED="1"
+        fi
+    fi
+    if [[ -n "${DOCKER_TEMP}" && -e "${DOCKER_TEMP}" ]]; then
+        cleanup_cmd "/usr/bin/unlink -- ${DOCKER_TEMP@Q}"
+    fi
+    if [[ -n "${STAGE}" ]]; then
+        cleanup_cmd "/usr/bin/find ${STAGE@Q} -depth -delete"
+    fi
+    for unit in "${DOCKER_UNITS[@]}"; do
+        if ! file_state="$(
+            /usr/bin/systemctl show --property=UnitFileState --value -- "${unit}"
+        )"; then
+            CLEANUP_FAILED="1"
+            continue
+        fi
+        if [[ -n "${file_state}" ]]; then
+            if /usr/bin/systemctl is-active --quiet -- "${unit}"; then
+                if [[ -z "${DOCKER_WAS_ACTIVE["${unit}"]}" ]]; then
+                    cleanup_cmd "/usr/bin/systemctl stop -- ${unit@Q}"
+                fi
+            elif [[ -n "${DOCKER_WAS_ACTIVE["${unit}"]}" ]]; then
+                cleanup_cmd "/usr/bin/systemctl start -- ${unit@Q}"
+            fi
+        fi
+        if [[ "${file_state}" == "${DOCKER_FILE_STATE["${unit}"]}" ]]; then
+            continue
+        fi
+        case "${DOCKER_FILE_STATE["${unit}"]}" in
+            masked) cleanup_cmd "/usr/bin/systemctl mask -- ${unit@Q}" ;;
+            masked-runtime) cleanup_cmd "/usr/bin/systemctl mask --runtime -- ${unit@Q}" ;;
+            "" | disabled | enabled | enabled-runtime)
+                # Package installation can enable units even when setup only requests a start.
+                case "${file_state}" in
+                    enabled) cleanup_cmd "/usr/bin/systemctl disable -- ${unit@Q}" ;;
+                    enabled-runtime)
+                        cleanup_cmd "/usr/bin/systemctl disable --runtime -- ${unit@Q}"
+                        ;;
+                    *) ;;
+                esac
+                case "${DOCKER_FILE_STATE["${unit}"]}" in
+                    enabled) cleanup_cmd "/usr/bin/systemctl enable -- ${unit@Q}" ;;
+                    enabled-runtime)
+                        cleanup_cmd "/usr/bin/systemctl enable --runtime -- ${unit@Q}"
+                        ;;
+                    *) ;;
+                esac
+                ;;
+            *) ;;
+        esac
+    done
+    if [[ "${status}" != "0" ]]; then
+        exit "${status}"
+    fi
+    exit "${CLEANUP_FAILED}"
+}
+
+function usage() {
+    /bin/cat <<"USAGE"
+Usage: sudo bin/setup-nvidia-toolkits [--lts-branch | --production-branch | --package NAME]
+                                      [--server] [--open | --proprietary] [--upgrade] [--yes]
+
+Install or upgrade the host NVIDIA driver on Ubuntu. On NVSwitch systems, also
+install and enable Fabric Manager. Docker is configured for GPU workloads.
+
+Use the newest matching APT package in an LTS (default) or Production branch.
+The window starts on the first release in NVIDIA's feed and lasts three years
+for LTS or one year for Production. Use `--package` to select any available
+driver package directly, e.g. `nvidia-driver-580-server-open`.
+With `--upgrade` and no selector, use the exact installed driver package.
+An already installed target keeps its version unless `--upgrade` is supplied.
+Omit `--upgrade` to switch family or kernel flavor within that branch.
+On a fresh node, `--upgrade` is ignored and normal driver selection applies.
+An interactive run prompts for unspecified choices. Without a terminal, pass
+`--yes`. This also authorizes the driver installer to terminate GPU processes.
+USAGE
+}
+
+function validate_package() {
+    if [[ ! "${PACKAGE}" =~ ^nvidia-driver-[1-9][0-9]*(-server)?(-open)?$ ]]; then
+        abort "Expected an NVIDIA driver package name."
+    fi
+    if [[ "${FAMILY}" == "server" && "${PACKAGE}" != *-server* ]] ||
+        [[ "${FLAVOR}" == "open" && "${PACKAGE}" != *-open ]] ||
+        [[ "${FLAVOR}" == "proprietary" && "${PACKAGE}" == *-open ]]; then
+        if [[ -n "${UPGRADE}" && "${PACKAGE}" == "${INSTALLED_DRIVER}" ]]; then
+            abort "Omit \`--upgrade\` to change the family or kernel flavor of \`${PACKAGE}\`."
+        fi
+        abort "Driver package conflicts with the selected family or flavor."
+    fi
+}
+
+function parse_options() {
+    SELECTOR=""
+    PACKAGE=""
+    FAMILY=""
+    FLAVOR=""
+    UPGRADE=""
+    YES=""
+    while [[ "$#" -gt 0 ]]; do
+        case "$1" in
+            --lts-branch | --production-branch | --package | --package=*)
+                if [[ -n "${SELECTOR}" ]]; then
+                    abort "Choose exactly one of \`--lts-branch\`, \`--production-branch\`, or \`--package\`."
+                fi
+                case "$1" in
+                    --lts-branch) SELECTOR="lts" ;;
+                    --production-branch) SELECTOR="production" ;;
+                    *)
+                        SELECTOR="package"
+                        if [[ "$1" == "--package" ]]; then
+                            shift
+                            PACKAGE="${1:-}"
+                        else
+                            PACKAGE="${1#*=}"
+                        fi
+                        if [[ -z "${PACKAGE}" ]]; then
+                            abort "Missing driver package name."
+                        fi
+                        ;;
+                esac
+                ;;
+            --server) FAMILY="server" ;;
+            --open | --proprietary)
+                if [[ -n "${FLAVOR}" && "${FLAVOR}" != "${1#--}" ]]; then
+                    abort "Choose one kernel flavor."
+                fi
+                FLAVOR="${1#--}"
+                ;;
+            --upgrade) UPGRADE="true" ;;
+            --yes | -y) YES="true" ;;
+            --help | -h)
+                usage
+                exit 0
+                ;;
+            *) abort "Unknown option: \`$1\`" ;;
+        esac
+        shift
+    done
+    if [[ -n "${PACKAGE}" ]]; then
+        validate_package
+    fi
+}
+
+# Estimate each branch window from its first release in NVIDIA's feed (LTS: 3 years, PB: 1).
+function supported_branches() {
+    TZ="UTC" /usr/bin/jq -sr --arg today "$2" '
+        def valid_date: select(type == "string" and test("^[0-9]{4}-[0-9]{2}-[0-9]{2}$"))
+            | . as $s
+            | select(try ((. + "T00:00:00Z" | fromdateiso8601 | strftime("%Y-%m-%d")) == $s)
+                catch false);
+        def branch_record: type == "object" and (.type | type == "string")
+            and (.driver_info | type == "array"
+                and all(.[]; type == "object" and has("release_date")));
+        if length == 1 and (.[0] | type) == "object" then .[0]
+        else error("expected one release object") end
+        | to_entries | map(select(.key | test("^[1-9][0-9]*$")))
+        | if all(.[]; .value | branch_record) and any(.[].value;
+            (.type == "lts branch" or .type == "production branch" or .type == "new feature branch")
+            and ([.driver_info[].release_date | valid_date] | length > 0))
+          then .[] else error("unrecognized NVIDIA release data") end
+        | (.value.type | if . == "lts branch" then ["lts", 3]
+            elif . == "production branch" then ["production", 1] else empty end) as $track
+        | ([.value.driver_info[]?.release_date | valid_date] | min) as $first
+        | select($first != null and $first <= $today)
+        | ($first + "T00:00:00Z" | fromdateiso8601 | gmtime | .[0] += $track[1]
+            | mktime | strftime("%Y-%m-%d")) as $expiry
+        | select($today < $expiry) | [.key, $track[0]] | @tsv
+    ' "$1"
+}
+
+function driver_variants() {
+    local driver_family="standard" kernel_flavor="proprietary"
+    if [[ "$1" == *-server* ]]; then
+        driver_family="server"
+    fi
+    if [[ "$1" == *-open ]]; then
+        kernel_flavor="open"
+    fi
+    printf -v "$2" "%s" "${driver_family}"
+    printf -v "$3" "%s" "${kernel_flavor}"
+}
+
+function prompt_choice() {
+    local result="$1" label="$2" default="$3" reply choice
+    shift 3
+    while true; do
+        if ! read -r -p "${label} ($*) [${default:-cancel}]: " reply; then
+            abort "Input ended during driver selection."
+        fi
+        reply="${reply:-${default}}"
+        if [[ -z "${reply}" ]]; then
+            abort "Driver installation cancelled."
+        fi
+        for choice in "$@"; do
+            if [[ "${reply}" == "${choice}" ]]; then
+                printf -v "${result}" "%s" "${reply}"
+                return
+            fi
+        done
+        echo "Choose one of: $*" >&2
+    done
+}
+
+# Choices are listed in preference order for a fresh installation.
+function choose_variant() {
+    local result="$1" label="$2" installed="$3" default
+    shift 3
+    default="${installed:-$1}"
+    if [[ " $* " != *" ${default} "* ]]; then
+        echo "The installed ${label,} (${installed}) is unavailable for this selection." >&2
+        if [[ -n "${YES}" ]]; then
+            abort "Select a different driver package, family, or kernel flavor explicitly."
+        fi
+        default=""
+    fi
+    if [[ -z "${YES}" && ("$#" -gt 1 || -z "${default}") ]]; then
+        prompt_choice "${result}" "${label}" "${default}" "$@"
+    else
+        printf -v "${result}" "%s" "${default}"
+    fi
+}
+
+# List downloadable Ubuntu driver metapackages at their current APT candidate versions.
+# Some transitional packages retain an old branch name and depend on a newer driver.
+function ubuntu_driver_candidates() {
+    local names
+    local -a packages
+    names="$(/usr/bin/apt-cache pkgnames nvidia-driver- |
+        /usr/bin/awk '/^nvidia-driver-[1-9][0-9]*(-server)?(-open)?$/')"
+    if [[ -z "${names}" ]]; then
+        return 0
+    fi
+    mapfile -t packages <<<"${names}"
+    /usr/bin/apt-cache --no-all-versions show "${packages[@]}" |
+        /usr/bin/awk '
+            BEGIN { RS=""; FS="\n"; OFS="\t" }
+            {
+                pkg=version=""; downloadable=transitional=0
+                for (i=1; i<=NF; i++) {
+                    if ($i ~ /^Package: /) pkg=substr($i, 10)
+                    if ($i ~ /^Version: /) version=substr($i, 10)
+                    if ($i ~ /^Filename: /) downloadable=1
+                    if ($i ~ /^(Pre-)?Depends: .*nvidia-driver-[0-9]+/ ||
+                        $i ~ /^Description[^:]*:.*[Tt]ransitional/) transitional=1
+                }
+                split(pkg, parts, "-")
+                upstream=version; sub(/^[0-9]+:/, "", upstream)
+                if (downloadable && !transitional && index(upstream, parts[3] ".") == 1)
+                    print pkg, version
+            }' | /usr/bin/sort -Vu
+}
+
+function installed_driver() {
+    # shellcheck disable=SC2016 # `dpkg-query` expands its own package fields.
+    /usr/bin/dpkg-query -W -f='${db:Status-Status} ${Package}\n' |
+        /usr/bin/awk '$1=="installed" && $2 ~ /^nvidia-driver-[0-9]+(-server)?(-open)?$/ {
+            if (++count > 1) {
+                print "Multiple Ubuntu NVIDIA driver metapackages are installed." > "/dev/stderr"
+                exit 1
+            }
+            print $2
+        }'
+}
+
+function load_candidates() {
+    local package version major category today
+    CANDIDATES=()
+    TRACK=()
+    VERSIONS=()
+    if [[ "${SELECTOR}" != "package" ]]; then
+        # shellcheck disable=SC2310 # Report a feed failure before making a selection.
+        if ! exec_cmd "/usr/bin/curl -fsSL -o ${STAGE@Q}/releases.json -- \
+            https://docs.nvidia.com/datacenter/tesla/drivers/releases.json"; then
+            abort "Could not download NVIDIA's release feed. Retry or use \`--package\` to select a driver explicitly."
+        fi
+        today="$(/bin/date -u +%F)"
+        # shellcheck disable=SC2310 # A malformed feed must stop automatic selection.
+        if ! supported_branches "${STAGE}/releases.json" "${today}" >"${STAGE}/branches"; then
+            abort "Could not read NVIDIA's release feed. Retry or use \`--package\` to select a driver explicitly."
+        fi
+        while IFS=$'\t' read -r major category; do
+            TRACK["${major}"]="${category}"
+        done <"${STAGE}/branches"
+    fi
+    ubuntu_driver_candidates >"${STAGE}/candidates"
+    while IFS=$'\t' read -r package version; do
+        major="${package#nvidia-driver-}"
+        major="${major%%-*}"
+        VERSIONS["${package}"]="${version}"
+        if [[ "${SELECTOR}" == "package" || -n "${TRACK["${major}"]:-}" ]]; then
+            CANDIDATES+=("${package}")
+        fi
+    done <"${STAGE}/candidates"
+    INSTALLED_FAMILY=""
+    INSTALLED_FLAVOR=""
+    if [[ -n "${INSTALLED_DRIVER}" ]]; then
+        driver_variants "${INSTALLED_DRIVER}" INSTALLED_FAMILY INSTALLED_FLAVOR
+    fi
+}
+
+function choose_driver() {
+    local candidate major family flavor
+    local -A branches=()
+    local -a eligible=()
+    if [[ "${SELECTOR}" == "package" ]]; then
+        if [[ -z "${PACKAGE}" ]]; then
+            for candidate in "${CANDIDATES[@]}"; do
+                major="${candidate#nvidia-driver-}"
+                printf "  R%s  %s\n" "${major%%-*}" "${candidate}" >&2
+            done
+            if ! read -r -p "Driver package: " PACKAGE; then
+                abort "Missing driver package."
+            fi
+        fi
+        validate_package
+        if [[ -z "${VERSIONS["${PACKAGE}"]:-}" ]]; then
+            abort "APT has no installable driver candidate for \`${PACKAGE}\`."
+        fi
+        return
+    fi
+    for candidate in "${CANDIDATES[@]}"; do
+        major="${candidate#nvidia-driver-}"
+        major="${major%%-*}"
+        if [[ "${TRACK["${major}"]:-}" != "${SELECTOR}" ]]; then
+            continue
+        fi
+        driver_variants "${candidate}" family flavor
+        if [[ (-n "${FAMILY}" && "${family}" != "${FAMILY}") ||
+            (-n "${FLAVOR}" && "${flavor}" != "${FLAVOR}") ]]; then
+            continue
+        fi
+        if [[ "${major}" -gt "${branches["${family}/${flavor}"]:-0}" ]]; then
+            branches["${family}/${flavor}"]="${major}"
+        fi
+    done
+    if [[ "${#branches[@]}" -eq 0 ]]; then
+        abort "APT has no ${SELECTOR} driver in its branch window matching the requested family and kernel flavor. Use \`--package\` to select a driver explicitly."
+    fi
+    if [[ -z "${FAMILY}" ]]; then
+        for family in standard server; do
+            if [[ -n "${branches["${family}/proprietary"]:-}" ||
+                -n "${branches["${family}/open"]:-}" ]]; then
+                eligible+=("${family}")
+            fi
+        done
+        choose_variant FAMILY "Driver family" "${INSTALLED_FAMILY}" "${eligible[@]}"
+    fi
+    if [[ -z "${FLAVOR}" ]]; then
+        eligible=()
+        for flavor in proprietary open; do
+            if [[ -n "${branches["${FAMILY}/${flavor}"]:-}" ]]; then
+                eligible+=("${flavor}")
+            fi
+        done
+        choose_variant FLAVOR "Kernel flavor" "${INSTALLED_FLAVOR}" "${eligible[@]}"
+    fi
+    PACKAGE="nvidia-driver-${branches["${FAMILY}/${FLAVOR}"]}"
+    if [[ "${FAMILY}" == "server" ]]; then
+        PACKAGE+="-server"
+    fi
+    if [[ "${FLAVOR}" == "open" ]]; then
+        PACKAGE+="-open"
+    fi
+}
+
+function has_nvswitch() {
+    local sys="${1:-/sys}" pci vendor
+    # The management port's VPD distinguishes it from a network adapter with the same PCI ID.
+    for pci in "${sys}"/bus/pci/devices/*; do
+        if [[ -r "${pci}/vendor" && -r "${pci}/vpd" ]] && read -r vendor <"${pci}/vendor" &&
+            [[ "${vendor}" == "0x15b3" ]] && LC_ALL="C" /bin/grep -aFq SW_MNG "${pci}/vpd"; then
+            return 0
+        fi
+    done
+    # For directly attached switches, NVIDIA's driver validates the device before binding it.
+    for pci in "${sys}"/bus/pci/drivers/nvidia-nvswitch/????:??:??.?; do
+        if [[ -e "${pci}" ]]; then
+            return 0
+        fi
+    done
+    [[ "${sys}" == "/sys" && -c "/dev/nvidia-nvswitch0" ]]
+}
+
+function fabric_package_states() {
+    # shellcheck disable=SC2016 # `dpkg-query` expands its own package fields.
+    /usr/bin/dpkg-query -W -f='${db:Status-Status} ${Package} ${binary:Package}\n' |
+        /usr/bin/awk '$1 != "not-installed" &&
+            $2 ~ /^nvidia-fabricmanager-([0-9]+(-dev)?|dev-[0-9]+)$/ {print $1, $3}'
+}
+
+function set_fabric_packages() {
+    local use_fabric_manager="$1" branch="${2#nvidia-driver-}" manager inventory status package
+    branch="${branch%%-*}"
+    manager="nvidia-fabricmanager-${branch}"
+    FABRIC_PACKAGE=""
+    FABRIC_RUNTIME_INSTALLED=""
+    OBSOLETE_FABRIC_PACKAGES=()
+    if [[ -n "${use_fabric_manager}" ]]; then
+        FABRIC_PACKAGE="${manager}"
+    fi
+    # shellcheck disable=SC2310 # The inventory pipeline returns `dpkg-query` or `awk` failures.
+    if ! inventory="$(fabric_package_states)"; then
+        abort "Could not read Fabric Manager package states."
+    fi
+    while IFS=" " read -r status package; do
+        case "${package%%:*}" in
+            "${manager}")
+                if [[ "${status}" == "installed" ]]; then
+                    FABRIC_RUNTIME_INSTALLED="true"
+                fi
+                ;;
+            "" | "${manager}-dev" | "nvidia-fabricmanager-dev-${branch}") ;;
+            *) OBSOLETE_FABRIC_PACKAGES+=("${package}") ;;
+        esac
+    done <<<"${inventory}"
+}
+
+function needs_fabric_install() {
+    [[ -n "${FABRIC_PACKAGE}" ]] &&
+        [[ -z "${FABRIC_RUNTIME_INSTALLED}" || -n "${UPGRADE}" || "$1" != "${INSTALLED_DRIVER}" ]]
+}
+
+# APT may resolve a virtual name to a provider. Check for the numbered package itself.
+function fabric_package_available() {
+    /usr/bin/apt-cache --no-all-versions show "${FABRIC_PACKAGE}" |
+        /bin/grep -Fx -- "Package: ${FABRIC_PACKAGE}" >/dev/null
+}
+
+function resolve_fabric() {
+    local use_fabric_manager="$1" driver="$2" plan="" purge_plan=""
+    local -a packages=() preview=(--simulate)
+    FABRIC_ERROR=""
+    SUSPEND_FABRIC=""
+    set_fabric_packages "${use_fabric_manager}" "${driver}"
+    if [[ "${driver}" != "${INSTALLED_DRIVER}" || -n "${UPGRADE}" ]]; then
+        # nvitop releases driver holds when it performs the requested driver installation.
+        preview+=(--ignore-hold)
+        packages+=("${driver}")
+    fi
+    # shellcheck disable=SC2310 # This predicate only tests the current selection and package state.
+    if needs_fabric_install "${driver}"; then
+        # shellcheck disable=SC2310 # A missing concrete candidate is a preflight failure.
+        if ! fabric_package_available; then
+            FABRIC_ERROR="APT has no candidate for the numbered Fabric Manager package \`${FABRIC_PACKAGE}\`."
+            return 1
+        fi
+        packages+=("${FABRIC_PACKAGE}")
+    fi
+    if [[ "${#OBSOLETE_FABRIC_PACKAGES[@]}" -gt 0 ]]; then
+        if ! purge_plan="$(
+            /usr/bin/apt-get "${preview[@]}" purge "${OBSOLETE_FABRIC_PACKAGES[@]}" 2>&1
+        )"; then
+            FABRIC_ERROR="APT could not purge ${OBSOLETE_FABRIC_PACKAGES[*]}:"$'\n'"${purge_plan}"
+            return 1
+        fi
+        # The simulation still sees holds on obsolete packages that the real purge removes first.
+        preview=(--simulate --ignore-hold)
+    fi
+    if [[ "${#packages[@]}" -gt 0 ]] &&
+        ! plan="$(/usr/bin/apt-get "${preview[@]}" install "${packages[@]}" 2>&1)"; then
+        FABRIC_ERROR="APT could not resolve the package changes for ${driver}:"$'\n'"${plan}"
+        return 1
+    fi
+    if [[ "${driver}" == "${INSTALLED_DRIVER}" && -z "${UPGRADE}" ]] &&
+        /bin/grep -Eq '^(Inst|Remv|Purg) '"${driver}"'([ :]|$)' <<<"${purge_plan}"$'\n'"${plan}"; then
+        FABRIC_ERROR="Fabric Manager would change the installed \`${driver}\`. "
+        FABRIC_ERROR+="Choose a compatible package or use \`--upgrade\` to request a driver update."
+        return 1
+    fi
+    # Removing only old development packages leaves the running Fabric Manager in place.
+    if [[ -n "${use_fabric_manager}" ]] && /usr/bin/awk '
+        /^(Remv|Purg) / && $2 ~ /^nvidia-fabricmanager-(dev-[0-9]+|[0-9]+-dev)(:[^:]+)?$/ { next }
+        /^(Inst|Remv|Purg) / { suspend = 1 }
+        END { exit !suspend }
+    ' <<<"${purge_plan}"$'\n'"${plan}"; then
+        SUSPEND_FABRIC="true"
+    fi
+}
+
+function change_fabric_packages() {
+    local action="$1" held
+    local -a packages_to_unhold
+    shift
+    held="$(/usr/bin/apt-mark showhold -- "$@")"
+    if [[ -n "${held}" ]]; then
+        mapfile -t packages_to_unhold <<<"${held}"
+        UNHELD_FABRIC_PACKAGES+=("${packages_to_unhold[@]}")
+        if [[ "${action}" == "purge" ]]; then
+            # `dpkg` can change the selection even if only configuration files remain and APT has no
+            # candidate.
+            exec_cmd "printf '%s purge\n' ${packages_to_unhold[*]@Q} | \
+                /usr/bin/dpkg --set-selections"
+        else
+            exec_cmd "/usr/bin/apt-mark unhold -- ${packages_to_unhold[*]@Q}"
+        fi
+    fi
+    exec_cmd "/usr/bin/apt-get ${action@Q} --yes -- ${*@Q}"
+}
+
+function install_fabric_packages() {
+    local inventory package held_driver
+    # nvitop may already have purged the previous branch during driver installation.
+    set_fabric_packages "$@"
+    # The driver installer can refresh APT after the preflight.
+    # shellcheck disable=SC2310 # This predicate only tests the selection and installed packages.
+    if needs_fabric_install "$2"; then
+        # shellcheck disable=SC2310 # Report a missing concrete candidate before changing any holds.
+        if ! fabric_package_available; then
+            abort "APT has no candidate for the numbered Fabric Manager package \`${FABRIC_PACKAGE}\`."
+        fi
+    elif [[ "${#OBSOLETE_FABRIC_PACKAGES[@]}" -eq 0 ]]; then
+        return 0
+    fi
+    # Protect the installed driver during fabric changes and preserve the hold state nvitop left.
+    held_driver="$(/usr/bin/apt-mark showhold -- "$2")"
+    if [[ -z "${held_driver}" ]]; then
+        TEMP_HELD_DRIVER="$2"
+        exec_cmd "/usr/bin/apt-mark hold -- ${TEMP_HELD_DRIVER@Q}"
+    fi
+    if [[ "${#OBSOLETE_FABRIC_PACKAGES[@]}" -gt 0 ]]; then
+        change_fabric_packages purge "${OBSOLETE_FABRIC_PACKAGES[@]}"
+        # APT can finish an interrupted removal but leave the package's configuration files.
+        inventory="$(fabric_package_states)"
+        for package in "${OBSOLETE_FABRIC_PACKAGES[@]}"; do
+            if /bin/grep -Fxq -- "config-files ${package}" <<<"${inventory}"; then
+                change_fabric_packages purge "${package}"
+            fi
+        done
+    fi
+    # shellcheck disable=SC2310 # The same predicate governs preflight and installation.
+    if needs_fabric_install "$2"; then
+        change_fabric_packages install "${FABRIC_PACKAGE}"
+    fi
+    if [[ -n "${TEMP_HELD_DRIVER}" ]]; then
+        exec_cmd "/usr/bin/apt-mark unhold -- ${TEMP_HELD_DRIVER@Q}"
+        TEMP_HELD_DRIVER=""
+    fi
+}
+
+# shellcheck disable=SC2310 # Resolver failures have package-specific diagnostics.
+function select_fabric_stack() {
+    if ! resolve_fabric "$1" "${PACKAGE}"; then
+        abort "Cannot install ${PACKAGE} (${VERSIONS["${PACKAGE}"]}): ${FABRIC_ERROR}"
+    fi
+}
+
+# Record the loaded driver and top-level packages before stopping an active Fabric Manager.
+function fabric_signature() {
+    if ! /usr/bin/nvidia-smi --query-gpu=driver_version --format=csv,noheader |
+        /usr/bin/sort -u; then
+        return 1
+    fi
+    # shellcheck disable=SC2016 # `dpkg-query` expands the package fields.
+    /usr/bin/dpkg-query -W -f='${db:Status-Status} ${Package} ${Version}\n' |
+        /usr/bin/awk '$1 == "installed" &&
+            $2 ~ /^nvidia-(driver-[0-9]+(-server)?(-open)?|fabricmanager(-[0-9]+)?)$/'
+}
+
+function suspend_fabric() {
+    local state answer
+    state="$(
+        /usr/bin/systemctl show --property=UnitFileState --value -- nvidia-fabricmanager.service
+    )"
+    if /usr/bin/systemctl is-active --quiet -- nvidia-fabricmanager.service; then
+        if [[ -z "${YES}" ]]; then
+            if ! read -r -p "Stop Fabric Manager for the driver update? [y/N] " answer; then
+                abort "Installation cancelled."
+            fi
+            if [[ "${answer,,}" != "y" && "${answer,,}" != "yes" ]]; then
+                abort "Installation cancelled."
+            fi
+        fi
+        FABRIC_BEFORE="$(fabric_signature)"
+        FABRIC_RESTORE="true"
+    elif [[ -z "${state}" ]]; then
+        return 0 # a fresh node has no Fabric Manager service to suspend
+    fi
+    # Keep package scripts and the driver installer's exit trap from starting an old daemon.
+    if [[ "${state}" != masked* ]]; then
+        FABRIC_TEMP_MASK="true"
+        exec_cmd "/usr/bin/systemctl mask --runtime -- nvidia-fabricmanager.service"
+    fi
+    if [[ -n "${FABRIC_RESTORE}" ]]; then
+        exec_cmd "/usr/bin/systemctl stop -- nvidia-fabricmanager.service"
+    fi
+}
+
+function toolkit_indexes() {
+    # shellcheck disable=SC2016 # APT supplies the index filename.
+    /usr/bin/apt-get indextargets --format '$(FILENAME)' "Identifier: Packages" "Trusted: yes" \
+        "Origin: https://nvidia.github.io/libnvidia-container/stable"
+}
+
+function container_toolkit_state() {
+    local status=0
+    # shellcheck disable=SC2016 # `dpkg-query` expands its own package fields.
+    /usr/bin/dpkg-query -W -f='${db:Status-Status}\n' nvidia-container-toolkit 2>/dev/null || status="$?"
+    if [[ "${status}" == "1" ]]; then
+        echo not-installed
+    else
+        return "${status}"
+    fi
+}
+
+function install_container_toolkit() {
+    local indexes index version
+    indexes="$(toolkit_indexes)"
+    if [[ -z "${indexes}" ]]; then
+        exec_cmd "/usr/bin/curl -fsSL -- \
+            https://nvidia.github.io/libnvidia-container/gpgkey | \
+            /usr/bin/sudo /usr/bin/gpg --batch --yes --dearmor -o \
+            /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg"
+        exec_cmd "/bin/chmod 0644 -- /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg"
+        exec_cmd "/usr/bin/curl -fsSL -- \
+            https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | \
+            /bin/sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | \
+            /usr/bin/sudo /usr/bin/tee /etc/apt/sources.list.d/nvidia-container-toolkit.list"
+        exec_cmd "/usr/bin/apt-get update --no-list-cleanup"
+        indexes="$(toolkit_indexes)"
+    fi
+    if [[ -z "${indexes}" ]]; then
+        abort "APT has no trusted NVIDIA stable toolkit index."
+    fi
+    # Select a stable release even when an administrator also enables the experimental repo.
+    version="$(
+        while IFS="" read -r index; do
+            if ! /usr/lib/apt/apt-helper cat-file "${index}"; then
+                exit 1
+            fi
+        done <<<"${indexes}" |
+            /usr/bin/awk '
+                /^Package: / { pkg = $2 }
+                /^Version: / && pkg == "nvidia-container-toolkit" { print $2 }
+            ' |
+            /usr/bin/sort -Vu | /usr/bin/tail -1
+    )"
+    if [[ -z "${version}" ]]; then
+        abort "NVIDIA's stable index has no toolkit for this architecture."
+    fi
+    # Record our obligation before APT can install the package and the process can be interrupted.
+    exec_cmd "/usr/bin/install -D -m 0600 -- /dev/null ${DOCKER_RUNTIME_PENDING@Q}"
+    exec_cmd "/usr/bin/apt-get install --yes \
+        nvidia-container-toolkit=${version@Q} nvidia-container-toolkit-base=${version@Q} \
+        libnvidia-container-tools=${version@Q} libnvidia-container1=${version@Q}"
+}
+
+function docker_runtime_registered() {
+    /usr/bin/timeout --kill-after=1 3 /usr/bin/docker "--host=unix://${DOCKER_SOCKET}" \
+        info --format "{{json .Runtimes}}" |
+        /usr/bin/jq -e --slurpfile config "${STAGE}/daemon.json" '
+            def command: [.path, (.runtimeArgs // [])];
+            (.nvidia | command) == ($config[0].runtimes.nvidia | command)
+        ' >/dev/null
+}
+
+function signal_docker_reload() {
+    exec_cmd "/usr/bin/systemctl kill --kill-who=main --signal=HUP -- docker.service"
+}
+
+function configure_docker() {
+    local config directory deadline changed="true" signaled=""
+    # Follow an administrator's symlink and replace the target atomically.
+    config="$(/usr/bin/realpath -m -- "${DOCKER_CONFIG_FILE}")"
+    directory="${config%/*}"
+    exec_cmd "/bin/mkdir -p -- ${directory@Q}"
+    if [[ -f "${config}" ]]; then
+        exec_cmd "/bin/cp --preserve=all -- ${config@Q} ${STAGE@Q}/daemon.original"
+        exec_cmd "/bin/cp -- ${STAGE@Q}/daemon.original ${STAGE@Q}/daemon.json"
+    else
+        exec_cmd "printf '{}\n' >${STAGE@Q}/daemon.json"
+    fi
+    exec_cmd "/usr/bin/nvidia-ctk runtime configure --runtime=docker \
+        --config=${STAGE@Q}/daemon.json"
+    /usr/bin/jq -e '.runtimes.nvidia.path | type == "string" and length > 0' \
+        "${STAGE}/daemon.json" >/dev/null
+    if [[ -f "${STAGE}/daemon.original" ]]; then
+        exec_cmd "/usr/bin/jq -Sc . ${STAGE@Q}/daemon.original >${STAGE@Q}/before.json"
+        exec_cmd "/usr/bin/jq -Sc . ${STAGE@Q}/daemon.json >${STAGE@Q}/after.json"
+        if /usr/bin/cmp -s -- "${STAGE}/before.json" "${STAGE}/after.json"; then
+            changed=""
+        fi
+    fi
+    if [[ -n "${changed}" ]]; then
+        DOCKER_TEMP="$(exec_cmd "/usr/bin/mktemp -- ${directory@Q}/.daemon.json.XXXXXXXX")"
+        if [[ -f "${STAGE}/daemon.original" ]]; then
+            exec_cmd "/bin/cp --preserve=all -- ${STAGE@Q}/daemon.original ${DOCKER_TEMP@Q}"
+        else
+            exec_cmd "/bin/chmod -- 0644 ${DOCKER_TEMP@Q}"
+        fi
+        exec_cmd "/bin/cat -- ${STAGE@Q}/daemon.json >${DOCKER_TEMP@Q}"
+        if [[ -f "${STAGE}/daemon.original" ]]; then
+            if ! /usr/bin/cmp -s -- "${STAGE}/daemon.original" "${config}"; then
+                abort "Docker configuration changed during setup. Review \`${config}\` before configuring the NVIDIA runtime."
+            fi
+            exec_cmd "/bin/mv -fT -- ${DOCKER_TEMP@Q} ${config@Q}"
+        else
+            # A hard link publishes the new file only if the path is still absent.
+            exec_cmd "/bin/ln -T -- ${DOCKER_TEMP@Q} ${config@Q}"
+            exec_cmd "/usr/bin/unlink -- ${DOCKER_TEMP@Q}"
+        fi
+        DOCKER_TEMP=""
+    fi
+    if [[ -z "${DOCKER_WAS_ACTIVE["docker.service"]}" ]]; then
+        return 0
+    fi
+    # A previous edit may already be on disk while the running daemon still uses its old table.
+    # shellcheck disable=SC2310 # This pipeline's status reflects the local Docker runtime table.
+    if [[ -z "${changed}" ]] && docker_runtime_registered; then
+        return 0
+    fi
+    # SIGHUP reloads runtimes without stopping containers, even when the active unit is masked.
+    # shellcheck disable=SC2310 # Signal delivery and daemon acceptance are checked separately.
+    if signal_docker_reload; then
+        signaled="true"
+        deadline="$((SECONDS + 10))"
+        while true; do
+            # shellcheck disable=SC2310 # Docker applies SIGHUP asynchronously.
+            if docker_runtime_registered; then
+                return 0
+            fi
+            if ((SECONDS >= deadline)); then
+                break
+            fi
+            /bin/sleep 1
+        done
+    fi
+    if [[ -n "${changed}" ]]; then
+        if ! /usr/bin/cmp -s -- "${STAGE}/daemon.json" "${config}"; then
+            abort "Docker reload failed and \`${config}\` changed during verification. Check the current configuration."
+        fi
+        if [[ -f "${STAGE}/daemon.original" ]]; then
+            DOCKER_TEMP="$(exec_cmd "/usr/bin/mktemp -- ${directory@Q}/.daemon.json.XXXXXXXX")"
+            exec_cmd "/bin/cp --preserve=all -- ${STAGE@Q}/daemon.original ${DOCKER_TEMP@Q}"
+            exec_cmd "/bin/mv -fT -- ${DOCKER_TEMP@Q} ${config@Q}"
+            DOCKER_TEMP=""
+        else
+            exec_cmd "/usr/bin/unlink -- ${config@Q}"
+        fi
+        echo "Restored the previous Docker configuration on disk." >&2
+        # Docker may have applied the change even if its API was unavailable during verification.
+        # shellcheck disable=SC2310 # Report a rollback signal failure explicitly.
+        if [[ -n "${signaled}" ]] && ! signal_docker_reload; then
+            abort "Docker could not reload the restored configuration. Check \`journalctl -u docker.service\`."
+        fi
+    fi
+    abort "Docker did not confirm the NVIDIA runtime. Check \`journalctl -u docker.service\`."
+}
+
+function prepare_driver_ppa() {
+    local policy
+    policy="$(/usr/bin/apt-cache policy)"
+    if [[ "${policy}" != *graphics-drivers/ppa/ubuntu* ]]; then
+        exec_cmd "/usr/bin/apt-get install --yes --no-install-recommends software-properties-common"
+        exec_cmd "/usr/bin/add-apt-repository --yes --no-update ppa:graphics-drivers/ppa"
+        exec_cmd "/usr/bin/apt-get update"
+    fi
+}
+
+function main() {
+    parse_options "$@"
+    if [[ "${EUID}" != "0" ]]; then
+        abort "Run this command as root with \`sudo\`."
+    fi
+    local os_image
+    os_image="$(
+        # shellcheck source=/dev/null
+        source /etc/os-release && printf "%s:%s" \
+            "${ID:?Missing distribution ID in /etc/os-release}" \
+            "${VERSION_ID:?Missing distribution version}"
+    )"
+    if [[ "${os_image%%:*}" != "ubuntu" ]]; then
+        abort "This command requires native Ubuntu."
+    fi
+    if [[ -n "${WSL_DISTRO_NAME:-}" ]] || /bin/grep -qi microsoft /proc/sys/kernel/osrelease; then
+        abort "Install the GPU driver on the Windows host for WSL."
+    fi
+    if ! /usr/bin/systemctl show --property=Version --value &>/dev/null; then
+        abort "Cannot reach systemd. Run this installer on the Ubuntu GPU host with systemd running as PID 1."
+    fi
+    if [[ ! -t 0 && -z "${YES}" ]]; then
+        abort "Use \`--yes\` for unattended installation, or run from a terminal."
+    fi
+
+    local unit driver branch loaded use_fabric_manager=""
+    for unit in "${DOCKER_UNITS[@]}"; do
+        DOCKER_FILE_STATE["${unit}"]="$(
+            /usr/bin/systemctl show --property=UnitFileState --value -- "${unit}"
+        )"
+        DOCKER_WAS_ACTIVE["${unit}"]=""
+        if /usr/bin/systemctl is-active --quiet -- "${unit}"; then
+            DOCKER_WAS_ACTIVE["${unit}"]="true"
+        fi
+    done
+    STAGE="$(exec_cmd "/usr/bin/mktemp -d -- /tmp/setup-nvidia-toolkits.XXXXXXXX")"
+    trap cleanup EXIT
+    trap "exit 129" HUP
+    trap "exit 130" INT
+    trap "exit 143" TERM
+    local -x DEBIAN_FRONTEND="noninteractive" LC_ALL="C"
+    exec_cmd "/usr/bin/apt-get update"
+    exec_cmd "/usr/bin/apt-get install --yes --no-install-recommends \
+        ca-certificates curl git gnupg jq kmod lsof mawk procps sudo"
+    INSTALLED_DRIVER="$(installed_driver)"
+    if [[ -n "${UPGRADE}" && -z "${SELECTOR}" && -n "${INSTALLED_DRIVER}" ]]; then
+        SELECTOR="package"
+        PACKAGE="${INSTALLED_DRIVER}"
+    fi
+    exec_cmd "/usr/bin/git clone --depth=1 -- https://github.com/XuehaiPan/nvitop.git \
+        ${STAGE@Q}/nvitop"
+    if [[ -z "${SELECTOR}" && -z "${YES}" ]]; then
+        prompt_choice SELECTOR "Driver selection" lts lts production package
+    fi
+    SELECTOR="${SELECTOR:-lts}"
+
+    # shellcheck disable=SC2310 # The hardware probe returns success only when it finds a switch.
+    if has_nvswitch; then
+        use_fabric_manager="true"
+    fi
+
+    prepare_driver_ppa
+    load_candidates
+    choose_driver
+    if [[ -n "${INSTALLED_FAMILY}" || -d "/sys/module/nvidia" ]]; then
+        echo "Warning: this host already has an NVIDIA driver. Changing it can stop GPU services and terminate GPU jobs." >&2
+    fi
+    branch="${PACKAGE#nvidia-driver-}"
+    branch="${branch%%-*}"
+    local installed_branch="${INSTALLED_DRIVER#nvidia-driver-}"
+    local -a options=("--package=${PACKAGE}")
+    if [[ "${INSTALLED_DRIVER}" != "${PACKAGE}" ]]; then
+        if [[ -n "${UPGRADE}" && "${installed_branch%%-*}" == "${branch}" ]]; then
+            abort "Omit \`--upgrade\` to switch from \`${INSTALLED_DRIVER}\` to \`${PACKAGE}\` within R${branch}."
+        fi
+        options+=(--latest)
+    elif [[ -n "${UPGRADE}" ]]; then
+        options+=(--upgrade-only)
+    fi
+    if [[ -n "${YES}" ]]; then
+        options+=(--yes)
+    fi
+    printf "Selected R%s (%s).\n" "${branch}" "${PACKAGE}"
+    select_fabric_stack "${use_fabric_manager}"
+    if [[ -n "${SUSPEND_FABRIC}" ]]; then
+        suspend_fabric
+    fi
+    # The wrapper has already shown the selection. Preserve nvitop's installation prompts.
+    exec_cmd "/bin/bash ${STAGE@Q}/nvitop/install-nvidia-driver.sh ${options[*]@Q}" |
+        /bin/sed -u '/^==> Available NVIDIA drivers (/,/^$/d'
+    driver="$(installed_driver)"
+    if [[ -z "${driver}" ]]; then
+        abort "The installer finished without an installed NVIDIA driver metapackage."
+    fi
+    branch="${driver#nvidia-driver-}"
+    branch="${branch%%-*}"
+    # A fresh driver's PCI probe can reveal a previously unbound switch.
+    # shellcheck disable=SC2310 # A negative probe is normal on a PCIe-only node.
+    if [[ -z "${use_fabric_manager}" ]] && has_nvswitch; then
+        use_fabric_manager="true"
+        # shellcheck disable=SC2310 # Report the resolver diagnostic before changing the fabric.
+        if ! resolve_fabric "${use_fabric_manager}" "${driver}"; then
+            abort "${FABRIC_ERROR}"
+        fi
+        if [[ -n "${SUSPEND_FABRIC}" ]]; then
+            suspend_fabric
+        fi
+    fi
+    install_fabric_packages "${use_fabric_manager}" "${driver}"
+    set_fabric_packages "${use_fabric_manager}" "${driver}"
+    if [[ "${#OBSOLETE_FABRIC_PACKAGES[@]}" -gt 0 ]]; then
+        abort "Fabric Manager packages from other branches still need purging: ${OBSOLETE_FABRIC_PACKAGES[*]}."
+    fi
+    if [[ -n "${FABRIC_PACKAGE}" ]]; then
+        if [[ -z "${FABRIC_RUNTIME_INSTALLED}" ]]; then
+            abort "Expected ${FABRIC_PACKAGE} for R${branch} after installation."
+        fi
+        exec_cmd "/usr/bin/apt-mark hold -- ${FABRIC_PACKAGE@Q}"
+    fi
+    UNHELD_FABRIC_PACKAGES=()
+
+    if ! loaded="$(
+        /usr/bin/nvidia-smi --query-gpu=driver_version --format=csv,noheader | /usr/bin/sort -u
+    )"; then
+        loaded=""
+    fi
+    if [[ "${loaded}" != "${branch}."* || "${loaded}" == *$'\n'* ]]; then
+        abort "Expected a loaded R${branch} driver. Check \`nvidia-smi\`, DKMS, and whether the node needs a reboot."
+    fi
+    if [[ -n "${FABRIC_PACKAGE}" ]]; then
+        case "$(
+            /usr/bin/systemctl show --property=UnitFileState --value -- nvidia-fabricmanager.service
+        )" in
+            masked) exec_cmd "/usr/bin/systemctl unmask -- nvidia-fabricmanager.service" ;;
+            masked-runtime)
+                exec_cmd "/usr/bin/systemctl unmask --runtime -- nvidia-fabricmanager.service"
+                ;;
+            *) ;;
+        esac
+        FABRIC_TEMP_MASK=""
+        # shellcheck disable=SC2310 # Report the service's diagnostic log if startup fails.
+        if ! exec_cmd "/usr/bin/systemctl enable --now nvidia-fabricmanager.service"; then
+            abort "Fabric Manager failed to start. Check \`journalctl -u nvidia-fabricmanager.service\` on this host."
+        fi
+        exec_cmd "/usr/bin/systemctl is-active --quiet -- nvidia-fabricmanager.service"
+        FABRIC_RESTORE=""
+    fi
+
+    if [[ ! -x "/usr/bin/docker" || (! -x "/usr/bin/dockerd" && ! -x "/usr/sbin/dockerd") ]]; then
+        exec_cmd "/usr/bin/curl -fsSL -- https://get.docker.com | /bin/sh -s -- --no-autostart"
+    fi
+    local toolkit_state
+    toolkit_state="$(container_toolkit_state)"
+    if [[ "${toolkit_state}" != "installed" ]]; then
+        install_container_toolkit
+    fi
+    if [[ -f "${DOCKER_RUNTIME_PENDING}" ]]; then
+        configure_docker
+        if [[ -n "${DOCKER_WAS_ACTIVE["docker.service"]}" ]]; then
+            echo "Restart Docker with \`sudo systemctl restart docker\` when workloads allow."
+            echo "The running daemon may need a restart to recognize \`--gpus all\`."
+        fi
+        exec_cmd "/usr/bin/unlink -- ${DOCKER_RUNTIME_PENDING@Q}"
+    fi
+    echo "NVIDIA driver ${loaded} is loaded. Run \`nvidia-smi -L\` to list the host GPUs."
+    echo "For an optional container check, run this when Docker is active."
+    echo "  sudo docker run --rm --runtime=nvidia --gpus all ${os_image} nvidia-smi -L"
+}
+
+if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
+    main "$@"
+fi

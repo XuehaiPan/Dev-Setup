@@ -1,0 +1,111 @@
+#!/bin/bash
+#
+# Run a Bash expression in each local user's home directory.
+#
+# Usage: sudo bin/foreach-user-run [--] COMMAND
+
+# shellcheck disable=SC2292 # This guard must also run under `sh`.
+if [ -z "${BASH_VERSION:-}" ]; then
+    echo "Bash is required to interpret this script." >&2
+    exit 1
+fi
+
+set -euo pipefail
+shopt -s dotglob nullglob
+
+HOME_ROOT="/home"
+
+function abort() {
+    printf "%s\n" "$*" >&2
+    exit 1
+}
+
+function require_debian_root() {
+    # `os-release` supplies the uppercase fields `ID` and `ID_LIKE`.
+    local ID="" ID_LIKE="" release="/etc/os-release"
+    if [[ ! -r "${release}" ]]; then
+        release="/usr/lib/os-release"
+    fi
+    if [[ -r "${release}" ]]; then
+        # shellcheck source=/dev/null
+        source "${release}"
+    fi
+    case " ${ID} ${ID_LIKE} " in
+        *" debian "* | *" ubuntu "*) ;;
+        *) abort "This script requires Debian, Ubuntu, or a derivative." ;;
+    esac
+    if [[ "${EUID}" != "0" ]]; then
+        abort "You must run this script as the root user."
+    fi
+}
+
+USAGE="Usage: \`sudo bin/foreach-user-run [--] COMMAND\`"
+if [[ "$#" -eq 1 && ("$1" == "-h" || "$1" == "--help") ]]; then
+    echo "${USAGE}"
+    exit 0
+fi
+case "${1:-}" in
+    --) shift ;;
+    -*) abort "${USAGE}" ;;
+    *) ;;
+esac
+# This command accepts shell expressions to run after sourcing each user's profile.
+COMMAND="$*"
+if [[ "${COMMAND}" != *[![:space:]]* ]]; then
+    abort "${USAGE}"
+fi
+
+require_debian_root
+
+# Save the terminal before piping the command. Batch runs use `/dev/null` for input.
+if [[ -t 0 ]]; then
+    exec {SESSION_INPUT}<&0
+else
+    exec {SESSION_INPUT}</dev/null
+fi
+
+# A keyed `getent passwd` lookup treats numeric login names as UIDs.
+PASSWD_ENTRIES="$(/usr/bin/getent -s files passwd)"
+declare -A ACCOUNT_HOMES=()
+while IFS=: read -r LOGIN _ _ _ _ ACCOUNT_HOME _; do
+    if [[ -n "${LOGIN}" && -z "${ACCOUNT_HOMES["${LOGIN}"]+set}" ]]; then
+        ACCOUNT_HOMES["${LOGIN}"]="${ACCOUNT_HOME}"
+    fi
+done <<<"${PASSWD_ENTRIES}"
+
+for HOME_DIR in "${HOME_ROOT}"/*; do
+    USERNAME="${HOME_DIR##*/}"
+    if [[ ! -d "${HOME_DIR}" || "${USERNAME}" == "lost+found" ||
+        "${ACCOUNT_HOMES["${USERNAME}"]:-}" != "${HOME_DIR}" ]]; then
+        continue
+    fi
+
+    echo "==> Running as user ${USERNAME} ..."
+    # Send the NUL-terminated expression on a separate descriptor to keep stdin on the terminal.
+    # shellcheck disable=SC2016 # The per-user Bash expands this script.
+    if printf "%s\0" "${COMMAND}" | USER="${USERNAME}" HOME="${HOME_DIR}" \
+        /sbin/runuser --pty --shell=/bin/bash \
+        --whitelist-environment="http_proxy,https_proxy,ftp_proxy,all_proxy,no_proxy" \
+        -- "${USERNAME}" -ic '
+if ! IFS="" read -r -d "" -u 3 __FOREACH_USER_COMMAND; then
+    printf "%s\n" "Could not read the per-user command." >&2
+    exit 1
+fi
+exec 3<&-
+printf "%s$ %s\n" "${USER}@${PWD}" "source ~/.bash_profile"
+source ~/.bash_profile
+printf "%s$ %s\n" "${USER}@${PWD}" "cd -- ~"
+cd -- ~ || exit "$?"
+printf "%s$ %s\n" "${USER}@${PWD}" "${__FOREACH_USER_COMMAND}"
+eval -- "${__FOREACH_USER_COMMAND}"
+' 3<&0 0<&"${SESSION_INPUT}" {SESSION_INPUT}<&-; then
+        echo "==> Finished running as user ${USERNAME} with exit code 0."
+    else
+        EXIT_CODE="$?"
+        echo "==> Finished running as user ${USERNAME} with exit code ${EXIT_CODE}." >&2
+        echo "==> Stopping on first failure." >&2
+        exit "${EXIT_CODE}"
+    fi
+done
+
+echo "==> Successfully ran command as each user."

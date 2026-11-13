@@ -1,0 +1,233 @@
+#!/bin/bash
+#
+# Create a user from the server template and link their data directory.
+#
+# Usage: sudo bin/add-user USERNAME
+
+# shellcheck disable=SC2292 # This guard must also run under `sh`.
+if [ -z "${BASH_VERSION:-}" ]; then
+    echo "Bash is required to interpret this script." >&2
+    exit 1
+fi
+
+set -euo pipefail
+export PATH="/usr/sbin:/usr/bin:/sbin:/bin"
+
+HOME_ROOT="/home"
+DATA_ROOT="/data"
+SKEL_DIR="/etc/skel"
+TEMPLATE_USER="server-admin"
+
+function abort() {
+    printf "%s\n" "$*" >&2
+    exit 1
+}
+
+function require_debian_root() {
+    # `os-release` supplies the uppercase fields `ID` and `ID_LIKE`.
+    local ID="" ID_LIKE="" release="/etc/os-release"
+    if [[ ! -r "${release}" ]]; then
+        release="/usr/lib/os-release"
+    fi
+    if [[ -r "${release}" ]]; then
+        # shellcheck source=/dev/null
+        source "${release}"
+    fi
+    case " ${ID} ${ID_LIKE} " in
+        *" debian "* | *" ubuntu "*) ;;
+        *) abort "This script requires Debian, Ubuntu, or a derivative." ;;
+    esac
+    if [[ "${EUID}" != "0" ]]; then
+        abort "You must run this script as the root user."
+    fi
+}
+
+# shellcheck disable=SC2294 # Callers pass a shell command with its arguments already quoted.
+function exec_cmd() {
+    printf "%s" "$@" | /usr/bin/awk \
+        'BEGIN {
+            RESET = "\033[0m";
+            BOLD = "\033[1m";
+            UNDERLINE = "\033[4m";
+            UNDERLINEOFF = "\033[24m";
+            RED = "\033[31m";
+            GREEN = "\033[32m";
+            YELLOW = "\033[33m";
+            WHITE = "\033[37m";
+            GRAY = "\033[90m";
+            IDENTIFIER = "[_a-zA-Z][_a-zA-Z0-9]*";
+            idx = 0;
+            in_string = 0;
+            double_quoted = 1;
+            printf("%s$", RESET BOLD WHITE);
+        }
+        {
+            for (i = 1; i <= NF; ++i) {
+                style = WHITE;
+                post_style = WHITE;
+                if (!in_string) {
+                    if ($i ~ /^-/)
+                        style = YELLOW;
+                    else if ($i == "sudo" && idx == 0) {
+                        style = UNDERLINE GREEN;
+                        post_style = UNDERLINEOFF WHITE;
+                    }
+                    else if ($i ~ "^" IDENTIFIER "=" && idx == 0) {
+                        style = GRAY;
+                        '"if (\$i ~ \"^\" IDENTIFIER \"=[\\\"']\") {"'
+                            in_string = 1;
+                            double_quoted = ($i ~ "^" IDENTIFIER "=\"");
+                        }
+                    }
+                    else if ($i ~ /^[12&]?>>?/ || $i == "\\")
+                        style = RED;
+                    else {
+                        ++idx;
+                        '"if (\$i ~ /^[\"']/) {"'
+                            in_string = 1;
+                            double_quoted = ($i ~ /^"/);
+                        }
+                        if (idx == 1)
+                            style = GREEN;
+                    }
+                }
+                if (in_string) {
+                    if (style == WHITE)
+                        style = "";
+                    post_style = "";
+                    '"if ((double_quoted && \$i ~ /\";?\$/ && \$i !~ /\\\\\";?\$/) || (!double_quoted && \$i ~ /';?\$/))"'
+                        in_string = 0;
+                }
+                if (($i ~ /;$/ && $i !~ /\\;$/) || $i == "|" || $i == "||" || $i == "&&") {
+                    if (!in_string) {
+                        idx = 0;
+                        if ($i !~ /;$/)
+                            style = RED;
+                    }
+                }
+                if ($i ~ /;$/ && $i !~ /\\;$/)
+                    printf(" %s%s%s;%s", style, substr($i, 1, length($i) - 1), (in_string ? WHITE : RED), post_style);
+                else
+                    printf(" %s%s%s", style, $i, post_style);
+                if ($i == "\\")
+                    printf("\n\t");
+            }
+        }
+        END {
+            printf("%s\n", RESET);
+        }' >&2 || true
+    eval "$@"
+}
+
+function cleanup_failed_useradd() {
+    local login
+    while IFS=: read -r login _; do
+        if [[ "${login}" == "${USERNAME}" ]]; then
+            echo "Account ${USERNAME} exists after the failed setup. Keeping \`${DATA_DIR}\`." >&2
+            echo "Inspect \`${HOME_DIR}\` and finish configuring the account manually." >&2
+            return
+        fi
+    done </etc/passwd
+    /bin/rmdir -- "${DATA_DIR}" || :
+}
+
+function link_if_missing() {
+    if [[ ! -e "$2" && ! -L "$2" ]]; then
+        exec_cmd "/bin/ln -sT -- ${1@Q} ${2@Q}"
+    fi
+}
+
+USAGE="Usage: \`sudo bin/add-user USERNAME\`"
+if [[ "$#" -eq 1 && ("$1" == "-h" || "$1" == "--help") ]]; then
+    echo "${USAGE}"
+    exit 0
+fi
+if [[ "$#" -ne 1 || -z "${1:-}" || "$1" == -* ]]; then
+    abort "${USAGE}"
+fi
+USERNAME="$1"
+if [[ "${USERNAME}" == */* || "${USERNAME}" == "." || "${USERNAME}" == ".." ]]; then
+    abort "Username cannot contain '/' or equal '.' or '..'."
+fi
+if [[ "${USERNAME}" == *:* || "${USERNAME}" == *[[:space:]]* ]]; then
+    abort "Username cannot contain a colon or whitespace."
+fi
+
+require_debian_root
+
+if [[ ! -d "${SKEL_DIR}/.dotfiles" || ! -d "${SKEL_DIR}/.linuxbrew/bin" ]]; then
+    abort "Missing user template in \`${SKEL_DIR}\`. Run \`sudo bin/bootstrap-server\` to build it."
+fi
+
+if [[ "${USERNAME}" == "shared-data" ]]; then
+    abort "Username shared-data is reserved for \`${DATA_ROOT}/shared-data\`."
+fi
+if /usr/bin/id -u -- "${USERNAME}" &>/dev/null; then
+    abort "User ${USERNAME} already exists. Please specify a new username."
+fi
+
+HOME_DIR="${HOME_ROOT}/${USERNAME}"
+DATA_DIR="${DATA_ROOT}/${USERNAME}"
+SHARED_DIR="${DATA_ROOT}/shared-data"
+
+for path in "${HOME_DIR}" "${DATA_DIR}"; do
+    if [[ -e "${path}" || -L "${path}" ]]; then
+        abort "Path \`${path}\` already exists. Move it aside or choose another username."
+    fi
+done
+
+exec_cmd "cd -- /"
+if [[ ! -d "${SHARED_DIR}" && (-e "${SHARED_DIR}" || -L "${SHARED_DIR}") ]]; then
+    abort "Expected a directory at \`${SHARED_DIR}\`."
+fi
+if [[ ! -d "${DATA_ROOT}" ]]; then
+    exec_cmd "/usr/bin/install -d -- ${DATA_ROOT@Q}"
+fi
+
+echo "==> Adding user ..."
+# Reserve the data path before creating the account.
+exec_cmd "/bin/mkdir -m 700 -- ${DATA_DIR@Q}"
+trap cleanup_failed_useradd EXIT
+trap 'exit 129' HUP
+trap 'exit 130' INT
+trap 'exit 143' TERM
+# `@Q` preserves each argument when `exec_cmd` evaluates the printed command.
+exec_cmd "/usr/sbin/useradd --shell /usr/bin/zsh --key HOME_MODE=0700 \
+    --create-home --home-dir ${HOME_DIR@Q} --skel ${SKEL_DIR@Q} -- ${USERNAME@Q}"
+trap - EXIT HUP INT TERM
+
+if [[ ! -d "${SHARED_DIR}" ]]; then
+    echo "==> Creating \`${SHARED_DIR}\` ..."
+    # Use an exact mode to clear any setgid bit inherited from `/data`.
+    exec_cmd "/usr/bin/install -d -o root -g root -m =777 -- ${SHARED_DIR@Q}"
+fi
+
+echo "==> Setting up ..."
+OWNER="${USERNAME}:$(/usr/bin/id -gn -- "${USERNAME}")"
+exec_cmd "/bin/mkdir -- ${DATA_DIR@Q}/Projects"
+exec_cmd "/bin/chmod -- 755 ${DATA_DIR@Q} ${DATA_DIR@Q}/Projects"
+exec_cmd "/bin/chown -h -- ${OWNER@Q} ${DATA_DIR@Q}/Projects ${DATA_DIR@Q}"
+
+exec_cmd "cd -- ${HOME_DIR@Q}"
+REPLACEMENT="${USERNAME//\\/\\\\}"
+REPLACEMENT="${REPLACEMENT//&/\\&}"
+TEMPLATE_PATTERN="$(/bin/sed 's/[][\.^$*]/\\&/g' <<<"${TEMPLATE_USER}")"
+SUBSTITUTION="s/${TEMPLATE_PATTERN}/${REPLACEMENT}/g"
+# `grep` returns 1 when the template has no paths to personalize.
+exec_cmd "if /bin/grep -rIlZ -F -- ${TEMPLATE_USER@Q} .; then :; else [[ \"\$?\" == \"1\" ]]; fi | \
+    /usr/bin/xargs -0 -r /bin/sed -i -e ${SUBSTITUTION@Q} --"
+
+link_if_missing "${DATA_DIR}" data
+link_if_missing "${SHARED_DIR}" shared-data
+link_if_missing "${DATA_DIR}/Projects" Projects
+exec_cmd "/bin/ln -sfn -- ${HOME_DIR@Q}/.linuxbrew/Homebrew/bin/brew .linuxbrew/bin/brew"
+exec_cmd "/bin/touch -- put-things-in-data-instead-of-home"
+exec_cmd "/bin/chown -h -- ${OWNER@Q} data shared-data Projects .linuxbrew/bin/brew \
+    put-things-in-data-instead-of-home"
+exec_cmd "/bin/mkdir -p -- .ssh"
+exec_cmd "/bin/chown -hR -- ${OWNER@Q} .ssh"
+exec_cmd "/sbin/runuser -u ${USERNAME@Q} -- /bin/chmod -- 700 .ssh"
+exec_cmd "/sbin/runuser -u ${USERNAME@Q} -- /bin/touch -- .ssh/authorized_keys"
+exec_cmd "/sbin/runuser -u ${USERNAME@Q} -- /bin/chmod -- 600 .ssh/authorized_keys"
+
+echo "==> Successfully added user ${USERNAME}."

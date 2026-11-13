@@ -189,6 +189,8 @@ handle_extension() {
             mediainfo "${FILE_PATH}" && exit 5
             exiftool "${FILE_PATH}" && exit 5
             ;; # Continue with next handler on failure
+
+        *) ;;
     esac
 }
 
@@ -323,6 +325,8 @@ handle_image() {
                 "${IMAGE_CACHE_PATH}" && exit 6
             [ "${rar}" ] || [ "${zip}" ] && rm -- "${IMAGE_CACHE_PATH}"
             ;;
+
+        *) ;;
     esac
 
     # openscad_image() {
@@ -345,6 +349,7 @@ handle_image() {
     #     3mf | amf | dxf | off | stl)
     #         openscad_image <(echo "import(\"${FILE_PATH}\");") && exit 6
     #         ;;
+    #     *) ;;
     # esac
 }
 
@@ -533,6 +538,8 @@ handle_mime() {
             readelf -WCa "${FILE_PATH}" && exit 5
             nm --demangle "${FILE_PATH}" && exit 5
             exit 1;;
+
+        *) ;;
     esac
 }
 

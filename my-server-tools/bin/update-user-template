@@ -1,0 +1,348 @@
+#!/bin/bash
+#
+# Refresh the Git checkouts and Miniconda installation in the default user template.
+# Usage: sudo bin/update-user-template
+
+# shellcheck disable=SC2292 # This guard must also run under sh.
+if [ -z "${BASH_VERSION:-}" ]; then
+    echo "Bash is required to interpret this script." >&2
+    exit 1
+fi
+
+set -euo pipefail
+shopt -s nullglob
+export PATH="/usr/sbin:/usr/bin:/sbin:/bin"
+
+HOME_ROOT="/home"
+SKEL_DIR="/etc/skel"
+TEMPLATE_USER="server-admin"
+TEMPLATE_USER_HOME="${HOME_ROOT}/${TEMPLATE_USER}"
+
+RUN_INDICATOR_PREFIX="/tmp/update-user-template"
+CONDA_STAGE="/tmp/update-user-template-conda-update"
+CONDA_TEMPLATE="${SKEL_DIR}/Miniconda3"
+
+function abort() {
+    printf "%s\n" "$*" >&2
+    exit 1
+}
+
+function require_debian_root() {
+    local ID="" ID_LIKE="" release="/etc/os-release"
+    if [[ ! -r "${release}" ]]; then
+        release="/usr/lib/os-release"
+    fi
+    if [[ -r "${release}" ]]; then
+        # shellcheck source=/dev/null
+        source "${release}"
+    fi
+    case " ${ID} ${ID_LIKE} " in
+        *" debian "* | *" ubuntu "*) ;;
+        *) abort "This script requires Debian, Ubuntu, or a derivative." ;;
+    esac
+    if [[ "${EUID}" != "0" ]]; then
+        abort "You must run this script as the root user."
+    fi
+}
+
+# shellcheck disable=SC2294 # Callers pass a shell command with its arguments already quoted.
+function exec_cmd() {
+    printf "%s" "$@" | /usr/bin/awk \
+        'BEGIN {
+            RESET = "\033[0m";
+            BOLD = "\033[1m";
+            UNDERLINE = "\033[4m";
+            UNDERLINEOFF = "\033[24m";
+            RED = "\033[31m";
+            GREEN = "\033[32m";
+            YELLOW = "\033[33m";
+            WHITE = "\033[37m";
+            GRAY = "\033[90m";
+            IDENTIFIER = "[_a-zA-Z][_a-zA-Z0-9]*";
+            idx = 0;
+            in_string = 0;
+            double_quoted = 1;
+            printf("%s$", RESET BOLD WHITE);
+        }
+        {
+            for (i = 1; i <= NF; ++i) {
+                style = WHITE;
+                post_style = WHITE;
+                if (!in_string) {
+                    if ($i ~ /^-/)
+                        style = YELLOW;
+                    else if ($i == "sudo" && idx == 0) {
+                        style = UNDERLINE GREEN;
+                        post_style = UNDERLINEOFF WHITE;
+                    }
+                    else if ($i ~ "^" IDENTIFIER "=" && idx == 0) {
+                        style = GRAY;
+                        '"if (\$i ~ \"^\" IDENTIFIER \"=[\\\"']\") {"'
+                            in_string = 1;
+                            double_quoted = ($i ~ "^" IDENTIFIER "=\"");
+                        }
+                    }
+                    else if ($i ~ /^[12&]?>>?/ || $i == "\\")
+                        style = RED;
+                    else {
+                        ++idx;
+                        '"if (\$i ~ /^[\"']/) {"'
+                            in_string = 1;
+                            double_quoted = ($i ~ /^"/);
+                        }
+                        if (idx == 1)
+                            style = GREEN;
+                    }
+                }
+                if (in_string) {
+                    if (style == WHITE)
+                        style = "";
+                    post_style = "";
+                    '"if ((double_quoted && \$i ~ /\";?\$/ && \$i !~ /\\\\\";?\$/) || (!double_quoted && \$i ~ /';?\$/))"'
+                        in_string = 0;
+                }
+                if (($i ~ /;$/ && $i !~ /\\;$/) || $i == "|" || $i == "||" || $i == "&&") {
+                    if (!in_string) {
+                        idx = 0;
+                        if ($i !~ /;$/)
+                            style = RED;
+                    }
+                }
+                if ($i ~ /;$/ && $i !~ /\\;$/)
+                    printf(" %s%s%s;%s", style, substr($i, 1, length($i) - 1), (in_string ? WHITE : RED), post_style);
+                else
+                    printf(" %s%s%s", style, $i, post_style);
+                if ($i == "\\")
+                    printf("\n\t");
+            }
+        }
+        END {
+            printf("%s\n", RESET);
+        }' >&2 || true
+    eval "$@"
+}
+
+function pull_projects() {
+    local base_dir proj_dir branch upstream old_head_hash head_hash
+    local timestamp last_timestamp commit_count
+    timestamp="$(/bin/date +%s)"
+
+    for base_dir in "$@"; do
+        /usr/bin/find "${base_dir}" -maxdepth 5 -type d -name .git -prune ! -empty -printf "%h\0" |
+            while IFS="" read -r -d "" proj_dir; do
+                branch="$(/usr/bin/git -C "${proj_dir}" branch --show-current)"
+                upstream="$(/usr/bin/git -C "${proj_dir}" branch --list --format='%(upstream)' -- "${branch}")"
+                if [[ -z "${upstream}" ]]; then
+                    continue
+                fi
+
+                exec_cmd "/usr/bin/git -C ${proj_dir@Q} fetch --all --prune"
+                old_head_hash="$(/usr/bin/git -C "${proj_dir}" rev-parse HEAD)"
+                head_hash="$(/usr/bin/git -C "${proj_dir}" rev-parse --verify "${upstream}")"
+                if [[ "${head_hash}" == "${old_head_hash}" ]]; then
+                    continue
+                fi
+                exec_cmd "/usr/bin/git -C ${proj_dir@Q} merge --ff-only -- ${upstream@Q}"
+
+                last_timestamp="$(/usr/bin/git -C "${proj_dir}" config --type=int --default 0 --get -- gc.lasttimestamp)"
+                if ((timestamp - last_timestamp >= 3600 * 24 * 3)); then
+                    commit_count="$(/usr/bin/git -C "${proj_dir}" rev-list --count --all)"
+                    if ((commit_count <= 10000 || timestamp - last_timestamp >= 3600 * 24 * 30)); then
+                        exec_cmd "/usr/bin/git -C ${proj_dir@Q} gc --aggressive"
+                        /usr/bin/git -C "${proj_dir}" config -- gc.lasttimestamp "${timestamp}"
+                    fi
+                fi
+            done
+    done
+}
+
+# Run the checkout's installer without root privileges and publish only a complete executable.
+function update_fzf_binary() (
+    local stage
+    exec_cmd "/bin/mkdir -p -- .fzf/bin"
+    stage="$(exec_cmd "/bin/mktemp -d -- ${SKEL_DIR@Q}/.fzf/bin/.update.XXXXXXXX")"
+    # shellcheck disable=SC2064 # Capture the local path before the subshell's EXIT trap runs.
+    trap "/bin/rm -rf -- ${stage@Q}" EXIT
+    exec_cmd "/bin/chmod 0711 -- ${stage@Q}"
+    exec_cmd "/usr/bin/install -d -m 0700 -o nobody -- ${stage@Q}/bin"
+    exec_cmd "/usr/bin/install -m 0644 -- .fzf/install ${stage@Q}/install"
+    if [[ -x .fzf/bin/fzf ]]; then
+        exec_cmd "/sbin/runuser -u nobody -- /bin/ln -s -- ${SKEL_DIR@Q}/.fzf/bin/fzf ${stage@Q}/bin/fzf"
+    fi
+    exec_cmd "/sbin/runuser -u nobody -- /usr/bin/env HOME=${stage@Q}/bin TMPDIR=${stage@Q}/bin \
+        /bin/bash ${stage@Q}/install --bin"
+    if [[ ".fzf/bin/fzf" -ef "${stage}/bin/fzf" ]]; then
+        return
+    fi
+    if [[ ! -f "${stage}/bin/fzf" || ! -s "${stage}/bin/fzf" || ! -x "${stage}/bin/fzf" ]]; then
+        abort "The fzf installer did not produce an executable."
+    fi
+    exec_cmd "/sbin/runuser -u nobody -- /bin/cat -- ${stage@Q}/bin/fzf >${stage@Q}/fzf"
+    exec_cmd "/bin/chmod 0755 -- ${stage@Q}/fzf"
+    exec_cmd "/bin/mv -fT -- ${stage@Q}/fzf .fzf/bin/fzf"
+)
+
+function replace_conda_template() {
+    local source="$1"
+    if [[ ! -f "${source}/bin/conda" ]]; then
+        abort "Missing Conda executable in \`${source}\`."
+    fi
+    if [[ -e "${CONDA_TEMPLATE}" || -L "${CONDA_TEMPLATE}" ]]; then
+        # shellcheck disable=SC2310 # Return a failed deletion before copying the replacement.
+        if ! exec_cmd "/usr/bin/find ${CONDA_TEMPLATE@Q} -depth -delete"; then
+            return 1
+        fi
+    fi
+    exec_cmd "/bin/cp -aT --reflink=auto -- ${source@Q} ${CONDA_TEMPLATE@Q}"
+}
+
+function clean_conda_stage() {
+    if [[ -d "${CONDA_STAGE}/previous" ]]; then
+        replace_conda_template "${CONDA_STAGE}/previous"
+        # shellcheck disable=SC2310 # Keep the backup on a failed rename.
+        if ! exec_cmd "/bin/mv -T -- ${CONDA_STAGE@Q}/previous ${CONDA_STAGE@Q}/backup"; then
+            return 1
+        fi
+    fi
+    exec_cmd "/usr/bin/find ${CONDA_STAGE@Q} -depth -delete"
+}
+
+function update_conda_envs() {
+    local prefix="${HOME}/Miniconda3" env_dir
+    shopt -s nullglob
+    export CONDA_PKGS_DIRS="${prefix}/pkgs" CONDA_ENVS_PATH="${prefix}/envs"
+    exec_cmd "${prefix@Q}/bin/conda update --prefix ${prefix@Q} --all --yes"
+    for env_dir in "${prefix}"/envs/*; do
+        if [[ -f "${env_dir}/conda-meta/history" && ! -L "${env_dir}" ]]; then
+            exec_cmd "${prefix@Q}/bin/conda update --prefix ${env_dir@Q} --all --yes"
+        fi
+    done
+    exec_cmd "${prefix@Q}/bin/conda clean --all --yes"
+}
+
+function mount_conda_home() {
+    local stage_home="$1" update_user="$2" template_home="$3"
+    local home_root="${template_home%/*}" proxy_name
+    local -a proxy_env=()
+    if [[ "${update_user}" == "nobody" || ! -d "${template_home}" ]]; then
+        # Create Conda's embedded installation path inside this private mount namespace.
+        exec_cmd "/bin/mount -t tmpfs -o mode=0755 tmpfs ${home_root@Q}"
+        exec_cmd "/bin/mkdir -- ${template_home@Q}"
+    fi
+    # Allow the staged executables to run even when `/tmp` is mounted `noexec`.
+    exec_cmd "/bin/mount -o bind,exec,nosuid,nodev -- ${stage_home@Q} ${template_home@Q}"
+    exec_cmd "cd -- ${template_home@Q}"
+    for proxy_name in {http,https,ftp,all,no}_proxy {HTTP,HTTPS,FTP,ALL,NO}_PROXY; do
+        if [[ -v "${proxy_name}" ]]; then
+            proxy_env+=("${proxy_name}=${!proxy_name}")
+        fi
+    done
+    # Expand the proxy array during execution so its values never enter the command trace.
+    {
+        declare -f exec_cmd update_conda_envs
+        printf '%s\n' update_conda_envs
+    } | exec_cmd "/sbin/runuser -u ${update_user@Q} -- /usr/bin/env -i HOME=${template_home@Q} \
+        USER=${update_user@Q} LOGNAME=${update_user@Q} SHELL=/bin/bash PATH=/usr/local/bin:/usr/bin:/bin \
+        \"\${proxy_env[@]}\" /bin/bash -seuo pipefail"
+}
+
+function update_conda_template() {
+    local update_user="${TEMPLATE_USER}" update_group
+    if ! /usr/bin/id -u -- "${update_user}" &>/dev/null; then
+        update_user="nobody"
+    fi
+    update_group="$(/usr/bin/id -gn -- "${update_user}")"
+    if [[ ! -d "${CONDA_TEMPLATE}" || -L "${CONDA_TEMPLATE}" ||
+        ! -x "${CONDA_TEMPLATE}/bin/conda" ]]; then
+        abort "Expected a Miniconda installation at \`${CONDA_TEMPLATE}\`."
+    fi
+    exec_cmd "/bin/mkdir -m 700 -- ${CONDA_STAGE@Q}"
+    trap 'clean_conda_stage; exec_cmd "/usr/bin/unlink -- ${RUN_INDICATOR@Q}"' EXIT
+    exec_cmd "/bin/mkdir -m 755 -- ${CONDA_STAGE@Q}/home"
+    exec_cmd "/bin/cp -a --reflink=auto -- ${CONDA_TEMPLATE@Q} ${CONDA_STAGE@Q}/home/"
+    exec_cmd "cd -- ${CONDA_STAGE@Q}/home"
+    exec_cmd "/usr/bin/install -d -m 700 -o ${update_user@Q} -g ${update_group@Q} -- .conda"
+    if [[ -d "${SKEL_DIR}/.conda/tos" ]]; then
+        exec_cmd "/bin/cp -a -- ${SKEL_DIR@Q}/.conda/tos .conda/"
+    elif [[ "${update_user}" == "${TEMPLATE_USER}" && -d "${TEMPLATE_USER_HOME}/.conda/tos" ]]; then
+        exec_cmd "/sbin/runuser -u ${update_user@Q} -- /bin/cp -a -- \
+            ${TEMPLATE_USER_HOME@Q}/.conda/tos .conda/"
+    fi
+    exec_cmd "/bin/chown -hR -- ${update_user@Q}:${update_group@Q} ."
+    if [[ -f "${SKEL_DIR}/.condarc" ]]; then
+        exec_cmd "/sbin/runuser -u ${update_user@Q} -- /bin/cp -L -- ${SKEL_DIR@Q}/.condarc .condarc"
+    elif [[ "${update_user}" == "${TEMPLATE_USER}" && -f "${TEMPLATE_USER_HOME}/.condarc" ]]; then
+        exec_cmd "/sbin/runuser -u ${update_user@Q} -- /bin/cp -L -- \
+            ${TEMPLATE_USER_HOME@Q}/.condarc .condarc"
+    fi
+
+    # Pass the tracer and update functions to the private mount namespace over stdin.
+    {
+        declare -f exec_cmd update_conda_envs mount_conda_home
+        printf '%s\n' 'mount_conda_home "$@"'
+    } | exec_cmd "/usr/bin/unshare --mount --propagation private -- /bin/bash -seuo pipefail -- \
+        ${CONDA_STAGE@Q}/home ${update_user@Q} ${TEMPLATE_USER_HOME@Q}"
+
+    exec_cmd "/bin/chown -hR -- root:root ${CONDA_STAGE@Q}/home/Miniconda3"
+    # Only a complete backup is named `previous`. Both renames stay on the staging filesystem.
+    exec_cmd "/bin/cp -a --reflink=auto -- ${CONDA_TEMPLATE@Q} ${CONDA_STAGE@Q}/backup"
+    exec_cmd "/bin/mv -T -- ${CONDA_STAGE@Q}/backup ${CONDA_STAGE@Q}/previous"
+    replace_conda_template "${CONDA_STAGE}/home/Miniconda3"
+    exec_cmd "/bin/mv -T -- ${CONDA_STAGE@Q}/previous ${CONDA_STAGE@Q}/backup"
+    clean_conda_stage
+    trap 'exec_cmd "/usr/bin/unlink -- ${RUN_INDICATOR@Q}"' EXIT
+}
+
+USAGE="Usage: \`sudo bin/update-user-template\`"
+if [[ "$#" -eq 1 && ("$1" == "-h" || "$1" == "--help") ]]; then
+    echo "${USAGE}"
+    exit 0
+fi
+if [[ "$#" -ne 0 ]]; then
+    abort "${USAGE}"
+fi
+
+require_debian_root
+
+if [[ ! -d "${SKEL_DIR}/.dotfiles" || ! -d "${SKEL_DIR}/.linuxbrew/bin" ]]; then
+    abort "Missing user template in \`${SKEL_DIR}\`. Run \`sudo bin/bootstrap-server\` to build it."
+fi
+
+RUN_INDICATOR="$(exec_cmd "/bin/mktemp -- ${RUN_INDICATOR_PREFIX@Q}.$$.XXXXXXXX")"
+trap 'exec_cmd "/usr/bin/unlink -- ${RUN_INDICATOR@Q}"' EXIT
+exec 9<"${RUN_INDICATOR}"
+for INDICATOR in "${RUN_INDICATOR_PREFIX}".*; do
+    if [[ "${INDICATOR}" == "${RUN_INDICATOR}" || ! -O "${INDICATOR}" || -L "${INDICATOR}" ]]; then
+        continue
+    fi
+    PID="${INDICATOR#"${RUN_INDICATOR_PREFIX}."}"
+    # A stale indicator cannot match the open file, even if Linux has reused the PID.
+    if [[ "${INDICATOR}" -ef "/proc/${PID%%.*}/fd/9" ]]; then
+        abort "Another \`update-user-template\` is already running."
+    fi
+done
+
+if [[ -e "${CONDA_STAGE}" || -L "${CONDA_STAGE}" ]]; then
+    STAGE_MODE="$(/usr/bin/stat -c %a -- "${CONDA_STAGE}")"
+    if [[ ! -d "${CONDA_STAGE}" || -L "${CONDA_STAGE}" ||
+        ! -O "${CONDA_STAGE}" || "${STAGE_MODE}" != "700" ]]; then
+        abort "Expected a root-owned directory with mode 0700 at \`${CONDA_STAGE}\`."
+    fi
+    clean_conda_stage
+fi
+
+echo "==> Updating user template ..."
+
+exec_cmd "cd -- ${SKEL_DIR@Q}"
+pull_projects .linuxbrew .oh-my-zsh .fzf .vim
+exec_cmd "/bin/chmod -R -- g-w .oh-my-zsh .fzf"
+if [[ -d ".fzf/.git" ]]; then
+    update_fzf_binary
+fi
+
+if [[ -e "${CONDA_TEMPLATE}" || -L "${CONDA_TEMPLATE}" ]]; then
+    echo "==> Updating the Miniconda template ..."
+    update_conda_template
+fi
+
+echo "==> Successfully updated user template."

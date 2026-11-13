@@ -1,0 +1,98 @@
+#!/bin/bash
+#
+# Send a message to each terminal where the user is logged in.
+#
+# Usage: sudo bin/warn-user USERNAME MESSAGE ...
+
+# shellcheck disable=SC2292 # This guard must also run under `sh`.
+if [ -z "${BASH_VERSION:-}" ]; then
+    echo "Bash is required to interpret this script." >&2
+    exit 1
+fi
+
+set -euo pipefail
+
+function abort() {
+    printf "%s\n" "$*" >&2
+    exit 1
+}
+
+function require_debian_root() {
+    # `os-release` supplies the uppercase fields `ID` and `ID_LIKE`.
+    local ID="" ID_LIKE="" release="/etc/os-release"
+    if [[ ! -r "${release}" ]]; then
+        release="/usr/lib/os-release"
+    fi
+    if [[ -r "${release}" ]]; then
+        # shellcheck source=/dev/null
+        source "${release}"
+    fi
+    case " ${ID} ${ID_LIKE} " in
+        *" debian "* | *" ubuntu "*) ;;
+        *) abort "This script requires Debian, Ubuntu, or a derivative." ;;
+    esac
+    if [[ "${EUID}" != "0" ]]; then
+        abort "You must run this script as the root user."
+    fi
+}
+
+USAGE="Usage: \`sudo bin/warn-user USERNAME MESSAGE ...\`"
+if [[ "$#" -eq 1 && ("$1" == "-h" || "$1" == "--help") ]]; then
+    echo "${USAGE}"
+    exit 0
+fi
+if [[ -z "${1:-}" ]]; then
+    abort "Please specify a username."
+fi
+if [[ "$1" == -* ]]; then
+    abort "${USAGE}"
+fi
+
+USERNAME="$1"
+shift
+
+if [[ "$#" -eq 0 ]]; then
+    abort "Please specify a message to warn the user."
+fi
+
+require_debian_root
+
+# GNU `groups` looks up its operand as a login name, even when it consists entirely of digits.
+if ! /usr/bin/groups -- "${USERNAME}" &>/dev/null; then
+    abort "User ${USERNAME} does not exist."
+fi
+TARGET_UID="$(/usr/bin/id -u -- "${USERNAME}")"
+
+SESSIONS="$(/usr/bin/who)"
+WARNING=""
+for _ in {1..30}; do
+    WARNING+="$*"$'\n'
+done
+WARNING+="$(/usr/bin/uptime)"
+STATUS=0
+while read -r LOGIN TTY _; do
+    if [[ "${LOGIN}" != "${USERNAME}" ]]; then
+        continue
+    fi
+    DEVICE="/dev/${TTY}"
+    # Open without creating the path, then write through the same device's descriptor.
+    if [[ ! -c "${DEVICE}" ]] || ! exec {TTY_FD}<"${DEVICE}"; then
+        echo "Cannot open terminal \`${DEVICE}\`." >&2
+        STATUS=1
+        continue
+    fi
+    FD_PATH="/proc/self/fd/${TTY_FD}"
+    OWNER_UID="$(/usr/bin/stat -Lc %u -- "${FD_PATH}")" || OWNER_UID=""
+    if [[ ! -t "${TTY_FD}" ]]; then
+        echo "\`${DEVICE}\` is not a terminal." >&2
+        STATUS=1
+    elif [[ "${TTY}" == pts/* && "${OWNER_UID}" != "${TARGET_UID}" ]]; then
+        echo "Could not verify that ${USERNAME} owns \`${DEVICE}\`." >&2
+        STATUS=1
+    elif ! printf '\n%s\n\n' "${WARNING}" | /usr/bin/timeout 5s /bin/cat >"${FD_PATH}"; then
+        echo "Could not deliver the message to \`${DEVICE}\`." >&2
+        STATUS=1
+    fi
+    exec {TTY_FD}<&-
+done <<<"${SESSIONS}"
+exit "${STATUS}"

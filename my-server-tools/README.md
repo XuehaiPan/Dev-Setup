@@ -11,7 +11,7 @@ From the Dev-Setup repository root, run `cd my-server-tools` before using the ex
 | [`delete-user`](#delete-user)                                        | Remove a local account, its home, and its data.                                                     |
 | [`update-user-template`](#refresh-the-template)                      | Update the software that new accounts inherit.                                                      |
 | [`setup-nvidia-toolkits`](#set-up-the-nvidia-driver-on-a-gpu-server) | Install the host driver, Fabric Manager on NVSwitch nodes, and NVIDIA Container Toolkit for Docker. |
-| [`foreach-user-run`](#foreach-user-run)                              | Run a Bash expression in each local user’s home.                                                    |
+| [`foreach-user-run`](#foreach-user-run)                              | Run a command in each local user’s home.                                                            |
 | [`warn-user`](#warn-user)                                            | Send a message to one user’s logged-in terminals.                                                   |
 | [`drop-caches`](#drop-caches)                                        | Flush pending writes and drop kernel filesystem caches.                                             |
 
@@ -135,18 +135,26 @@ sudo docker run --rm --runtime=nvidia --gpus all ubuntu:latest nvidia-smi -L
 
 ### `foreach-user-run`
 
-Run a Bash expression for each local account whose recorded home is exactly `/home/USERNAME` and whose home directory exists. The script sources `~/.bash_profile`, changes to the user’s home, and runs the expression. It reports each account’s exit code and stops at the first failure, returning that code.
+Run a command as each local user whose recorded home is an existing directory at `/home/USERNAME`. Each command runs in `/bin/bash`, regardless of the user’s login shell. Bash sources `~/.bash_profile` and changes to the user’s home before evaluating the command.
 
-Single-quote the expression so each user’s shell expands `${HOME}`. For a command starting with a dash, use `foreach-user-run -- COMMAND`. In this example, `du` receives the `--` before the path.
+Pass the command as one nonblank string. Single quotes let the target user’s Bash expand variables and globs, so this example prints each user’s home directory. If the command string starts with a dash, put `--` before it.
 
 ```bash
-sudo bin/foreach-user-run 'du -sh -- "${HOME}/Miniconda3"'
+sudo bin/foreach-user-run 'echo "${HOME}"'
 ```
 
-To compare each account’s dotfiles with the template, run the following from a terminal. Quit Vim to continue to the next account.
+By default, `foreach-user-run` stops at the first failure. With `--keep-going`, it finishes the remaining accounts and lists each failed account with its exit code. In both modes, it returns the first nonzero exit code, or zero if all commands succeed.
+
+To compare dotfiles with the template interactively, run Vim from a terminal. Quit Vim to move to the next account.
 
 ```bash
 sudo bin/foreach-user-run 'vim -c "DirDiff ~/.dotfiles /etc/skel/.dotfiles"'
+```
+
+To print a unified diff of each account’s top-level dotfiles against the template, use `colordiff` with `--keep-going`. This lets the comparison continue when `colordiff` reports differences with a nonzero exit code.
+
+```bash
+sudo bin/foreach-user-run --keep-going 'colordiff -uEB ~/.dotfiles /etc/skel/.dotfiles'
 ```
 
 ### `warn-user`
@@ -173,10 +181,10 @@ List `/data` and its immediate subdirectories by size, largest first. The `-x` f
 sudo du -xh --max-depth=1 -- /data | sort -hr
 ```
 
-Check for Homebrew updates across accounts. The output includes the installed and available versions.
+Update Homebrew and list outdated packages for each account.
 
 ```bash
-sudo bin/foreach-user-run 'brew update && brew outdated --verbose'
+sudo bin/foreach-user-run --keep-going 'brew update && brew outdated --greedy'
 ```
 
 Install the same Homebrew packages for each account. Cleanup runs even if the update or install fails, and the subshell passes a failure back to `foreach-user-run`.

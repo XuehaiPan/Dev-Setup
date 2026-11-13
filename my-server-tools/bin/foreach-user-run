@@ -2,7 +2,7 @@
 #
 # Run a Bash expression in each local user's home directory.
 #
-# Usage: sudo bin/foreach-user-run [--] COMMAND
+# Usage: sudo bin/foreach-user-run [--keep-going] [--] 'COMMAND'
 
 # shellcheck disable=SC2292 # This guard must also run under `sh`.
 if [ -z "${BASH_VERSION:-}" ]; then
@@ -39,21 +39,31 @@ function require_debian_root() {
     fi
 }
 
-USAGE="Usage: \`sudo bin/foreach-user-run [--] COMMAND\`"
-if [[ "$#" -eq 1 && ("$1" == "-h" || "$1" == "--help") ]]; then
-    echo "${USAGE}"
-    exit 0
+USAGE="Usage: \`sudo bin/foreach-user-run [--keep-going] [--] 'COMMAND'\`"
+KEEP_GOING=""
+while [[ "$#" -gt 0 ]]; do
+    case "$1" in
+        --keep-going) KEEP_GOING="true" ;;
+        -h | --help)
+            echo "${USAGE}"
+            echo "Bash (\`/bin/bash\`) evaluates the command regardless of the user's login shell."
+            echo "Use \`--keep-going\` to continue after failures and return the first failure code."
+            exit 0
+            ;;
+        --)
+            shift
+            break
+            ;;
+        -*) abort "${USAGE}" ;;
+        *) break ;;
+    esac
+    shift
+done
+if [[ "$#" -ne 1 || "${1:-}" != *[![:space:]]* ]]; then
+    abort "Pass exactly one nonblank command string. ${USAGE}"
 fi
-case "${1:-}" in
-    --) shift ;;
-    -*) abort "${USAGE}" ;;
-    *) ;;
-esac
-# This command accepts shell expressions to run after sourcing each user's profile.
-COMMAND="$*"
-if [[ "${COMMAND}" != *[![:space:]]* ]]; then
-    abort "${USAGE}"
-fi
+
+COMMAND="$1"
 
 require_debian_root
 
@@ -73,6 +83,8 @@ while IFS=: read -r LOGIN _ _ _ _ ACCOUNT_HOME _; do
     fi
 done <<<"${PASSWD_ENTRIES}"
 
+FIRST_FAILURE=0
+FAILURES=()
 for HOME_DIR in "${HOME_ROOT}"/*; do
     USERNAME="${HOME_DIR##*/}"
     if [[ ! -d "${HOME_DIR}" || "${USERNAME}" == "lost+found" ||
@@ -103,9 +115,20 @@ eval -- "${__FOREACH_USER_COMMAND}"
     else
         EXIT_CODE="$?"
         echo "==> Finished running as user ${USERNAME} with exit code ${EXIT_CODE}." >&2
-        echo "==> Stopping on first failure." >&2
-        exit "${EXIT_CODE}"
+        if [[ -z "${KEEP_GOING}" ]]; then
+            echo "==> Stopping on first failure." >&2
+            exit "${EXIT_CODE}"
+        fi
+        if [[ "${FIRST_FAILURE}" -eq 0 ]]; then
+            FIRST_FAILURE="${EXIT_CODE}"
+        fi
+        FAILURES+=("${USERNAME} (exit code ${EXIT_CODE})")
     fi
 done
 
+if [[ "${FIRST_FAILURE}" -ne 0 ]]; then
+    echo "==> Failed accounts:" >&2
+    printf '    %s\n' "${FAILURES[@]}" >&2
+    exit "${FIRST_FAILURE}"
+fi
 echo "==> Successfully ran command as each user."

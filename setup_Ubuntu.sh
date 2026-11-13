@@ -473,7 +473,7 @@ git config --global alias.list-ignored '! cd -- "${GIT_PREFIX:-.}" && git ls-fil
 git config --global alias.config-push-remote '! cd -- "$(git rev-parse --show-toplevel)" && GIT_BRANCH="${1:-"$(git branch --show-current)"}" && git config branch."${GIT_BRANCH}".remote upstream; git config branch."${GIT_BRANCH}".pushremote origin;'
 git config --global alias.diff-remote 'diff @{upstream}'
 git config --global alias.diff-push-remote '! cd -- "$(git rev-parse --show-toplevel)"; GIT_BRANCH="$(git branch --show-current)"; GIT_PUSH_REMOTE="$(git config --default "$(git config --default origin --get branch."${GIT_BRANCH}".remote)" --get branch."${GIT_BRANCH}".pushremote)"; GIT_PUSH_REF="$(git rev-parse --abbrev-ref @{push} 2>/dev/null || echo "${GIT_PUSH_REMOTE}/${GIT_BRANCH}")"; git diff "${GIT_PUSH_REF}"'
-git config --global alias.sync-remote '! cd -- "$(git rev-parse --show-toplevel)"; git status --porcelain && (GIT_CURRENT_BRANCH="$(git branch --show-current)"; GIT_BRANCH="${1:-"${GIT_CURRENT_BRANCH}"}"; GIT_REMOTE="$(git remote show | grep -E "^upstream$" || echo "origin")"; [ "${GIT_CURRENT_BRANCH}" != "${GIT_BRANCH}" ] && gut checkout "${GIT_BRANCH}"; git fetch --all --tags --prune --force --jobs=16; git pull --ff-only "${GIT_REMOTE}" "${GIT_BRANCH}"; [ "${GIT_REMOTE}" != "origin" ] && git push origin "${GIT_BRANCH}:${GIT_BRANCH}"; [ "${GIT_CURRENT_BRANCH}" != "${GIT_BRANCH}" ] && gut checkout "${GIT_CURRENT_BRANCH}")'
+git config --global alias.sync-remote '! cd -- "$(git rev-parse --show-toplevel)"; git status --porcelain && (GIT_CURRENT_BRANCH="$(git branch --show-current)"; GIT_BRANCH="${1:-"${GIT_CURRENT_BRANCH}"}"; GIT_REMOTE="$(git remote show | grep -E "^upstream$" || echo "origin")"; [ "${GIT_CURRENT_BRANCH}" != "${GIT_BRANCH}" ] && git checkout "${GIT_BRANCH}"; git fetch --all --tags --prune --force --jobs=16 && git merge --ff-only -- "${GIT_REMOTE}/${GIT_BRANCH}" && [ "${GIT_REMOTE}" != "origin" ] && git push -- origin "${GIT_BRANCH}:${GIT_BRANCH}"; if [ "${GIT_CURRENT_BRANCH}" != "${GIT_BRANCH}" ]; then git checkout "${GIT_CURRENT_BRANCH}"; fi)'
 git config --global alias.add-non-eolws-changes '! cd -- "$(git rev-parse --show-toplevel)"; git diff --no-color --unified=0 --ignore-submodules=all --ignore-space-at-eol | git apply --cached --allow-empty --unidiff-zero --ignore-space-change --whitespace=nowarn -'
 git config --global alias.save '! cd -- "$(git rev-parse --show-toplevel)"; message="$*"; message="${message#"${message%%[![:space:]]*}"}"; case "${message}" in "") message="wip" ;; wip:*|WIP:*|\[wip\]*|\[WIP\]*) ;; *) message="wip: ${message}" ;; esac; git add --all && git diff --cached --quiet || git commit -m "${message}"; :'
 git config --global color.ui true
@@ -1591,7 +1591,8 @@ function pull_projects() {
             old_head_hash="$(git -C "${proj_dir}" rev-parse "${branch}")"
             head_hash="$(git -C "${proj_dir}" rev-parse "${remote}/${branch}")"
             if [[ "${head_hash}" != "${old_head_hash}" ]]; then
-                exec_cmd "git -C \"${proj_dir/#${HOME}/\${HOME\}}\" pull ${remote} ${branch} --ff-only"
+                # Fast-forward with `git merge --ff-only`. `git pull` would fetch the branch again.
+                exec_cmd "git -C \"${proj_dir/#${HOME}/\${HOME\}}\" merge --ff-only -- \"${remote}/${branch}\""
                 last_timestamp="$(git -C "${proj_dir}" config --default 0 --get gc.lasttimestamp)"
                 if ((timestamp - last_timestamp >= 3600 * 24 * 3)); then
                     commit_count="$(git -C "${proj_dir}" rev-list --count --all || echo "0")"
@@ -1606,7 +1607,7 @@ function pull_projects() {
             if [[ -n "${push_remote}" ]]; then
                 push_remote_hash="$(git -C "${proj_dir}" rev-parse "${push_remote}/${branch}")"
                 if [[ "${head_hash}" != "${push_remote_hash}" ]]; then
-                    exec_cmd "git -C \"${proj_dir/#${HOME}/\${HOME\}}\" push ${push_remote} ${branch} || true"
+                    exec_cmd "git -C \"${proj_dir/#${HOME}/\${HOME\}}\" push -- \"${push_remote}\" \"${branch}\" || true"
                 fi
             fi
         done < <(

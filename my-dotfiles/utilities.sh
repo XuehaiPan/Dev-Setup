@@ -335,7 +335,8 @@ function pull_projects() {
             old_head_hash="$(git -C "${proj_dir}" rev-parse "${branch}")"
             head_hash="$(git -C "${proj_dir}" rev-parse "${remote}/${branch}")"
             if [[ "${head_hash}" != "${old_head_hash}" ]]; then
-                exec_cmd "git -C \"${proj_dir/#${HOME}/\${HOME\}}\" pull ${remote} ${branch} --ff-only"
+                # Fast-forward with `git merge --ff-only`. `git pull` would fetch the branch again.
+                exec_cmd "git -C \"${proj_dir/#${HOME}/\${HOME\}}\" merge --ff-only -- \"${remote}/${branch}\""
                 last_timestamp="$(git -C "${proj_dir}" config --default 0 --get gc.lasttimestamp)"
                 if ((timestamp - last_timestamp >= 3600 * 24 * 3)); then
                     commit_count="$(git -C "${proj_dir}" rev-list --count --all || echo "0")"
@@ -350,7 +351,7 @@ function pull_projects() {
             if [[ -n "${push_remote}" ]]; then
                 push_remote_hash="$(git -C "${proj_dir}" rev-parse "${push_remote}/${branch}")"
                 if [[ "${head_hash}" != "${push_remote_hash}" ]]; then
-                    exec_cmd "git -C \"${proj_dir/#${HOME}/\${HOME\}}\" push ${push_remote} ${branch} || true"
+                    exec_cmd "git -C \"${proj_dir/#${HOME}/\${HOME\}}\" push -- \"${push_remote}\" \"${branch}\" || true"
                 fi
             fi
         done < <(

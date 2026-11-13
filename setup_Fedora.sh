@@ -72,10 +72,10 @@ fi
 if [[ -z "${CONDA_BASE_PREFIX}" ]]; then
     CONDA_BASE_PREFIX="${HOME}/Miniconda3"
 fi
-if [[ "${CONDA_BASE_PREFIX/#${HOME}\//}" == "${CONDA_BASE_PREFIX}" ]]; then
+if [[ "${CONDA_BASE_PREFIX/#"${HOME}"\//}" == "${CONDA_BASE_PREFIX}" ]]; then
     CONDA_DIR="${CONDA_BASE_PREFIX}"
 else
-    CONDA_DIR="\${HOME}/${CONDA_BASE_PREFIX/#${HOME}\//}"
+    CONDA_DIR="\${HOME}/${CONDA_BASE_PREFIX/#"${HOME}"\//}"
 fi
 
 # Common functions
@@ -158,7 +158,7 @@ function exec_cmd() {
 unset HAVE_SUDO_ACCESS
 
 function have_sudo_access() {
-    if [[ "${EUID:-"${UID}"}" == "0" ]]; then
+    if [[ "${EUID:-"${UID}"}" -eq 0 ]]; then
         return 0
     fi
 
@@ -253,7 +253,7 @@ function get_latest_version() {
 
 if have_sudo_access; then
     # Install sudo command
-    if [[ "${EUID:-"${UID}"}" == "0" && ! -x "/usr/bin/sudo" ]]; then
+    if [[ "${EUID:-"${UID}"}" -eq 0 && ! -x "/usr/bin/sudo" ]]; then
         exec_cmd 'dnf install sudo --assumeyes'
     fi
 
@@ -441,10 +441,10 @@ else
     fi
 fi
 
-if [[ "${HOMEBREW_PREFIX/#${HOME}\//}" == "${HOMEBREW_PREFIX}" ]]; then
+if [[ "${HOMEBREW_PREFIX/#"${HOME}"\//}" == "${HOMEBREW_PREFIX}" ]]; then
     HOMEBREW_BREW="${HOMEBREW_PREFIX}/bin/brew"
 else
-    HOMEBREW_BREW="\"\${HOME}/${HOMEBREW_PREFIX/#${HOME}\//}/bin/brew\""
+    HOMEBREW_BREW="\"\${HOME}/${HOMEBREW_PREFIX/#"${HOME}"\//}/bin/brew\""
 fi
 exec_cmd "eval \"\$(${HOMEBREW_BREW} shellenv)\""
 exec_cmd 'brew update --verbose'
@@ -638,7 +638,7 @@ export LSCOLORS="${LSCOLORS:-"GxFxCxDxBxegedabagaced"}"
 export LANG="en_US.UTF-8"
 export LANGUAGE="en:C"
 if [[ -x "$(command -v locale)" ]]; then
-    eval "$(printf "export %s\n" $(LC_ALL="" LC_TIME="C.UTF-8" locale))"
+    eval "$(LC_ALL="" LC_TIME="C.UTF-8" locale | sed 's/^/export /')"
 fi
 export LC_ALL="${LANG}"
 
@@ -649,8 +649,7 @@ ${HOMEBREW_SETTINGS}
 # Anaconda
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-__conda_setup="\$(CONDA_REPORT_ERRORS=false "${CONDA_DIR}/bin/conda" shell.zsh hook 2>/dev/null)"
-if [[ \$? -eq 0 ]]; then
+if __conda_setup="\$(CONDA_REPORT_ERRORS=false "${CONDA_DIR}/bin/conda" shell.zsh hook 2>/dev/null)"; then
     eval "\${__conda_setup}"
 else
     if [[ -f "${CONDA_DIR}/etc/profile.d/conda.sh" ]]; then
@@ -665,8 +664,7 @@ unset __conda_setup
 # !! Contents within this block are managed by 'mamba shell init' !!
 export MAMBA_ROOT_PREFIX="${CONDA_DIR}/bin"
 export MAMBA_EXE="\${MAMBA_ROOT_PREFIX}/mamba"
-__mamba_setup="\$("\${MAMBA_EXE}" shell hook --shell zsh --root-prefix "\${MAMBA_ROOT_PREFIX}" 2>/dev/null)"
-if [[ \$? -eq 0 ]]; then
+if __mamba_setup="\$("\${MAMBA_EXE}" shell hook --shell zsh --root-prefix "\${MAMBA_ROOT_PREFIX}" 2>/dev/null)"; then
     eval "\${__mamba_setup}"
 else
     alias mamba="\${MAMBA_EXE}"
@@ -755,7 +753,7 @@ function __remove_duplicate() {
     local sep name value
     sep="$1"
     shift
-    while [[ $# -gt 0 ]]; do
+    while [[ "$#" -gt 0 ]]; do
         name="$1"
         shift
         if [[ -z "${name}" ]]; then
@@ -982,7 +980,7 @@ plugins=(
 
 ZSH_COLORIZE_STYLE="monokai"
 ZSH_AUTOSUGGEST_STRATEGY=(history completion)
-if [[ "${EUID:-"${UID}"}" == "0" ]]; then
+if [[ "${EUID:-"${UID}"}" -eq 0 ]]; then
     ZSH_DISABLE_COMPFIX=true
 fi
 
@@ -1170,7 +1168,7 @@ function exec_cmd() {
 }
 
 function have_sudo_access() {
-    if [[ "${EUID:-"${UID}"}" == "0" ]]; then
+    if [[ "${EUID:-"${UID}"}" -eq 0 ]]; then
         return 0
     fi
 
@@ -1394,8 +1392,8 @@ function available_cuda_devices() {
         if ! ((maxcount > 0)); then
             break
         fi
-        pids=$(nvidia-smi --id="${index}" --query-compute-apps=pid --format=csv,noheader | xargs echo -n)
-        if [[ -n "${pids}" ]] && (ps -o user -p ${pids} | tail -n +2 | grep -qvF "${USER}") &&
+        pids="$(nvidia-smi --id="${index}" --query-compute-apps=pid --format=csv,noheader | paste -sd , -)"
+        if [[ -n "${pids}" ]] && (ps -o user -p "${pids}" | tail -n +2 | grep -qvF "${USER}") &&
             ((memused >= 3072 || memfree <= 6144 || utilization >= 20)); then
             continue
         fi
@@ -1417,7 +1415,7 @@ function auto_reannounce_trackers() {
     echo -ne "\033[?25l"
 
     for ((t = 0; t <= TIMES; ++t)); do
-        if [[ $((t % 5)) != 0 ]]; then
+        if ((t % 5 != 0)); then
             TORRENT="active"
         else
             TORRENT="all"
@@ -1447,7 +1445,7 @@ function pykill() {
 }
 
 function pull_projects() {
-    local base_dirs base_dir proj_dir
+    local base_dirs base_dir proj_dir git_cmd
     local head_hash old_head_hash branch remote push_remote push_remote_hash commit_count
     local last_timestamp timestamp
 
@@ -1468,18 +1466,19 @@ function pull_projects() {
             if [[ -z "${branch}" || -z "${remote}" ]]; then
                 continue
             fi
-            exec_cmd "git -C \"${proj_dir/#${HOME}/\${HOME\}}\" fetch --all --prune"
+            git_cmd="git -C \"${proj_dir/#"${HOME}"/"\${HOME}"}\""
+            exec_cmd "${git_cmd} fetch --all --prune"
             old_head_hash="$(git -C "${proj_dir}" rev-parse "${branch}")"
             head_hash="$(git -C "${proj_dir}" rev-parse "${remote}/${branch}")"
             if [[ "${head_hash}" != "${old_head_hash}" ]]; then
                 # Fast-forward with `git merge --ff-only`. `git pull` would fetch the branch again.
-                exec_cmd "git -C \"${proj_dir/#${HOME}/\${HOME\}}\" merge --ff-only -- \"${remote}/${branch}\""
+                exec_cmd "${git_cmd} merge --ff-only -- \"${remote}/${branch}\""
                 last_timestamp="$(git -C "${proj_dir}" config --default 0 --get gc.lasttimestamp)"
                 if ((timestamp - last_timestamp >= 3600 * 24 * 3)); then
                     commit_count="$(git -C "${proj_dir}" rev-list --count --all || echo "0")"
                     commit_count="${commit_count:-0}"
                     if ((commit_count <= 10000 || timestamp - last_timestamp >= 3600 * 24 * 30)); then
-                        exec_cmd "git -C \"${proj_dir/#${HOME}/\${HOME\}}\" gc --aggressive"
+                        exec_cmd "${git_cmd} gc --aggressive"
                         git -C "${proj_dir}" config gc.lasttimestamp "${timestamp}" &>/dev/null || true
                     fi
                 fi
@@ -1488,7 +1487,7 @@ function pull_projects() {
             if [[ -n "${push_remote}" ]]; then
                 push_remote_hash="$(git -C "${proj_dir}" rev-parse "${push_remote}/${branch}")"
                 if [[ "${head_hash}" != "${push_remote_hash}" ]]; then
-                    exec_cmd "git -C \"${proj_dir/#${HOME}/\${HOME\}}\" push -- \"${push_remote}\" \"${branch}\" || true"
+                    exec_cmd "${git_cmd} push -- \"${push_remote}\" \"${branch}\" || true"
                 fi
             fi
         done < <(
@@ -1591,7 +1590,7 @@ export PS1
 export LANG="en_US.UTF-8"
 export LANGUAGE="en:C"
 if [[ -x "$(command -v locale)" ]]; then
-    eval "$(printf "export %s\n" $(LC_ALL="" LC_TIME="C.UTF-8" locale))"
+    eval "$(LC_ALL="" LC_TIME="C.UTF-8" locale | sed 's/^/export /')"
 fi
 export LC_ALL="${LANG}"
 
@@ -1602,8 +1601,7 @@ ${HOMEBREW_SETTINGS}
 # Anaconda
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-__conda_setup="\$(CONDA_REPORT_ERRORS=false "${CONDA_DIR}/bin/conda" shell.bash hook 2>/dev/null)"
-if [[ \$? -eq 0 ]]; then
+if __conda_setup="\$(CONDA_REPORT_ERRORS=false "${CONDA_DIR}/bin/conda" shell.bash hook 2>/dev/null)"; then
     eval "\${__conda_setup}"
 else
     if [[ -f "${CONDA_DIR}/etc/profile.d/conda.sh" ]]; then
@@ -1618,8 +1616,7 @@ unset __conda_setup
 # !! Contents within this block are managed by 'mamba shell init' !!
 export MAMBA_ROOT_PREFIX="${CONDA_DIR}/bin"
 export MAMBA_EXE="\${MAMBA_ROOT_PREFIX}/mamba"
-__mamba_setup="\$("\${MAMBA_EXE}" shell hook --shell bash --root-prefix "\${MAMBA_ROOT_PREFIX}" 2>/dev/null)"
-if [[ \$? -eq 0 ]]; then
+if __mamba_setup="\$("\${MAMBA_EXE}" shell hook --shell bash --root-prefix "\${MAMBA_ROOT_PREFIX}" 2>/dev/null)"; then
     eval "\${__mamba_setup}"
 else
     alias mamba="\${MAMBA_EXE}"
@@ -1710,7 +1707,7 @@ function __remove_duplicate() {
     local sep name value
     sep="$1"
     shift
-    while [[ $# -gt 0 ]]; do
+    while [[ "$#" -gt 0 ]]; do
         name="$1"
         shift
         if [[ -z "${name}" ]]; then
@@ -2659,8 +2656,8 @@ fi
 
 # Install fonts
 URL_LIST=("https://github.com/ryanoasis/nerd-fonts/releases/latest/download/DejaVuSansMono.zip")
-LATEST_CASCADIA_VERSION="$(get_latest_version "microsoft/cascadia-code")"
-if [[ $? -eq 0 && -n "${LATEST_CASCADIA_VERSION}" ]]; then
+if LATEST_CASCADIA_VERSION="$(get_latest_version "microsoft/cascadia-code")" &&
+    [[ -n "${LATEST_CASCADIA_VERSION}" ]]; then
     URL_LIST+=("https://github.com/microsoft/cascadia-code/releases/latest/download/CascadiaCode-${LATEST_CASCADIA_VERSION#v}.zip")
 fi
 exec_cmd "wget -N -P \"${TMP_DIR}/fonts\" https://github.com/XuehaiPan/Dev-Setup/raw/HEAD/fonts/Menlo.ttc"

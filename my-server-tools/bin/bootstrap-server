@@ -217,7 +217,7 @@ function cleanup() {
             *) ;;
         esac
     done
-    if [[ "${status}" != "0" ]]; then
+    if [[ "${status}" -ne 0 ]]; then
         exit "${status}"
     fi
     exit "${CLEANUP_FAILED}"
@@ -275,7 +275,7 @@ case "${ID}" in
     debian | ubuntu) ;;
     *) abort "This script requires Debian or Ubuntu." ;;
 esac
-if [[ "${EUID}" != "0" ]]; then
+if [[ "${EUID}" -ne 0 ]]; then
     abort "You must run this script as the root user."
 fi
 if [[ ! -d "${DATA_ROOT}" ]]; then

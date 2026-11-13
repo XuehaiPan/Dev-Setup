@@ -75,7 +75,7 @@ function exec_cmd() {
 }
 
 function have_sudo_access() {
-    if [[ "${EUID:-"${UID}"}" == "0" ]]; then
+    if [[ "${EUID:-"${UID}"}" -eq 0 ]]; then
         return 0
     fi
 
@@ -257,8 +257,8 @@ function available_cuda_devices() {
         if ! ((maxcount > 0)); then
             break
         fi
-        pids=$(nvidia-smi --id="${index}" --query-compute-apps=pid --format=csv,noheader | xargs echo -n)
-        if [[ -n "${pids}" ]] && (ps -o user -p ${pids} | tail -n +2 | grep -qvF "${USER}") &&
+        pids="$(nvidia-smi --id="${index}" --query-compute-apps=pid --format=csv,noheader | paste -sd , -)"
+        if [[ -n "${pids}" ]] && (ps -o user -p "${pids}" | tail -n +2 | grep -qvF "${USER}") &&
             ((memused >= 3072 || memfree <= 6144 || utilization >= 20)); then
             continue
         fi
@@ -280,7 +280,7 @@ function auto_reannounce_trackers() {
     echo -ne "\033[?25l"
 
     for ((t = 0; t <= TIMES; ++t)); do
-        if [[ $((t % 5)) != 0 ]]; then
+        if ((t % 5 != 0)); then
             TORRENT="active"
         else
             TORRENT="all"
@@ -310,7 +310,7 @@ function pykill() {
 }
 
 function pull_projects() {
-    local base_dirs base_dir proj_dir
+    local base_dirs base_dir proj_dir git_cmd
     local head_hash old_head_hash branch remote push_remote push_remote_hash commit_count
     local last_timestamp timestamp
 
@@ -331,18 +331,19 @@ function pull_projects() {
             if [[ -z "${branch}" || -z "${remote}" ]]; then
                 continue
             fi
-            exec_cmd "git -C \"${proj_dir/#${HOME}/\${HOME\}}\" fetch --all --prune"
+            git_cmd="git -C \"${proj_dir/#"${HOME}"/"\${HOME}"}\""
+            exec_cmd "${git_cmd} fetch --all --prune"
             old_head_hash="$(git -C "${proj_dir}" rev-parse "${branch}")"
             head_hash="$(git -C "${proj_dir}" rev-parse "${remote}/${branch}")"
             if [[ "${head_hash}" != "${old_head_hash}" ]]; then
                 # Fast-forward with `git merge --ff-only`. `git pull` would fetch the branch again.
-                exec_cmd "git -C \"${proj_dir/#${HOME}/\${HOME\}}\" merge --ff-only -- \"${remote}/${branch}\""
+                exec_cmd "${git_cmd} merge --ff-only -- \"${remote}/${branch}\""
                 last_timestamp="$(git -C "${proj_dir}" config --default 0 --get gc.lasttimestamp)"
                 if ((timestamp - last_timestamp >= 3600 * 24 * 3)); then
                     commit_count="$(git -C "${proj_dir}" rev-list --count --all || echo "0")"
                     commit_count="${commit_count:-0}"
                     if ((commit_count <= 10000 || timestamp - last_timestamp >= 3600 * 24 * 30)); then
-                        exec_cmd "git -C \"${proj_dir/#${HOME}/\${HOME\}}\" gc --aggressive"
+                        exec_cmd "${git_cmd} gc --aggressive"
                         git -C "${proj_dir}" config gc.lasttimestamp "${timestamp}" &>/dev/null || true
                     fi
                 fi
@@ -351,7 +352,7 @@ function pull_projects() {
             if [[ -n "${push_remote}" ]]; then
                 push_remote_hash="$(git -C "${proj_dir}" rev-parse "${push_remote}/${branch}")"
                 if [[ "${head_hash}" != "${push_remote_hash}" ]]; then
-                    exec_cmd "git -C \"${proj_dir/#${HOME}/\${HOME\}}\" push -- \"${push_remote}\" \"${branch}\" || true"
+                    exec_cmd "${git_cmd} push -- \"${push_remote}\" \"${branch}\" || true"
                 fi
             fi
         done < <(

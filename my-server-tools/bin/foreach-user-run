@@ -34,7 +34,7 @@ function require_debian_root() {
         *" debian "* | *" ubuntu "*) ;;
         *) abort "This script requires Debian, Ubuntu, or a derivative." ;;
     esac
-    if [[ "${EUID}" != "0" ]]; then
+    if [[ "${EUID}" -ne 0 ]]; then
         abort "You must run this script as the root user."
     fi
 }

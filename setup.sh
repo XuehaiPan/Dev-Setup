@@ -67,7 +67,7 @@ function print_help() {
     ) >&2
 }
 
-while (("$#" > 0)); do
+while [[ "$#" -gt 0 ]]; do
     option="$1"
     case "${option}" in
         --set-mirrors)

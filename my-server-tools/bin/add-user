@@ -37,7 +37,7 @@ function require_debian_root() {
         *" debian "* | *" ubuntu "*) ;;
         *) abort "This script requires Debian, Ubuntu, or a derivative." ;;
     esac
-    if [[ "${EUID}" != "0" ]]; then
+    if [[ "${EUID}" -ne 0 ]]; then
         abort "You must run this script as the root user."
     fi
 }
@@ -214,7 +214,7 @@ REPLACEMENT="${REPLACEMENT//&/\\&}"
 TEMPLATE_PATTERN="$(/bin/sed 's/[][\.^$*]/\\&/g' <<<"${TEMPLATE_USER}")"
 SUBSTITUTION="s/${TEMPLATE_PATTERN}/${REPLACEMENT}/g"
 # `grep` returns 1 when the template has no paths to personalize.
-exec_cmd "if /bin/grep -rIlZ -F -- ${TEMPLATE_USER@Q} .; then :; else [[ \"\$?\" == \"1\" ]]; fi | \
+exec_cmd "if /bin/grep -rIlZ -F -- ${TEMPLATE_USER@Q} .; then :; else [[ \"\$?\" -eq 1 ]]; fi | \
     /usr/bin/xargs -0 -r /bin/sed -i -e ${SUBSTITUTION@Q} --"
 
 link_if_missing "${DATA_DIR}" data

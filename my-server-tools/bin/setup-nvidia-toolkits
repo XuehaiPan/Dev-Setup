@@ -143,7 +143,7 @@ function cleanup() {
     local status="$?" unit file_state package toolkit_state
     cleanup_cmd "cd -- /"
     # shellcheck disable=SC2310 # Keep the marker if the package state cannot be read.
-    if [[ "${status}" != "0" && -f "${DOCKER_RUNTIME_PENDING}" ]] &&
+    if [[ "${status}" -ne 0 && -f "${DOCKER_RUNTIME_PENDING}" ]] &&
         toolkit_state="$(container_toolkit_state)" &&
         [[ "${toolkit_state}" == "not-installed" || "${toolkit_state}" == "config-files" ]]; then
         # APT never installed the toolkit. A later independent installation owns its configuration.
@@ -220,7 +220,7 @@ function cleanup() {
             *) ;;
         esac
     done
-    if [[ "${status}" != "0" ]]; then
+    if [[ "${status}" -ne 0 ]]; then
         exit "${status}"
     fi
     exit "${CLEANUP_FAILED}"
@@ -359,7 +359,7 @@ function prompt_choice() {
         if ! read -r -p "${label} ($*) [${default:-cancel}]: " reply; then
             abort "Input ended during driver selection."
         fi
-        reply="${reply:-${default}}"
+        reply="${reply:-"${default}"}"
         if [[ -z "${reply}" ]]; then
             abort "Driver installation cancelled."
         fi
@@ -767,7 +767,7 @@ function container_toolkit_state() {
     local status=0
     # shellcheck disable=SC2016 # `dpkg-query` expands its own package fields.
     /usr/bin/dpkg-query -W -f='${db:Status-Status}\n' nvidia-container-toolkit 2>/dev/null || status="$?"
-    if [[ "${status}" == "1" ]]; then
+    if [[ "${status}" -eq 1 ]]; then
         echo not-installed
     else
         return "${status}"
@@ -930,7 +930,7 @@ function prepare_driver_ppa() {
 
 function main() {
     parse_options "$@"
-    if [[ "${EUID}" != "0" ]]; then
+    if [[ "${EUID}" -ne 0 ]]; then
         abort "Run this command as root with \`sudo\`."
     fi
     local os_image

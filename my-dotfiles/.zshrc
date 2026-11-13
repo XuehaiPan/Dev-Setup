@@ -40,7 +40,7 @@ export LSCOLORS="${LSCOLORS:-"GxFxCxDxBxegedabagaced"}"
 export LANG="en_US.UTF-8"
 export LANGUAGE="en:C"
 if [[ -x "$(command -v locale)" ]]; then
-    eval "$(printf "export %s\n" $(LC_ALL="" LC_TIME="C.UTF-8" locale))"
+    eval "$(LC_ALL="" LC_TIME="C.UTF-8" locale | sed 's/^/export /')"
 fi
 export LC_ALL="${LANG}"
 
@@ -75,8 +75,7 @@ function brew() { \command brew "$@"; \local rc="$?"; \builtin hash -r &>/dev/nu
 # Anaconda
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$(CONDA_REPORT_ERRORS=false "${HOME}/Miniconda3/bin/conda" shell.zsh hook 2>/dev/null)"
-if [[ $? -eq 0 ]]; then
+if __conda_setup="$(CONDA_REPORT_ERRORS=false "${HOME}/Miniconda3/bin/conda" shell.zsh hook 2>/dev/null)"; then
     eval "${__conda_setup}"
 else
     if [[ -f "${HOME}/Miniconda3/etc/profile.d/conda.sh" ]]; then
@@ -91,8 +90,7 @@ unset __conda_setup
 # !! Contents within this block are managed by 'mamba shell init' !!
 export MAMBA_ROOT_PREFIX="${HOME}/Miniconda3/bin"
 export MAMBA_EXE="${MAMBA_ROOT_PREFIX}/mamba"
-__mamba_setup="$("${MAMBA_EXE}" shell hook --shell zsh --root-prefix "${MAMBA_ROOT_PREFIX}" 2>/dev/null)"
-if [[ $? -eq 0 ]]; then
+if __mamba_setup="$("${MAMBA_EXE}" shell hook --shell zsh --root-prefix "${MAMBA_ROOT_PREFIX}" 2>/dev/null)"; then
     eval "${__mamba_setup}"
 else
     alias mamba="${MAMBA_EXE}"
@@ -208,7 +206,7 @@ function __remove_duplicate() {
     local sep name value
     sep="$1"
     shift
-    while [[ $# -gt 0 ]]; do
+    while [[ "$#" -gt 0 ]]; do
         name="$1"
         shift
         if [[ -z "${name}" ]]; then

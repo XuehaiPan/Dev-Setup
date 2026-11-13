@@ -32,11 +32,11 @@ fmt_tokens() {
         printf '%s' "${n}"
         return
     fi
-    if [[ "${n}" -ge 1000000 ]] 2>/dev/null; then
+    if ((n >= 1000000)) 2>/dev/null; then
         local m
         m="$(echo "scale=1; ${n} / 1000000" | "${BC}")"
         printf '%.1fM' "${m}"
-    elif [[ "${n}" -ge 1000 ]] 2>/dev/null; then
+    elif ((n >= 1000)) 2>/dev/null; then
         local k
         k="$(echo "scale=1; ${n} / 1000" | "${BC}")"
         printf '%.1fK' "${k}"
@@ -63,20 +63,20 @@ SEP="${DIM}│${RESET}"
 # ---------------------------------------------------------------------------
 fmt_countdown() {
     local secs="${1}"
-    if [[ "${secs}" -le 0 ]] 2>/dev/null; then
+    if ((secs <= 0)) 2>/dev/null; then
         printf 'now'
         return
     fi
     local d="$((secs / 86400))"
     local h="$(((secs % 86400) / 3600))"
     local m="$(((secs % 3600) / 60))"
-    if [[ "${d}" -ge 3 ]]; then
+    if ((d >= 3)); then
         printf '%d.%dd' "${d}" "$((h * 10 / 24))"
-    elif [[ "${d}" -gt 0 ]]; then
+    elif ((d > 0)); then
         printf '%dd%dh' "${d}" "${h}"
-    elif [[ "${h}" -ge 5 ]]; then
+    elif ((h >= 5)); then
         printf '%d.%dh' "${h}" "$((m * 10 / 60))"
-    elif [[ "${h}" -gt 0 ]]; then
+    elif ((h > 0)); then
         printf '%dh%dm' "${h}" "${m}"
     else
         printf '%dm' "${m}"
@@ -89,21 +89,22 @@ fmt_countdown() {
 # Prints the colored+countdown string; empty if used_pct is empty.
 # ---------------------------------------------------------------------------
 fmt_rate_section() {
-    local label="${1}" used="${2}" resets="${3}"
+    local label="${1}" used="${2}" resets="${3}" used_rounded
     [[ -n "${used}" ]] || return 0
-    local rem="$((100 - "$(printf '%.0f' "${used}")"))"
+    used_rounded="$(printf '%.0f' "${used}")"
+    local rem="$((100 - used_rounded))"
     local color="${WHITE}"
-    if [[ "${rem}" -le 15 ]]; then
+    if ((rem <= 15)); then
         color="${BLINK}${RED}"
-    elif [[ "${rem}" -le 25 ]]; then
+    elif ((rem <= 25)); then
         color="${RED}"
-    elif [[ "${rem}" -le 50 ]]; then
+    elif ((rem <= 50)); then
         color="${YELLOW}"
     fi
     local countdown=""
     if [[ -n "${resets}" ]]; then
         local ttl="$((resets - now_epoch))"
-        if [[ "${ttl}" -gt 0 ]] 2>/dev/null; then
+        if ((ttl > 0)) 2>/dev/null; then
             countdown="${RESET}${DIM}/♻$(fmt_countdown "${ttl}")${RESET}"
         fi
     fi
@@ -137,7 +138,7 @@ relpath() {
 # ===========================================================================
 
 read -r now_epoch now_time < <(date '+%s %H:%M:%S')
-home_dir="${HOME:-$(eval echo ~)}"
+home_dir="${HOME:-"$(eval echo ~)"}"
 
 # --- Line 1 --------------------------------------------------------------
 
@@ -153,13 +154,13 @@ fi
 
 # 1b. Project dir + current dir + git branches
 cwd="$(echo "${input}" | "${JQ}" -r '.workspace.current_dir // .cwd // empty')"
-cwd="${cwd:-$(pwd)}"
+cwd="${cwd:-"$(pwd)"}"
 project_dir="$(echo "${input}" | "${JQ}" -r '.workspace.project_dir // empty')"
-project_dir="${project_dir:-${cwd}}"
-dir_display="${project_dir/#${home_dir}/'~'}"
+project_dir="${project_dir:-"${cwd}"}"
+dir_display="${project_dir/#"${home_dir}"/'~'}"
 cwd_suffix=""
 if [[ "${cwd}" != "${project_dir}" ]]; then
-    cwd_rel="$(relpath "${cwd}" "${project_dir}" || echo "${cwd/#${home_dir}/'~'}")"
+    cwd_rel="$(relpath "${cwd}" "${project_dir}" || echo "${cwd/#"${home_dir}"/'~'}")"
     cwd_suffix="${RESET}${WHITE}:${RESET}${CYAN}${cwd_rel}"
 fi
 branch="$(git_branch "${project_dir}")"
@@ -177,7 +178,7 @@ fi
 # 1c. Model display name + optional reasoning effort
 model="$(echo "${input}" | "${JQ}" -r '.model.display_name // empty')"
 effort="$(echo "${input}" | "${JQ}" -r '.effortLevel // .effort_level // empty')"
-effort="${effort:-${CLAUDE_CODE_EFFORT_LEVEL:-}}"
+effort="${effort:-"${CLAUDE_CODE_EFFORT_LEVEL:-}"}"
 model_display=""
 if [[ -n "${model}" ]]; then
     if [[ -n "${effort}" ]]; then
@@ -222,9 +223,11 @@ if [[ -n "${total_out}" ]] && [[ "${total_out}" != "0" ]]; then
 fi
 cache_create="$(echo "${input}" | "${JQ}" -r '.context_window.current_usage.cache_creation_input_tokens // 0')"
 cache_read="$(echo "${input}" | "${JQ}" -r '.context_window.current_usage.cache_read_input_tokens // 0')"
-cache_total="$(("$(printf '%.0f' "${cache_create}" 2>/dev/null || echo 0)" + "$(printf '%.0f' "${cache_read}" 2>/dev/null || echo 0)"))"
+cache_create="$(printf '%.0f' "${cache_create}" 2>/dev/null || echo 0)"
+cache_read="$(printf '%.0f' "${cache_read}" 2>/dev/null || echo 0)"
+cache_total="$((cache_create + cache_read))"
 cache_fmt=""
-if [[ "${cache_total}" -gt 0 ]]; then
+if ((cache_total > 0)); then
     cache_fmt="$(fmt_tokens "${cache_total}")"
 fi
 
@@ -235,7 +238,7 @@ first=1
 print_section() {
     local color="${1}"
     local text="${2}"
-    if [[ ${first} -eq 0 ]]; then
+    if ((first == 0)); then
         printf ' %b ' "${SEP}"
     fi
     printf "${RESET}${color}%b${RESET}" "${text}"
@@ -292,7 +295,7 @@ fi
 # 2c: rate limits (remaining % + countdown to reset)
 five_fmt="$(fmt_rate_section '5h' "${five_used}" "${five_resets}")"
 week_fmt="$(fmt_rate_section '7d' "${week_used}" "${week_resets}")"
-rate_section="${five_fmt}${week_fmt:+${five_fmt:+ }${week_fmt}}"
+rate_section="${five_fmt}${week_fmt:+"${five_fmt:+ }${week_fmt}"}"
 if [[ -n "${rate_section}" ]]; then
     print_section "" "${rate_section}"
 fi

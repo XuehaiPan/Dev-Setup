@@ -100,13 +100,15 @@ handle_extension() {
 
         ## CSV
         csv)
-            python3 -c "import pandas as pd; print(pd.read_csv('${FILE_PATH}').to_markdown())" && exit 5
+            python3 -c 'import sys, pandas as pd; print(pd.read_csv(sys.argv[1]).to_markdown())' \
+                "${FILE_PATH}" && exit 5
             exit 2;;
 
         ## XLSX
         xlsx)
             ## Preview as markdown conversion
-            python3 -c "import pandas as pd; print(pd.read_excel('${FILE_PATH}').to_markdown())" && exit 5
+            python3 -c 'import sys, pandas as pd; print(pd.read_excel(sys.argv[1]).to_markdown())' \
+                "${FILE_PATH}" && exit 5
             ## Preview as csv conversion
             ## Uses: https://github.com/dilshod/xlsx2csv
             xlsx2csv -- "${FILE_PATH}" && exit 5
@@ -124,7 +126,7 @@ handle_extension() {
         ## JSON Lines
         jsonl)
             local total_lines
-            total_lines="$(($(wc -l < "${FILE_PATH}")))"
+            total_lines="$(($(wc -l <"${FILE_PATH}")))"
 
             # Handle empty file
             [ "${total_lines}" -eq 0 ] && exit 2
@@ -221,7 +223,7 @@ handle_image() {
         ## Image
         image/*)
             local orientation
-            orientation="$( identify -format '%[EXIF:Orientation]\n' -- "${FILE_PATH}" )"
+            orientation="$(identify -format '%[EXIF:Orientation]\n' -- "${FILE_PATH}")"
             ## If orientation data is present and the image actually
             ## needs rotating ("1" means no rotation)...
             if [[ -n "${orientation}" && "${orientation}" != 1 ]]; then
@@ -270,7 +272,7 @@ handle_image() {
 
         ## Font
         application/font* | application/*opentype | font/*)
-            preview_png="/tmp/$( basename "${IMAGE_CACHE_PATH%.*}" ).png"
+            preview_png="/tmp/$(basename "${IMAGE_CACHE_PATH%.*}").png"
             if fontimage -o "${preview_png}" \
                          --pixelsize "120" \
                          --fontname \
@@ -300,22 +302,22 @@ handle_image() {
                 application/x-7z-compressed) ;;
                 *) tar=1 ;;
             esac
-            { [ "${tar}" ] && fn=$( tar --list --file "${FILE_PATH}" ); } ||
-            { fn=$( bsdtar --list --file "${FILE_PATH}" ) && bsd=1 && tar=""; } ||
-            { [ "${rar}" ] && fn=$( unrar lb -p- -- "${FILE_PATH}" ); } ||
-            { [ "${zip}" ] && fn=$( zipinfo -1 -- "${FILE_PATH}" ); } || return
+            { [ "${tar}" ] && fn="$(tar --list --file "${FILE_PATH}")"; } ||
+            { fn="$(bsdtar --list --file "${FILE_PATH}")" && bsd=1 && tar=""; } ||
+            { [ "${rar}" ] && fn="$(unrar lb -p- -- "${FILE_PATH}")"; } ||
+            { [ "${zip}" ] && fn="$(zipinfo -1 -- "${FILE_PATH}")"; } || return
 
-            fn=$( echo "${fn}" | python3 -c "from __future__ import print_function; \
+            fn="$(echo "${fn}" | python3 -c "from __future__ import print_function; \
                     import sys; import mimetypes as m; \
                     [ print(l, end='') for l in sys.stdin \
                       if (m.guess_type(l[:-1])[0] or '').startswith('image/') ]" |
-                sort -V | head -n 1 )
+                sort -V | head -n 1)"
             [ "${fn}" = "" ] && return
-            [ "${bsd}" ] && fn=$( printf '%b' "${fn}" )
+            [ "${bsd}" ] && fn="$(printf '%b' "${fn}")"
 
             [ "${tar}" ] && tar --extract --to-stdout \
                 --file "${FILE_PATH}" -- "${fn}" >"${IMAGE_CACHE_PATH}" && exit 6
-            fe=$( echo -n "${fn}" | sed 's/[][*?\]/\\\0/g' )
+            fe="$(echo -n "${fn}" | sed 's/[][*?\]/\\\0/g')"
             [ "${bsd}" ] && bsdtar --extract --to-stdout \
                 --file "${FILE_PATH}" -- "${fe}" >"${IMAGE_CACHE_PATH}" && exit 6
             [ "${bsd}" ] || [ "${tar}" ] && rm -- "${IMAGE_CACHE_PATH}"
@@ -381,7 +383,8 @@ handle_mime() {
         ## XLS
         *ms-excel | application/vnd.openxmlformats-officedocument.spreadsheetml.sheet)
             ## Preview as markdown conversion
-            python3 -c "import pandas as pd; print(pd.read_excel('${FILE_PATH}').to_markdown())" && exit 5
+            python3 -c 'import sys, pandas as pd; print(pd.read_excel(sys.argv[1]).to_markdown())' \
+                "${FILE_PATH}" && exit 5
             ## Preview as csv conversion
             ## xls2csv comes with catdoc:
             ##   http://www.wagner.pp.ru/~vitus/software/catdoc/
@@ -390,13 +393,14 @@ handle_mime() {
 
         ## CSV
         */csv)
-            python3 -c "import pandas as pd; print(pd.read_csv('${FILE_PATH}').to_markdown())" && exit 5
+            python3 -c 'import sys, pandas as pd; print(pd.read_csv(sys.argv[1]).to_markdown())' \
+                "${FILE_PATH}" && exit 5
             exit 2;;
 
         ## SQLite
         *sqlite3)
             ## Preview as text conversion
-            sqlite_tables="$( sqlite3 "file:${FILE_PATH}?mode=ro" '.tables' )" || exit 1
+            sqlite_tables="$(sqlite3 "file:${FILE_PATH}?mode=ro" '.tables')" || exit 1
             [ -z "${sqlite_tables}" ] && { echo "Empty SQLite database." && exit 5; }
             sqlite_show_query() {
                 sqlite-utils query "${FILE_PATH}" "${1}" --table --fmt fancy_grid ||
@@ -432,7 +436,7 @@ handle_mime() {
                 FROM (${sqlite_rowcount_query});"
             if [ "${SQLITE_TABLE_LIMIT}" -gt 0 ] && [ "${SQLITE_ROW_LIMIT}" -ge 0 ]; then
                 ## Do exhaustive preview
-                echo && printf '>%.0s' $( seq "${PV_WIDTH}" ) && echo
+                echo && printf '>%.0s' $(seq "${PV_WIDTH}") && echo
                 sqlite3 "file:${FILE_PATH}?mode=ro" -noheader \
                     "SELECT name FROM sqlite_master
                     WHERE type='table' AND name NOT LIKE 'sqlite_%'
@@ -485,10 +489,10 @@ handle_mime() {
         ## Text
         text/* | */xml)
             ## Syntax highlight
-            if [[ "$( stat --printf='%s' -- "${FILE_PATH}" )" -gt "${HIGHLIGHT_SIZE_MAX}" ]]; then
+            if [[ "$(stat --printf='%s' -- "${FILE_PATH}")" -gt "${HIGHLIGHT_SIZE_MAX}" ]]; then
                 exit 2
             fi
-            if [[ "$( tput colors )" -ge 256 ]]; then
+            if [[ "$(tput colors)" -ge 256 ]]; then
                 local pygmentize_format='terminal256'
                 local highlight_format='xterm256'
             else
@@ -548,7 +552,7 @@ handle_fallback() {
     exit 1
 }
 
-MIMETYPE="$( file --dereference --brief --mime-type -- "${FILE_PATH}" )"
+MIMETYPE="$(file --dereference --brief --mime-type -- "${FILE_PATH}")"
 if [[ "${PV_IMAGE_ENABLED}" == 'True' ]]; then
     handle_image "${MIMETYPE}"
 fi

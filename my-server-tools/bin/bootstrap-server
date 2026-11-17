@@ -134,7 +134,7 @@ function export_template() {
     local -a files
 
     # Check the installation before exporting anything. Dev-Setup can continue after a failed download.
-    for file in .linuxbrew/bin/brew Miniconda3/bin/conda .fzf/bin/fzf; do
+    for file in .linuxbrew/bin/brew Miniforge3/bin/conda .fzf/bin/fzf; do
         if [[ ! -x "${file}" ]]; then
             echo "Missing template executable: \`${file}\`" >&2
             exit 1
@@ -146,9 +146,9 @@ function export_template() {
             exit 1
         fi
     done
-    files=(.dotfiles .linuxbrew .oh-my-zsh .fzf .vim Miniconda3 .bash_profile .zshrc)
+    files=(.dotfiles .linuxbrew .oh-my-zsh .fzf .vim Miniforge3 .bash_profile .zshrc)
     for entry in .bashrc .bash_logout .profile .condarc .fzf.bash .fzf.zsh .gemrc .gitconfig \
-        .gitignore_global .tmux.conf .tmux.conf.local .vimrc .selected_editor .anaconda .conda .config \
+        .gitignore_global .tmux.conf .tmux.conf.local .vimrc .selected_editor .conda .config \
         .cpan .ipython .local .perl; do
         if [[ -e "${entry}" || -L "${entry}" ]]; then
             files+=("${entry}")

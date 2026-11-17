@@ -90,24 +90,24 @@ fi
 unset __COMMAND_NOT_FOUND_HANDLER
 function brew() { \command brew "$@"; \local rc="$?"; \builtin hash -r &>/dev/null; \return "${rc}"; }
 
-# Anaconda
+# Conda
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-if __conda_setup="$(CONDA_REPORT_ERRORS=false "${HOME}/Miniconda3/bin/conda" shell.bash hook 2>/dev/null)"; then
+if __conda_setup="$(CONDA_REPORT_ERRORS=false "${HOME}/Miniforge3/bin/conda" shell.bash hook 2>/dev/null)"; then
     eval "${__conda_setup}"
 else
-    if [[ -f "${HOME}/Miniconda3/etc/profile.d/conda.sh" ]]; then
-        source "${HOME}/Miniconda3/etc/profile.d/conda.sh"
+    if [[ -f "${HOME}/Miniforge3/etc/profile.d/conda.sh" ]]; then
+        source "${HOME}/Miniforge3/etc/profile.d/conda.sh"
     else
-        export PATH="${HOME}/Miniconda3/bin${PATH:+:"${PATH}"}"
+        export PATH="${HOME}/Miniforge3/bin${PATH:+:"${PATH}"}"
     fi
 fi
 unset __conda_setup
 
 # >>> mamba initialize >>>
 # !! Contents within this block are managed by 'mamba shell init' !!
-export MAMBA_ROOT_PREFIX="${HOME}/Miniconda3/bin"
-export MAMBA_EXE="${MAMBA_ROOT_PREFIX}/mamba"
+export MAMBA_ROOT_PREFIX="${HOME}/Miniforge3"
+export MAMBA_EXE="${MAMBA_ROOT_PREFIX}/bin/mamba"
 if __mamba_setup="$("${MAMBA_EXE}" shell hook --shell bash --root-prefix "${MAMBA_ROOT_PREFIX}" 2>/dev/null)"; then
     eval "${__mamba_setup}"
 else
@@ -189,7 +189,7 @@ export DYLD_FALLBACK_LIBRARY_PATH="${DYLD_FALLBACK_LIBRARY_PATH:+"${DYLD_FALLBAC
 if [[ -f "${HOME}/.fzf.bash" ]]; then
     source "${HOME}/.fzf.bash"
 fi
-export FZF_DEFAULT_COMMAND="fd --type file --follow --hidden --no-ignore-vcs --exclude '.git' --exclude '[Mm]iniconda3' --exclude '[Aa]naconda3' --color=always"
+export FZF_DEFAULT_COMMAND="fd --type file --follow --hidden --no-ignore-vcs --exclude '.git' --exclude '[Mm]iniforge3' --exclude '[Mm]iniconda3' --exclude '[Aa]naconda3' --color=always"
 export FZF_CTRL_T_COMMAND="${FZF_DEFAULT_COMMAND}"
 FZF_PREVIEW_COMMAND="(bat --color=always {} || highlight -O ansi {} || cat {}) 2>/dev/null | head -100"
 export FZF_DEFAULT_OPTS="--height=40% --layout=reverse --ansi --preview='${FZF_PREVIEW_COMMAND}'"

@@ -3,11 +3,7 @@ auto_update_conda: true
 
 channels:
   - conda-forge
-  - defaults
-default_channels:
-  - https://mirrors.cernet.edu.cn/anaconda/pkgs/main
-  - https://mirrors.cernet.edu.cn/anaconda/pkgs/r
-  - https://mirrors.cernet.edu.cn/anaconda/pkgs/msys2
+default_channels: []
 custom_channels:
   conda-forge: https://mirrors.cernet.edu.cn/anaconda/cloud
   pytorch: https://mirrors.cernet.edu.cn/anaconda/cloud
@@ -16,18 +12,17 @@ custom_channels:
   bioconda: https://mirrors.cernet.edu.cn/anaconda/cloud
   menpo: https://mirrors.cernet.edu.cn/anaconda/cloud
   simpleitk: https://mirrors.cernet.edu.cn/anaconda/cloud
+mirrored_channels:
+  conda-forge:
+    - https://mirrors.cernet.edu.cn/anaconda/cloud/conda-forge
 channel_priority: flexible
 
 ssl_verify: true
 show_channel_urls: false
 report_errors: false
-anaconda_anon_usage: false
-plugins:
-  anaconda_telemetry: false
 
 force_reinstall: true
 create_default_packages:
-  # - anaconda
   - pip
   - ipython
   - ipdb

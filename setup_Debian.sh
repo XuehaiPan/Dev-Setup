@@ -57,21 +57,21 @@ fi
 # Set default Conda installation directory
 CONDA_DIR=''
 CONDA_BASE_PREFIX=''
-if [[ -d "${HOME}/Miniconda3" || -L "${HOME}/Miniconda3" ]]; then
-    CONDA_BASE_PREFIX="${HOME}/Miniconda3"
-elif [[ -d "${HOME}/miniconda3" || -L "${HOME}/miniconda3" ]]; then
-    CONDA_BASE_PREFIX="${HOME}/miniconda3"
-elif [[ -d "${HOME}/Miniforge3" || -L "${HOME}/Miniforge3" ]]; then
+if [[ -d "${HOME}/Miniforge3" || -L "${HOME}/Miniforge3" ]]; then
     CONDA_BASE_PREFIX="${HOME}/Miniforge3"
 elif [[ -d "${HOME}/miniforge3" || -L "${HOME}/miniforge3" ]]; then
     CONDA_BASE_PREFIX="${HOME}/miniforge3"
+elif [[ -d "${HOME}/Miniconda3" || -L "${HOME}/Miniconda3" ]]; then
+    CONDA_BASE_PREFIX="${HOME}/Miniconda3"
+elif [[ -d "${HOME}/miniconda3" || -L "${HOME}/miniconda3" ]]; then
+    CONDA_BASE_PREFIX="${HOME}/miniconda3"
 elif [[ -d "${HOME}/Anaconda3" || -L "${HOME}/Anaconda3" ]]; then
     CONDA_BASE_PREFIX="${HOME}/Anaconda3"
 elif [[ -d "${HOME}/anaconda3" || -L "${HOME}/anaconda3" ]]; then
     CONDA_BASE_PREFIX="${HOME}/anaconda3"
 fi
 if [[ -z "${CONDA_BASE_PREFIX}" ]]; then
-    CONDA_BASE_PREFIX="${HOME}/Miniconda3"
+    CONDA_BASE_PREFIX="${HOME}/Miniforge3"
 fi
 if [[ "${CONDA_BASE_PREFIX/#"${HOME}"\//}" == "${CONDA_BASE_PREFIX}" ]]; then
     CONDA_DIR="${CONDA_BASE_PREFIX}"
@@ -728,7 +728,7 @@ EOF
 cat >>.dotfiles/.zshrc <<EOF
 ${HOMEBREW_SETTINGS}
 
-# Anaconda
+# Conda
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
 if __conda_setup="\$(CONDA_REPORT_ERRORS=false "${CONDA_DIR}/bin/conda" shell.zsh hook 2>/dev/null)"; then
@@ -744,8 +744,8 @@ unset __conda_setup
 
 # >>> mamba initialize >>>
 # !! Contents within this block are managed by 'mamba shell init' !!
-export MAMBA_ROOT_PREFIX="${CONDA_DIR}/bin"
-export MAMBA_EXE="\${MAMBA_ROOT_PREFIX}/mamba"
+export MAMBA_ROOT_PREFIX="${CONDA_DIR}"
+export MAMBA_EXE="\${MAMBA_ROOT_PREFIX}/bin/mamba"
 if __mamba_setup="\$("\${MAMBA_EXE}" shell hook --shell zsh --root-prefix "\${MAMBA_ROOT_PREFIX}" 2>/dev/null)"; then
     eval "\${__mamba_setup}"
 else
@@ -811,9 +811,9 @@ if [[ -f "${HOME}/.fzf.zsh" ]]; then
 fi
 if [[ -x "$(command -v fdfind)" ]]; then
     alias fd='fdfind'
-    export FZF_DEFAULT_COMMAND="fdfind --type file --follow --hidden --no-ignore-vcs --exclude '.git' --exclude '[Mm]iniconda3' --exclude '[Aa]naconda3' --color=always"
+    export FZF_DEFAULT_COMMAND="fdfind --type file --follow --hidden --no-ignore-vcs --exclude '.git' --exclude '[Mm]iniforge3' --exclude '[Mm]iniconda3' --exclude '[Aa]naconda3' --color=always"
 elif [[ -x "$(command -v fd)" ]]; then
-    export FZF_DEFAULT_COMMAND="fd --type file --follow --hidden --no-ignore-vcs --exclude '.git' --exclude '[Mm]iniconda3' --exclude '[Aa]naconda3' --color=always"
+    export FZF_DEFAULT_COMMAND="fd --type file --follow --hidden --no-ignore-vcs --exclude '.git' --exclude '[Mm]iniforge3' --exclude '[Mm]iniconda3' --exclude '[Aa]naconda3' --color=always"
 fi
 if [[ -n "${FZF_DEFAULT_COMMAND}" ]]; then
     export FZF_CTRL_T_COMMAND="${FZF_DEFAULT_COMMAND}"
@@ -1691,7 +1691,7 @@ EOF
 cat >>.dotfiles/.bash_profile <<EOF
 ${HOMEBREW_SETTINGS}
 
-# Anaconda
+# Conda
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
 if __conda_setup="\$(CONDA_REPORT_ERRORS=false "${CONDA_DIR}/bin/conda" shell.bash hook 2>/dev/null)"; then
@@ -1707,8 +1707,8 @@ unset __conda_setup
 
 # >>> mamba initialize >>>
 # !! Contents within this block are managed by 'mamba shell init' !!
-export MAMBA_ROOT_PREFIX="${CONDA_DIR}/bin"
-export MAMBA_EXE="\${MAMBA_ROOT_PREFIX}/mamba"
+export MAMBA_ROOT_PREFIX="${CONDA_DIR}"
+export MAMBA_EXE="\${MAMBA_ROOT_PREFIX}/bin/mamba"
 if __mamba_setup="\$("\${MAMBA_EXE}" shell hook --shell bash --root-prefix "\${MAMBA_ROOT_PREFIX}" 2>/dev/null)"; then
     eval "\${__mamba_setup}"
 else
@@ -1771,9 +1771,9 @@ if [[ -f "${HOME}/.fzf.bash" ]]; then
 fi
 if [[ -x "$(command -v fdfind)" ]]; then
     alias fd='fdfind'
-    export FZF_DEFAULT_COMMAND="fdfind --type file --follow --hidden --no-ignore-vcs --exclude '.git' --exclude '[Mm]iniconda3' --exclude '[Aa]naconda3' --color=always"
+    export FZF_DEFAULT_COMMAND="fdfind --type file --follow --hidden --no-ignore-vcs --exclude '.git' --exclude '[Mm]iniforge3' --exclude '[Mm]iniconda3' --exclude '[Aa]naconda3' --color=always"
 elif [[ -x "$(command -v fd)" ]]; then
-    export FZF_DEFAULT_COMMAND="fd --type file --follow --hidden --no-ignore-vcs --exclude '.git' --exclude '[Mm]iniconda3' --exclude '[Aa]naconda3' --color=always"
+    export FZF_DEFAULT_COMMAND="fd --type file --follow --hidden --no-ignore-vcs --exclude '.git' --exclude '[Mm]iniforge3' --exclude '[Mm]iniconda3' --exclude '[Aa]naconda3' --color=always"
 fi
 if [[ -n "${FZF_DEFAULT_COMMAND}" ]]; then
     export FZF_CTRL_T_COMMAND="${FZF_DEFAULT_COMMAND}"
@@ -2547,14 +2547,10 @@ auto_update_conda: true
 
 channels:
   - conda-forge
-  - defaults
+default_channels: []
 EOF
 if [[ -n "${SET_MIRRORS}" ]]; then
     cat >>.dotfiles/.condarc <<'EOF'
-default_channels:
-  - https://mirrors.cernet.edu.cn/anaconda/pkgs/main
-  - https://mirrors.cernet.edu.cn/anaconda/pkgs/r
-  - https://mirrors.cernet.edu.cn/anaconda/pkgs/msys2
 custom_channels:
   conda-forge: https://mirrors.cernet.edu.cn/anaconda/cloud
   pytorch: https://mirrors.cernet.edu.cn/anaconda/cloud
@@ -2563,6 +2559,9 @@ custom_channels:
   bioconda: https://mirrors.cernet.edu.cn/anaconda/cloud
   menpo: https://mirrors.cernet.edu.cn/anaconda/cloud
   simpleitk: https://mirrors.cernet.edu.cn/anaconda/cloud
+mirrored_channels:
+  conda-forge:
+    - https://mirrors.cernet.edu.cn/anaconda/cloud/conda-forge
 EOF
 fi
 cat >>.dotfiles/.condarc <<'EOF'
@@ -2571,13 +2570,9 @@ channel_priority: flexible
 ssl_verify: true
 show_channel_urls: false
 report_errors: false
-anaconda_anon_usage: false
-plugins:
-  anaconda_telemetry: false
 
 force_reinstall: true
 create_default_packages:
-  # - anaconda
   - pip
   - ipython
   - ipdb
@@ -2600,14 +2595,16 @@ EOF
 ln -sf .dotfiles/.condarc .
 chmod 644 .dotfiles/.condarc
 
-# Install Miniconda
+# Install Miniforge
 if [[ ! -x "${CONDA_BASE_PREFIX}/condabin/conda" ]]; then
+    MINIFORGE_INSTALLER="Miniforge3-Linux-$(uname -m).sh"
     if [[ -n "${SET_MIRRORS}" ]]; then
-        exec_cmd "wget -N -P \"${TMP_DIR}\" https://mirrors.cernet.edu.cn/anaconda/miniconda/Miniconda3-latest-Linux-$(uname -m).sh"
+        MINIFORGE_URL="https://mirrors.cernet.edu.cn/github-release/conda-forge/miniforge/LatestRelease"
     else
-        exec_cmd "wget -N -P \"${TMP_DIR}\" https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-$(uname -m).sh"
+        MINIFORGE_URL="https://github.com/conda-forge/miniforge/releases/latest/download"
     fi
-    exec_cmd "/bin/sh \"${TMP_DIR}/Miniconda3-latest-Linux-$(uname -m).sh\" -b -p \"${CONDA_DIR}\""
+    exec_cmd "wget -N -P \"${TMP_DIR}\" \"${MINIFORGE_URL}/${MINIFORGE_INSTALLER}\"" &&
+        exec_cmd "/bin/bash \"${TMP_DIR}/${MINIFORGE_INSTALLER}\" -b -p \"${CONDA_DIR}\""
 fi
 
 if [[ -x "${CONDA_BASE_PREFIX}/condabin/conda" ]]; then
@@ -2615,9 +2612,6 @@ if [[ -x "${CONDA_BASE_PREFIX}/condabin/conda" ]]; then
     export PATH="${CONDA_BASE_PREFIX}/condabin${PATH:+:"${PATH}"}"
     source "${CONDA_BASE_PREFIX}/etc/profile.d/conda.sh"
     source "${CONDA_BASE_PREFIX}/bin/activate"
-    exec_cmd "CONDA_PLUGINS_AUTO_ACCEPT_TOS=yes \"${CONDA_DIR}/condabin/conda\""' install \
-        conda-anaconda-tos conda-anaconda-telemetry --name=base --yes'
-    exec_cmd "\"${CONDA_DIR}/condabin/conda\""' tos accept'
     if "${CONDA_BASE_PREFIX}/condabin/conda" self update --help 2>/dev/null | grep -q -- '--yes'; then
         exec_cmd "CONDA_CHANNEL_PRIORITY=disabled \"${CONDA_DIR}/condabin/conda\""' self update --yes'
         exec_cmd "\"${CONDA_DIR}/condabin/conda\""' install --update-specs mamba --name=base --yes'

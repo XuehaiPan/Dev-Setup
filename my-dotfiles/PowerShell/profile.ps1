@@ -3,7 +3,9 @@ chcp 65001
 Import-Module -Name PSReadLine -Force -ErrorAction:Ignore
 Import-Module -Name posh-git -ErrorAction:Ignore
 
-if (Test-Path -Path "~\Miniconda3\shell\condabin\conda-hook.ps1") {
+if (Test-Path -Path "~\Miniforge3\shell\condabin\conda-hook.ps1") {
+    & "~\Miniforge3\shell\condabin\conda-hook.ps1"
+} elseif (Test-Path -Path "~\Miniconda3\shell\condabin\conda-hook.ps1") {
     & "~\Miniconda3\shell\condabin\conda-hook.ps1"
 }
 

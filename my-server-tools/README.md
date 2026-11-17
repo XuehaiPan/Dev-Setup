@@ -80,11 +80,11 @@ Run `update-user-template` between account creations. New accounts inherit the r
 sudo bin/update-user-template
 ```
 
-The updater first recovers any interrupted Miniconda update from its saved copy. It then fast-forwards Git checkouts with a configured upstream under `.linuxbrew`, `.oh-my-zsh`, `.fzf`, and `.vim` in `/etc/skel`. It refreshes the fzf executable by running `.fzf/install --bin` as `nobody`.
+The updater first recovers any interrupted Conda update from its saved copy. It then fast-forwards Git checkouts with a configured upstream under `.linuxbrew`, `.oh-my-zsh`, `.fzf`, and `.vim` in `/etc/skel`. It refreshes the fzf executable by running `.fzf/install --bin` as `nobody`.
 
-If `/etc/skel/Miniconda3` exists, allow room in `/tmp` for a working copy and a rollback copy. The updater mounts a temporary home privately at `/home/server-admin`, the path where the template’s Conda installation was built. It runs Conda as the host’s `server-admin` account if available, otherwise as `nobody`. It updates the base and named environments, cleans the package cache, and copies the result back to `/etc/skel/Miniconda3`.
+If `/etc/skel/Miniforge3` exists, allow room in `/tmp` for a working copy and a rollback copy. The updater mounts a temporary home privately at `/home/server-admin`, the path where the template’s Conda installation was built. It runs Conda as the host’s `server-admin` account if available, otherwise as `nobody`. It updates the base and named environments, cleans the package cache, and copies the result back to `/etc/skel/Miniforge3`.
 
-The updater reads `.condarc` and `.conda/tos` from the template. If either is missing and the host has a `server-admin` account, it looks in `/home/server-admin` for that item. Recovery after an interruption requires the rollback copy to survive. Compiled packages with an embedded prefix can still refer to `/home/server-admin/Miniconda3` after a new user’s text files have been personalized.
+The updater reads `.condarc` from the template. If it is missing and the host has a `server-admin` account, it looks in `/home/server-admin` for `.condarc`. Recovery after an interruption requires the rollback copy to survive. Compiled packages with an embedded prefix can still refer to `/home/server-admin/Miniforge3` after a new user’s text files have been personalized.
 
 ## Set up the NVIDIA driver on a GPU server
 
@@ -216,5 +216,5 @@ sudo bin/foreach-user-run '{
 Preview the space each account could reclaim from cached Conda archives. Replace `--dry-run` with `--yes` to remove them.
 
 ```bash
-sudo bin/foreach-user-run '"${HOME}/Miniconda3/bin/conda" clean --tarballs --dry-run'
+sudo bin/foreach-user-run 'conda clean --tarballs --dry-run'
 ```

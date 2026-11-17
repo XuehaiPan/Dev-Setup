@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Refresh the Git checkouts and Miniconda installation in the default user template.
+# Refresh the Git checkouts and Miniforge installation in the default user template.
 # Usage: sudo bin/update-user-template
 
 # shellcheck disable=SC2292 # This guard must also run under sh.
@@ -20,7 +20,7 @@ TEMPLATE_USER_HOME="${HOME_ROOT}/${TEMPLATE_USER}"
 
 RUN_INDICATOR_PREFIX="/tmp/update-user-template"
 CONDA_STAGE="/tmp/update-user-template-conda-update"
-CONDA_TEMPLATE="${SKEL_DIR}/Miniconda3"
+CONDA_TEMPLATE="${SKEL_DIR}/Miniforge3"
 
 function abort() {
     printf "%s\n" "$*" >&2
@@ -197,10 +197,10 @@ function replace_conda_template() {
 }
 
 function clean_conda_stage() {
-    if [[ -d "${CONDA_STAGE}/previous" ]]; then
-        replace_conda_template "${CONDA_STAGE}/previous"
+    if [[ -d "${CONDA_STAGE}/Miniforge3" ]]; then
+        replace_conda_template "${CONDA_STAGE}/Miniforge3"
         # shellcheck disable=SC2310 # Keep the backup on a failed rename.
-        if ! exec_cmd "/bin/mv -T -- ${CONDA_STAGE@Q}/previous ${CONDA_STAGE@Q}/backup"; then
+        if ! exec_cmd "/bin/mv -T -- ${CONDA_STAGE@Q}/Miniforge3 ${CONDA_STAGE@Q}/backup"; then
             return 1
         fi
     fi
@@ -208,7 +208,7 @@ function clean_conda_stage() {
 }
 
 function update_conda_envs() {
-    local prefix="${HOME}/Miniconda3" env_dir
+    local prefix="${HOME}/Miniforge3" env_dir
     shopt -s nullglob
     export CONDA_PKGS_DIRS="${prefix}/pkgs" CONDA_ENVS_PATH="${prefix}/envs"
     exec_cmd "${prefix@Q}/bin/conda update --prefix ${prefix@Q} --all --yes"
@@ -247,30 +247,29 @@ function mount_conda_home() {
 }
 
 function update_conda_template() {
-    local update_user="${TEMPLATE_USER}" update_group
+    local update_user="${TEMPLATE_USER}" update_group config
     if ! /usr/bin/id -u -- "${update_user}" &>/dev/null; then
         update_user="nobody"
     fi
     update_group="$(/usr/bin/id -gn -- "${update_user}")"
     if [[ ! -d "${CONDA_TEMPLATE}" || -L "${CONDA_TEMPLATE}" ||
         ! -x "${CONDA_TEMPLATE}/bin/conda" ]]; then
-        abort "Expected a Miniconda installation at \`${CONDA_TEMPLATE}\`."
+        abort "Expected a Miniforge installation at \`${CONDA_TEMPLATE}\`."
     fi
     exec_cmd "/bin/mkdir -m 700 -- ${CONDA_STAGE@Q}"
     trap 'clean_conda_stage; exec_cmd "/usr/bin/unlink -- ${RUN_INDICATOR@Q}"' EXIT
     exec_cmd "/bin/mkdir -m 755 -- ${CONDA_STAGE@Q}/home"
     exec_cmd "/bin/cp -a --reflink=auto -- ${CONDA_TEMPLATE@Q} ${CONDA_STAGE@Q}/home/"
     exec_cmd "cd -- ${CONDA_STAGE@Q}/home"
-    exec_cmd "/usr/bin/install -d -m 700 -o ${update_user@Q} -g ${update_group@Q} -- .conda"
-    if [[ -d "${SKEL_DIR}/.conda/tos" ]]; then
-        exec_cmd "/bin/cp -a -- ${SKEL_DIR@Q}/.conda/tos .conda/"
-    elif [[ "${update_user}" == "${TEMPLATE_USER}" && -d "${TEMPLATE_USER_HOME}/.conda/tos" ]]; then
-        exec_cmd "/sbin/runuser -u ${update_user@Q} -- /bin/cp -a -- \
-            ${TEMPLATE_USER_HOME@Q}/.conda/tos .conda/"
-    fi
     exec_cmd "/bin/chown -hR -- ${update_user@Q}:${update_group@Q} ."
     if [[ -f "${SKEL_DIR}/.condarc" ]]; then
-        exec_cmd "/sbin/runuser -u ${update_user@Q} -- /bin/cp -L -- ${SKEL_DIR@Q}/.condarc .condarc"
+        config="$(/usr/bin/realpath -e -- "${SKEL_DIR}/.condarc")"
+        if [[ "${config}" == "${SKEL_DIR}/"* ]]; then
+            # The template can be private to root even when its config is intended for new users.
+            exec_cmd "/usr/bin/install -m 600 -o ${update_user@Q} -g ${update_group@Q} -- ${config@Q} .condarc"
+        else
+            exec_cmd "/sbin/runuser -u ${update_user@Q} -- /bin/cp -L -- ${SKEL_DIR@Q}/.condarc .condarc"
+        fi
     elif [[ "${update_user}" == "${TEMPLATE_USER}" && -f "${TEMPLATE_USER_HOME}/.condarc" ]]; then
         exec_cmd "/sbin/runuser -u ${update_user@Q} -- /bin/cp -L -- \
             ${TEMPLATE_USER_HOME@Q}/.condarc .condarc"
@@ -283,12 +282,12 @@ function update_conda_template() {
     } | exec_cmd "/usr/bin/unshare --mount --propagation private -- /bin/bash -seuo pipefail -- \
         ${CONDA_STAGE@Q}/home ${update_user@Q} ${TEMPLATE_USER_HOME@Q}"
 
-    exec_cmd "/bin/chown -hR -- root:root ${CONDA_STAGE@Q}/home/Miniconda3"
-    # Only a complete backup is named `previous`. Both renames stay on the staging filesystem.
+    exec_cmd "/bin/chown -hR -- root:root ${CONDA_STAGE@Q}/home/Miniforge3"
+    # Only a complete backup is named `Miniforge3`. Both renames stay on the staging filesystem.
     exec_cmd "/bin/cp -a --reflink=auto -- ${CONDA_TEMPLATE@Q} ${CONDA_STAGE@Q}/backup"
-    exec_cmd "/bin/mv -T -- ${CONDA_STAGE@Q}/backup ${CONDA_STAGE@Q}/previous"
-    replace_conda_template "${CONDA_STAGE}/home/Miniconda3"
-    exec_cmd "/bin/mv -T -- ${CONDA_STAGE@Q}/previous ${CONDA_STAGE@Q}/backup"
+    exec_cmd "/bin/mv -T -- ${CONDA_STAGE@Q}/backup ${CONDA_STAGE@Q}/Miniforge3"
+    replace_conda_template "${CONDA_STAGE}/home/Miniforge3"
+    exec_cmd "/bin/mv -T -- ${CONDA_STAGE@Q}/Miniforge3 ${CONDA_STAGE@Q}/backup"
     clean_conda_stage
     trap 'exec_cmd "/usr/bin/unlink -- ${RUN_INDICATOR@Q}"' EXIT
 }
@@ -341,7 +340,7 @@ if [[ -d ".fzf/.git" ]]; then
 fi
 
 if [[ -e "${CONDA_TEMPLATE}" || -L "${CONDA_TEMPLATE}" ]]; then
-    echo "==> Updating the Miniconda template ..."
+    echo "==> Updating the Miniforge template ..."
     update_conda_template
 fi
 

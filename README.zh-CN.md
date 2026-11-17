@@ -217,7 +217,7 @@ ln -sf .dotfiles/<CFG_FILE> .
 | [shfmt](https://github.com/mvdan/sh)                                                                                             |   ✔   |      ✔       |       ✔       |
 | [shellcheck](https://www.shellcheck.net)                                                                                         |   ✔   |      ✔       |       ✔       |
 |                                                                                                                                  |       |              |               |
-| [Miniconda3](https://docs.conda.io/en/latest/miniconda.html)                                                                     |   ✔   |      ✔       |       ✔       |
+| [Miniforge3](https://github.com/conda-forge/miniforge)                                                                           |   ✔   |      ✔       |       ✔       |
 | [mamba](https://github.com/mamba-org/mamba)                                                                                      |   ✔   |      ✔       |       ✔       |
 | [gcc](https://gcc.gnu.org)                                                                                                       |   ✔   |      ✔       |       ✔       |
 | [gdb](https://www.gnu.org/software/gdb)                                                                                          |   ✔   |      ✔       |       ✔       |

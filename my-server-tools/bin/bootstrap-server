@@ -445,6 +445,8 @@ if [[ -n "${EDIT}" ]]; then
     echo "==> Edit the template home, then run \`exit\` to publish it."
     exec_cmd "/usr/bin/docker exec -it ${AS_TEMPLATE_USER[*]@Q} ${CONTAINER@Q} /bin/bash -l"
 fi
+exec_cmd "/usr/bin/docker exec ${AS_TEMPLATE_USER[*]@Q} ${CONTAINER@Q} \
+    ${TEMPLATE_USER_HOME@Q}/Miniforge3/bin/conda clean --all --yes"
 
 echo "==> Copying the template to \`${SKEL_DIR}\` ..."
 STAGE="$(exec_cmd "/usr/bin/mktemp -d -- ${DATA_ROOT@Q}/.bootstrap-server.XXXXXXXX")"
@@ -452,6 +454,12 @@ script_with_exec_cmd export_template | exec_cmd "/usr/bin/docker exec -i ${AS_TE
     ${CONTAINER@Q} /bin/bash -seuo pipefail | \
     /bin/tar --extract --file=- --directory=${STAGE@Q} \
     --no-same-owner --same-permissions"
+# Remove empty descendants from known dot-folders while retaining each top-level folder.
+for ENTRY in .oh-my-zsh .fzf .vim .conda .config .cpan .ipython .local .perl; do
+    if [[ -d "${STAGE}/${ENTRY}" && ! -L "${STAGE}/${ENTRY}" ]]; then
+        exec_cmd "/usr/bin/find ${STAGE@Q}/${ENTRY@Q} -depth -mindepth 1 -type d -empty -delete"
+    fi
+done
 exec_cmd "/bin/touch -- ${STAGE@Q}/put-things-in-data-instead-of-home"
 
 # Passing individual entries limits deletion to exported directories and preserves the root mode.

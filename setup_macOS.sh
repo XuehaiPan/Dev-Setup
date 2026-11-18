@@ -973,6 +973,9 @@ cat >"${TMP_DIR}/zsh-lean" <<EOF
 ${SHEBANG}
 ${COMMAND}
 EOF
+mkdir -p "${HOME}/.local/bin"
+exec_cmd "cp -f \"\${TMP_DIR}/zsh-lean\" \"\${HOME}/.local/bin/zsh-lean\""
+chmod 755 "${HOME}/.local/bin/zsh-lean"
 if [[ ! -x "${HOMEBREW_PREFIX}/bin/zsh-lean" || -L "${HOMEBREW_PREFIX}/bin/zsh-lean" ]] ||
     ! diff -EB "${HOMEBREW_PREFIX}/bin/zsh-lean" "${TMP_DIR}/zsh-lean" &>/dev/null; then
     if [[ -f "${HOMEBREW_PREFIX}/bin/zsh-lean" ]]; then

@@ -1066,6 +1066,9 @@ cat >"${TMP_DIR}/zsh-lean" <<EOF
 ${SHEBANG}
 ${COMMAND}
 EOF
+mkdir -p "${HOME}/.local/bin"
+exec_cmd "cp -f \"\${TMP_DIR}/zsh-lean\" \"\${HOME}/.local/bin/zsh-lean\""
+chmod 755 "${HOME}/.local/bin/zsh-lean"
 if have_sudo_access; then
     if [[ ! -d "/usr/local/bin" ]]; then
         exec_cmd 'sudo mkdir -p "/usr/local/bin"'
@@ -1081,10 +1084,6 @@ if have_sudo_access; then
     if ! grep -qF '/usr/local/bin/zsh-lean' /etc/shells; then
         exec_cmd 'echo "/usr/local/bin/zsh-lean" | sudo tee -a /etc/shells'
     fi
-else
-    mkdir -p "${HOME}/.local/bin"
-    exec_cmd "cp -f \"${TMP_DIR}/zsh-lean\" \"\${HOME}/.local/bin/zsh-lean\""
-    chmod 755 "${HOME}/.local/bin/zsh-lean"
 fi
 
 # Add utility script file

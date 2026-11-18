@@ -198,7 +198,7 @@ sudo bin/foreach-user-run '(
 )'
 ```
 
-Refresh each account with the upgrade helpers from its Dev-Setup Bash profile. This also clears Homebrew downloads and the pre-commit, pip, and uv caches. Running `uv cache clean` after both `uvx` commands clears the tools they cached.
+Refresh each account with the upgrade helpers from its Dev-Setup Bash profile. This also clears Homebrew downloads and the pre-commit, pip, and uv caches. Running `uv cache clean` after both `uvx` commands clears the tools they cached. A 60-second timeout prevents cleanup from waiting indefinitely when the cache is still in use.
 
 ```bash
 sudo bin/foreach-user-run '{
@@ -206,7 +206,7 @@ sudo bin/foreach-user-run '{
     brew cleanup --scrub --prune=all
     uvx pre-commit clean
     uvx pip cache purge
-    uv cache clean
+    timeout 60s uv cache clean
     upgrade_ohmyzsh
     upgrade_fzf
     upgrade_vim

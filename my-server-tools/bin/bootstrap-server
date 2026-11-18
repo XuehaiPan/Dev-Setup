@@ -154,8 +154,14 @@ function export_template() {
             files+=("${entry}")
         fi
     done
+    # Omit regenerable caches while retaining configuration and installed packages.
     # The host will own these files as root. Clear setuid and setgid bits on export.
-    exec_cmd "exec /bin/tar --create --file=- --mode=a-s --exclude=.dotfiles/backups -- ${files[*]@Q}"
+    exec_cmd "exec /bin/tar --create --file=- --mode=a-s --anchored \
+        --exclude=.dotfiles/backups \
+        --exclude=.cpan/build \
+        --exclude=.cpan/sources \
+        --exclude=.oh-my-zsh/cache \
+        -- ${files[*]@Q}"
 }
 
 function cleanup_cmd() {
